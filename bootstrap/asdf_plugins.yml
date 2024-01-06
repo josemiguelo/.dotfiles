@@ -1,0 +1,72 @@
+#TODO: uncomment relevant packages
+java:
+  repo: https://github.com/halcyon/asdf-java.git
+  versions:
+    - adoptopenjdk-8.0.362+9
+    - adoptopenjdk-11.0.18+10
+    - adoptopenjdk-17.0.7+7
+  globals: "adoptopenjdk-17.0.7+7"
+nodejs:
+  repo: https://github.com/asdf-vm/asdf-nodejs.git
+  versions:
+    - 10.24.1
+    - 12.22.12
+    - 14.21.3
+    - 16.20.0
+    - 18.16.0
+  globals: "18.16.0"
+  post_installation:
+    - "npm install -g yarn"
+golang:
+  repo: https://github.com/kennyp/asdf-golang.git
+  versions:
+    - 1.21.5
+  globals: "1.21.5"
+  post_installation:
+    - "GOV=$(asdf where golang); GOPATH=$GOV/packages; PATH=$PATH:$GOPATH/bin; . ~/.asdf/asdf.sh"
+    - "go install github.com/jesseduffield/lazydocker@latest"
+    - "go install github.com/jesseduffield/lazygit@latest"
+python:
+  pre_installation:
+    - "sudo apt update"
+    - "sudo apt install -y make zlib1g zlib1g-dev libssl-dev libbz2-dev libsqlite3-dev"
+    - "sudo apt install -y build-essential libffi-dev libreadline-dev liblzma-dev tk-dev"
+  versions:
+    - 2.7.18
+    - 3.11.3
+  globals: "3.11.3 2.7.18"
+  post_installation:
+    - "pip install pynvim"
+neovim:
+  versions:
+    - nightly
+  globals: "nightly"
+rust:
+  repo: https://github.com/asdf-community/asdf-rust.git
+  versions:
+    - 1.74.1
+  globals: "1.74.1"
+maven:
+  repo: https://github.com/halcyon/asdf-maven.git
+  versions:
+    - 3.6.3
+  globals: "3.6.3"
+ruby:
+  pre_installation:
+    - "sudo apt update"
+    - "sudo apt install -y autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev"
+  repo: https://github.com/asdf-vm/asdf-ruby.git
+  versions:
+    - 3.2.2
+  globals: "3.2.2"
+gradle:
+  repo: https://github.com/rfrancis/asdf-gradle.git
+  versions:
+    - 8.1.1
+    # - 7.4.2
+  globals: "8.1.1"
+lazydocker:
+  repo: https://github.com/comdotlinux/asdf-lazydocker.git
+  versions:
+    - latest
+  globals: "latest"

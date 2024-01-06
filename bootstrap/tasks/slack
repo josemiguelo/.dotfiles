@@ -1,0 +1,10 @@
+#! /bin/env bash
+
+#TODO: make this idempotent
+
+apt_install libgtk-3-0 libappindicator3-1 libnotify4 xdg-utils libatspi2.0-0 libdbusmenu-glib4 libdbusmenu-gtk3-4 libxss1
+
+TEMP_DEB="$(mktemp)" &&
+	wget -O "$TEMP_DEB" 'https://downloads.slack-edge.com/releases/linux/4.35.131/prod/x64/slack-desktop-4.35.131-amd64.deb' &&
+	sudo dpkg -i "$TEMP_DEB" &&
+	rm -f "$TEMP_DEB"

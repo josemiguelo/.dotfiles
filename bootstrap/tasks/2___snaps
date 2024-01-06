@@ -1,0 +1,25 @@
+#! /bin/env bash
+
+snaps_file="$BOOTSTRAP_DIR/snaps.txt"
+
+if [[ ! -f $snaps_file ]]; then
+	warn "file $snaps_file was not found. skipping snaps installation..."
+else
+	if is_apt_pkg_installed snapd; then
+		sudo systemctl stop snapd
+		sudo apt remove --purge --assume-yes snapd
+		rm -rf ~/snap/
+		sudo rm -rf /var/cache/snapd/
+	fi
+
+	sudo apt update
+	apt_install snapd
+
+	#FIXME: snaps installation hangs when all tasks are run
+	while read p; do
+		substep "$p"
+		bash -c "sudo snap install $p"
+	done <$snaps_file
+fi
+
+unset snaps_file

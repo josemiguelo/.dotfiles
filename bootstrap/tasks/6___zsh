@@ -1,0 +1,13 @@
+#! /bin/env bash
+
+#TODO: make this idempotent
+
+sudo apt update
+apt_install zsh
+
+sudo chsh -s $(which zsh) $USER
+
+cat >~/.zshenv <<EOF
+export ZDOTDIR=~/.config/zsh
+[[ -f $ZDOTDIR/.zshenv ]] && . $ZDOTDIR/.zshenv
+EOF

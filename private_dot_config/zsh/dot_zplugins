@@ -1,0 +1,69 @@
+# p10k prompt pre
+$ZDOTDIR/plugins/p10k-prompt-pre
+
+# requirements
+mattmc3/zfunctions
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:plugins/extract
+
+# completion utils
+zsh-users/zsh-completions kind:fpath path:src
+belak/zsh-utils path:completion
+$ZDOTDIR/plugins/fzf
+ohmyzsh/ohmyzsh path:plugins/fzf
+Aloxaf/fzf-tab
+
+# prompt
+romkatv/powerlevel10k
+
+# git
+ohmyzsh/ohmyzsh path:plugins/git
+$ZDOTDIR/completions/git kind:fpath
+
+# asdf
+$ZDOTDIR/plugins/asdf-pre
+ohmyzsh/ohmyzsh path:plugins/asdf
+
+# aliases utils
+ohmyzsh/ohmyzsh path:plugins/alias-finder
+
+# command not found utils
+ohmyzsh/ohmyzsh path:plugins/command-not-found
+
+# docker and k8s
+$ZDOTDIR/completions/docker kind:fpath
+ohmyzsh/ohmyzsh path:plugins/docker-compose
+ohmyzsh/ohmyzsh path:plugins/kubectl
+
+# clipboard
+ohmyzsh/ohmyzsh path:lib/clipboard.zsh
+ohmyzsh/ohmyzsh path:plugins/copybuffer
+ohmyzsh/ohmyzsh path:plugins/copyfile
+ohmyzsh/ohmyzsh path:plugins/copypath
+
+# Editor
+ohmyzsh/ohmyzsh path:plugins/magic-enter
+
+# zshrc configs
+mattmc3/zshrc.d
+
+# languages
+$ZDOTDIR/plugins/golang
+$ZDOTDIR/plugins/android
+$ZDOTDIR/plugins/rust
+
+
+# qmk
+$ZDOTDIR/plugins/qmk
+
+# highlighting
+zdharma-continuum/fast-syntax-highlighting kind:defer
+
+# suggestions 
+zsh-users/zsh-autosuggestions kind:defer
+
+# history
+zsh-users/zsh-history-substring-search kind:defer
+
+# p10k prompt final step
+$ZDOTDIR/plugins/p10k-prompt-post

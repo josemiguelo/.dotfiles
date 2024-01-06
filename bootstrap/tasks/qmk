@@ -1,0 +1,12 @@
+#! /bin/env bash
+
+#FIXME: this task is hanging
+#TODO: make this idempotent
+
+#TODO: try to not use this
+. ~/.asdf/asdf.sh
+
+sudo apt-get install libusb-dev
+python3 -m pip install --user qmk
+
+~/.local/bin/qmk setup josemiguelo/qmk_firmware -y

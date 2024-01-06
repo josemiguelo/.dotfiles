@@ -1,0 +1,5 @@
+#! /bin/env bash
+
+#TODO: make this idempotent
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
