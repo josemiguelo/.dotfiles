@@ -1,0 +1,11 @@
+#! /bin/env bash
+
+if command_exists fzf; then
+	warn "fzf has already been installed..."
+else
+	fzf_path=${XDG_DATA_HOME:=~/.local/share}/junegunn/fzf
+	[[ -d $fzf_path ]] || git clone --depth 1 https://github.com/junegunn/fzf.git $fzf_path
+
+	$fzf_path/install --xdg --key-bindings --completion --no-update-rc --no-bash --no-fish
+	unset fzf_path
+fi

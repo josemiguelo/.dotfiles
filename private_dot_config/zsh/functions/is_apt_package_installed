@@ -1,0 +1,1 @@
+[[ "installed" == $(dpkg -s ${1} &>/dev/null | cat | grep -i status &>/dev/null | cat | awk '{print $NF}') ]]

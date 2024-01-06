@@ -1,0 +1,14 @@
+#! /bin/env bash
+
+apt_packages_file="$BOOTSTRAP_DIR/apt_packages.txt"
+
+if [[ ! -f $apt_packages_file ]]; then
+	warn "file $apt_packages_file was not found. skipping apt packages installation..."
+else
+	sudo apt update
+	apt_install $(grep "" $apt_packages_file | xargs)
+fi
+
+unset apt_packages_file
+
+# TODO: add template for other OSes

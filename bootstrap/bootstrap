@@ -1,0 +1,21 @@
+#!/bin/bash
+
+sh -c "$(curl -fsLS get.chezmoi.io)"
+sudo mv ./bin/chezmoi /usr/local/bin/chezmoi
+rm -rf ./bin
+
+if command -v chezmoi >/dev/null 2>&1; then
+	echo "==> chezmoi was downloaded successfully"
+else
+	echo "==> there was an error running chezmoi.."
+	exit 1
+fi
+
+GITHUB_USERNAME=josemiguelo
+chezmoi init https://github.com/$GITHUB_USERNAME/.dotfiles.git
+
+chezmoi apply
+
+init_bootstrap_file="$(chezmoi source-path)/bootstrap/init.sh"
+chmod +x $init_bootstrap_file
+. $init_bootstrap_file

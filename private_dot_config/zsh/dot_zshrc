@@ -1,0 +1,14 @@
+# completion
+fpath=($ZDOTDIR/completions $fpath)
+autoload -Uz compinit
+compinit
+
+# zstyles
+[[ -r $ZDOTDIR/.zstyles ]] && . $ZDOTDIR/.zstyles
+
+# use antidote for plugin management
+export antidote_path=${XDG_DATA_HOME:=~/.local/share}/mattmc3/antidote
+[[ -d $antidote_path ]] || git clone --depth 1 --quiet https://github.com/mattmc3/antidote $antidote_path
+
+source $antidote_path/antidote.zsh
+antidote load

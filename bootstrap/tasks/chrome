@@ -1,0 +1,13 @@
+#! /bin/env bash
+
+#TODO: research if there's an repository for this
+#TODO: make this idempotent
+
+sudo apt update
+apt_install fonts-liberation libu2f-udev
+
+TEMP_DEB="$(mktemp)" &&
+	wget -O "$TEMP_DEB" 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb' &&
+	sudo dpkg -i "$TEMP_DEB"
+
+rm -f "$TEMP_DEB"

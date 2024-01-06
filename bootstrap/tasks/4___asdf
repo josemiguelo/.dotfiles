@@ -1,0 +1,123 @@
+#! /bin/env bash
+
+ASDF_PLUGINS_FILE="$BOOTSTRAP_DIR/asdf_plugins.yml"
+
+# make it available to other tasks that make use of asdf binaries
+export ASDF_TARGET_DIR=~/.asdf
+
+asdf_preinstall() {
+	create_file $HOME/.tool-versions
+}
+
+asdf_post_install() {
+	true
+}
+
+plugin_pre_install() {
+	pre_installation=$(echo "$1" | yq '.pre_installation | .[]' | { grep -v "null" 2>/dev/null || true; })
+	if [ ! -z "$pre_installation" ]; then
+		while IFS= read -r line; do
+			substep "executing pre_installation task $(echo $line | cut -c 1-40)..."
+			eval "$line"
+		done <<<"$pre_installation"
+	fi
+	unset pre_installation
+}
+
+plugin_add() {
+	if [ -z "$(asdf plugin list | { grep -i $2 2>/dev/null || true; })" ]; then
+		substep "adding plugin $2..."
+		repo=$(echo "$1" | yq '.repo' | { grep -v "null" 2>/dev/null || true; })
+		plugin_pre_install "$1"
+		asdf plugin-add $2 $repo
+		unset repo
+	else
+		warn "plugin $2 has already been installed. skipping..."
+	fi
+}
+
+plugin_install_versions() {
+	versions=$(echo "$1" | yq '.versions | .[]' | { grep -v "null" 2>/dev/null || true; })
+	if [ ! -z "$versions" ]; then
+		while IFS= read -r version; do
+			if [ -z "$(asdf list $2 | { grep -i $version 2>/dev/null || true; })" ]; then
+				substep "installing version $version..."
+				asdf install $2 $version
+			else
+				warn "version $version has already been installed. skipping..."
+			fi
+		done <<<"$versions"
+	fi
+	unset versions
+}
+
+plugin_post_install() {
+	warn "inside plugin_post_install.."
+	post_installation_tasks=$(echo "$1" | yq '.post_installation | .[]' | { grep -v "null" 2>/dev/null || true; })
+	if [ ! -z "$post_installation_tasks" ]; then
+		warn "inside if.."
+		while IFS= read -r line; do
+			substep "executing post_installation task $(echo $line | cut -c 1-40)..."
+			eval ". ~/.asdf/asdf.sh; $line"
+		done <<<"$post_installation_tasks"
+	fi
+	unset post_installation_tasks
+}
+
+plugin_set_globals() {
+	globals=$(echo "$1" | yq '.globals' | { grep -v "null" 2>/dev/null || true; })
+	if [ ! -z "$globals" ]; then
+		substep "setting globals $2..."
+		asdf global $2 $globals
+	else
+		warn "plugin $2 has not defined any global version. skipping..."
+	fi
+
+	unset globals
+}
+
+plugin_reshim() {
+	asdf reshim $1
+}
+
+asdf_plugins_installation() {
+	plugins=$(cat $ASDF_PLUGINS_FILE | yq 'keys | .[]')
+	for plugin_name in ${plugins[@]}; do
+		step "installing plugin $plugin_name..."
+
+		plugin_definition=$(cat $ASDF_PLUGINS_FILE | lang_name=$plugin_name yq 'with_entries(select(.key == env(lang_name))) | .[]')
+
+		plugin_add "$plugin_definition" "$plugin_name"
+
+		plugin_install_versions "$plugin_definition" "$plugin_name"
+
+		plugin_reshim "$plugin_name"
+
+		plugin_set_globals "$plugin_definition" "$plugin_name"
+	done
+	unset plugins
+}
+
+check_existing_asdf() {
+	if command_exists asdf; then
+		warn "asdf executable was found on path. skipping installation..."
+	else
+		if [[ -d $ASDF_TARGET_DIR ]]; then
+			warn "asdf dir  $ASDF_TARGET_DIR was found.."
+			. "$ASDF_TARGET_DIR/asdf.sh"
+		else
+			log "cloning asdf-vm... at $ASDF_TARGET_DIR"
+			git clone https://github.com/asdf-vm/asdf.git $ASDF_TARGET_DIR
+			. "$ASDF_TARGET_DIR/asdf.sh"
+		fi
+	fi
+}
+
+if [[ ! -f $ASDF_PLUGINS_FILE ]]; then
+	warn "file $ASDF_PLUGINS_FILE was not found. skipping asdf installation..."
+else
+	check_existing_asdf
+	asdf_preinstall
+	asdf_plugins_installation
+	asdf_post_install
+fi

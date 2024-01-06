@@ -1,0 +1,28 @@
+#! /bin/env bash
+
+fonts_target_path=~/.fonts
+
+if (($(ls -A $fonts_target_path/Fira* 2>/dev/null | wc -l) == 0)); then
+	warn "Fira Code fonts have not been downloaded at $fonts_target_path"
+
+	TEMP_DIR=$(mktemp -d)
+	cd $TEMP_DIR
+
+	step "downloading nerd fonts at $TEMP_DIR/ ..."
+	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip -P $TEMP_DIR/
+
+	step "unziping FiraCode to $TEMP_DIR/FiraCode/ ..."
+	unzip $TEMP_DIR/FiraCode.zip -d $TEMP_DIR/FiraCode
+
+	step "copying fonts to $fonts_target_path/ ..."
+	mkdir -p $fonts_target_path
+	cp $TEMP_DIR/FiraCode/Fira\ Code* $fonts_target_path/
+
+	step "updating fonts cache..."
+	fc-cache -fv
+
+else
+	warn "Fira Code fonts have already been downloaded at $fonts_target_path/"
+fi
+
+unset fonts_target_path

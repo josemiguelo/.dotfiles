@@ -1,0 +1,4 @@
+flathub
+com.logseq.Logseq
+org.kde.neochat
+org.kde.okular

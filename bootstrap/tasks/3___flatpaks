@@ -1,0 +1,16 @@
+#! /bin/env bash
+
+#FIXME: error authntication flatpak
+
+sudo apt update
+apt_install flatpak gnome-software-plugin-flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+flatpaks_file="$BOOTSTRAP_DIR/flatpaks.txt"
+if [[ ! -f $flatpaks_file ]]; then
+	warn "file $flatpaks_file was not found. skipping snaps installation..."
+else
+	flatpak install -y $(grep "" $flatpaks_file | xargs)
+fi
+
+unset flatpaks_file

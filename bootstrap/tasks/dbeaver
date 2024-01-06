@@ -1,0 +1,7 @@
+#! /bin/env bash
+
+#TODO: make this idempotent
+TEMP_DEB="$(mktemp)" &&
+	wget -O "$TEMP_DEB" 'https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb' &&
+	sudo dpkg -i "$TEMP_DEB"
+rm -f "$TEMP_DEB"

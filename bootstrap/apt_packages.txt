@@ -1,0 +1,22 @@
+wget
+curl
+gcc
+git
+gnupg
+openssh-client
+apt-transport-https
+vim
+unzip
+ripgrep
+silversearcher-ag
+ca-certificates
+tig
+kitty
+gparted
+samba openssh-server openssh-client
+xclip
+fd-find
+tree
+guake
+pavucontrol
+vlc
