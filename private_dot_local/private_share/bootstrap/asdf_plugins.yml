@@ -24,7 +24,6 @@ golang:
   globals: "1.21.5"
   post_installation:
     - "GOV=$(asdf where golang); GOPATH=$GOV/packages; PATH=$PATH:$GOPATH/bin; . ~/.asdf/asdf.sh"
-    - "go install github.com/jesseduffield/lazydocker@latest"
     - "go install github.com/jesseduffield/lazygit@latest"
 python:
   pre_installation:
