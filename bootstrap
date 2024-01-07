@@ -11,11 +11,11 @@ else
 	exit 1
 fi
 
-GITHUB_USERNAME=josemiguelo
-chezmoi init https://github.com/$GITHUB_USERNAME/.dotfiles.git
+chezmoi init --verbose --recurse-submodules=false https://github.com/josemiguelo/.dotfiles.git
 
+sleep 3
 chezmoi apply
 
-init_bootstrap_file="~/.local/share/bootstrap/init.sh"
+init_bootstrap_file="$HOME/.local/share/bootstrap/init.sh"
 chmod +x $init_bootstrap_file
 . $init_bootstrap_file
