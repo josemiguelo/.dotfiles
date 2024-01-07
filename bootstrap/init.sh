@@ -3,11 +3,11 @@
 export BOOTSTRAP_DIR=$(dirname $(realpath -s $BASH_SOURCE))
 export PATH=$BOOTSTRAP_DIR/bin:$PATH
 
-# source all pre-bootstrap scripts
-for f in $BOOTSTRAP_DIR/pre/*; do source $f; done
-
 # source all utils
 for f in $BOOTSTRAP_DIR/utils/*; do source $f; done
+
+# source all pre-bootstrap scripts
+for f in $BOOTSTRAP_DIR/pre/*; do source $f; done
 
 tasks_dir=$BOOTSTRAP_DIR/tasks
 
