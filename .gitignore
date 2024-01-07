@@ -1,4 +1,4 @@
-bootstrap/bin/**
+private_dot_local/private_share/bootstrap/bin/**
 private_dot_config/zsh/dot_antidote
 private_dot_config/zsh/dot_antidote/
 private_dot_config/zsh/dot_cache/
