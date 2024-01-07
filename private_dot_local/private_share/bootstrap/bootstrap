@@ -16,6 +16,6 @@ chezmoi init https://github.com/$GITHUB_USERNAME/.dotfiles.git
 
 chezmoi apply
 
-init_bootstrap_file="$(chezmoi source-path)/bootstrap/init.sh"
+init_bootstrap_file="~/.local/share/bootstrap/init.sh"
 chmod +x $init_bootstrap_file
 . $init_bootstrap_file
