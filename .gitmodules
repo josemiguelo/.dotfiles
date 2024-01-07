@@ -1,0 +1,3 @@
+[submodule "private_dot_config/nvim/lua/external_private"]
+	path = private_dot_config/nvim/lua/external_private
+	url = git@github.com:josemiguelo/nvim_private.git
