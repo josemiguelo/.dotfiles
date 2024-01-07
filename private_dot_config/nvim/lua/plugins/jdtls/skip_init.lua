@@ -30,7 +30,7 @@ end
 M.should_skip_server = function()
   local should_skip_dir, cdw = should_skip_this_dir()
   if should_skip_dir then
-    Util.info("jdtls is disabled on dir " .. cdw, { title = "JDTLS" })
+    Util.info("jdtls is disabled on the dir " .. cdw, { title = "JDTLS" })
     return true
   end
 
