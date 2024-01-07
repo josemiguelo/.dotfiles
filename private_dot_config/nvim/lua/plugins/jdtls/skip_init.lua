@@ -5,13 +5,16 @@ local M = {}
 
 local function should_skip_this_dir()
   local skipped_dirs = {
-    "/home/josemiguel/decompiled_jars/fastrack-server-3.3.8",
+    home .. "/decompiled_jars/fastrack-server-3.3.8",
   }
 
-  local private_skipped_dirs = require("private.jdtls").private_skipped_dirs
+  local ok, private = pcall(require, "private.jdtls")
+  if ok then
+    local private_skipped_dirs = private.private_skipped_dirs
 
-  for i = 1, #private_skipped_dirs do
-    skipped_dirs[#skipped_dirs + 1] = private_skipped_dirs[i]
+    for i = 1, #private_skipped_dirs do
+      skipped_dirs[#skipped_dirs + 1] = private_skipped_dirs[i]
+    end
   end
 
   local cdw = vim.fn.getcwd()

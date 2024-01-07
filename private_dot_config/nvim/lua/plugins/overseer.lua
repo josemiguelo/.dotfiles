@@ -42,7 +42,10 @@ return {
       local overseer = require("overseer")
       overseer.setup(opts)
 
-      require("private.overseer")
+      local ok, private = pcall(require, "private")
+      if ok then
+        private.overseer.config(overseer)
+      end
     end,
   },
 }
