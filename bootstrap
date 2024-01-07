@@ -13,7 +13,7 @@ fi
 
 chezmoi init --verbose --recurse-submodules=false https://github.com/josemiguelo/.dotfiles.git
 
-sleep 3
+sleep 2
 chezmoi apply
 
 init_bootstrap_file="$HOME/.local/share/bootstrap/init.sh"
