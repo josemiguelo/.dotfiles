@@ -31,7 +31,7 @@ ohmyzsh/ohmyzsh path:plugins/alias-finder
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 
 # docker and k8s
-$ZDOTDIR/completions/docker kind:fpath
+$ZDOTDIR/plugins/docker
 ohmyzsh/ohmyzsh path:plugins/docker-compose
 ohmyzsh/ohmyzsh path:plugins/kubectl
 
