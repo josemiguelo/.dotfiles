@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+(( ${+commands[docker-compose]} )) && dccmd='docker-compose' || dccmd='docker compose'
+
+eval "$dccmd stop $1 && $dccmd up -d $1 && $dccmd logs -f $1"
