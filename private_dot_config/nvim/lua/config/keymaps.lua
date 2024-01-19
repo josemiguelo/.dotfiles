@@ -80,8 +80,8 @@ map("n", "<leader>tr", ":TabRename ", { desc = "Rename tab" })
 map("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>te", "<cmd>tab sb %<CR>", { desc = "Open buffer in new tab" })
 
-map("n", "<S-l>", "<cmd>tabn<CR>", { desc = "Next tab" })
-map("n", "<S-h>", "<cmd>tabp<cr>", { desc = "Prev tab" })
+-- map("n", "<S-l>", "<cmd>tabn<CR>", { desc = "Next tab" })
+-- map("n", "<S-h>", "<cmd>tabp<cr>", { desc = "Prev tab" })
 
 -- map("n", "<leader>tr", function()
 --   vim.ui.input({ prompt = "Rename tab: " }, function(name)
