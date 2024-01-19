@@ -20,3 +20,5 @@ tree
 guake
 pavucontrol
 vlc
+jq
+moreutils
