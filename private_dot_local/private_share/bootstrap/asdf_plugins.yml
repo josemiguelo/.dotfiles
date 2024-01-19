@@ -62,7 +62,8 @@ gradle:
   repo: https://github.com/rfrancis/asdf-gradle.git
   versions:
     - 8.1.1
-    # - 7.4.2
+    - 7.4.2
+    - 7.6.3
   globals: "8.1.1"
 lazydocker:
   repo: https://github.com/comdotlinux/asdf-lazydocker.git
