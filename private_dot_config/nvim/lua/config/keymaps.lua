@@ -7,17 +7,7 @@ local wk = require("which-key")
 local Util = require("lazyvim.util")
 
 local function map(mode, lhs, rhs, opts)
-  local keys = require("lazy.core.handler").handlers.keys
-  ---@cast keys LazyKeysHandler
-  -- do not create the keymap if a lazy keys handler exists
-  if not keys.active[keys.parse({ lhs, mode = mode }).id] then
-    opts = opts or {}
-    opts.silent = opts.silent ~= false
-    if opts.remap and not vim.g.vscode then
-      opts.remap = nil
-    end
-    vim.keymap.set(mode, lhs, rhs, opts)
-  end
+  vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 -- terminals
@@ -72,6 +62,12 @@ map("n", "<leader>wo", "<cmd>only<CR>", { desc = "Only window", remap = true })
 
 vim.keymap.del("n", "<leader>fn")
 map("n", "<leader>bn", "<cmd>enew<cr>", { desc = "New Buffer" })
+map("n", "<leader>fn", function()
+  require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+end, { desc = "tig (cwd)" })
+map("n", "<leader>fN", function()
+  require("neo-tree.command").execute({ toggle = true, dir = Util.root() })
+end, { desc = "tig (cwd)" })
 
 map("n", "<leader>tt", "<cmd>tabnew<CR>", { desc = "New tab" })
 map("n", "<leader>tml", "<cmd>+tabmove<cr>", { desc = "Move next tab" })
@@ -107,4 +103,4 @@ map("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Go to right window", r
 --   { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Go to right window" },
 
 keys["<leader>r"] = { name = "+run" }
-require("which-key").register(keys)
+wk.register(keys)
