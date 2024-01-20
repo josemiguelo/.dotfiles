@@ -65,5 +65,8 @@ zsh-users/zsh-autosuggestions kind:defer
 # history
 zsh-users/zsh-history-substring-search kind:defer
 
+# dotfiles
+$ZDOTDIR/plugins/chezmoi
+
 # p10k prompt final step
 $ZDOTDIR/plugins/p10k-prompt-post
