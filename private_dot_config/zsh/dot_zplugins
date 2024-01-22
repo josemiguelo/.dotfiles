@@ -47,11 +47,13 @@ ohmyzsh/ohmyzsh path:plugins/magic-enter
 # zshrc configs
 mattmc3/zshrc.d
 
+# dotfiles
+$ZDOTDIR/plugins/chezmoi
+
 # languages
 $ZDOTDIR/plugins/golang
 $ZDOTDIR/plugins/android
 $ZDOTDIR/plugins/rust
-
 
 # qmk
 $ZDOTDIR/plugins/qmk
@@ -64,9 +66,6 @@ zsh-users/zsh-autosuggestions kind:defer
 
 # history
 zsh-users/zsh-history-substring-search kind:defer
-
-# dotfiles
-$ZDOTDIR/plugins/chezmoi
 
 # p10k prompt final step
 $ZDOTDIR/plugins/p10k-prompt-post
