@@ -1,4 +1,3 @@
-bootstrap/
-bootstrap/**
-bootstrap_new_machine.sh
+.config/zsh/.zplugins.zsh.zwc
+.config/zsh/.zplugins.zsh.zwc.old
 README.md
