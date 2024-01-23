@@ -1,4 +1,4 @@
-alias chzu='chezmoi update'
-alias chzd='chezmoi diff'
-alias chza='chezmoi apply'
-alias chzanv='chezmoi apply -nv'
+alias chzup='chezmoi update'
+alias chzdi='chezmoi diff'
+alias chzap='chezmoi apply'
+alias chzapnv='chezmoi apply -nv'
