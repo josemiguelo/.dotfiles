@@ -1,6 +1,8 @@
 return {
-	{
-		"lukas-reineke/headlines.nvim",
-		enabled = false, --NOTE: this causes performance problems
-	},
+  {
+    "lukas-reineke/headlines.nvim",
+    --NOTE: disable this plugin from the lang.markdown extra
+    -- this causes performance problems
+    enabled = false,
+  },
 }

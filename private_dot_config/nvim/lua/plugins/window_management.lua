@@ -4,6 +4,16 @@ end
 
 return {
   {
+    "declancm/maximize.nvim",
+    opts = {
+      default_keymaps = false,
+    },
+    keys = {
+      { "<leader>Z", "<Cmd>lua require('maximize').toggle()<CR>", desc = "Toggle Maximize" },
+    },
+  },
+
+  {
     "anuvyklack/windows.nvim",
     lazy = false,
     dependencies = {
