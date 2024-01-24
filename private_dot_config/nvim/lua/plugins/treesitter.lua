@@ -84,5 +84,29 @@ return {
       cmd = { "TSPlaygroundToggle" },
     },
   },
+
   { "nvim-treesitter/playground" },
+
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    config = true,
+  },
+
+  {
+    "andymass/vim-matchup",
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter",
+        opts = function(_, opts)
+          opts.matchup = {
+            enable = true,
+            include_match_words = true,
+          }
+        end,
+      },
+    },
+    event = { "BufReadPost", "BufNewFile" },
+  },
 }
