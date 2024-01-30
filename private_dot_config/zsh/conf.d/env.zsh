@@ -15,10 +15,4 @@ alias gcleanfd='git clean -f -d'
 
 alias c="clear"
 
-#tmux
-alias tx="tmux"
-alias txr="tmuxinator"
-alias txre="tmuxinator edit"
-alias txrs="tmuxinator start"
-
 alias fd="fdfind"
