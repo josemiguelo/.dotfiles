@@ -26,3 +26,6 @@ private_dot_config/zsh/~*
 private_dot_config/zsh/dot_zlocal
 private_dot_config/ranger/__pycache__
 private_dot_config/ranger/__pycache__/
+
+#private config
+private_dot_config/zsh/conf.d/private.zsh
