@@ -21,3 +21,5 @@ alias gcleanfd='git clean -f -d'
 alias c="clear"
 
 alias fd="fdfind"
+
+alias rm='echo "use trash instead of rm. use rm with a prependend slash if you really want to"; false'
