@@ -3,6 +3,10 @@ local LazyVimUtil = require("lazyvim.util")
 
 return {
   {
+    "nvim-neo-tree/neo-tree.nvim",
+    init = function() end,
+  },
+  {
     "folke/todo-comments.nvim",
     opts = {
       search = {

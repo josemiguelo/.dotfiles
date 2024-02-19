@@ -36,6 +36,14 @@ return {
     "stevearc/oil.nvim",
     cmd = "Oil",
     keys = { { "<leader>e", "<cmd>Oil --float<CR>", desc = "Oil file manager" } },
+    init = function()
+      if vim.fn.argc(-1) == 1 then
+        local stat = vim.loop.fs_stat(vim.fn.argv(0))
+        if stat and stat.type == "directory" then
+          vim.cmd("Oil")
+        end
+      end
+    end,
     opts = {
       columns = {
         "icon",
