@@ -36,6 +36,7 @@ python:
   globals: "3.11.3 2.7.18"
   post_installation:
     - "pip install pynvim"
+    - "pip install trash-cli"
 neovim:
   versions:
     - nightly
