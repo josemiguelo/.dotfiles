@@ -1,0 +1,47 @@
+#! /bin/env bash
+
+sudo apt install -y \
+	'bsdutils' \
+	'cmake' \
+	'dpkg-dev' \
+	'fakeroot' \
+	'gcc' \
+	'g++' \
+	'libegl1-mesa-dev' \
+	'libssl-dev' \
+	'libfontconfig1-dev' \
+	'libwayland-dev' \
+	'libx11-xcb-dev' \
+	'libxcb-ewmh-dev' \
+	'libxcb-icccm4-dev' \
+	'libxcb-image0-dev' \
+	'libxcb-keysyms1-dev' \
+	'libxcb-randr0-dev' \
+	'libxcb-render0-dev' \
+	'libxcb-xkb-dev' \
+	'libxkbcommon-dev' \
+	'libxkbcommon-x11-dev' \
+	'libxcb-util-dev' \
+	'lsb-release' \
+	'xdg-utils' \
+	'xorg-dev'
+
+cd /tmp
+
+curl -LO https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/wezterm-20240203-110809-5046fc22-src.tar.gz
+tar -xzf wezterm-20240203-110809-5046fc22-src.tar.gz
+
+cd wezterm-20240203-110809-5046fc22
+cargo build --release
+
+git init
+git config --local user.name "Jose Miguel Ochoa"
+git config --local user.email "josemiguelo.ochoa@gmail.com"
+git add --all
+git commit -m "first commit"
+
+sudo ci/deploy.sh
+sudo dpkg -i ./wezterm-20240220-114052-2a03596d.Ubuntu20.04.deb
+
+cd ..
+rm -rf wezterm-20240203-110809-5046fc22
