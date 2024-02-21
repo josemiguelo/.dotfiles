@@ -28,20 +28,19 @@ sudo apt install -y \
 
 cd /tmp
 
-curl -LO https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/wezterm-20240203-110809-5046fc22-src.tar.gz
-tar -xzf wezterm-20240203-110809-5046fc22-src.tar.gz
+#TODO:replace with wez/wezterm.git once the PR has been approved
+git clone --depth=1 --branch=deploy-popos --recursive https://github.com/josemiguelo/wezterm.git
+cd wezterm
 
-cd wezterm-20240203-110809-5046fc22
+git submodule update --init --recursive
 cargo build --release
 
-git init
-git config --local user.name "Jose Miguel Ochoa"
-git config --local user.email "josemiguelo.ochoa@gmail.com"
-git add --all
-git commit -m "first commit"
-
 sudo ci/deploy.sh
-sudo dpkg -i ./wezterm-20240220-114052-2a03596d.Ubuntu20.04.deb
+TAG_NAME=${TAG_NAME:-$(git -c "core.abbrev=8" show -s "--format=%cd-%h" "--date=format:%Y%m%d-%H%M%S")}
+distro=$(lsb_release -is 2>/dev/null || sh -c "source /etc/os-release && echo \$NAME")
+distver=$(lsb_release -rs 2>/dev/null || sh -c "source /etc/os-release && echo \$VERSION_ID")
+debname=wezterm-$TAG_NAME.$distro$distver
+sudo dpkg -i ./$debname.deb
 
 cd ..
-rm -rf wezterm-20240203-110809-5046fc22
+rm -rf /tmp/wezterm
