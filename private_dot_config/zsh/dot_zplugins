@@ -44,9 +44,6 @@ ohmyzsh/ohmyzsh path:plugins/copypath
 # Editor
 ohmyzsh/ohmyzsh path:plugins/magic-enter
 
-# tmux
-$ZDOTDIR/plugins/tmux
-
 # zshrc configs
 mattmc3/zshrc.d
 

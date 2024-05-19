@@ -71,11 +71,3 @@ lazydocker:
   versions:
     - latest
   globals: "latest"
-tmux:
-  pre_installation:
-    - "sudo apt update"
-    - "sudo apt install -y libevent-dev ncurses-dev build-essential bison pkg-config"
-  repo: https://github.com/mameen-omar/asdf-tmux.git
-  versions:
-    - 3.2a
-  globals: "3.2a"
