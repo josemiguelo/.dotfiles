@@ -7,8 +7,11 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 
 config.color_scheme = "Tokyo Night"
-config.font = wezterm.font("FiraCode Nerd Font Mono")
-config.font_size = 9.0
+config.font = wezterm.font_with_fallback({
+	"Fira Code",
+	"FiraCode Nerd Font Mono",
+})
+config.font_size = 12.0
 
 config.scrollback_lines = 10000
 
