@@ -18,6 +18,9 @@ alias tigs="tig status"
 alias tiga="tig --all"
 alias gcleanfd='git clean -f -d'
 
+#lazygit
+alias lg="lazygit"
+
 alias c="clear"
 
 alias fd="fdfind"
