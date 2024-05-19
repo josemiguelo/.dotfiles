@@ -1,6 +1,6 @@
 local g = vim.g
 local opt = vim.opt
-local ft = vim.fileype
+local ft = vim.filetype
 
 g.loaded_netrwPlugin = 1
 opt.cursorcolumn = true
