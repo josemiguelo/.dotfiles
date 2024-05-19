@@ -101,26 +101,11 @@ keys["<leader>tm"] = { name = "+move tab" }
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 
-vim.keymap.del("n", "<C-h>")
-vim.keymap.del("n", "<C-j>")
-vim.keymap.del("n", "<C-k>")
-vim.keymap.del("n", "<C-l>")
-
-map("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Go to left window", remap = true })
-map("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Go to lower window", remap = true })
-map("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Go to upper window", remap = true })
-map("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Go to right window", remap = true })
-
 map("n", "<C-S-s>", "<cmd>wa<cr>")
 
 map("n", "<leader>uj", function()
   require("utils.jdtls").toggle()
 end, { desc = "Toggle Jdtls globally" })
-
---   { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Go to left window" },
---   { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Go to lower window" },
---   { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Go to upper window" },
---   { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Go to right window" },
 
 keys["<leader>r"] = { name = "+run" }
 wk.register(keys)
