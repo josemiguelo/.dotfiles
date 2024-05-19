@@ -1,13 +1,14 @@
 #!nvim -l
 
-local u = require("utils")
+local files = require("utils.files")
+local strings = require("utils.strings")
 
 local function sync_system_cmd(notif_msg, err_msg, cmd, opts)
   local function handle_data(err, data)
-    if not u.string_is_empty(err) then
+    if not strings.string_is_empty(err) then
       vim.print(err)
     end
-    if not u.string_is_empty(data) then
+    if not strings.string_is_empty(data) then
       vim.print(data)
     end
   end
@@ -28,38 +29,38 @@ local function sync_system_cmd(notif_msg, err_msg, cmd, opts)
 end
 
 local jar_full_path = _G.arg[1]
-if u.string_is_empty(jar_full_path) then
+if strings.string_is_empty(jar_full_path) then
   vim.notify("jar name was not passed\n")
   os.exit(1, true)
 end
 
-if not u.is_file(jar_full_path) then
+if not files.is_file(jar_full_path) then
   vim.notify("jar " .. jar_full_path .. " does not exist\n")
   os.exit(1, true)
 end
 
 local decompiler = vim.fn.glob("~/jars/java-decompiler-engine-232.8660.185.jar")
-if not u.is_file(decompiler) then
+if not files.is_file(decompiler) then
   vim.notify("decompiler " .. decompiler .. " not found\n")
   os.exit(1, true)
 end
 
 local decompiled_jars_dir = vim.fn.glob("~/decompiled_jars")
-if not u.is_directory(decompiled_jars_dir) then
+if not files.is_directory(decompiled_jars_dir) then
   vim.notify("directory " .. decompiled_jars_dir .. " not found\n")
   os.exit(1, true)
 end
 
 local jar_name = vim.fs.basename(jar_full_path)
 local decompiled_jar_path = vim.fs.joinpath(decompiled_jars_dir, jar_name)
-if u.is_file(decompiled_jar_path) then
+if files.is_file(decompiled_jar_path) then
   vim.notify("decompiled jar " .. jar_name .. " already exists at " .. decompiled_jar_path)
   os.exit(1, true)
 end
 
 local target_path = string.gsub(jar_name, ".jar", "")
 local target_decompiled_jar_path = vim.fs.joinpath(decompiled_jars_dir, target_path)
-if u.is_directory(target_decompiled_jar_path) then
+if files.is_directory(target_decompiled_jar_path) then
   vim.notify("target directory " .. target_decompiled_jar_path .. " already exists ")
   os.exit(1, true)
 end

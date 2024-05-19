@@ -97,6 +97,9 @@ map("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Go to lower window", re
 map("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Go to upper window", remap = true })
 map("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Go to right window", remap = true })
 
+map("n", "<leader>uj", function()
+  require("utils.jdtls").toggle()
+end, { desc = "Toggle Jdtls globally" })
 --   { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Go to left window" },
 --   { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Go to lower window" },
 --   { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Go to upper window" },
