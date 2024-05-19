@@ -57,6 +57,7 @@ $ZDOTDIR/plugins/chezmoi
 $ZDOTDIR/plugins/golang
 $ZDOTDIR/plugins/android
 $ZDOTDIR/plugins/rust
+$ZDOTDIR/plugins/java
 
 # qmk
 $ZDOTDIR/plugins/qmk

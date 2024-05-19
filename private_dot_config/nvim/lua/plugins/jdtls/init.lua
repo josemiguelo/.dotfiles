@@ -46,7 +46,12 @@ return {
                 end
               end)
 
-              require("jdtls").start_or_attach(require("plugins.jdtls.cmd_config").build_jdtls_config())
+              local jdt_utils = require("utils.jdtls")
+              if jdt_utils.enabled() then
+                require("jdtls").start_or_attach(require("plugins.jdtls.cmd_config").build_jdtls_config())
+              else
+                jdt_utils.info()
+              end
             end,
           })
           return true

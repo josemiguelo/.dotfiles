@@ -1,5 +1,5 @@
 local home = os.getenv("HOME")
-local java_bin_path = home .. "/.asdf/installs/java/adoptopenjdk-17.0.7+7/bin/java"
+local java_bin_path = home .. "/.asdf/installs/java/adoptopenjdk-17.0.11+9/bin/java"
 local workspace_path = home .. "/.local/share/nvim/jdtls-workspace/"
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = workspace_path .. project_name
@@ -106,15 +106,15 @@ M.build_jdtls_config = function()
         runtimes = {
           {
             name = "JavaSE-17",
-            path = home .. "/.asdf/installs/java/adoptopenjdk-17.0.7+7",
+            path = home .. "/.asdf/installs/java/adoptopenjdk-17.0.11+9",
           },
           {
             name = "JavaSE-11",
-            path = home .. "/.asdf/installs/java/adoptopenjdk-11.0.18+10",
+            path = home .. "/.asdf/installs/java/adoptopenjdk-11.0.23+9",
           },
           {
             name = "JavaSE-1.8",
-            path = home .. "/.asdf/installs/java/adoptopenjdk-8.0.362+9",
+            path = home .. "/.asdf/installs/java/zulu-8.78.0.19",
           },
         },
       },
