@@ -2,10 +2,11 @@ return {
   {
     "folke/tokyonight.nvim",
     opts = {
+      transparent = true,
       style = "storm",
       lualine_bold = true,
       on_colors = function(colors)
-        colors.border = "#565f89"
+        colors.border = "#F8F8FF"
       end,
       on_highlights = function(hl, colors)
         hl.CursorLineNr = { fg = colors.cyan }

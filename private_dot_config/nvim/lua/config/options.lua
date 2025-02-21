@@ -2,12 +2,7 @@ local g = vim.g
 local opt = vim.opt
 local ft = vim.filetype
 
-g.loaded_netrwPlugin = 1
 opt.cursorcolumn = true
-
--- vim.cmd([[ hi def IlluminatedWordText gui=underline guibg=#525252" ]])
--- vim.cmd([[ hi def IlluminatedWordRead gui=underline guibg=#525252" ]])
--- vim.cmd([[ hi def IlluminatedWordWrite gui=underline guibg=#525252" ]])
 
 -- make zsh files recognized as sh for bash-ls & treesitter
 ft.add({
