@@ -1,2 +1,2 @@
-. ~/.asdf/plugins/java/set-java-home.zsh
-. ~/.asdf/plugins/tomcat/set-catalina-home.sh
+[[ -f "$HOME/.asdf/plugins/java/set-java-home.zsh" ]] && . ~/.asdf/plugins/java/set-java-home.zsh
+[[ -f "$HOME/.asdf/plugins/tomcat/set-catalina-home.sh" ]] && . ~/.asdf/plugins/tomcat/set-catalina-home.sh
