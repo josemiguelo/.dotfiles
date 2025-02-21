@@ -10,7 +10,7 @@ function M.toggle()
 end
 
 function M.info()
-  require("lazyvim.util")[M.enabled() and "info" or "warn"](
+  LazyVim[M.enabled() and "info" or "warn"](
     { ("**%s**"):format((M.enabled() and "enabled" or "disabled") .. " on the whole project") },
     { title = "Jdtls" }
   )

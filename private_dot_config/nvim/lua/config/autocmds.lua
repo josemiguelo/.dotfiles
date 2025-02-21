@@ -1,6 +1,12 @@
 local jdt_utils = require("utils.jdtls")
 
-pcall(require, "private.autocmds")
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "java" },
+  callback = function()
+    vim.o.tabstop = 4
+    vim.o.shiftwidth = 4
+  end,
+})
 
 vim.api.nvim_create_user_command("JdtInfo", function()
   jdt_utils.info()
