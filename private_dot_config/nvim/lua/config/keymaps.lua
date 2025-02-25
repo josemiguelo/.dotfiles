@@ -11,10 +11,6 @@ map("n", "<leader><tab>m", "<cmd>tabm +1<cr>", { desc = "Move current tab to the
 map("n", "<leader><tab>M", "<cmd>tabm -1<cr>", { desc = "Move current tab to the right" })
 map("n", "<leader><tab>r", ":TabRename ", { desc = "Rename tab" })
 
--- when moving across pages, always center the cursor
-map("n", "<C-d>", "<C-d>zz")
-map("n", "<C-u>", "<C-u>zz")
-
 -- save all files
 map("n", "<C-S-s>", "<cmd>wa<cr>")
 
