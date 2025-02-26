@@ -54,5 +54,6 @@
   "vim-flog": { "branch": "master", "commit": "5bd9c58c5cd142277754b11dee805799ed2528b1" },
   "vim-freemarker": { "branch": "master", "commit": "993bda23e72e4c074659970c1e777cb19d8cf93e" },
   "vim-fugitive": { "branch": "master", "commit": "4a745ea72fa93bb15dd077109afbb3d1809383f2" },
-  "which-key.nvim": { "branch": "main", "commit": "5bf7a73fe851896d5ac26d313db849bf00f45b78" }
+  "which-key.nvim": { "branch": "main", "commit": "5bf7a73fe851896d5ac26d313db849bf00f45b78" },
+  "yazi.nvim": { "branch": "main", "commit": "58169cdd36333de3c7ecb7aeac71e6339254b791" }
 }
