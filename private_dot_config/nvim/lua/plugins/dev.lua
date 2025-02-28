@@ -3,6 +3,7 @@ return {
     "yarospace/lua-console.nvim",
     lazy = true,
     opts = {},
+    keys = { "`", "<Leader>`" },
   },
   {
     "jbyuki/one-small-step-for-vimkind",
