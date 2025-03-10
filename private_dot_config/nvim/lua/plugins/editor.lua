@@ -64,11 +64,5 @@ return {
         },
       },
     },
-    config = function(_, opts)
-      local overseer = require("overseer")
-      overseer.setup(opts)
-
-      pcall(require, "private.overseer")
-    end,
   },
 }
