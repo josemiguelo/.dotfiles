@@ -14,6 +14,8 @@ return {
         hl.LineNrAbove = { fg = colors.blue1 }
         hl.LineNrBelow = { fg = colors.blue1 }
         hl.Comment = { fg = "#7380ba" }
+        hl.SnacksPicker = { bg = "none", nocombine = true }
+        hl.SnacksPickerBorder = { bg = "none", nocombine = true }
       end,
     },
   },
