@@ -16,6 +16,9 @@ return {
         hl.Comment = { fg = "#7380ba" }
         hl.SnacksPicker = { bg = "none", nocombine = true }
         hl.SnacksPickerBorder = { bg = "none", nocombine = true }
+        hl.Normal = { bg = "none", nocombine = true }
+        hl.NormalFloat = { bg = "none", nocombine = true }
+        hl.SnacksTerminal = { bg = "none", nocombine = true }
       end,
     },
   },
