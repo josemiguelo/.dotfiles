@@ -5,22 +5,15 @@ return {
       transparent = true,
       style = "storm",
       lualine_bold = true,
+      dim_inactive = true,
       on_colors = function(colors)
-        colors.border = "#F8F8FF"
+        colors.border = colors.blue6
       end,
       on_highlights = function(hl, colors)
         hl.CursorLineNr = { fg = colors.cyan }
         hl.LineNrAbove = { fg = colors.blue1 }
         hl.LineNrBelow = { fg = colors.blue1 }
         hl.Comment = { fg = "#7380ba" }
-
-        hl.IlluminatedWord = {}
-        hl.IlluminatedCurWord = {}
-        hl.IlluminatedWordText = {}
-        hl.IlluminatedWordRead = {}
-        hl.IlluminatedWordWrite = {}
-
-        -- hl.FlashLabel = { bg = "#ff007c", bold = true, fg = "#c0caf5" }
       end,
     },
   },
