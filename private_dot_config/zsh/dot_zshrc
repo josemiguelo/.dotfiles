@@ -3,6 +3,10 @@ fpath=($ZDOTDIR/completions $fpath)
 autoload -Uz compinit
 compinit
 
+export HISTFILE="$HOME/.local/state/zsh_history"
+export HISTSIZE=10000
+export SAVEHIST=10000
+
 # zstyles
 [[ -r $ZDOTDIR/.zstyles ]] && . $ZDOTDIR/.zstyles
 
