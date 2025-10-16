@@ -22,10 +22,12 @@ require("lazy").setup({
     { import = "features.neovim_core" },
     { import = "features" },
     { import = "features.langs" },
+    {{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
     {
       dir = "~/Projects/private.nvim",
       opts = {},
     },
+    {{ end }}
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
