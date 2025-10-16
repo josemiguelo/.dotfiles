@@ -1,0 +1,13 @@
+java adoptopenjdk-21.0.6+7.0.LTS
+python 3.12.3 2.7.18
+nodejs 20.19.4
+golang 1.25.3
+neovim nightly
+rust 1.77.2
+maven 3.6.3
+ruby 3.3.1
+lazydocker 0.24.1
+tomcat 9.0.88
+lazygit 0.55.1
+bun 1.1.10
+cocoapods 1.15.2
