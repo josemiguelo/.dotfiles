@@ -10,7 +10,7 @@ M.setup = function(config)
 
   --colorscheme
 	config.color_scheme = "Tokyo Night"
-	if private_exists and private_config.color_scheme then
+	if private_exists and private_config ~= nil and private_config.color_scheme then
 		config.color_scheme = private_config.color_scheme
 	end
 
