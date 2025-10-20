@@ -1,6 +1,6 @@
 java adoptopenjdk-21.0.6+7.0.LTS
 python 3.12.3 2.7.18
-nodejs 22.20.0
+nodejs 23.11.1
 golang 1.25.3
 neovim nightly
 rust 1.77.2
