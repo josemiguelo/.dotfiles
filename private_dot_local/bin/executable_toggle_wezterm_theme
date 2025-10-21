@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+local file_path="$HOME/.config/wezterm/private.lua"
+
+# 1. Check if "Day" is present and remove it
+if grep -q 'color_scheme = "Tokyo Night Day"' "$file_path"; then
+    sed -i '' 's/\(color_scheme = "Tokyo Night\) Day"/\1"/' "$file_path"
+elif grep -q 'color_scheme = "Tokyo Night"' "$file_path"; then
+    sed -i '' 's/\(color_scheme = "Tokyo Night\)"/\1 Day"/' "$file_path"
+fi
