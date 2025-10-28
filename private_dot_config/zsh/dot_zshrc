@@ -17,4 +17,6 @@ export antidote_path=${XDG_DATA_HOME:=~/.local/share}/mattmc3/antidote
 source $antidote_path/antidote.zsh
 antidote load
 
+eval "$(zoxide init zsh)"
+
 eval "$(starship init zsh)"
