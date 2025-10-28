@@ -15,7 +15,7 @@ M.setup = function(config)
 
 		-- The size of the font in the tab bar.
 		-- Default to 10.0 on Windows but 12.0 on other systems
-		font_size = 13.0,
+		font_size = 12.0,
 
 		-- The overall background color of the tab bar when
 		-- the window is focused
