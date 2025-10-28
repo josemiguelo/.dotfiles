@@ -16,7 +16,11 @@ M.setup = function(config)
 
   -- font
 	config.font_size = 12.0
-  {{ if (eq .chezmoi.os "darwin") }}config.font = wezterm.font("Fira Code"){{ else if (eq .chezmoi.os "linux") }}config.font = wezterm.font("FiraCode Nerd Font Mono"){{ end }}
+  {{ if (eq .chezmoi.os "darwin") }}
+  config.font = wezterm.font("Fira Code")
+  {{ else if (eq .chezmoi.os "linux") }}
+  config.font = wezterm.font("FiraCode Nerd Font Mono")
+  {{ end }}
 
   -- scrollback
 	config.scrollback_lines = 10000
