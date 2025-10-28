@@ -40,6 +40,11 @@ M.setup = function(config)
 
 	local plugin_url = "https://github.com/MLFlexer/smart_workspace_switcher.wezterm"
 	local workspace_switcher = wezterm.plugin.require(plugin_url)
+
+	if wezterm.target_triple:find("darwin") then
+		workspace_switcher.zoxide_path = "/opt/homebrew/bin/zoxide"
+	end
+
 	workspace_switcher.apply_to_config(config)
 
 	 -- stylua: ignore
