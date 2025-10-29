@@ -91,7 +91,7 @@ local excluded_filetypes = {}
 return {
   {
     "b0o/incline.nvim",
-    dependencies = { "nvim-web-devicons" },
+    dependencies = { "nvim-web-devicons", "folke/tokyonight.nvim" },
     config = function()
       require("incline").setup({
         window = {
@@ -104,23 +104,22 @@ return {
             return {}
           end
 
-          local helpers = require("incline.helpers")
-          local devicons = require("nvim-web-devicons")
+          local colors = require("tokyonight.colors").setup()
 
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
           if filename == "" then
             filename = "[No Name]"
           end
-          local ft_icon, ft_color = devicons.get_icon_color(filename)
           local modified = vim.bo[props.buf].modified
           local path = build_path(props.buf)
 
           return {
-            modified and { "(M)", gui = "bold,italic" } or "",
+            -- " ",
+            modified and { "*", gui = "bold,italic" } or "",
             { path, gui = "bold" },
-            " ",
-            ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
-            " ",
+            -- " ",
+            guibg = colors.bg_highlight,
+            guifg = colors.white,
           }
         end,
       })
