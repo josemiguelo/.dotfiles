@@ -47,4 +47,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- TODO: jdtls toggle functionality
 
+vim.opt.splitkeep = "cursor"
+
 return {}
