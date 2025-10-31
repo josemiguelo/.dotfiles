@@ -30,16 +30,19 @@ return {
       "GRemove",
       "Gbrowse",
     },
-    config = function()
-      -- BUG: this doesn't work
-      remap("n", "<leader>gg", function()
-        if vim.v.count > 0 then
-          vim.cmd("G")
-        else
-          fugitive_toggle_window()
-        end
-      end, { noremap = true, silent = true, desc = "Toggle Fugitive Window" })
-    end,
+    keys = {
+      {
+        "<leader>gg",
+        function()
+          if vim.v.count > 0 then
+            vim.cmd("G")
+          else
+            fugitive_toggle_window()
+          end
+        end,
+        desc = "GitUi (Root Dir)",
+      },
+    },
   },
   {
     "nvim-treesitter/nvim-treesitter",
