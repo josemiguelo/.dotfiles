@@ -7,7 +7,7 @@ return {
       lualine_bold = true,
       dim_inactive = true,
       on_colors = function(colors)
-        colors.border = colors.blue6
+        colors.border = colors.teal
       end,
       on_highlights = function(hl, colors)
         hl.CursorLineNr = { fg = colors.cyan }
