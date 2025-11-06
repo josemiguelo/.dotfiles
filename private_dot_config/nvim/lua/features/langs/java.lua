@@ -2,12 +2,6 @@
 -- needing to require that when this module loads.
 local java_filetypes = { "java" }
 
-local path_exists = require("util.paths").path_exists
-local jdtls_util = require("util.java")
-
-local java_deps_ext_path = os.getenv(jdtls_util.java_deps_ext_env_name)
-local java_deps_ext_exists = path_exists(java_deps_ext_path)
-
 -- Utility function to extend or override a config table, similar to the way
 -- that Plugin.opts works.
 ---@param config table
@@ -85,15 +79,6 @@ return {
     },
   },
 
-  {
-    "JavaHello/java-deps.nvim",
-    ft = "java",
-    cond = java_deps_ext_exists,
-    config = function()
-      require("java-deps").setup({})
-    end,
-  },
-
   -- Set up nvim-jdtls to attach to java files.
   {
     "mfussenegger/nvim-jdtls",
@@ -101,12 +86,10 @@ return {
     ft = java_filetypes,
     opts = function()
       local cmd = { vim.fn.exepath("jdtls") }
-
       if LazyVim.has("mason.nvim") then
         local lombok_jar = vim.fn.expand("$MASON/share/jdtls/lombok.jar")
         table.insert(cmd, string.format("--jvm-arg=-javaagent:%s", lombok_jar))
       end
-
       return {
         root_dir = function(path)
           return vim.fs.root(path, vim.lsp.config.jdtls.root_markers)
@@ -177,18 +160,6 @@ return {
           end
         end
       end
-
-      if java_deps_ext_exists then
-        local jars_path = java_deps_ext_path
-          .. "/jdtls.ext/com.microsoft.jdtls.ext.core"
-          .. "/target/com.microsoft.jdtls.ext.core-*.jar"
-        local java_deps_bundle = vim.split(vim.fn.glob(jars_path), "\n")
-
-        if java_deps_bundle[1] ~= "" then
-          vim.list_extend(bundles, java_deps_bundle)
-        end
-      end
-
       local function attach_jdtls()
         local fname = vim.api.nvim_buf_get_name(0)
 
@@ -300,12 +271,6 @@ return {
                   })
                 end
               end
-            end
-
-            if java_deps_ext_exists then
-              vim.api.nvim_buf_create_user_command(args.buf, "JavaDeps", require("java-deps").toggle_outline, {
-                nargs = 0,
-              })
             end
 
             -- User can set additional keymaps in opts.on_attach
