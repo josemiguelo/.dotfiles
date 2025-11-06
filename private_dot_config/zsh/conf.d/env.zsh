@@ -28,3 +28,5 @@ alias fd="fdfind"
 alias rm='echo "use trash instead of rm. use rm with a prependend slash if you really want to"; false'
 
 alias cd="z"
+
+export VSCODE_JAVA_DEPENDENCY_PATH="$HOME/Repos/vscode-java-dependency"
