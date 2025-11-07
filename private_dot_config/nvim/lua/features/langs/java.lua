@@ -79,6 +79,18 @@ return {
     },
   },
 
+  {
+    "g0ne150/java-deps.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+      {
+        "mason-org/mason.nvim",
+        opts = { ensure_installed = { "vscode-java-dependency" } },
+      },
+    },
+    config = function() end,
+  },
+
   -- Set up nvim-jdtls to attach to java files.
   {
     "mfussenegger/nvim-jdtls",
@@ -104,6 +116,7 @@ return {
         jdtls_config_dir = function(project_name)
           return vim.fn.stdpath("cache") .. "/jdtls/" .. project_name .. "/config"
         end,
+
         jdtls_workspace_dir = function(project_name)
           return vim.fn.stdpath("cache") .. "/jdtls/" .. project_name .. "/workspace"
         end,
@@ -146,6 +159,7 @@ return {
         },
       }
     end,
+
     config = function(_, opts)
       -- Find the extra bundles that should be passed on the jdtls command-line
       -- if nvim-dap is enabled with java debug/test.
@@ -159,7 +173,15 @@ return {
             vim.list_extend(bundles, vim.fn.glob("$MASON/share/java-test/*.jar", false, true))
           end
         end
+
+        if mason_registry.is_installed("vscode-java-dependency") then
+          vim.list_extend(
+            bundles,
+            vim.fn.glob("$MASON/share/vscode-java-dependency/com.microsoft.jdtls.ext.core-*.jar", false, true)
+          )
+        end
       end
+
       local function attach_jdtls()
         local fname = vim.api.nvim_buf_get_name(0)
 
