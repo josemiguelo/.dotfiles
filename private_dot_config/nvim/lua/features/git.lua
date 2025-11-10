@@ -1,5 +1,4 @@
 local get_window_by_ft = require("util.windows").get_window_by_ft
-local remap = require("util.keymaps").remap
 
 local function fugitive_toggle_window()
   local fugitive_win = get_window_by_ft("fugitive")

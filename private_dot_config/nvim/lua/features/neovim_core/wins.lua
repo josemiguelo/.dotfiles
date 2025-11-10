@@ -1,16 +1,14 @@
-local create_augroup = require("util.cmds").create_augroup
-local delete_augroup = require("util.cmds").del_augroup
-local get_window_by_ft = require("util.windows").get_window_by_ft
+local create_augroup = require("util.cmds").new_lazyvim_augroup
+local delete_augroup = require("util.cmds").del_lazyvim_augroup
 
---[[
-  add more filetypes to close with q
---]]
+local suffix = "close_with_q"
+
 LazyVim.on_very_lazy(function()
-  local suffix = "close_with_q"
   delete_augroup(suffix) -- remove original command
+
   vim.api.nvim_create_autocmd("FileType", {
-    group = create_augroup(suffix),
-    pattern = {
+    group = create_augroup("custom_" .. suffix),
+    pattern = { -- add more filetypes to close with q
       "PlenaryTestPopup",
       "checkhealth",
       "dbout",
@@ -28,26 +26,21 @@ LazyVim.on_very_lazy(function()
       "tsplayground",
       "git",
       "man",
-      "scratch",
       "fugitive",
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
       vim.schedule(function()
-        vim.keymap.set("n", "q", function()
+        local action_close = function()
           vim.cmd("close")
           pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
-        end, {
-          buffer = event.buf,
-          silent = true,
-          desc = "Quit buffer",
-        })
+        end
+        local keymap_options = { buffer = event.buf, silent = true, desc = "Quit buffer" }
+        vim.keymap.set("n", "q", action_close, keymap_options)
       end)
     end,
   })
 end)
-
--- TODO: jdtls toggle functionality
 
 vim.opt.splitkeep = "cursor"
 
