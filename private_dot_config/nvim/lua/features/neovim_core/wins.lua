@@ -44,4 +44,15 @@ end)
 
 vim.opt.splitkeep = "cursor"
 
-return {}
+return {
+  {
+    "folke/which-key.nvim",
+    -- stylua: ignore
+    keys = {
+      { "<C-Up>", mode = { "n" }, "<cmd>resize +10<cr>", desc = "Increase Window Height", },
+      { "<C-Down>", mode = { "n" }, "<cmd>resize -10<cr>", desc = "Decrease Window Height", },
+      { "<C-Left>", mode = { "n" }, "<cmd>vertical resize -10<cr>", desc = "Decrease Window Width", },
+      { "<C-Right>", mode = { "n" }, "<cmd>vertical resize +10<cr>", desc = "Increase Window Width", },
+    },
+  },
+}
