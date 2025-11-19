@@ -27,6 +27,7 @@ LazyVim.on_very_lazy(function()
       "git",
       "man",
       "fugitive",
+      "fugitiveblame",
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
