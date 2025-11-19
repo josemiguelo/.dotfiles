@@ -114,12 +114,10 @@ return {
           local path = build_path(props.buf)
 
           return {
-            -- " ",
-            modified and { "*", gui = "bold,italic" } or "",
+            modified and { "(M)", gui = "bold,italic", guifg = colors.red } or "",
             { path, gui = "bold" },
-            -- " ",
             guibg = colors.bg_highlight,
-            guifg = colors.white,
+            guifg = colors.teal,
           }
         end,
       })
