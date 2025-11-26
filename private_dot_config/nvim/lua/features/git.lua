@@ -63,4 +63,12 @@ return {
     cmd = { "Flog", "Flogsplit", "Floggit" },
     dependencies = { "tpope/vim-fugitive" },
   },
+  {
+    "tpope/vim-rhubarb",
+    event = "VeryLazy",
+  },
+  {
+    "shumphrey/fugitive-gitlab.vim",
+    event = "VeryLazy",
+  },
 }
