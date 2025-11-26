@@ -7,16 +7,16 @@ return {
   {
     "nanozuki/tabby.nvim",
     dependencies = {
-      { "folke/tokyonight.nvim", "folke/snacks.nvim" },
+      { "olimorris/onedarkpro.nvim", "folke/snacks.nvim" },
     },
     config = function()
       vim.o.showtabline = 2
 
-      local colors = require("tokyonight.colors").setup()
+      local colors = require("onedarkpro.helpers").get_colors()
 
       local theme = {
         fill = "TabLineFill",
-        current_tab = { fg = colors.black, bg = colors.blue, style = "bold" },
+        current_tab = { fg = colors.bg, bg = colors.red, style = "bold" },
         tab = { style = "italic" },
       }
 

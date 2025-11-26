@@ -1,29 +1,54 @@
 return {
   {
     "folke/tokyonight.nvim",
+    cond = false,
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = { colorscheme = "vaporwave" },
+  },
+  {
+    "olimorris/onedarkpro.nvim",
+    priority = 1000,
     opts = {
-      transparent = true,
-      style = "storm",
-      lualine_bold = true,
-      dim_inactive = true,
-      on_colors = function(colors)
-        colors.border = colors.teal
-      end,
-      on_highlights = function(hl, colors)
-        hl.CursorLineNr = { fg = colors.cyan }
-        hl.LineNrAbove = { fg = colors.blue1 }
-        hl.LineNrBelow = { fg = colors.blue1 }
-        hl.Comment = { fg = "#7380ba" }
-        hl.SnacksPicker = { bg = "none", nocombine = true }
-        hl.SnacksPickerBorder = { bg = "none", nocombine = true }
-        hl.Normal = { bg = "none", nocombine = true }
-        hl.NormalFloat = { bg = "none", nocombine = true }
-        hl.SnacksTerminal = { bg = "none", nocombine = true }
-      end,
+      highlights = {
+        CursorLineNr = { fg = "${green}" },
+        LineNrAbove = { fg = "${blue}" },
+        LineNrBelow = { fg = "${blue}" },
+        CursorColumn = { bg = "${cursorline}" },
+        WinSeparator = { fg = "${blue}" },
+        SnacksPicker = { bg = "NONE" },
+        SnacksPickerBorder = { bg = "NONE" },
+        Normal = { bg = "NONE" },
+        NormalFloat = { bg = "NONE" },
+        SnacksTerminal = { bg = "NONE" },
+      },
+      options = {
+        cursorline = true,
+        transparency = true,
+        terminal_colors = true,
+        lualine_transparency = true,
+        highlight_inactive_windows = true,
+      },
+      styles = {
+        types = "bold",
+        methods = "bold",
+        numbers = "NONE",
+        strings = "NONE",
+        comments = "italic",
+        keywords = "bold,italic",
+        constants = "bold",
+        functions = "italic",
+        operators = "NONE",
+        variables = "NONE",
+        parameters = "italic",
+        conditionals = "bold,italic",
+        virtual_text = "italic",
+      },
     },
   },
   {
     "catppuccin/nvim",
-    enabled = false,
+    cond = false,
   },
 }
