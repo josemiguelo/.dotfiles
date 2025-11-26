@@ -1,5 +1,11 @@
 return {
   "catgoose/nvim-colorizer.lua",
   event = "BufReadPre",
-  opts = {},
+  opts = {
+    filetypes = {
+      "*",
+      "!sidekick_terminal",
+      "!fugitive",
+    },
+  },
 }
