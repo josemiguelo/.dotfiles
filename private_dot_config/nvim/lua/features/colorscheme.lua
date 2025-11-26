@@ -1,18 +1,10 @@
 return {
   {
-    "folke/tokyonight.nvim",
-    cond = false,
-  },
-  {
-    "LazyVim/LazyVim",
-    opts = { colorscheme = "vaporwave" },
-  },
-  {
     "olimorris/onedarkpro.nvim",
     priority = 1000,
     opts = {
       highlights = {
-        CursorLineNr = { fg = "${green}" },
+        CursorLineNr = { fg = "${purple}" },
         LineNrAbove = { fg = "${blue}" },
         LineNrBelow = { fg = "${blue}" },
         CursorColumn = { bg = "${cursorline}" },
@@ -24,7 +16,6 @@ return {
         SnacksTerminal = { bg = "NONE" },
       },
       options = {
-        cursorline = true,
         transparency = true,
         terminal_colors = true,
         lualine_transparency = true,
@@ -47,8 +38,7 @@ return {
       },
     },
   },
-  {
-    "catppuccin/nvim",
-    cond = false,
-  },
+  { "LazyVim/LazyVim", opts = { colorscheme = "vaporwave" } },
+  { "catppuccin/nvim", cond = false },
+  { "folke/tokyonight.nvim", cond = false },
 }
