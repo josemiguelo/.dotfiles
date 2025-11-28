@@ -7,14 +7,23 @@ the 'listchars' option.
 vim.opt.list = true
 vim.opt.listchars = {
   eol = "⤶",
-  space = "·",
+  -- space = "·",
   tab = "▸ ",
   trail = "•",
   extends = "»",
   precedes = "«",
   nbsp = "␣",
-  lead = "·",
-  leadmultispace = "·",
+  -- lead = "·",
+  -- leadmultispace = "·",
 }
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "terminal", "snacks_dashboard" },
+  callback = function()
+    vim.opt_local.list = false
+  end,
+  -- make sure this autocommand runs every time you enter a terminal buffer.
+  once = false,
+})
 
 return {}
