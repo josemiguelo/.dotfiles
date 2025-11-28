@@ -14,6 +14,7 @@ return {
         Normal = { bg = "NONE" },
         NormalFloat = { bg = "NONE" },
         SnacksTerminal = { bg = "NONE" },
+        FlashLabel = { bg = "${blue}", bold = true, fg = "${cursorline}" },
       },
       options = {
         transparency = true,
@@ -38,7 +39,7 @@ return {
       },
     },
   },
-  { "LazyVim/LazyVim", opts = { colorscheme = "vaporwave" } },
+  { "LazyVim/LazyVim", opts = { colorscheme = "onedark" } },
   { "catppuccin/nvim", cond = false },
   { "folke/tokyonight.nvim", cond = false },
 }
