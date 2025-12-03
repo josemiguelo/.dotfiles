@@ -18,7 +18,11 @@ vim.opt.listchars = {
 }
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "terminal", "snacks_dashboard" },
+  pattern = {
+    "terminal",
+    "snacks_dashboard",
+    "snacks_terminal",
+  },
   callback = function()
     vim.opt_local.list = false
   end,
