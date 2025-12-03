@@ -71,4 +71,8 @@ return {
     "shumphrey/fugitive-gitlab.vim",
     event = "VeryLazy",
   },
+  {
+    "farhanmustar/fugitive-delta.nvim",
+    event = "VeryLazy",
+  },
 }
