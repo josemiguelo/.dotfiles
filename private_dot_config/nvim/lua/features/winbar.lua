@@ -91,7 +91,7 @@ local excluded_filetypes = {}
 return {
   {
     "b0o/incline.nvim",
-    dependencies = { "nvim-web-devicons", "olimorris/onedarkpro.nvim" },
+    dependencies = { "nvim-web-devicons", "olimorris/onedarkpro.nvim", "folke/tokyonight.nvim" },
     config = function()
       require("incline").setup({
         window = {
@@ -104,7 +104,10 @@ return {
             return {}
           end
 
-          local colors = require("onedarkpro.helpers").get_colors()
+          -- stylua: ignore
+          local colors = vim.o.background == "dark"
+            and require("onedarkpro.helpers").get_colors()
+            or require("tokyonight.colors").setup()
 
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
           if filename == "" then
@@ -113,12 +116,16 @@ return {
           local modified = vim.bo[props.buf].modified
           local path = build_path(props.buf)
 
-          return {
+          local render_ret = {
             modified and { "(M)", gui = "bold,italic", guifg = colors.red } or "",
             { path, gui = "bold" },
-            guibg = colors.cursorline,
             guifg = colors.blue,
           }
+
+          if vim.o.background == "dark" then
+            render_ret.guibg = colors.cursorline
+          end
+          return render_ret
         end,
       })
 
