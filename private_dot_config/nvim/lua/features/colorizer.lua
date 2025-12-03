@@ -7,6 +7,7 @@ return {
       "!sidekick_terminal",
       "!fugitive",
       "!help",
+      "!git",
     },
   },
 }
