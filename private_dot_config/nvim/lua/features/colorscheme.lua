@@ -5,7 +5,7 @@ return {
     "folke/tokyonight.nvim",
     opts = {
       transparent = true,
-      style = "storm",
+      style = "day",
       lualine_bold = true,
       dim_inactive = true,
       on_colors = function(colors)
