@@ -3,6 +3,56 @@ local reload_plugins = function()
   require("features.tabbar")[2].config()
   require("features.blink_cursor")[1].config()
 end
+
+local tokyonight_highlights = function(hl, colors)
+  hl.Comment = { fg = "#7380ba" }
+
+  -- cursor colors
+  hl.CursorLineNr = { fg = colors.cyan }
+
+  -- relative numbers
+  hl.LineNrAbove = { fg = colors.blue1 }
+  hl.LineNrBelow = { fg = colors.blue1 }
+
+  -- snacks plugins
+  hl.SnacksPicker = { bg = "none", nocombine = true }
+  hl.SnacksPickerBorder = { bg = "none", nocombine = true }
+  hl.Normal = { bg = "none", nocombine = true }
+  hl.NormalFloat = { bg = "none", nocombine = true }
+  hl.SnacksTerminal = { bg = "none", nocombine = true }
+
+  -- flash
+  hl.FlashLabel = { bg = "#ff007c", bold = true, fg = "#ffffff" }
+
+  -- git
+  hl.DiffText = { bg = "#ffffff" }
+end
+
+local onedark_highlights = {
+  --
+  CursorColumn = { bg = "${cursorline}" },
+  CursorLineNr = { fg = "${purple}" },
+
+  -- relative numbers
+  LineNrAbove = { fg = "${blue}" },
+  LineNrBelow = { fg = "${blue}" },
+
+  WinSeparator = { fg = "${blue}" },
+
+  -- snacks plugins
+  SnacksPicker = { bg = "NONE" },
+  SnacksPickerBorder = { bg = "NONE" },
+  Normal = { bg = "NONE" },
+  NormalFloat = { bg = "NONE" },
+  SnacksTerminal = { bg = "NONE" },
+
+  -- flash
+  FlashLabel = { bg = "${blue}", bold = true, fg = "${cursorline}" },
+
+  -- git
+  DiffText = { bg = "${cyan}", bold = true, fg = "#000000" },
+}
+
 return {
 
   -- light theme
@@ -16,21 +66,7 @@ return {
       on_colors = function(colors)
         colors.border = colors.blue6
       end,
-      on_highlights = function(hl, colors)
-        hl.CursorLineNr = { fg = colors.cyan }
-        hl.LineNrAbove = { fg = colors.blue1 }
-        hl.LineNrBelow = { fg = colors.blue1 }
-        hl.Comment = { fg = "#7380ba" }
-
-        hl.SnacksPicker = { bg = "none", nocombine = true }
-        hl.SnacksPickerBorder = { bg = "none", nocombine = true }
-        hl.Normal = { bg = "none", nocombine = true }
-        hl.NormalFloat = { bg = "none", nocombine = true }
-        hl.SnacksTerminal = { bg = "none", nocombine = true }
-
-        hl.FlashLabel = { bg = "#ff007c", bold = true, fg = "#ffffff" }
-        hl.DiffText = { bg = "#ffffff" }
-      end,
+      on_highlights = tokyonight_highlights,
     },
   },
 
@@ -39,20 +75,6 @@ return {
     "olimorris/onedarkpro.nvim",
     priority = 1000,
     opts = {
-      highlights = {
-        CursorLineNr = { fg = "${purple}" },
-        LineNrAbove = { fg = "${blue}" },
-        LineNrBelow = { fg = "${blue}" },
-        CursorColumn = { bg = "${cursorline}" },
-        WinSeparator = { fg = "${blue}" },
-        SnacksPicker = { bg = "NONE" },
-        SnacksPickerBorder = { bg = "NONE" },
-        Normal = { bg = "NONE" },
-        NormalFloat = { bg = "NONE" },
-        SnacksTerminal = { bg = "NONE" },
-        FlashLabel = { bg = "${blue}", bold = true, fg = "${cursorline}" },
-        DiffText = { bg = "${cursorline}" },
-      },
       options = {
         transparency = true,
         terminal_colors = true,
@@ -74,6 +96,7 @@ return {
         conditionals = "bold,italic",
         virtual_text = "italic",
       },
+      highlights = onedark_highlights,
     },
   },
 
