@@ -1,3 +1,8 @@
+local reload_plugins = function()
+  require("features.winbar")[1].config()
+  require("features.tabbar")[2].config()
+  require("features.blink_cursor")[1].config()
+end
 return {
 
   -- light theme
@@ -80,15 +85,13 @@ return {
         vim.notify("Enabling dark mode 🌚")
         vim.api.nvim_set_option_value("background", "dark", {})
         vim.cmd("colorscheme onedark")
-        require("features.winbar")[1].config()
-        require("features.tabbar")[2].config()
+        reload_plugins()
       end,
       set_light_mode = function()
         vim.notify("Enabling light mode 🌞")
         vim.api.nvim_set_option_value("background", "light", {})
         vim.cmd("colorscheme tokyonight-day")
-        require("features.winbar")[1].config()
-        require("features.tabbar")[2].config()
+        reload_plugins()
       end,
     },
   },
