@@ -11,4 +11,6 @@ setup_tabs(config)
 setup_ssh(config)
 setup_switcher(config)
 
+config.default_prog = { "/bin/zsh", "--login" }
+
 return config
