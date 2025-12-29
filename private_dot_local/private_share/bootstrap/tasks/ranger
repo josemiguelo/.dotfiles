@@ -1,9 +1,0 @@
-#! /bin/env bash
-
-#TODO: make this idempotent
-
-#TODO: try to not use this
-. ~/.asdf/asdf.sh
-
-pip install Pygments
-pip install ranger-fm
