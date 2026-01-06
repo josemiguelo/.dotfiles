@@ -30,10 +30,3 @@ antidote load
 eval "$(zoxide init zsh)"
 
 eval "$(starship init zsh)"
-
-MARKER="$HOME/.config/dotfiles-setup-done"
-if [[ "${CONTAINER_ID:-}" =~ ^boxkit ]]; then
-    if [ ! -f "$MARKER" ]; then
-        echo "🖥️ you are on a dev environment. execute setup-dotfiles.sh"
-    fi
-fi
