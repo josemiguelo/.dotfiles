@@ -1,5 +1,3 @@
-export PATH=$PATH:$HOME/.local/bin
-
 #git
 alias tigs="tig status"
 alias tiga="tig --all"
