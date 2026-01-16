@@ -1,3 +1,1 @@
-alias qmkc="qmk compile -kb crkbd/rev1 -km jm"
-alias qmkf="qmk flash -kb crkbd/rev1 -km jm"
-alias qmkr="cd $HOME/qmk_firmware/keyboards/crkbd/rev1/keymaps/jm/"
+alias qmkr="cd $HOME/qmk_firmware/keyboards/bastardkb/charybdis/4x6_trackball_left/keymaps/jm"
