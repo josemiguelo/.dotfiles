@@ -109,12 +109,14 @@ return {
         vim.api.nvim_set_option_value("background", "dark", {})
         vim.cmd("colorscheme onedark")
         reload_plugins()
+        vim.cmd([[ highlight link FugitiveDeltaText DiffText ]])
       end,
       set_light_mode = function()
         vim.notify("Enabling light mode 🌞")
         vim.api.nvim_set_option_value("background", "light", {})
         vim.cmd("colorscheme tokyonight-day")
         reload_plugins()
+        vim.cmd([[ highlight link FugitiveDeltaText DiffText ]])
       end,
     },
   },
