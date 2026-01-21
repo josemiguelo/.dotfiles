@@ -26,9 +26,14 @@ M.setup = function(config)
 	config.underline_thickness = 2
 	config.colors = { split = "#E16765" }
 
+  {{ if (eq .chezmoi.os "darwin") }}
 	-- Slightly transparent and blurred background
 	config.window_background_opacity = 0.9
 	config.macos_window_background_blur = 30
+  {{ else if (eq .chezmoi.os "linux") }}
+	config.window_background_opacity = 0.9
+  config.kde_window_background_blur = true
+  {{ end }}
 end
 
 return M
