@@ -11,6 +11,10 @@ setup_tabs(config)
 setup_ssh(config)
 setup_switcher(config)
 
+{{ if (eq .chezmoi.os "darwin") }}
 config.default_prog = { "/bin/zsh", "--login" }
+{{ else if (eq .chezmoi.os "linux") }}
+config.default_prog = { "/usr/bin/zsh", "--login" }
+{{ end }}
 
 return config
