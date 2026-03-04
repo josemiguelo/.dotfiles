@@ -47,6 +47,12 @@ return {
   -- disable lsp's formatting capabilities since we want to use google-java-format instead
   {
     "mfussenegger/nvim-jdtls",
+    dependencies = {
+      {
+        "mason-org/mason.nvim",
+        opts = { ensure_installed = { "google-java-format" } },
+      },
+    },
     opts = {
       jdtls = function(config)
         config.settings = config.settings or {}
