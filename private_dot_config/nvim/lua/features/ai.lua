@@ -9,7 +9,7 @@ return {
         },
         win = {
           split = {
-            width = 120, -- set to 0 for default split width
+            width = math.floor(vim.o.columns * 0.3), -- 30% of visible window
           },
         },
       },
