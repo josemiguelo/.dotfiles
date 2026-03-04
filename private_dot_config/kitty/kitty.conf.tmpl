@@ -34,8 +34,7 @@ macos_show_window_title_in window
 {{ else if (eq .chezmoi.os "linux") -}}
 background_blur 1
 {{ end -}}
-# background_opacity 0.85
-background_opacity 1
+background_opacity 0.85
 
 # Remote control for scripting
 allow_remote_control yes
@@ -45,7 +44,7 @@ listen_on unix:/tmp/kitty
 enabled_layouts grid,tall,fat,vertical,horizontal,stack
 
 # --- Tab Bar ---
-tab_bar_min_tabs 1
+# tab_bar_min_tabs 1
 tab_bar_edge bottom
 tab_bar_style powerline
 tab_powerline_style slanted
@@ -57,9 +56,6 @@ tab_title_template "{index}: {title}"
 
 # --- Keybindings ---
 map ctrl+alt+e set_tab_title
-
-# Layout switching
-map ctrl+shift+l next_layout
 
 # --- Theme ---
 # Automatic theme switching is managed by Kitty using the .auto.conf files.
