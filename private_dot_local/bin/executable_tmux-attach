@@ -1,17 +1,55 @@
 #!/usr/bin/env bash
 
-if ! tmux run 2>/dev/null; then
-  echo "tmux server not running"
-  exit 0
+# Icons for differentiation (Nerd Fonts)
+session_icon="󱂬"
+dir_icon="󰉋"
+
+# 1. Collect existing sessions
+sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null)
+if [[ -n "$TMUX" ]]; then
+  current_session=$(tmux display-message -p '#S' 2>/dev/null)
+  sessions_raw=$(echo "$sessions_raw" | grep -v "^$current_session$")
 fi
 
-session_name="$(tmux list-sessions | sed -E 's/:.*$//' | grep -v \"^$(tmux display-message -p '#S')\$\" | fzf-tmux -p --reverse)"
-if [[ -z $session_name ]]; then
-  exit 0
-fi
-
-if [ -z "$TMUX" ]; then
-  tmux attach -t $session_name
+if [[ -n "$sessions_raw" ]]; then
+  sessions=$(echo "$sessions_raw" | sed "s|^|$session_icon |")
 else
-  tmux switch-client -t $session_name
+  sessions=""
+fi
+
+# 2. Collect zoxide directories
+if command -v zoxide &>/dev/null; then
+  dirs=$(zoxide query -l | sed "s|^|$dir_icon |")
+else
+  dirs=""
+fi
+
+# 3. Combine and select using fzf-tmux popup
+choice=$(printf "%s\n%s" "$sessions" "$dirs" | grep . | fzf-tmux -p --reverse)
+
+[[ -z "$choice" ]] && exit 0
+
+# 4. Determine target
+icon="${choice%% *}"
+value="${choice#* }"
+
+if [[ "$icon" == "$session_icon" ]]; then
+  # It's an existing session
+  target="$value"
+else
+  # It's a directory: create session if needed
+  target_path="$value"
+  # Sanitize: use basename and replace characters that might annoy tmux
+  target=$(basename "$target_path" | tr ' .' '__')
+
+  if ! tmux has-session -t "$target" 2>/dev/null; then
+    tmux new-session -ds "$target" -c "$target_path"
+  fi
+fi
+
+# 5. Attach or Switch
+if [[ -z "$TMUX" ]]; then
+  tmux attach-session -t "$target"
+else
+  tmux switch-client -t "$target"
 fi
