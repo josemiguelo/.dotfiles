@@ -11,3 +11,4 @@ chezmoi init --apply --verbose --force https://github.com/josemiguelo/.dotfiles.
 ## Todos
 
 - fix android paths
+- nvim navigation (C-hjkl) does not work on terminals (included Snacks) and this breaks TmuxNavigator
