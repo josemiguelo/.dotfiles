@@ -14,7 +14,6 @@ return {
         },
       },
     },
-
     keys = {
       {
         "<c-.>",
@@ -23,4 +22,16 @@ return {
       },
     },
   },
+
+  {{ if eq .chezmoi.hostname "work-mac" }}
+  {
+    "zbirenbaum/copilot.lua",
+    cond = false,
+  },
+
+  { 
+    "fang2hou/blink-copilot",
+    cond = false,
+  },
+  {{ end }}
 }
