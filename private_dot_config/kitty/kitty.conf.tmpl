@@ -12,7 +12,11 @@ font_family Fira Code
 font_family FiraCode Nerd Font Mono
 {{ end -}}
 
+{{ if (eq .chezmoi.os "darwin") -}}
+font_size 13.0
+{{ else if (eq .chezmoi.os "linux") -}}
 font_size 12.0
+{{ end -}}
 
 # Symbol mapping (Nerd Font Icons)
 symbol_map U+E000-U+E00A,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6B1,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F372,U+F400-U+F532,U+F500-U+FD46,U+F0001-U+F1AF0 Symbols Nerd Font Mono
@@ -27,21 +31,12 @@ cursor_trail_start_threshold 0
 scrollback_lines 10000
 
 # Blur
-{{ if (eq .chezmoi.os "darwin") -}}
-background_blur 30
-macos_titlebar_color background
-macos_show_window_title_in window
-{{ else if (eq .chezmoi.os "linux") -}}
 background_blur 1
-{{ end -}}
 background_opacity 0.85
 
 # Remote control for scripting
 allow_remote_control yes
 listen_on unix:/tmp/kitty
-
-# Layout management
-enabled_layouts grid,tall,fat,vertical,horizontal,stack
 
 # --- Tab Bar ---
 # tab_bar_min_tabs 1
