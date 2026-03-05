@@ -30,14 +30,23 @@ require("lazy").setup({
     { import = "features.langs" },
     {{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
     {
-      dir = "~/Projects/galileo.nvim",
+      "galileo.nvim",
+      dev = true,
       opts = {},
+      dependencies = {
+        "nvim-neotest/nvim-nio",
+        "folke/snacks.nvim",
+        {
+          "stevearc/overseer.nvim",
+          tag = "v1.6.0",
+        }
+      },
     },
     {{ end }}
   },
   dev = {
     ---@type string | fun(plugin: LazyPlugin): string
-    path = "~/Repos/nvim-plugins",
+    path = "~/Repos/gh/josemiguelo",
     ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
     patterns = {}, -- For example {"folke"}
     fallback = true, -- Fallback to git when local plugin doesn't exist
