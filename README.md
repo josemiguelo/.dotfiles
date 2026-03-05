@@ -1,6 +1,13 @@
-bash <(curl -s https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap)
+# .dotfiles
+
+My dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
+
+Install them with:
+```bash
+chezmoi init --apply --verbose --force https://github.com/josemiguelo/.dotfiles.git
+```
+
 
 ## Todos
 
-- remove all bootstrap logic
 - fix android paths
