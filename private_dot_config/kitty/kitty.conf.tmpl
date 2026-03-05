@@ -8,13 +8,9 @@ shell /usr/bin/zsh --login
 # Fonts
 {{ if (eq .chezmoi.os "darwin") -}}
 font_family Fira Code
-{{ else if (eq .chezmoi.os "linux") -}}
-font_family FiraCode Nerd Font Mono
-{{ end -}}
-
-{{ if (eq .chezmoi.os "darwin") -}}
 font_size 13.0
 {{ else if (eq .chezmoi.os "linux") -}}
+font_family FiraCode Nerd Font Mono
 font_size 12.0
 {{ end -}}
 
@@ -31,7 +27,11 @@ cursor_trail_start_threshold 0
 scrollback_lines 10000
 
 # Blur
+{{ if (eq .chezmoi.os "darwin") -}}
+background_blur 30
+{{ else if (eq .chezmoi.os "linux") -}}
 background_blur 1
+{{ end -}}
 background_opacity 0.85
 
 # Remote control for scripting
