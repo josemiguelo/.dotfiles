@@ -9,8 +9,8 @@ compinit
 
 export HISTFILE="$HOME/.local/state/zsh_history"
 if [[ ! -f "$HISTFILE" ]]; then
-    mkdir -p "$(dirname "$HISTFILE")"
-    touch "$HISTFILE"
+  mkdir -p "$(dirname "$HISTFILE")"
+  touch "$HISTFILE"
 fi
 
 export HISTSIZE=10000
@@ -25,6 +25,14 @@ export antidote_path=${XDG_DATA_HOME:=~/.local/share}/mattmc3/antidote
 
 source $antidote_path/antidote.zsh
 antidote load
+
+# Check if we are NOT in WezTerm
+if [ -z "$WEZTERM_PANE" ] && [ "$TERM_PROGRAM" != "WezTerm" ]; then
+  __wezterm_user_vars_preexec() { :; }
+  __wezterm_user_vars_precmd() { :; }
+  __wezterm_semantic_precmd() { :; }
+  __wezterm_osc7() { :; }
+fi
 
 eval "$(zoxide init zsh)"
 
