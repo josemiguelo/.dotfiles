@@ -63,17 +63,17 @@ set -g @plugin 'tmux-plugins/tmux-resurrect'
 
 # Messages
 set-option -g mode-style "reverse"
-set-option -g message-style "bg=default,fg=green"
+set-option -g message-style "bg=default,fg=red"
 
 # Center
 set-option -g status-justify centre
 set-option -g status-style "bg=default"
 
-set-window-option -g window-status-current-format '#[bold]#[fg=green, bg=default]#[fg=black, bg=green] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=green, bg=default]'
-set-window-option -g window-status-format ' #I #W '
+set-window-option -g window-status-current-format '#[bold]#[fg=red, bg=default]#[fg=black, bg=red] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=red, bg=default]'
+set-window-option -g window-status-format ' #I #W '
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
-set-window-option -g window-status-current-style "bg=default,fg=green"
+set-window-option -g window-status-current-style "bg=default,fg=red"
 
 # Left
 set-option -g status-left '#{prefix_highlight}'
@@ -82,12 +82,12 @@ set-option -g status-left '#{prefix_highlight}'
 set -g @prefix_highlight_show_copy_mode 'on'
 set -g @prefix_highlight_copy_mode_attr 'fg=black,bg=yellow,bold'
 set -g @prefix_highlight_show_sync_mode 'on'
-set -g @prefix_highlight_sync_mode_attr 'fg=black,bg=green'
+set -g @prefix_highlight_sync_mode_attr 'fg=black,bg=red'
 set -g @prefix_highlight_copy_prompt 'COPY'
 set -g @prefix_highlight_sync_prompt 'SYNC'
 
 # Right
-set-option -g status-right "#[fg=black,bg=red,bold] #S #[default]"
+set-option -g status-right "#[fg=black,bg=green,bold] #S #[default]"
 
 ##########
 ## INIT ##
