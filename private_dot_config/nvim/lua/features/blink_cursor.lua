@@ -2,16 +2,13 @@ return {
   {
     "Grazfather/blinker.nvim",
     dependencies = {
-      { "olimorris/onedarkpro.nvim", "folke/snacks.nvim" },
+      { "olimorris/onedarkpro.nvim" },
     },
     config = function()
-    -- stylua: ignore
-    local colors = vim.o.background == "dark"
-      and require("onedarkpro.helpers").get_colors()
-      or require("tokyonight.colors").setup()
+      local colors = require("onedarkpro.helpers").get_colors()
 
       require("blinker").setup({
-        color = colors.blue,
+        color = colors.red,
       })
     end,
     keys = {

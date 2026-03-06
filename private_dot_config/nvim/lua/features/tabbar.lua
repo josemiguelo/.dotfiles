@@ -1,3 +1,5 @@
+-- NOTE: don't change the order of the returned plugins array!
+-- colorscheme depends on it
 return {
   {
     "akinsho/bufferline.nvim",
@@ -7,13 +9,13 @@ return {
   {
     "nanozuki/tabby.nvim",
     dependencies = {
-      { "olimorris/onedarkpro.nvim", "folke/snacks.nvim", "folke/tokyonight.nvim" },
+      { "olimorris/onedarkpro.nvim", "folke/snacks.nvim" },
     },
     config = function()
       vim.o.showtabline = 2
 
-      local dark_colors = require("onedarkpro.helpers").get_colors()
-      local light_colors = require("tokyonight.colors").setup()
+      local dark_colors = require("onedarkpro.helpers").get_colors("onedark")
+      local light_colors = require("onedarkpro.helpers").get_colors("onelight")
 
       local function is_zoomed()
         return Snacks.zen.win and Snacks.zen.win:valid() or false
