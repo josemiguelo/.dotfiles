@@ -1,8 +1,5 @@
 return {
   "sphamba/smear-cursor.nvim",
   opts = {},
-{{- if eq .chezmoi.fqdnHostname "bluefin" }}
   cond = false,
-{{ end }}
 }
-
