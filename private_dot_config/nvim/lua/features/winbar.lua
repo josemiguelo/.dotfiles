@@ -88,10 +88,12 @@ end
 
 local excluded_filetypes = {}
 
+-- NOTE: don't change the order of the returned plugins array!
+-- colorscheme depends on it
 return {
   {
     "b0o/incline.nvim",
-    dependencies = { "nvim-web-devicons", "olimorris/onedarkpro.nvim", "folke/tokyonight.nvim" },
+    dependencies = { "nvim-web-devicons", "olimorris/onedarkpro.nvim" },
     config = function()
       require("incline").setup({
         window = {
@@ -104,10 +106,7 @@ return {
             return {}
           end
 
-          -- stylua: ignore
-          local colors = vim.o.background == "dark"
-            and require("onedarkpro.helpers").get_colors()
-            or require("tokyonight.colors").setup()
+          local colors = require("onedarkpro.helpers").get_colors()
 
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
           if filename == "" then
