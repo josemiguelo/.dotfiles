@@ -47,6 +47,9 @@ bind Z select-pane -t 1 \; resize-pane -Z
 
 bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
 
+# give enough time to pick the fing pane
+set -g display-panes-time 4000
+
 #############
 ## PLUGINS ##
 #############
@@ -69,11 +72,11 @@ set-option -g message-style "bg=default,fg=red"
 set-option -g status-justify centre
 set-option -g status-style "bg=default"
 
-set-window-option -g window-status-current-format '#[bold]#[fg=red, bg=default]#[fg=black, bg=red] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=red, bg=default]'
+set-window-option -g window-status-current-style "bg=default,fg=red"
+set-window-option -g window-status-current-format '#[bold]#[fg=red, bg=default]#[fg=white, bg=red] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=red, bg=default]'
 set-window-option -g window-status-format ' #I #W '
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
-set-window-option -g window-status-current-style "bg=default,fg=red"
 
 # Left
 set-option -g status-left '#{prefix_highlight}'
@@ -93,24 +96,3 @@ set-option -g status-right '#[fg=green, bg=default]#[fg=black, bg=green] #S #
 ## INIT ##
 ##########
 run 'tpack init'
-
-{{- if eq .chezmoi.os "darwin" }}
-# RE-BIND ALL NAV KEYS FOR MACOS/CSI-U COMPATIBILITY
-# We do this AFTER init to ensure we override the plugin's defaults
-
-# 1. Define detection (local scope for safety)
-is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
-
-# 2. Map all 4 directions explicitly
-# These bindings work even when extended-keys/csi-u are active
-bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
-bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' 'select-pane -D'
-bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k' 'select-pane -U'
-bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l' 'select-pane -R'
-
-# 3. Fix for Copy Mode navigation
-bind-key -T copy-mode-vi 'C-h' select-pane -L
-bind-key -T copy-mode-vi 'C-j' select-pane -D
-bind-key -T copy-mode-vi 'C-k' select-pane -U
-bind-key -T copy-mode-vi 'C-l' select-pane -R
-{{- end }}
