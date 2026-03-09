@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
+ROOT_CA="$HOME/Documents/zscaler/root-ca.pem"
+export NODE_EXTRA_CA_CERTS="$ROOT_CA"
+export REQUESTS_CA_BUNDLE="$ROOT_CA"
+export AWS_CA_BUNDLE="$ROOT_CA"
+export CURL_CA_BUNDLE="$ROOT_CA"
+{{ end }}
