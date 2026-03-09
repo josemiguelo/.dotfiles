@@ -1,8 +1,3 @@
-# Disable WezTerm shell integration if not running in WezTerm
-if [[ "$TERM_PROGRAM" != "WezTerm" ]]; then
-  unset WEZTERM_PANE WEZTERM_EXECUTABLE WEZTERM_UNIX_SOCKET
-fi
-
 #git
 alias tigs="tig status"
 alias tiga="tig --all"
