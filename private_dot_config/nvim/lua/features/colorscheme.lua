@@ -1,4 +1,12 @@
-local hl = vim.api.nvim_set_hl
+--- @param ns_id integer Namespace id for this highlight `nvim_create_namespace()`.
+--- @param name string Highlight group name, e.g. "ErrorMsg"
+--- @param overrides vim.api.keyset.highlight Highlight definition map, accepts the following keys:
+local extend_hl = function(ns_id, name, overrides)
+  local current_hl = vim.api.nvim_get_hl(0, { name = name })
+  vim.api.nvim_set_hl(ns_id, name, vim.tbl_extend("force", current_hl, overrides or {}))
+end
+
+local diagnostic_types = { "Error", "Warn", "Info", "Hint" }
 
 local reload_plugins = function()
   require("features.winbar")[1].config()
@@ -7,51 +15,59 @@ local reload_plugins = function()
 end
 
 local apply_shared_highlights = function(c)
-  hl(0, "LineNrAbove", { fg = c.blue })
-  hl(0, "LineNrBelow", { fg = c.blue })
-  hl(0, "SnacksPicker", { bg = "NONE" })
-  hl(0, "SnacksPickerBorder", { bg = "NONE" })
-  hl(0, "Normal", { bg = "NONE" })
-  hl(0, "NormalFloat", { bg = "NONE" })
-  hl(0, "SnacksTerminal", { bg = "NONE" })
-  hl(0, "CursorLine", { bg = c.cursorline })
-  hl(0, "CursorColumn", { bg = c.cursorline })
-  hl(0, "diffAdded", { fg = c.green, bold = true })
-  hl(0, "diffRemoved", { fg = c.red, bold = true })
-  hl(0, "diffSubname", { fg = c.purple, bold = true })
-  hl(0, "diffIndexLine", { fg = c.purple, bold = true })
-  hl(0, "diffFile", { fg = c.blue, bold = true })
-  hl(0, "diffOldFile", { fg = c.blue, bold = true })
-  hl(0, "diffNewFile", { fg = c.blue, bold = true })
-  hl(0, "DiffText", { bg = c.cyan, bold = true, fg = "#000000" })
-  hl(0, "GitSignsAdd", { fg = c.green })
-  hl(0, "GitSignsChange", { fg = c.yellow })
-  hl(0, "GitSignsDelete", { fg = c.red })
+  extend_hl(0, "LineNrAbove", { fg = c.blue })
+  extend_hl(0, "LineNrBelow", { fg = c.blue })
+  extend_hl(0, "SnacksPicker", { bg = "NONE" })
+  extend_hl(0, "SnacksPickerBorder", { bg = "NONE" })
+  extend_hl(0, "Normal", { bg = "NONE" })
+  extend_hl(0, "NormalFloat", { bg = "NONE" })
+  extend_hl(0, "SnacksTerminal", { bg = "NONE" })
+  extend_hl(0, "CursorLine", { bg = c.cursorline })
+  extend_hl(0, "CursorColumn", { bg = c.cursorline })
+  extend_hl(0, "diffAdded", { fg = c.green, bold = true })
+  extend_hl(0, "diffRemoved", { fg = c.red, bold = true })
+  extend_hl(0, "diffSubname", { fg = c.purple, bold = true })
+  extend_hl(0, "diffIndexLine", { fg = c.purple, bold = true })
+  extend_hl(0, "diffFile", { fg = c.blue, bold = true })
+  extend_hl(0, "diffOldFile", { fg = c.blue, bold = true })
+  extend_hl(0, "diffNewFile", { fg = c.blue, bold = true })
+  extend_hl(0, "DiffText", { bg = c.cyan, bold = true, fg = "#000000" })
+  extend_hl(0, "GitSignsAdd", { fg = c.green })
+  extend_hl(0, "GitSignsChange", { fg = c.yellow })
+  extend_hl(0, "GitSignsDelete", { fg = c.red })
+  extend_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+
+  for _, type in ipairs(diagnostic_types) do
+    extend_hl(0, "DiagnosticVirtualText" .. type, { undercurl = true, italic = true, bold = true })
+  end
 end
 
 local apply_dark_highlights = function()
   local c = require("onedarkpro.helpers").get_colors()
   apply_shared_highlights(c)
-  hl(0, "CursorLineNr", { fg = c.purple })
-  hl(0, "WinSeparator", { fg = c.blue })
-  hl(0, "FlashLabel", { bg = c.blue, bold = true, fg = c.cursorline })
+
+  extend_hl(0, "CursorLineNr", { fg = c.purple })
+  extend_hl(0, "WinSeparator", { fg = c.blue })
+  extend_hl(0, "FlashLabel", { bg = c.blue, bold = true, fg = c.cursorline })
 end
 
 local apply_light_highlights = function()
   local c = require("onedarkpro.helpers").get_colors()
   apply_shared_highlights(c)
-  hl(0, "Comment", { fg = "#7380ba", italic = true })
-  hl(0, "CursorLineNr", { fg = c.cyan })
-  hl(0, "FlashLabel", { bg = "#ff007c", bold = true, fg = c.cursorline })
+
   local lighten = require("onedarkpro.helpers").lighten
-  hl(0, "GitSignsStagedAdd", { fg = lighten("green", 35) })
-  hl(0, "GitSignsStagedChange", { fg = lighten("yellow", 35) })
-  hl(0, "GitSignsStagedDelete", { fg = lighten("red", 35) })
   local darken = require("onedarkpro.helpers").darken
-  hl(0, "DiagnosticVirtualTextError", { fg = darken("red", 15), italic = true })
-  hl(0, "DiagnosticVirtualTextWarn", { fg = darken("yellow", 15), italic = true })
-  hl(0, "DiagnosticVirtualTextHint", { fg = darken("cyan", 15), italic = true })
-  hl(0, "DiagnosticVirtualTextInfo", { fg = darken("blue", 15), italic = true })
+
+  extend_hl(0, "Comment", { fg = "#7380ba", italic = true })
+  extend_hl(0, "CursorLineNr", { fg = c.cyan })
+  extend_hl(0, "FlashLabel", { bg = "#ff007c", bold = true, fg = c.cursorline })
+  extend_hl(0, "GitSignsStagedAdd", { fg = lighten("green", 35) })
+  extend_hl(0, "GitSignsStagedChange", { fg = lighten("yellow", 35) })
+  extend_hl(0, "GitSignsStagedDelete", { fg = lighten("red", 35) })
+  extend_hl(0, "DiagnosticVirtualTextError", { fg = "red", sp = "red" })
+  extend_hl(0, "DiagnosticVirtualTextWarn", { fg = "orange", sp = "orange" })
+  extend_hl(0, "DiagnosticVirtualTextHint", { fg = darken("cyan", 10), sp = darken("cyan", 15) })
+  extend_hl(0, "DiagnosticVirtualTextInfo", { fg = "blue", sp = "blue" })
 end
 
 return {
