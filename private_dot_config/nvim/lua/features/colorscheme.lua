@@ -1,81 +1,111 @@
---- @param ns_id integer Namespace id for this highlight `nvim_create_namespace()`.
---- @param name string Highlight group name, e.g. "ErrorMsg"
---- @param overrides vim.api.keyset.highlight Highlight definition map, accepts the following keys:
-local extend_hl = function(ns_id, name, overrides)
-  local current_hl = vim.api.nvim_get_hl(0, { name = name })
-  vim.api.nvim_set_hl(ns_id, name, vim.tbl_extend("force", current_hl, overrides or {}))
-end
-
-local diagnostic_types = { "Error", "Warn", "Info", "Hint" }
-
 local reload_plugins = function()
   require("features.winbar")[1].config()
   require("features.tabbar")[2].config()
   require("features.blink_cursor")[1].config()
 end
 
-local apply_shared_highlights = function(c)
-  extend_hl(0, "LineNrAbove", { fg = c.blue })
-  extend_hl(0, "LineNrBelow", { fg = c.blue })
-  extend_hl(0, "SnacksPicker", { bg = "NONE" })
-  extend_hl(0, "SnacksPickerBorder", { bg = "NONE" })
-  extend_hl(0, "Normal", { bg = "NONE" })
-  extend_hl(0, "NormalFloat", { bg = "NONE" })
-  extend_hl(0, "SnacksTerminal", { bg = "NONE" })
-  extend_hl(0, "CursorLine", { bg = c.cursorline })
-  extend_hl(0, "CursorColumn", { bg = c.cursorline })
-  extend_hl(0, "diffAdded", { fg = c.green, bold = true })
-  extend_hl(0, "diffRemoved", { fg = c.red, bold = true })
-  extend_hl(0, "diffSubname", { fg = c.purple, bold = true })
-  extend_hl(0, "diffIndexLine", { fg = c.purple, bold = true })
-  extend_hl(0, "diffFile", { fg = c.blue, bold = true })
-  extend_hl(0, "diffOldFile", { fg = c.blue, bold = true })
-  extend_hl(0, "diffNewFile", { fg = c.blue, bold = true })
-  extend_hl(0, "DiffText", { bg = c.cyan, bold = true, fg = "#000000" })
-  extend_hl(0, "GitSignsAdd", { fg = c.green })
-  extend_hl(0, "GitSignsChange", { fg = c.yellow })
-  extend_hl(0, "GitSignsDelete", { fg = c.red })
-  extend_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-
-  for _, type in ipairs(diagnostic_types) do
-    extend_hl(0, "DiagnosticVirtualText" .. type, { undercurl = true, italic = true, bold = true })
-  end
-end
-
-local apply_dark_highlights = function()
-  local c = require("onedarkpro.helpers").get_colors()
-  apply_shared_highlights(c)
-
-  extend_hl(0, "CursorLineNr", { fg = c.purple })
-  extend_hl(0, "WinSeparator", { fg = c.blue })
-  extend_hl(0, "FlashLabel", { bg = c.blue, bold = true, fg = c.cursorline })
-end
-
-local apply_light_highlights = function()
-  local c = require("onedarkpro.helpers").get_colors()
-  apply_shared_highlights(c)
-
-  local lighten = require("onedarkpro.helpers").lighten
-  local darken = require("onedarkpro.helpers").darken
-
-  extend_hl(0, "Comment", { fg = "#7380ba", italic = true })
-  extend_hl(0, "CursorLineNr", { fg = c.cyan })
-  extend_hl(0, "FlashLabel", { bg = "#ff007c", bold = true, fg = c.cursorline })
-  extend_hl(0, "GitSignsStagedAdd", { fg = lighten("green", 35) })
-  extend_hl(0, "GitSignsStagedChange", { fg = lighten("yellow", 35) })
-  extend_hl(0, "GitSignsStagedDelete", { fg = lighten("red", 35) })
-  extend_hl(0, "DiagnosticVirtualTextError", { fg = "red", sp = "red" })
-  extend_hl(0, "DiagnosticVirtualTextWarn", { fg = "orange", sp = "orange" })
-  extend_hl(0, "DiagnosticVirtualTextHint", { fg = darken("cyan", 10), sp = darken("cyan", 15) })
-  extend_hl(0, "DiagnosticVirtualTextInfo", { fg = "blue", sp = "blue" })
-end
-
 return {
-
   {
     "olimorris/onedarkpro.nvim",
     priority = 1000,
     opts = {
+      colors = {
+        onedark = {
+          diag_error_sp = "require('onedarkpro.helpers').lighten('red', 9.3, 'onedark')",
+          diag_warn_sp = "require('onedarkpro.helpers').lighten('yellow', 9, 'onedark')",
+          diag_hint_sp = "require('onedarkpro.helpers').lighten('cyan', 10.8, 'onedark')",
+          diag_info_sp = "require('onedarkpro.helpers').lighten('blue', 10.2, 'onedark')",
+        },
+        onelight = {
+          staged_green = "require('onedarkpro.helpers').lighten('green', 35, 'onelight')",
+          staged_yellow = "require('onedarkpro.helpers').lighten('yellow', 35, 'onelight')",
+          staged_red = "require('onedarkpro.helpers').lighten('red', 35, 'onelight')",
+          diag_error_sp = "require('onedarkpro.helpers').lighten('red', 15, 'onelight')",
+          diag_warn_sp = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
+          diag_hint_sp = "require('onedarkpro.helpers').darken('cyan', 15, 'onelight')",
+          diag_info_sp = "require('onedarkpro.helpers').lighten('blue', 26, 'onelight')",
+          diag_error_fg = "require('onedarkpro.helpers').lighten('red', 15, 'onelight')",
+          diag_warn_fg = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
+          diag_hint_fg = "require('onedarkpro.helpers').darken('cyan', 10, 'onelight')",
+          diag_info_fg = "require('onedarkpro.helpers').lighten('blue', 26, 'onelight')",
+        },
+      },
+      highlights = {
+        LineNrAbove = { fg = "${blue}", extend = true },
+        LineNrBelow = { fg = "${blue}", extend = true },
+        SnacksPicker = { bg = "NONE", extend = true },
+        SnacksPickerBorder = { bg = "NONE", extend = true },
+        SnacksTerminal = { bg = "NONE", extend = true },
+        CursorLine = { bg = "${cursorline}", extend = true },
+        CursorColumn = { bg = "${cursorline}", extend = true },
+        diffAdded = { fg = "${green}", bold = true, extend = true },
+        diffRemoved = { fg = "${red}", bold = true, extend = true },
+        diffSubname = { fg = "${purple}", bold = true, extend = true },
+        diffIndexLine = { fg = "${purple}", bold = true, extend = true },
+        diffFile = { fg = "${blue}", bold = true, extend = true },
+        diffOldFile = { fg = "${blue}", bold = true, extend = true },
+        diffNewFile = { fg = "${blue}", bold = true, extend = true },
+        DiffText = { bg = "${cyan}", bold = true, fg = "#000000", extend = true },
+        GitSignsAdd = { fg = "${green}", extend = true },
+        GitSignsChange = { fg = "${yellow}", extend = true },
+        GitSignsDelete = { fg = "${red}", extend = true },
+        DapStoppedLine = { link = "Visual" },
+        FugitiveDeltaText = { link = "DiffText" },
+        DiagnosticVirtualTextError = {
+          undercurl = true,
+          italic = true,
+          bold = true,
+          fg = { onelight = "${diag_error_fg}" },
+          sp = "${diag_error_sp}",
+          extend = true,
+        },
+        DiagnosticVirtualTextWarn = {
+          undercurl = true,
+          italic = true,
+          bold = true,
+          fg = { onelight = "${diag_warn_fg}" },
+          sp = "${diag_warn_sp}",
+          extend = true,
+        },
+        DiagnosticVirtualTextHint = {
+          undercurl = true,
+          italic = true,
+          bold = true,
+          fg = { onelight = "${diag_hint_fg}" },
+          sp = "${diag_hint_sp}",
+          extend = true,
+        },
+        DiagnosticVirtualTextInfo = {
+          undercurl = true,
+          italic = true,
+          bold = true,
+          fg = { onelight = "${diag_info_fg}" },
+          sp = "${diag_info_sp}",
+          extend = true,
+        },
+        CursorLineNr = {
+          fg = { onedark = "${purple}", onelight = "${cyan}" },
+          extend = true,
+        },
+        WinSeparator = {
+          fg = { onedark = "${blue}" },
+          extend = true,
+        },
+        FlashLabel = {
+          bg = { onedark = "${blue}", onelight = "#ff007c" },
+          bold = true,
+          fg = "${cursorline}",
+          extend = true,
+        },
+        Comment = {
+          fg = { onelight = "#7380ba" },
+          italic = true,
+          extend = true,
+        },
+        GitSignsStagedAdd = { fg = { onelight = "${staged_green}" }, extend = true },
+        GitSignsStagedChange = { fg = { onelight = "${staged_yellow}" }, extend = true },
+        GitSignsStagedDelete = { fg = { onelight = "${staged_red}" }, extend = true },
+      },
       options = {
         transparency = true,
         terminal_colors = true,
@@ -100,7 +130,6 @@ return {
     },
   },
 
-  -- it enables the appropriate theme at startup AND in runtime when OS's theme has changed
   {
     "f-person/auto-dark-mode.nvim",
     opts = {
@@ -108,17 +137,13 @@ return {
         vim.notify("Enabling dark mode 🌚")
         vim.api.nvim_set_option_value("background", "dark", {})
         vim.cmd("colorscheme onedark")
-        apply_dark_highlights()
         reload_plugins()
-        vim.cmd([[ highlight link FugitiveDeltaText DiffText ]])
       end,
       set_light_mode = function()
         vim.notify("Enabling light mode 🌞")
         vim.api.nvim_set_option_value("background", "light", {})
         vim.cmd("colorscheme onelight")
-        apply_light_highlights()
         reload_plugins()
-        vim.cmd([[ highlight link FugitiveDeltaText DiffText ]])
       end,
     },
   },
