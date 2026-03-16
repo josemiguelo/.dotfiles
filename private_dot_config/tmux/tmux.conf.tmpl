@@ -71,19 +71,22 @@ set -g @plugin 'christoomey/vim-tmux-navigator'
 set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'lloydbond/tmux-floating-terminal'
 
-###########
-## THEME ##
-###########
+set -g @floating_scratch_term 'C-t'
+
+###################
+## ONEDARK THEME ##
+###################
+
+set-option -g status-style "bg=default"
+set-option -g mode-style "reverse"
 
 # Messages
-set-option -g mode-style "reverse"
 set-option -g message-style "bg=default,fg=green"
 
 # Center
 set-option -g status-justify centre
-set-option -g status-style "bg=default"
-
 set-window-option -g window-status-current-style "bg=default,fg=green"
 set-window-option -g window-status-current-format '#[bold]#[fg=green, bg=default]#[fg=black, bg=green] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=green, bg=default]'
 set-window-option -g window-status-format ' #I #W '
