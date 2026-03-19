@@ -30,6 +30,9 @@ set -g allow-passthrough on
 
 run-shell "tmux set-option -g default-shell $(command -v zsh)"
 
+# give enough time to pick the fing pane
+set -g display-panes-time 4000
+
 #################
 ## KEYBINDINGS ##
 #################
@@ -51,6 +54,9 @@ bind  c  new-window      -c "#{pane_current_path}"
 bind  %  split-window -h -c "#{pane_current_path}"
 bind '"' split-window -v -c "#{pane_current_path}"
 
+# Toggle '_' prefix on the current window name to hide/show it in the status bar
+bind h run-shell 'tmux rename-window "#{?#{m:_*,#W},#{s/^_//:#W},_#W}"'
+
 bind-key -n C-S-Left swap-window -t -1\; select-window -t -1
 bind-key -n C-S-Right swap-window -t +1\; select-window -t +1
 
@@ -58,9 +64,6 @@ bind-key -n C-S-Right swap-window -t +1\; select-window -t +1
 bind Z select-pane -t 1 \; resize-pane -Z
 
 bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
-
-# give enough time to pick the fing pane
-set -g display-panes-time 4000
 
 #############
 ## PLUGINS ##
@@ -87,9 +90,9 @@ set-option -g message-style "bg=default,fg=green"
 
 # Center
 set-option -g status-justify centre
-set-window-option -g window-status-current-style "bg=default,fg=green"
-set-window-option -g window-status-current-format '#[bold]#[fg=green, bg=default]#[fg=black, bg=green] #I  #W #{?window_zoomed_flag,(ZOOMED),} #[fg=green, bg=default]'
-set-window-option -g window-status-format ' #I #W '
+set-window-option -g window-status-current-format "#{?#{m:_*,#W},,#[fg=green]#[bg=default]#[fg=black]#[bg=green]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=green]#[bg=default]}"
+set-window-option -g window-status-format "#{?#{m:_*,#W},, #I #W }"
+
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
 
