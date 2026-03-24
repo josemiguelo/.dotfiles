@@ -23,6 +23,7 @@ return {
     dependencies = {
       {
         "igorlfs/nvim-dap-view",
+        version = "1.*",
         opts = {
           winbar = {
             sections = { "scopes", "breakpoints", "threads", "exceptions", "repl", "console" },
