@@ -36,10 +36,9 @@ cursor_trail_start_threshold 0
 scrollback_lines 10000
 
 # Blur
+# NOTE: for linux, use WM's own capabilities
 {{ if (eq .chezmoi.os "darwin") -}}
 background_blur 30
-{{ else if (eq .chezmoi.os "linux") -}}
-background_blur 1
 {{ end -}}
 background_opacity 0.85
 
