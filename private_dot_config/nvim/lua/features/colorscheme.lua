@@ -28,6 +28,7 @@ return {
           diag_warn_fg = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
           diag_hint_fg = "require('onedarkpro.helpers').darken('cyan', 10, 'onelight')",
           diag_info_fg = "require('onedarkpro.helpers').lighten('blue', 26, 'onelight')",
+          cursorline = "require('onedarkpro.helpers').darken('bg', 13, 'onelight')",
         },
       },
       highlights = {
