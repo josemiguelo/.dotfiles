@@ -11,5 +11,10 @@ return {
       { "location", color = { gui = "bold" }, padding = { left = 0, right = 1 } },
     }
     opts.sections.lualine_z = {}
+
+    opts.options = {
+      section_separators = { left = "", right = "" },
+      component_separators = { left = "", right = "" },
+    }
   end,
 }

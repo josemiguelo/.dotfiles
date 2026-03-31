@@ -86,12 +86,12 @@ set-option -g status-style "bg=default"
 set-option -g mode-style "reverse"
 
 # Messages
-set-option -g message-style "bg=default,fg=green"
+set-option -g message-style "bg=default,fg=color4"
 
 # Center
-set-option -g status-justify centre
-set-window-option -g window-status-current-format "#{?#{m:_*,#W},,#[fg=green]#[bg=default]#[fg=black]#[bg=green]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=green]#[bg=default]}"
-set-window-option -g window-status-format "#{?#{m:_*,#W},, #I #W }"
+set-option -g status-justify left
+set-window-option -g window-status-current-format "#{?#{m:_*,#W},,#[fg=color1]#[bg=default]▐#[fg=black]#[bg=color1]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color1]#[bg=default]▌}"
+set-window-option -g window-status-format "#{?#{m:_*,#W},, #I #W }"
 
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
@@ -106,7 +106,15 @@ set -g @prefix_highlight_copy_prompt 'COPY'
 set -g @prefix_highlight_sync_prompt 'SYNC'
 
 # Right
-set-option -g status-right "#[fg=white,bg=red,bold] #S #[default]"
+set-option -g status-right "#[fg=black,bg=red,bold] #S #[default]"
+
+# Status bar
+# 1. Enable two lines for the status bar
+# 2. Set the top line (index 0) to be the "padding" line (as an empty line)
+# 3. Move your existing status content to the bottom line (index 1)
+set -g status 2
+set -g status-format[0] ""
+set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{W:#{T:window-status-format},#{T:window-status-current-format}#[default]}#[align=right]#{E:status-right}"
 
 ##########
 ## INIT ##
