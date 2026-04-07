@@ -90,8 +90,8 @@ set-option -g message-style "bg=default,fg=color4"
 
 # Center
 set-option -g status-justify left
-set-window-option -g window-status-current-format "#{?#{m:_*,#W},,#[fg=color1]#[bg=default]▐#[fg=black]#[bg=color1]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color1]#[bg=default]▌}"
-set-window-option -g window-status-format "#{?#{m:_*,#W},, #I #W }"
+set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color1]#[bg=default]▐#[fg=black]#[bg=color1]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color1]#[bg=default]▌}#[norange]"
+set-window-option -g window-status-format "#[range=window|#{window_index}]#{?#{m:_*,#W},, #I #W }#[norange]"
 
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
