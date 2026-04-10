@@ -1,0 +1,6 @@
+{{ if (eq .chezmoi.osRelease.id "bazzite") }}
+sourceDir = "/var{{ .chezmoi.homeDir }}/.local/share/chezmoi"
+destDir = "/var{{ .chezmoi.homeDir }}"
+{{ end }}
+[cd]
+  command = "zsh"
