@@ -1,5 +1,5 @@
 return {
-  {{ if (eq .chezmoi.osRelease.id "bazzite") }}
+  {{ if eq (dig "osRelease" "id" "" .chezmoi) "bazzite" }}
     {
       "xvzc/chezmoi.nvim",
       init = function()
