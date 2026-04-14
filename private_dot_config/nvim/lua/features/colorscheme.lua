@@ -52,6 +52,7 @@ return {
         diffNewFile = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
         fugitiveUnstagedSection = { fg = "${purple}", bold = true, extend = true, underline = true, italic = true },
         fugitiveStagedSection = { fg = "${purple}", bold = true, extend = true, underline = true, italic = true },
+        gitdiff = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
         DiffText = { bg = "${cyan}", bold = true, fg = "#000000", extend = true },
         GitSignsAdd = { fg = "${green}", extend = true },
         GitSignsChange = { fg = "${yellow}", extend = true },
