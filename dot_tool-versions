@@ -10,4 +10,4 @@ tomcat 9.0.88
 bun 1.1.10
 cocoapods 1.16.0
 asdf-plugin-manager 1.5.0
-gradle 7.6.3
+gradle 8.14.2 7.6.3
