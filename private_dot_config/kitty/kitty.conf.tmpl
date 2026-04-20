@@ -60,6 +60,11 @@ tab_title_template " {index}: {title} "
 
 # --- Keybindings ---
 map ctrl+alt+e set_tab_title
+{{ if (eq .chezmoi.os "darwin") -}}
+map cmd+t new_tab_with_cwd
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+shift+t new_tab_with_cwd
+{{ end -}}
 
 # --- Theme ---
 # Automatic theme switching is managed by Kitty using the .auto.conf files.
