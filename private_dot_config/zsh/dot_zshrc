@@ -38,3 +38,8 @@ eval "$(zoxide init zsh)"
 
 export STARSHIP_CONFIG=~/config/starship/starship.toml
 eval "$(starship init zsh)"
+
+# Auto-attach to tmux in kitty
+if [[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]; then
+  tmux-attach
+fi
