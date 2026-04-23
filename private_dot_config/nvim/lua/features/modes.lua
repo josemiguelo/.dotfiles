@@ -10,7 +10,4 @@ return {
       },
     },
   },
-  config = function(_, opts)
-    require("better_escape").setup(opts)
-  end,
 }
