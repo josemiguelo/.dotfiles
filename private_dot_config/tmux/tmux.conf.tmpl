@@ -13,6 +13,7 @@ set -as terminal-features ",xterm-kitty:extkeys"
 set -as terminal-overrides ",xterm*:Tc" # true color
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-overrides ',*:Setrgb=\E[48;2;%p1%d;%p2%d;%p3%dm'
+set -as terminal-overrides ',xterm*:Ss=\E[%p1%d q:Se=\E[5 q'
 
 # Extended Keys Logic (Keep your existing settings)
 set -gs extended-keys on
