@@ -18,7 +18,7 @@ return {
         },
         onelight = {
           staged_green = "require('onedarkpro.helpers').lighten('green', 35, 'onelight')",
-          staged_yellow = "require('onedarkpro.helpers').lighten('yellow', 35, 'onelight')",
+          staged_yellow = "require('onedarkpro.helpers').lighten('yellow', 20, 'onelight')",
           staged_red = "require('onedarkpro.helpers').lighten('red', 35, 'onelight')",
           diag_error_sp = "require('onedarkpro.helpers').lighten('red', 15, 'onelight')",
           diag_warn_sp = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
