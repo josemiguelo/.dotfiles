@@ -14,3 +14,4 @@ chezmoi init --apply --verbose --force https://github.com/josemiguelo/.dotfiles.
 - nvim navigation (C-hjkl) does not work on terminals (included Snacks) and this breaks TmuxNavigator
 - remove custom tmux logic from nvim
 - implement asking before quitting on neovim
+- clash between Snacks.nvim maximize and definition picker z-index
