@@ -1,0 +1,50 @@
+#!/usr/bin/env zsh
+{{ if (eq .chezmoi.os "darwin") -}}
+# Optimize screenshots for AI assistants
+#
+# Usage: aishot [path]
+#   path  file to write, or a directory to write ai_img.jpg into
+#         (defaults to ./ai_img.jpg, ".jpg" is appended if missing)
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "Usage: aishot [path]"
+    exit 0
+fi
+
+local output="${1:-ai_img.jpg}"
+
+# A directory argument keeps the default file name
+[[ -d "$output" ]] && output="${output%/}/ai_img.jpg"
+[[ "${output:l}" == *.jpg || "${output:l}" == *.jpeg ]] || output="$output.jpg"
+
+mkdir -p "$(dirname "$output")" || exit 1
+
+local tmp="/tmp/aishot_raw_$$.png"
+trap 'rm -f "$tmp"' EXIT INT TERM
+
+echo "📷 Select an area on your screen..."
+
+# 1. Capture standard PNG to temporary file
+screencapture -i "$tmp"
+
+# Exit if user cancels the screenshot (e.g., presses Esc)
+if [[ ! -f "$tmp" ]]; then
+    echo "❌ Cancelled"
+    exit 1
+fi
+
+# 2. Get current width and calculate half-size (strips 2x Retina density)
+local width=$(sips -g pixelWidth "$tmp" | awk '/pixelWidth/ {print $2}')
+local target_width=$((width / 2))
+
+# 3. Downscale and convert to JPEG (sips cannot write WebP)
+if ! sips -s format jpeg -s formatOptions 80 --resampleWidth "$target_width" "$tmp" --out "$output" > /dev/null; then
+    echo "❌ Conversion failed"
+    exit 1
+fi
+
+echo "✅ Saved token-optimized image to: $output"
+{{ else -}}
+echo "❌ aishot only works on macOS (needs screencapture and sips)"
+exit 1
+{{ end -}}
