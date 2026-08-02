@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(workmux --help)",
+      "Bash(workmux docs *)"
+    ]
+  }
+}
