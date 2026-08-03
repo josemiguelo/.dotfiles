@@ -1,2 +1,5 @@
 nerdfont: true
 worktree_dir: all_worktrees
+files:
+  symlink:
+    - .claude/settings.local.json
