@@ -4,7 +4,7 @@
 
 ;; 1. The physical keys Kanata intercepts
 (defsrc
-  fn   1    2    3    4    5    6    7    8    9    0    -    =    [    ]    \    left rght up   down
+  fn   1    2    3    4    5    6    7    8    9    0    -    =    [    ]    \    ;    '    ,    .    left rght up   down
 )
 
 ;; 2. Shortcut alias for triggering the temporary Fn modifier layer
@@ -12,15 +12,16 @@
   fn_layer (layer-while-held functional)
 )
 
-;; 3. Standard baseline typing layer (Must match the 20-key layout matrix)
+;; 3. Standard baseline typing layer (Must match the 24-key layout matrix)
 (deflayer default
-  @fn_layer  1    2    3    4    5    6    7    8    9    0    -    =    [    ]    \    left rght up   down
+  @fn_layer  1    2    3    4    5    6    7    8    9    0    -    =    [    ]    \    ;    '    ,    .    left rght up   down
 )
 
-;; 4. Validated layer activated ONLY while holding down the physical Fn key (20 keys layout)
+;; 4. Validated layer activated ONLY while holding down the physical Fn key (24 keys layout)
 ;; - 1 through = map seamlessly to F1 through F12
 ;; - Brackets and Backslash control media playback (prev, next, pp)
-;; - Arrow keys control hardware Volume levels and Screen Brightness (vold, volu, brup, brdn)
+;; - Semicolon/Quote control Volume (vold, volu); Comma/Period control Brightness (brdn, brup)
+;; - Arrow keys keep macOS navigation: home, end, pgup, pgdn
 (deflayer functional
-  _          f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prev next pp   vold volu brup brdn
+  _          f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prev next pp   vold volu brdn brup home end  pgup pgdn
 )
