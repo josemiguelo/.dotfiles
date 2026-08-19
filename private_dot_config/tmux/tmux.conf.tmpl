@@ -123,3 +123,12 @@ set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{W:#{T:windo
 ## INIT ##
 ##########
 run 'tpack init'
+
+# Override tmux-floating-terminal popup dimensions (plugin hardcodes 70%x70%).
+# Must run AFTER plugin init so it replaces the plugin's binding.
+bind-key C-t if-shell -F '#{==:#S,floating}' {
+    detach-client
+} {
+    set -gF '@last_session_name' '#S'
+    popup -d '#{pane_current_path}' -xC -yC -w95% -h95% -E 'tmux new -A -s floating'
+}
