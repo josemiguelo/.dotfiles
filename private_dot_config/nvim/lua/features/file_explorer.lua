@@ -30,6 +30,7 @@ return {
     keymaps = {
       show_help = "<f1>",
     },
+    floating_window_scaling_factor = 0.92,
   },
   init = function()
     vim.g.loaded_netrwPlugin = 1
