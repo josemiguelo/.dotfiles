@@ -1,6 +1,6 @@
 # Locate the Android SDK directory, tolerating case differences (Sdk vs sdk)
 # across machines/installations.
-for _android_sdk_dir in "$HOME/Library/Android"/[Ss]dk; do
+for _android_sdk_dir in "$HOME/Library/Android"/[Ss]dk(N); do
   if [[ -d "$_android_sdk_dir" ]]; then
     export ANDROID_HOME="$_android_sdk_dir"
     export ANDROID_SDK_ROOT="$_android_sdk_dir"
