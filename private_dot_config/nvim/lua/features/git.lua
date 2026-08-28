@@ -62,6 +62,18 @@ return {
     event = "VeryLazy",
     cmd = { "Flog", "Flogsplit", "Floggit" },
     dependencies = { "tpope/vim-fugitive" },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "floggraph",
+        callback = function(ev)
+          vim.keymap.set("n", "<Leader><CR>", "<Cmd>belowright Flogsplitcommit<CR>", {
+            buffer = ev.buf,
+            silent = true,
+            desc = "Flog: open commit in horizontal split below",
+          })
+        end,
+      })
+    end,
   },
   {
     "tpope/vim-rhubarb",
