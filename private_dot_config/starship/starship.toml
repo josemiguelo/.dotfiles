@@ -5,3 +5,25 @@
 add_newline = true
 
 command_timeout = 8000
+
+# Recolor the default prompt with the onedarkpro.nvim ("onedark" flavor) palette.
+# Only the standard color names are remapped, so the default format is untouched.
+palette = "onedark"
+
+[palettes.onedark]
+black = "#282c34"
+red = "#e06c75"
+green = "#98c379"
+yellow = "#e5c07b"
+blue = "#61afef"
+purple = "#c678dd"
+cyan = "#56b6c2"
+white = "#abb2bf"
+"bright-black" = "#5c6370"
+"bright-red" = "#e06c75"
+"bright-green" = "#98c379"
+"bright-yellow" = "#e5c07b"
+"bright-blue" = "#61afef"
+"bright-purple" = "#c678dd"
+"bright-cyan" = "#56b6c2"
+"bright-white" = "#abb2bf"
