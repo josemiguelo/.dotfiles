@@ -17,7 +17,10 @@ return {
     "AlexandrosAlexiou/kotlin.nvim",
     ft = { "kotlin" },
     dependencies = {
-      "mason-lspconfig.nvim",
+      {
+        "mason-lspconfig.nvim",
+        opts = { automatic_enable = { exclude = { "kotlin_lsp" } } },
+      },
       "oil.nvim",
       "trouble.nvim",
       {
