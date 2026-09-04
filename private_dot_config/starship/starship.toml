@@ -1,8 +1,9 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
-add_newline = true
+# Draw a full-width rule between shell prompts instead of a blank line
+add_newline = false
+format = "\n${custom.hr}\n\n$all"
 
 command_timeout = 8000
 
@@ -27,3 +28,8 @@ white = "#abb2bf"
 "bright-purple" = "#c678dd"
 "bright-cyan" = "#56b6c2"
 "bright-white" = "#abb2bf"
+
+[custom.hr]
+when = true
+command = '''W=$(stty size </dev/tty 2>/dev/null | cut -d" " -f2); printf "%*s" "${W:-80}" "" | sed "s/ /─/g"'''
+format = "[$output](bright-black)"
