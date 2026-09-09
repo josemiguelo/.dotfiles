@@ -13,6 +13,19 @@ return {
   {
     "tpope/vim-fugitive",
     event = "VeryLazy",
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "fugitive",
+        callback = function(ev)
+          vim.keymap.set("n", "<Leader><CR>", "gO", {
+            buffer = ev.buf,
+            remap = true,
+            silent = true,
+            desc = "Fugitive: open file under cursor in vertical split",
+          })
+        end,
+      })
+    end,
     cmd = {
       "G",
       "Git",
