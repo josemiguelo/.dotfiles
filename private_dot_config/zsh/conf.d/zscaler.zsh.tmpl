@@ -1,7 +1,11 @@
 {{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
-ROOT_CA="$HOME/Documents/zscaler/root-ca.pem"
-export NODE_EXTRA_CA_CERTS="$ROOT_CA"
-export REQUESTS_CA_BUNDLE="$ROOT_CA"
-export AWS_CA_BUNDLE="$ROOT_CA"
-export CURL_CA_BUNDLE="$ROOT_CA"
+# only point the tooling at the corporate root CA when it is actually readable;
+# otherwise curl, aws and node fail with opaque TLS errors instead of falling
+# back to the system trust store
+if [[ -r "$HOME/Documents/zscaler/root-ca.pem" ]]; then
+  export NODE_EXTRA_CA_CERTS="$HOME/Documents/zscaler/root-ca.pem"
+  export REQUESTS_CA_BUNDLE="$NODE_EXTRA_CA_CERTS"
+  export AWS_CA_BUNDLE="$NODE_EXTRA_CA_CERTS"
+  export CURL_CA_BUNDLE="$NODE_EXTRA_CA_CERTS"
+fi
 {{ end }}

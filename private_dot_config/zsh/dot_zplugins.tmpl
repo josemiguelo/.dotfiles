@@ -1,6 +1,30 @@
+# brew
+# must come first: it puts /opt/homebrew/bin on PATH, and plugins that shell out
+# to a tool otherwise hit the much slower /usr/bin stubs (Apple git is ~300ms)
+$ZDOTDIR/plugins/brew
+
 # requirements
 mattmc3/zfunctions
-ohmyzsh/ohmyzsh path:lib
+
+# ohmyzsh's lib, minus the pieces only its own themes use. starship draws the
+# prompt, so async_prompt/prompt_info_functions/vcs_info/spectrum are dead
+# weight, and bzr/nvm cover tools that aren't installed. clipboard.zsh is loaded
+# further down with the plugins that depend on it.
+ohmyzsh/ohmyzsh path:lib/cli.zsh
+ohmyzsh/ohmyzsh path:lib/compfix.zsh
+ohmyzsh/ohmyzsh path:lib/completion.zsh
+ohmyzsh/ohmyzsh path:lib/correction.zsh
+ohmyzsh/ohmyzsh path:lib/diagnostics.zsh
+ohmyzsh/ohmyzsh path:lib/directories.zsh
+ohmyzsh/ohmyzsh path:lib/functions.zsh
+ohmyzsh/ohmyzsh path:lib/git.zsh
+ohmyzsh/ohmyzsh path:lib/grep.zsh
+ohmyzsh/ohmyzsh path:lib/history.zsh
+ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
+ohmyzsh/ohmyzsh path:lib/misc.zsh
+ohmyzsh/ohmyzsh path:lib/termsupport.zsh
+ohmyzsh/ohmyzsh path:lib/theme-and-appearance.zsh
+
 ohmyzsh/ohmyzsh path:plugins/extract
 
 # completion utils
@@ -18,7 +42,7 @@ $ZDOTDIR/completions/git kind:fpath
 # NOTE: asdf loading should not depend on any brew binary
 # if this is the case, link it like: ln -s /opt/homebrew/bin/asdf ~/.local/bin/asdf
 $ZDOTDIR/plugins/asdf-pre
-ohmyzsh/ohmyzsh path:plugins/asdf
+$ZDOTDIR/plugins/asdf
 
 # aliases utils
 ohmyzsh/ohmyzsh path:plugins/alias-finder
@@ -66,6 +90,3 @@ zsh-users/zsh-autosuggestions kind:defer
 
 # history
 zsh-users/zsh-history-substring-search kind:defer
-
-# brew
-$ZDOTDIR/plugins/brew

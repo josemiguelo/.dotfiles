@@ -1,20 +1,33 @@
+# Profile startup with: ZSH_PROFILE=1 zsh -i -c exit
+[[ -n "$ZSH_PROFILE" ]] && zmodload zsh/zprof
+
+# PATH and FPATH are exported, so nested shells re-append every entry
+typeset -U path fpath
+
 export PATH="$HOME/.local/bin:$PATH"
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
 
-# completion
-fpath=($ZDOTDIR/completions "${fpath[@]-}")
+# completion; compinit itself is run by belak/zsh-utils once antidote has
+# finished adding plugin directories to fpath. $ZSH_CACHE_DIR/completions holds
+# the completions plugins generate at runtime (_asdf, _kubectl) and has to be on
+# fpath or compinit never picks them up.
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p $ZSH_CACHE_DIR/completions
-autoload -Uz compinit
-compinit
+fpath=($ZDOTDIR/completions $ZSH_CACHE_DIR/completions "${fpath[@]-}")
 
-export HISTFILE="$HOME/.local/state/zsh_history"
-if [[ ! -f "$HISTFILE" ]]; then
-  mkdir -p "$(dirname "$HISTFILE")"
-  touch "$HISTFILE"
-fi
-
-export HISTSIZE=10000
-export SAVEHIST=10000
+# Init snippets from slow tools get cached and only regenerated when the tool
+# itself is newer than the cache, which keeps a fork out of every startup.
+typeset -g __zcache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/init"
+zcache() {
+  local name=$1; shift
+  local bin=${commands[$1]:-$1}
+  [[ -x $bin ]] || return 0
+  local file=$__zcache_dir/$name.zsh
+  if [[ ! -s $file || $bin -nt $file ]]; then
+    [[ -d $__zcache_dir ]] || mkdir -p $__zcache_dir
+    "$@" >| $file || { command rm -f $file; return 1; }
+  fi
+  source $file
+}
 
 # zstyles
 [[ -r $ZDOTDIR/.zstyles ]] && . $ZDOTDIR/.zstyles
@@ -24,7 +37,33 @@ export antidote_path=${XDG_DATA_HOME:=~/.local/share}/mattmc3/antidote
 [[ -d $antidote_path ]] || git clone --depth 1 --quiet https://github.com/mattmc3/antidote $antidote_path
 
 source $antidote_path/antidote.zsh
+
+# ohmyzsh's lib calls compdef before zsh-utils has run compinit, so queue those
+# registrations and replay them once compinit has defined the real compdef
+typeset -ga _compdef_queue=()
+compdef() { _compdef_queue+=( "${(j: :)${(q)@}}" ) }
+
 antidote load
+
+if (( $+_comps )); then
+  for _cd in $_compdef_queue; do eval "compdef $_cd"; done
+fi
+unset _cd _compdef_queue
+
+# the brew plugin runs first so plugins don't shell out to the slow /usr/bin
+# stubs, but asdf prepends its shims afterwards; re-assert homebrew's
+# precedence here. typeset -U above keeps the first occurrence, so this is a
+# plain array move rather than another brew shellenv.
+path=( /opt/homebrew/{bin,sbin}(N-/) $path )
+
+# history must be set after antidote load: ohmyzsh's lib/history.zsh raises
+# HISTSIZE to 50000 whenever it finds a smaller value, so anything set earlier
+# is silently overridden. HISTSIZE stays above SAVEHIST so hist_expire_dups_first
+# has room to drop duplicates before the file is trimmed.
+HISTFILE="$HOME/.local/state/zsh_history"
+HISTSIZE=50000
+SAVEHIST=10000
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
 
 # Check if we are NOT in WezTerm
 if [ -z "$WEZTERM_PANE" ] && [ "$TERM_PROGRAM" != "WezTerm" ]; then
@@ -34,10 +73,13 @@ if [ -z "$WEZTERM_PANE" ] && [ "$TERM_PROGRAM" != "WezTerm" ]; then
   __wezterm_osc7() { :; }
 fi
 
-eval "$(zoxide init zsh)"
+zcache zoxide zoxide init zsh
 
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
-eval "$(starship init zsh)"
+# --print-full-init is what `starship init zsh` ends up evaluating anyway
+zcache starship starship init zsh --print-full-init
+
+[[ -n "$ZSH_PROFILE" ]] && zprof
 
 # Auto-attach to tmux in kitty
 if [[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]; then
