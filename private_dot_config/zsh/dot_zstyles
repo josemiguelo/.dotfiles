@@ -3,9 +3,6 @@
 zstyle ':omz:alpha:lib:git' async-prompt no
 
 # Antidote
-# v2 defaults path-style to 'full' ($ANTIDOTE_HOME/github.com/owner/repo); keep
-# the v1 'owner/repo' layout so upgrading doesn't re-clone every bundle
-zstyle ':antidote:bundle' path-style 'short'
 zstyle ':antidote:bundle' use-friendly-names 'yes'
 zstyle ':antidote:bundle' file ${ZDOTDIR:-~}/.zplugins
 zstyle ':antidote:bundle:*' zcompile 'yes'
