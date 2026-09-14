@@ -25,7 +25,7 @@ else
 fi
 
 # 3. Combine and select using fzf-tmux popup
-choice=$(printf "%s\n%s" "$sessions" "$dirs" | grep . | fzf-tmux -p --reverse)
+choice=$(printf "%s\n%s" "$sessions" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
 
 [[ -z "$choice" ]] && exit 0
 
