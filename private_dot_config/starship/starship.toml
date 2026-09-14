@@ -3,7 +3,7 @@
 
 # Draw a full-width rule between shell prompts instead of a blank line
 add_newline = false
-format = "\n${custom.hr}\n\n$all"
+format = "\n${custom.hr}\n$all"
 
 command_timeout = 8000
 
