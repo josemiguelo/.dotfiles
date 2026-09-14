@@ -43,7 +43,34 @@ else
   target=$(basename "$target_path" | tr ' .' '__')
 
   if ! tmux has-session -t "$target" 2>/dev/null; then
-    tmux new-session -ds "$target" -c "$target_path"
+    layout_file=""
+    named_file=""
+    for candidate in "$target_path/.tmuxinator.yml" "$target_path/.tmuxinator.yaml"; do
+      if [[ -f "$candidate" ]]; then
+        layout_file="$candidate"
+        break
+      fi
+    done
+    for candidate in "$HOME/.config/tmuxinator/${target}.yml" "$HOME/.config/tmuxinator/${target}.yaml"; do
+      if [[ -f "$candidate" ]]; then
+        named_file="$candidate"
+        break
+      fi
+    done
+
+    started=0
+    if command -v tmuxinator &>/dev/null; then
+      tmuxinator_flags=(--no-attach --suppress-tmux-version-warning --name "$target")
+      if [[ -n "$layout_file" ]]; then
+        tmuxinator start --project-config "$layout_file" "${tmuxinator_flags[@]}" && started=1
+      elif [[ -n "$named_file" ]]; then
+        tmuxinator start "$target" "${tmuxinator_flags[@]}" && started=1
+      fi
+    fi
+
+    if [[ "$started" -eq 0 ]] && ! tmux has-session -t "$target" 2>/dev/null; then
+      tmux new-session -ds "$target" -c "$target_path"
+    fi
   fi
 fi
 
