@@ -1,7 +1,7 @@
 asdf-plugin-manager                       https://github.com/asdf-community/asdf-plugin-manager.git f1cc7390168e10e2f7ebc044293957fe72009d5b
 golang                                    https://github.com/asdf-community/asdf-golang.git         a75b761963d8e6eda1a185c73476da8a75b8d300
 gradle                                    https://github.com/rfrancis/asdf-gradle.git               1a0b6a725bf70909fcf4978ddb3242485a961e8f
-java                                      https://github.com/halcyon/asdf-java.git                  7dd6ea203115fe01b0069246ab3d1e3900ea4dd8
+java                                      https://github.com/halcyon/asdf-java.git                  aecfc0c0469d3ebd66b03f677d9fa15f14eb226d
 maven                                     https://github.com/halcyon/asdf-maven                     674e23a8e239147ccf835252a41459c72f497c94
 neovim                                    https://github.com/richin13/asdf-neovim.git               cc53c899a5a830ef6dc2e74afb8ef3b8abf4e51a
 nodejs                                    https://github.com/asdf-vm/asdf-nodejs.git                779c8dc84b3bdab38c2c80622d315c2c3267f74b
