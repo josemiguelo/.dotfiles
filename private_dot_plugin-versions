@@ -6,7 +6,7 @@ maven                                     https://github.com/halcyon/asdf-maven 
 neovim                                    https://github.com/richin13/asdf-neovim.git               cc53c899a5a830ef6dc2e74afb8ef3b8abf4e51a
 nodejs                                    https://github.com/asdf-vm/asdf-nodejs.git                779c8dc84b3bdab38c2c80622d315c2c3267f74b
 python                                    https://github.com/asdf-community/asdf-python.git         abc2a03863e4d569b4f9de0d0efc1a88d96c2c12
-ruby                                      https://github.com/asdf-vm/asdf-ruby.git                  d4aa4d94206c6f87ef8901ea90a76ed811aaaad4
+ruby                                      https://github.com/asdf-vm/asdf-ruby.git                  302a44bc4eb2fcb2c99e048052bd090a1c582783
 rust                                      https://github.com/asdf-community/asdf-rust.git           bb9de4503b55fd290fcc95f55df1b439d4d1513c
 tomcat                                    https://github.com/mbutov/asdf-tomcat                     ec5acf2e2268d6dde1362d9dd723c9142679874e
 bun                                       https://github.com/cometkim/asdf-bun.git                  804d9603c473ea616fa078f851fa8380246e2c7a  
