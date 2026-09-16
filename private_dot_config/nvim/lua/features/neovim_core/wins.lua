@@ -30,7 +30,12 @@ LazyVim.on_very_lazy(function()
       "fugitiveblame",
     },
     callback = function(event)
+      -- unsetting 'buflisted' fires BufDelete, and fugitive kills the job behind
+      -- a :G! capture buffer on that event, so the async command never runs
+      local eventignore = vim.o.eventignore
+      vim.o.eventignore = "BufDelete"
       vim.bo[event.buf].buflisted = false
+      vim.o.eventignore = eventignore
       vim.schedule(function()
         local action_close = function()
           vim.cmd("close")
