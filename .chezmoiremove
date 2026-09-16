@@ -1,0 +1,7 @@
+# Files and directories no longer in the source state.
+# Paths are relative to the destination directory (home).
+.config/wezterm
+.config/kanata
+.local/bin/toggle_wezterm_theme
+.config/raycast/script-commands/wezterm.sh
+.config/nvim/lua/features/langs/lisp.lua

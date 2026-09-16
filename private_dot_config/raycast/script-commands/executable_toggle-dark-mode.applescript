@@ -19,13 +19,3 @@ tell application "System Events"
 	end tell
 end tell
 
-set scriptPath to "/Users/jochoa/.local/bin/toggle_wezterm_theme"
-set shellCommand to quoted form of scriptPath
-
-try
-	set shellResult to do shell script shellCommand
-	log "Toggle dark mode on wezterm!"
-on error errMsg number errNum
-	log "Error toggling dark mode on wezterm!"
-end try
-
