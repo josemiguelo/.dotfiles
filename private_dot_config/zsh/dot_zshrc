@@ -65,14 +65,6 @@ HISTSIZE=50000
 SAVEHIST=10000
 [[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
 
-# Check if we are NOT in WezTerm
-if [ -z "$WEZTERM_PANE" ] && [ "$TERM_PROGRAM" != "WezTerm" ]; then
-  __wezterm_user_vars_preexec() { :; }
-  __wezterm_user_vars_precmd() { :; }
-  __wezterm_semantic_precmd() { :; }
-  __wezterm_osc7() { :; }
-fi
-
 zcache zoxide zoxide init zsh
 
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
