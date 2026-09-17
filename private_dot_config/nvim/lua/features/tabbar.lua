@@ -9,13 +9,13 @@ return {
   {
     "nanozuki/tabby.nvim",
     dependencies = {
-      { "olimorris/onedarkpro.nvim", "folke/snacks.nvim" },
+      { "folke/tokyonight.nvim", "folke/snacks.nvim" },
     },
     config = function()
       vim.o.showtabline = 2
 
-      local dark_colors = require("onedarkpro.helpers").get_colors("onedark")
-      local light_colors = require("onedarkpro.helpers").get_colors("onelight")
+      local dark_colors = require("tokyonight.colors").setup({ style = "night" })
+      local light_colors = require("tokyonight.colors").setup({ style = "day" })
 
       local function is_zoomed()
         return Snacks.zen.win and Snacks.zen.win:valid() or false
@@ -35,15 +35,9 @@ return {
 
         local theme = {
           fill = "TabLineFill",
-          current_tab = { fg = colors.bg, bg = colors.red, style = "bold" },
+          current_tab = { fg = colors.bg, bg = colors.blue, style = "bold" },
           tab = { style = "italic" },
         }
-
-        if vim.o.background == "light" then
-          theme.current_tab.bg = colors.blue
-        else
-          theme.current_tab.bg = colors.red
-        end
 
         if is_zoomed() then
           return {

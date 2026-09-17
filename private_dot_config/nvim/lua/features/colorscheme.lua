@@ -4,138 +4,126 @@ local reload_plugins = function()
   require("features.blink_cursor")[1].config()
 end
 
+-- merge onto what the theme already set instead of replacing the whole group
+local function extend(highlights, group, opts)
+  highlights[group] = vim.tbl_extend("force", highlights[group] or {}, opts)
+end
+
+local function luminance(hex)
+  local r, g, b = hex:match("^#(%x%x)(%x%x)(%x%x)$")
+  return (0.299 * tonumber(r, 16) + 0.587 * tonumber(g, 16) + 0.114 * tonumber(b, 16)) / 255
+end
+
+-- palette colors flip lightness between the night and day styles, so pick the
+-- foreground that still reads against whatever the background resolved to
+local function contrast_fg(bg)
+  return luminance(bg) > 0.5 and "#000000" or "#ffffff"
+end
+
 return {
   {
-    "olimorris/onedarkpro.nvim",
+    "folke/tokyonight.nvim",
     priority = 1000,
     opts = {
-      colors = {
-        onedark = {
-          diag_error_sp = "require('onedarkpro.helpers').lighten('red', 9.3, 'onedark')",
-          diag_warn_sp = "require('onedarkpro.helpers').lighten('yellow', 9, 'onedark')",
-          diag_hint_sp = "require('onedarkpro.helpers').lighten('cyan', 10.8, 'onedark')",
-          diag_info_sp = "require('onedarkpro.helpers').lighten('blue', 10.2, 'onedark')",
-        },
-        onelight = {
-          staged_green = "require('onedarkpro.helpers').lighten('green', 35, 'onelight')",
-          staged_yellow = "require('onedarkpro.helpers').lighten('yellow', 20, 'onelight')",
-          staged_red = "require('onedarkpro.helpers').lighten('red', 35, 'onelight')",
-          diag_error_sp = "require('onedarkpro.helpers').lighten('red', 15, 'onelight')",
-          diag_warn_sp = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
-          diag_hint_sp = "require('onedarkpro.helpers').darken('cyan', 15, 'onelight')",
-          diag_info_sp = "require('onedarkpro.helpers').lighten('blue', 26, 'onelight')",
-          diag_error_fg = "require('onedarkpro.helpers').lighten('red', 15, 'onelight')",
-          diag_warn_fg = "require('onedarkpro.helpers').lighten('yellow', 15, 'onelight')",
-          diag_hint_fg = "require('onedarkpro.helpers').darken('cyan', 10, 'onelight')",
-          diag_info_fg = "require('onedarkpro.helpers').lighten('blue', 26, 'onelight')",
-          cursorline = "require('onedarkpro.helpers').darken('bg', 13, 'onelight')",
-        },
-      },
-      highlights = {
-        LineNrAbove = { fg = "${blue}", extend = true },
-        LineNrBelow = { fg = "${blue}", extend = true },
-        SnacksPicker = { bg = "NONE", extend = true },
-        SnacksPickerBorder = { bg = "NONE", extend = true },
-        SnacksTerminal = { bg = "NONE", extend = true },
-        CursorLine = { bg = "${cursorline}", extend = true },
-        CursorColumn = { bg = "${cursorline}", extend = true },
-        Added = { fg = "${green}", extend = true },
-        Removed = { fg = "${red}", extend = true },
-        Changed = { fg = "${yellow}", bold = true, extend = true },
-        diffAdded = { link = "Added" },
-        diffRemoved = { link = "Removed" },
-        diffSubname = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        diffIndexLine = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        diffFile = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        diffLine = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        diffOldFile = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        diffNewFile = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        fugitiveUnstagedSection = { fg = "${purple}", bold = true, extend = true, underline = true, italic = true },
-        fugitiveStagedSection = { fg = "${purple}", bold = true, extend = true, underline = true, italic = true },
-        gitdiff = { fg = "${blue}", bold = true, extend = true, underline = true, italic = true },
-        ["@attribute"] = { fg = "${purple}", bold = true, extend = true, underline = true, italic = true },
-        DiffText = { bg = "${cyan}", bold = true, fg = "#000000", extend = true },
-        GitSignsAdd = { fg = "${green}", extend = true },
-        GitSignsChange = { fg = "${yellow}", extend = true },
-        GitSignsDelete = { fg = "${red}", extend = true },
-        DapStoppedLine = { link = "Visual" },
-        FugitiveDeltaText = { link = "DiffText" },
-        DiagnosticVirtualTextError = {
-          undercurl = true,
-          italic = true,
-          bold = true,
-          fg = { onelight = "${diag_error_fg}" },
-          sp = "${diag_error_sp}",
-          extend = true,
-        },
-        DiagnosticVirtualTextWarn = {
-          undercurl = true,
-          italic = true,
-          bold = true,
-          fg = { onelight = "${diag_warn_fg}" },
-          sp = "${diag_warn_sp}",
-          extend = true,
-        },
-        DiagnosticVirtualTextHint = {
-          undercurl = true,
-          italic = true,
-          bold = true,
-          fg = { onelight = "${diag_hint_fg}" },
-          sp = "${diag_hint_sp}",
-          extend = true,
-        },
-        DiagnosticVirtualTextInfo = {
-          undercurl = true,
-          italic = true,
-          bold = true,
-          fg = { onelight = "${diag_info_fg}" },
-          sp = "${diag_info_sp}",
-          extend = true,
-        },
-        CursorLineNr = {
-          fg = { onedark = "${purple}", onelight = "${cyan}" },
-          extend = true,
-        },
-        WinSeparator = {
-          fg = { onedark = "${blue}" },
-          extend = true,
-        },
-        FlashLabel = {
-          bg = { onedark = "${blue}", onelight = "#ff007c" },
-          bold = true,
-          fg = "${cursorline}",
-          extend = true,
-        },
-        Comment = {
-          fg = { onelight = "#7380ba" },
-          italic = true,
-          extend = true,
-        },
-        GitSignsStagedAdd = { fg = { onelight = "${staged_green}" }, extend = true },
-        GitSignsStagedChange = { fg = { onelight = "${staged_yellow}" }, extend = true },
-        GitSignsStagedDelete = { fg = { onelight = "${staged_red}" }, extend = true },
-      },
-      options = {
-        transparency = true,
-        terminal_colors = true,
-        lualine_transparency = true,
-        highlight_inactive_windows = true,
-      },
+      style = "night",
+      light_style = "day",
+      transparent = true,
+      terminal_colors = true,
       styles = {
-        types = "bold",
-        methods = "bold",
-        numbers = "NONE",
-        strings = "NONE",
-        comments = "italic",
-        keywords = "bold,italic",
-        constants = "bold",
-        functions = "italic",
-        operators = "NONE",
-        variables = "NONE",
-        parameters = "italic",
-        conditionals = "bold,italic",
-        virtual_text = "italic",
+        sidebars = "transparent",
+        floats = "transparent",
       },
+      on_colors = function(colors)
+        colors.border = colors.blue6
+        -- night's #565f89 sits too close to the background to read comfortably, and
+        -- dark5 only reaches 4.1:1 against it. This clears 5.7:1 while staying well
+        -- below the #c0caf5 body text, so comments still read as secondary. Day is fine.
+        if luminance(colors.bg) < 0.5 then
+          colors.comment = "#8b93c4"
+        end
+      end,
+      on_highlights = function(hl, c)
+        local light = luminance(c.bg) > 0.5
+        local blend = require("tokyonight.util").blend
+        local emphasis = { bold = true, underline = true, italic = true }
+
+        for _, group in ipairs({
+          "Normal",
+          "NormalFloat",
+          "SnacksPicker",
+          "SnacksPickerBorder",
+          "SnacksTerminal",
+        }) do
+          extend(hl, group, { bg = c.none, nocombine = true })
+        end
+
+        extend(hl, "LineNrAbove", { fg = c.blue1 })
+        extend(hl, "LineNrBelow", { fg = c.blue1 })
+
+        extend(hl, "CursorLine", { bg = c.bg_highlight })
+        extend(hl, "CursorColumn", { bg = c.bg_highlight })
+        extend(hl, "CursorLineNr", { fg = light and c.cyan or c.purple })
+
+        extend(hl, "FlashLabel", { bg = c.magenta2, fg = contrast_fg(c.magenta2), bold = true })
+
+        if light then
+          extend(hl, "Comment", { fg = "#7380ba", italic = true })
+        end
+
+        extend(hl, "@variable", { fg = c.cyan })
+
+        -- c.git holds the sign colors, c.diff the region tints
+        extend(hl, "Added", { fg = c.git.add })
+        extend(hl, "Removed", { fg = c.git.delete })
+        extend(hl, "Changed", { fg = c.git.change, bold = true })
+
+        -- c.git.add is a muted teal and c.git.delete a washed maroon, which get lost
+        -- on top of the diff tints, so the diff body uses the saturated syntax colors
+        extend(hl, "diffAdded", { fg = c.green })
+        extend(hl, "diffRemoved", { fg = c.red })
+
+        -- Tokyo Night already gives each diff header its own color, so carry over
+        -- only the emphasis and let its palette supply the foreground
+        for _, group in ipairs({
+          "diffFile",
+          "diffLine",
+          "diffIndexLine",
+          "diffOldFile",
+          "diffNewFile",
+        }) do
+          extend(hl, group, emphasis)
+        end
+
+        -- these two it leaves undefined, so they still need a color of their own
+        extend(hl, "diffSubname", vim.tbl_extend("force", emphasis, { fg = c.blue }))
+        extend(hl, "gitdiff", vim.tbl_extend("force", emphasis, { fg = c.blue }))
+
+        extend(hl, "DiffText", { bg = c.diff.text, fg = contrast_fg(c.diff.text), bold = true })
+
+        -- GitSignsAdd/Change/Delete already use c.git; only the staged variants are
+        -- missing, dimmed toward the background so they read as already applied
+        extend(hl, "GitSignsStagedAdd", { fg = blend(c.git.add, 0.5, c.bg) })
+        extend(hl, "GitSignsStagedChange", { fg = blend(c.git.change, 0.5, c.bg) })
+        extend(hl, "GitSignsStagedDelete", { fg = blend(c.git.delete, 0.5, c.bg) })
+
+        for _, group in ipairs({ "fugitiveUnstagedSection", "fugitiveStagedSection" }) do
+          extend(hl, group, vim.tbl_extend("force", emphasis, { fg = c.purple }))
+        end
+
+        -- flog's graph groups default-link to generic syntax colors, which drift from
+        -- the palette fugitive lands on; follow git's own --decorate conventions so the
+        -- two read as the same tool. Its flogDiff* groups already link to diff*.
+        extend(hl, "flogHash", { fg = c.magenta })
+        extend(hl, "flogAuthor", { fg = c.teal })
+        extend(hl, "flogDate", { fg = c.dark5 })
+        extend(hl, "flogRef", { fg = c.blue })
+        extend(hl, "flogRefTag", { fg = c.yellow, bold = true })
+        extend(hl, "flogRefRemote", { fg = c.red, bold = true })
+        extend(hl, "flogRefHead", { fg = c.cyan, bold = true })
+        extend(hl, "flogRefHeadBranch", { fg = c.green, bold = true })
+        extend(hl, "flogCollapsedCommit", { fg = c.comment, italic = true })
+        hl.FugitiveDeltaText = { link = "DiffText" }
+      end,
     },
   },
 
@@ -145,13 +133,13 @@ return {
       set_dark_mode = function()
         vim.notify("Enabling dark mode 🌚")
         vim.api.nvim_set_option_value("background", "dark", {})
-        vim.cmd("colorscheme onedark")
+        vim.cmd("colorscheme tokyonight-night")
         reload_plugins()
       end,
       set_light_mode = function()
         vim.notify("Enabling light mode 🌞")
         vim.api.nvim_set_option_value("background", "light", {})
-        vim.cmd("colorscheme onelight")
+        vim.cmd("colorscheme tokyonight-day")
         reload_plugins()
       end,
     },
