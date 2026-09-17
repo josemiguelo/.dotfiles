@@ -2,13 +2,15 @@ return {
   {
     "Grazfather/blinker.nvim",
     dependencies = {
-      { "olimorris/onedarkpro.nvim" },
+      { "folke/tokyonight.nvim" },
     },
     config = function()
-      local colors = require("onedarkpro.helpers").get_colors()
+      local colors = require("tokyonight.colors").setup({
+        style = vim.o.background == "light" and "day" or "night",
+      })
 
       require("blinker").setup({
-        color = colors.red,
+        color = colors.orange,
       })
     end,
     keys = {

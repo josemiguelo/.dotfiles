@@ -86,35 +86,61 @@ set -g @plugin 'lloydbond/tmux-floating-terminal'
 set -g @floating_scratch_term 'C-t'
 set -g @continuum-restore 'on'
 
-###################
-## ONEDARK THEME ##
-###################
+#######################
+## TOKYO NIGHT THEME ##
+#######################
+
+# Kitty serves the Tokyo Night palette through its ANSI slots (see
+# kitty/dark-theme.auto.conf and light-theme.auto.conf), and swaps night for day
+# with the system appearance. Naming slots rather than hex keeps tmux on Tokyo
+# Night in both modes and lets it follow that switch for free.
+#   color0 black   color1 red     color2 green  color3 yellow
+#   color4 blue    color5 magenta color6 cyan   color8 bright black
 
 set-option -g status-style "bg=default"
-set-option -g mode-style "reverse"
+set-option -g mode-style "bg=color8,fg=color15"
 
 # Messages
 set-option -g message-style "bg=default,fg=color4"
+set-option -g message-command-style "bg=default,fg=color4"
+
+# Panes
+set-option -g pane-border-style "fg=color8"
+set-option -g pane-active-border-style "fg=color4"
+set-option -g display-panes-colour "color8"
+set-option -g display-panes-active-colour "color4"
+
+# Copy mode search
+set-option -g copy-mode-match-style "bg=color3,fg=color0"
+set-option -g copy-mode-current-match-style "bg=color4,fg=color0"
+
+# Clock
+set-option -g clock-mode-colour "color4"
 
 # Center
 set-option -g status-justify left
-set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color1]#[bg=default]▐#[fg=black]#[bg=color1]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color1]#[bg=default]▌}#[norange]"
+set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color4]#[bg=default]▐#[fg=color0]#[bg=color4]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color4]#[bg=default]▌}#[norange]"
 set-window-option -g window-status-format "#[range=window|#{window_index}]#{?#{m:_*,#W},, #I #W }#[norange]"
 
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"
+set-window-option -g window-status-activity-style "bg=default,fg=color3"
+set-window-option -g window-status-bell-style "bg=default,fg=color1,bold"
 
 # Left
 set-option -g status-left '#{prefix_highlight}'
+# the plugin builds its style by splitting this on commas, so bold rides along on fg
+set -g @prefix_highlight_fg 'color0,bold'
+set -g @prefix_highlight_bg 'color6'
 set -g @prefix_highlight_show_copy_mode 'on'
-set -g @prefix_highlight_copy_mode_attr 'fg=black,bg=yellow,bold'
+set -g @prefix_highlight_copy_mode_attr 'fg=color0,bg=color3,bold'
 set -g @prefix_highlight_show_sync_mode 'on'
-set -g @prefix_highlight_sync_mode_attr 'fg=black,bg=green'
+set -g @prefix_highlight_sync_mode_attr 'fg=color0,bg=color2'
 set -g @prefix_highlight_copy_prompt 'COPY'
 set -g @prefix_highlight_sync_prompt 'SYNC'
 
 # Right
-set-option -g status-right "#[fg=black,bg=red,bold] #S #[default]"
+set-option -g status-right "#[fg=color0,bg=color5,bold] #S #[default]"
 
 # Status bar
 # 1. Enable two lines for the status bar
