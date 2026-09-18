@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Cycles real tmux sessions, skipping the per-session floating scratch sessions
-# (named floating-<session_name>) created by tmux-floating-terminal.
+# (named floating-<session_name>) created by tmux-floating-scratchpad.
 
 direction="$1"
 current_session=$(tmux display-message -p '#S')
