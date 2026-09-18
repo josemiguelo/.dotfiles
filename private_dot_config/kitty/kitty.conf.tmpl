@@ -61,11 +61,16 @@ tab_title_template " {index}: {title} "
 # --- Keybindings ---
 map ctrl+alt+e set_tab_title
 
-# Open the tmux-attach picker. Sends C-M-a (ESC + C-a), which tmux binds in its
-# root table and zsh binds via bindkey, so it works in or out of tmux. Mapping
-# it here rather than letting the key through keeps it working on macOS, where
-# Option only reaches terminal programs as Alt if macos_option_as_alt is set.
+# Open the tmux-attach picker. Sends C-M-a (ESC + C-a), bound in tmux's root
+# table and in zsh via bindkey, so it works in or out of tmux. Mapped here
+# because on macOS Option only reaches programs as Alt with macos_option_as_alt.
+# The modifier differs per OS so the physical key matches: Linux's Alt sits
+# where macOS puts Command.
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+a send_text all \x1b\x01
+{{ else if (eq .chezmoi.os "linux") -}}
 map ctrl+alt+a send_text all \x1b\x01
+{{ end -}}
 
 # kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
 # no_op releases them so tmux receives them for swapping windows.
