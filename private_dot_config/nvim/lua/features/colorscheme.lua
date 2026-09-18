@@ -14,8 +14,8 @@ local function luminance(hex)
   return (0.299 * tonumber(r, 16) + 0.587 * tonumber(g, 16) + 0.114 * tonumber(b, 16)) / 255
 end
 
--- palette colors flip lightness between the night and day styles, so pick the
--- foreground that still reads against whatever the background resolved to
+-- palette lightness flips between the storm and day styles, so pick the
+-- foreground from the background that actually resolved
 local function contrast_fg(bg)
   return luminance(bg) > 0.5 and "#000000" or "#ffffff"
 end
@@ -25,7 +25,7 @@ return {
     "folke/tokyonight.nvim",
     priority = 1000,
     opts = {
-      style = "night",
+      style = "storm",
       light_style = "day",
       transparent = true,
       terminal_colors = true,
@@ -35,9 +35,8 @@ return {
       },
       on_colors = function(colors)
         colors.border = colors.blue6
-        -- night's #565f89 sits too close to the background to read comfortably, and
-        -- dark5 only reaches 4.1:1 against it. This clears 5.7:1 while staying well
-        -- below the #c0caf5 body text, so comments still read as secondary. Day is fine.
+        -- storm's #565f89 contrasts 4.1:1 on bg; this clears 5.7:1 and stays
+        -- below the #c0caf5 body text. Day is fine as-is.
         if luminance(colors.bg) < 0.5 then
           colors.comment = "#8b93c4"
         end
@@ -77,8 +76,8 @@ return {
         extend(hl, "Removed", { fg = c.git.delete })
         extend(hl, "Changed", { fg = c.git.change, bold = true })
 
-        -- c.git.add is a muted teal and c.git.delete a washed maroon, which get lost
-        -- on top of the diff tints, so the diff body uses the saturated syntax colors
+        -- c.git.add/delete are muted and get lost on the diff tints, so the diff
+        -- body uses the saturated syntax colors instead
         extend(hl, "diffAdded", { fg = c.green })
         extend(hl, "diffRemoved", { fg = c.red })
 
@@ -100,8 +99,8 @@ return {
 
         extend(hl, "DiffText", { bg = c.diff.text, fg = contrast_fg(c.diff.text), bold = true })
 
-        -- GitSignsAdd/Change/Delete already use c.git; only the staged variants are
-        -- missing, dimmed toward the background so they read as already applied
+        -- GitSignsAdd/Change/Delete already use c.git; the staged variants are
+        -- missing, dimmed toward the background
         extend(hl, "GitSignsStagedAdd", { fg = blend(c.git.add, 0.5, c.bg) })
         extend(hl, "GitSignsStagedChange", { fg = blend(c.git.change, 0.5, c.bg) })
         extend(hl, "GitSignsStagedDelete", { fg = blend(c.git.delete, 0.5, c.bg) })
@@ -110,9 +109,8 @@ return {
           extend(hl, group, vim.tbl_extend("force", emphasis, { fg = c.purple }))
         end
 
-        -- flog's graph groups default-link to generic syntax colors, which drift from
-        -- the palette fugitive lands on; follow git's own --decorate conventions so the
-        -- two read as the same tool. Its flogDiff* groups already link to diff*.
+        -- flog's graph groups default-link to generic syntax colors; follow git's
+        -- --decorate conventions to match fugitive. flogDiff* already links to diff*.
         extend(hl, "flogHash", { fg = c.magenta })
         extend(hl, "flogAuthor", { fg = c.teal })
         extend(hl, "flogDate", { fg = c.dark5 })
@@ -133,7 +131,7 @@ return {
       set_dark_mode = function()
         vim.notify("Enabling dark mode 🌚")
         vim.api.nvim_set_option_value("background", "dark", {})
-        vim.cmd("colorscheme tokyonight-night")
+        vim.cmd("colorscheme tokyonight-storm")
         reload_plugins()
       end,
       set_light_mode = function()

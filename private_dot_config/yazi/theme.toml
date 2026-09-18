@@ -1,8 +1,7 @@
 #:schema https://yazi-rs.github.io/schemas/theme.json
 
-# Flavors live in flavors/ and are verbatim copies of tokyonight.nvim's
-# extras/yazi. Yazi picks between them from the system appearance, the same
-# switch kitty and neovim follow.
+# Flavors are verbatim copies of tokyonight.nvim's extras/yazi, picked from the
+# system appearance.
 [flavor]
-dark  = "tokyonight-night"
+dark  = "tokyonight-storm"
 light = "tokyonight-day"

@@ -14,7 +14,7 @@ return {
     config = function()
       vim.o.showtabline = 2
 
-      local dark_colors = require("tokyonight.colors").setup({ style = "night" })
+      local dark_colors = require("tokyonight.colors").setup({ style = "storm" })
       local light_colors = require("tokyonight.colors").setup({ style = "day" })
 
       local function is_zoomed()

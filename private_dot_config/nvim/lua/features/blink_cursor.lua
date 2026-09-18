@@ -6,7 +6,7 @@ return {
     },
     config = function()
       local colors = require("tokyonight.colors").setup({
-        style = vim.o.background == "light" and "day" or "night",
+        style = vim.o.background == "light" and "day" or "storm",
       })
 
       require("blinker").setup({
