@@ -107,7 +107,7 @@ return {
           end
 
           local colors = require("tokyonight.colors").setup({
-            style = vim.o.background == "light" and "day" or "night",
+            style = vim.o.background == "light" and "day" or "storm",
           })
 
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")

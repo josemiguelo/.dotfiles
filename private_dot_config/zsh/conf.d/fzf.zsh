@@ -7,18 +7,18 @@ fzf-theme() {
   local shared="--highlight-line --info=inline-right --ansi --layout=reverse --border=none"
   local dark=1
 
-  # only macOS reports appearance; elsewhere stay on the night palette
+  # only macOS reports appearance; elsewhere stay on the storm palette
   if [[ "$OSTYPE" == darwin* ]]; then
     [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == Dark ]] || dark=0
   fi
 
   if (( dark )); then
     export FZF_DEFAULT_OPTS="$shared \
-      --color=bg+:#283457 \
-      --color=bg:#16161e \
-      --color=border:#27a1b9 \
+      --color=bg+:#2e3c64 \
+      --color=bg:#1f2335 \
+      --color=border:#29a4bd \
       --color=fg:#c0caf5 \
-      --color=gutter:#16161e \
+      --color=gutter:#1f2335 \
       --color=header:#ff9e64 \
       --color=hl+:#2ac3de \
       --color=hl:#2ac3de \
@@ -27,7 +27,7 @@ fzf-theme() {
       --color=pointer:#ff007c \
       --color=prompt:#2ac3de \
       --color=query:#c0caf5:regular \
-      --color=scrollbar:#27a1b9 \
+      --color=scrollbar:#29a4bd \
       --color=separator:#ff9e64 \
       --color=spinner:#ff007c"
   else

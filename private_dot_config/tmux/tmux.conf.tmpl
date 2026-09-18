@@ -43,7 +43,6 @@ unbind C-b
 set-option -g prefix C-a
 bind C-a send-prefix
 
-bind a run-shell "~/.local/bin/tmux-attach"
 bind -n C-M-a run-shell "~/.local/bin/tmux-attach"
 
 bind -n C-PPage previous-window
@@ -90,10 +89,9 @@ set -g @continuum-restore 'on'
 ## TOKYO NIGHT THEME ##
 #######################
 
-# Kitty serves the Tokyo Night palette through its ANSI slots (see
-# kitty/dark-theme.auto.conf and light-theme.auto.conf), and swaps night for day
-# with the system appearance. Naming slots rather than hex keeps tmux on Tokyo
-# Night in both modes and lets it follow that switch for free.
+# Kitty carries the Tokyo Night palette in its ANSI slots and swaps storm for
+# day with the system appearance (see kitty/*-theme.auto.conf). Naming slots
+# rather than hex follows that switch.
 #   color0 black   color1 red     color2 green  color3 yellow
 #   color4 blue    color5 magenta color6 cyan   color8 bright black
 
