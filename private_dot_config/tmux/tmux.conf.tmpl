@@ -94,7 +94,7 @@ set -g @continuum-restore 'on'
 # rather than hex follows that switch.
 #   color0 black   color1 red     color2 green  color3 yellow
 #   color4 blue    color5 magenta color6 cyan   color8 bright black
-#   color16 orange (Tokyo Night's accent, in the extended slots)
+#   color16 orange  color17 red (Tokyo Night's own, in the extended slots)
 
 # Foreground for text on a bright accent. color0 is near black under storm but
 # #b4b5b9 under day, so take it from client_theme instead. Comma-free so
@@ -135,8 +135,9 @@ set-window-option -g window-status-bell-style "bg=default,fg=color1,bold"
 set-option -g status-left '#{prefix_highlight}'
 # the plugin builds its style by splitting this on commas, so bold rides along on fg
 set -g @prefix_highlight_fg '#{E:@fg_on_accent},bold'
-# Orange, not cyan: cyan sits ~20 degrees from the active window's blue.
-set -g @prefix_highlight_bg 'colour16'
+# Red, not cyan: cyan sits ~20 degrees from the active window's blue. color17
+# over color1 because storm's #f7768e reads pink rather than red.
+set -g @prefix_highlight_bg 'colour17'
 set -g @prefix_highlight_show_copy_mode 'on'
 set -g @prefix_highlight_copy_mode_attr 'fg=#{E:@fg_on_accent},bg=color3,bold'
 set -g @prefix_highlight_show_sync_mode 'on'
