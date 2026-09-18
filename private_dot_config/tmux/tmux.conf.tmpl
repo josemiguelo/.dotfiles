@@ -63,6 +63,10 @@ bind h run-shell 'tmux rename-window "#{?#{m:_*,#W},#{s/^_//:#W},_#W}"'
 bind-key -n C-S-Left swap-window -t -1\; select-window -t -1
 bind-key -n C-S-Right swap-window -t +1\; select-window -t +1
 
+# Cycle real sessions with prefix + ( / ), skipping the per-session floating scratch sessions.
+bind ( run-shell "~/.local/bin/tmux-session-cycle prev"
+bind ) run-shell "~/.local/bin/tmux-session-cycle next"
+
 # go to the top/first pane and maximize it
 bind Z select-pane -t 1 \; resize-pane -Z
 
@@ -80,9 +84,11 @@ set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
-set -g @plugin 'lloydbond/tmux-floating-terminal'
+set -g @plugin 'josemiguelo/tmux-floating-scratchpad'
 
 set -g @floating_scratch_term 'C-t'
+set -g @floating_scratch_width '95%'
+set -g @floating_scratch_height '95%'
 set -g @continuum-restore 'on'
 
 #######################
@@ -160,12 +166,3 @@ set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{W:#{T:windo
 ## INIT ##
 ##########
 run 'tpack init'
-
-# Override tmux-floating-terminal popup dimensions (plugin hardcodes 70%x70%).
-# Must run AFTER plugin init so it replaces the plugin's binding.
-bind-key C-t if-shell -F '#{==:#S,floating}' {
-    detach-client
-} {
-    set -gF '@last_session_name' '#S'
-    popup -d '#{pane_current_path}' -xC -yC -w95% -h95% -E 'tmux new -A -s floating'
-}

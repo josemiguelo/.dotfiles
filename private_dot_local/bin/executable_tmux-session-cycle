@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Cycles real tmux sessions, skipping the per-session floating scratch sessions
+# (named floating-<session_name>) created by tmux-floating-terminal.
+
+direction="$1"
+current_session=$(tmux display-message -p '#S')
+
+sessions=()
+while IFS= read -r line; do
+  sessions+=("$line")
+done < <(tmux list-sessions -F '#S' | grep -vE '^floating-')
+
+count=${#sessions[@]}
+[[ "$count" -eq 0 ]] && exit 0
+
+current_index=-1
+for i in "${!sessions[@]}"; do
+  if [[ "${sessions[$i]}" == "$current_session" ]]; then
+    current_index=$i
+    break
+  fi
+done
+
+if [[ "$current_index" -eq -1 ]]; then
+  target_index=0
+elif [[ "$direction" == "next" ]]; then
+  target_index=$(( (current_index + 1) % count ))
+else
+  target_index=$(( (current_index - 1 + count) % count ))
+fi
+
+tmux switch-client -t "${sessions[$target_index]}"
