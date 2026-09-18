@@ -9,8 +9,8 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 session_icon="󱂬"
 dir_icon="󰉋"
 
-# 1. Collect existing sessions
-sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null)
+# 1. Collect existing sessions, excluding the per-session floating scratch sessions
+sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-')
 if [[ -n "$TMUX" ]]; then
   current_session=$(tmux display-message -p '#S' 2>/dev/null)
   sessions_raw=$(echo "$sessions_raw" | grep -v "^$current_session$")
