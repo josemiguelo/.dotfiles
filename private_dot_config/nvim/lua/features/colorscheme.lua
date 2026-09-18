@@ -56,6 +56,10 @@ return {
           extend(hl, group, { bg = c.none, nocombine = true })
         end
 
+        -- snacks default-links this to NonText (2.2:1). Blend fg_dark toward
+        -- the background so the dirname stays secondary to the filename.
+        extend(hl, "SnacksPickerDir", { fg = blend(c.fg_dark, 0.85, c.bg) })
+
         extend(hl, "LineNrAbove", { fg = c.blue1 })
         extend(hl, "LineNrBelow", { fg = c.blue1 })
 
