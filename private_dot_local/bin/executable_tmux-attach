@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# tmux runs this through run-shell, which hands it tmux's environment rather
+# than an interactive shell's, so FZF_DEFAULT_OPTS is not set. Load it here;
+# fzf-tmux forwards the variable into the popup it opens.
+source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
+
 # Icons for differentiation (Nerd Fonts)
 session_icon="󱂬"
 dir_icon="󰉋"
