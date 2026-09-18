@@ -1,4 +1,7 @@
-# Tokyo Night colors for fzf, verbatim from tokyonight.nvim's extras/fzf.
+# Tokyo Night colors for fzf, from tokyonight.nvim's extras/fzf. Deviations:
+# bg and gutter are -1 to inherit the terminal background, since kitty only
+# keeps the default background transparent; pointer and marker are blue rather
+# than upstream's pink.
 # mattmc3/zshrc.d sources conf.d after ohmyzsh's fzf plugin, so this wins.
 # FZF_DEFAULT_OPTS is read when fzf starts, so a shell that was already open
 # when the system appearance changed needs `fzf-theme` re-run by hand.
@@ -15,16 +18,16 @@ fzf-theme() {
   if (( dark )); then
     export FZF_DEFAULT_OPTS="$shared \
       --color=bg+:#2e3c64 \
-      --color=bg:#1f2335 \
+      --color=bg:-1 \
       --color=border:#29a4bd \
       --color=fg:#c0caf5 \
-      --color=gutter:#1f2335 \
+      --color=gutter:-1 \
       --color=header:#ff9e64 \
       --color=hl+:#2ac3de \
       --color=hl:#2ac3de \
       --color=info:#545c7e \
-      --color=marker:#ff007c \
-      --color=pointer:#ff007c \
+      --color=marker:#7aa2f7 \
+      --color=pointer:#7aa2f7 \
       --color=prompt:#2ac3de \
       --color=query:#c0caf5:regular \
       --color=scrollbar:#29a4bd \
@@ -33,16 +36,16 @@ fzf-theme() {
   else
     export FZF_DEFAULT_OPTS="$shared \
       --color=bg+:#b7c1e3 \
-      --color=bg:#d0d5e3 \
+      --color=bg:-1 \
       --color=border:#4094a3 \
       --color=fg:#3760bf \
-      --color=gutter:#d0d5e3 \
+      --color=gutter:-1 \
       --color=header:#b15c00 \
       --color=hl+:#188092 \
       --color=hl:#188092 \
       --color=info:#8990b3 \
-      --color=marker:#d20065 \
-      --color=pointer:#d20065 \
+      --color=marker:#2e7de9 \
+      --color=pointer:#2e7de9 \
       --color=prompt:#188092 \
       --color=query:#3760bf:regular \
       --color=scrollbar:#4094a3 \
