@@ -1,0 +1,10 @@
+name: loadout
+root: ~/Repos/gh/josemiguelo/loadout
+
+windows:
+  - agent: claude --continue
+  - loadout:
+  - loadouts:
+      root: ~/.config/loadouts
+  - wiki:
+      root: ~/Repos/gh/josemiguelo/loadout.wiki
