@@ -154,9 +154,8 @@ set-window-option -g window-status-bell-style "bg=default,fg=color1,bold"
 set-option -g status-left '#{prefix_highlight}'
 # the plugin builds its style by splitting this on commas, so bold rides along on fg
 set -g @prefix_highlight_fg '#{E:@fg_on_accent},bold'
-# Red, not cyan: cyan sits ~20 degrees from the active window's blue. color17
-# over color1 because storm's #f7768e reads pink rather than red.
-set -g @prefix_highlight_bg 'colour17'
+# Orange, not cyan: cyan sits ~20 degrees from the active window's blue.
+set -g @prefix_highlight_bg 'colour16'
 set -g @prefix_highlight_show_copy_mode 'on'
 set -g @prefix_highlight_copy_mode_attr 'fg=#{E:@fg_on_accent},bg=color3,bold'
 set -g @prefix_highlight_show_sync_mode 'on'
