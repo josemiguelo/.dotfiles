@@ -55,6 +55,9 @@ unset _cd _compdef_queue
 # precedence here. typeset -U above keeps the first occurrence, so this is a
 # plain array move rather than another brew shellenv.
 path=( /opt/homebrew/{bin,sbin}(N-/) $path )
+{{- if eq .chezmoi.hostname "macbook-fedora-omarchy" }}
+path=( /home/linuxbrew/.linuxbrew/{bin,sbin}(N-/) $path )
+{{- end }}
 
 # history must be set after antidote load: ohmyzsh's lib/history.zsh raises
 # HISTSIZE to 50000 whenever it finds a smaller value, so anything set earlier

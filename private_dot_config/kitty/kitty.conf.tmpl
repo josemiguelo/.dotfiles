@@ -45,8 +45,16 @@ background_blur 1
 background_opacity 0.85
 
 # Remote control for scripting
+{{ if eq .chezmoi.hostname "macbook-fedora-omarchy" -}}
+# omedora: socket-only, on the per-window socket omarchy-cmd-terminal-cwd
+# queries so "open terminal here" lands in this window's cwd. omedora's own
+# migrations comment out the unrestricted form, so don't use it here.
+allow_remote_control socket-only
+listen_on unix:${XDG_RUNTIME_DIR}/omarchy-kitty-{kitty_pid}
+{{ else -}}
 allow_remote_control yes
 listen_on unix:/tmp/kitty
+{{ end -}}
 
 # --- Tab Bar ---
 tab_bar_edge top
@@ -83,6 +91,12 @@ map ctrl+shift+t new_tab_with_cwd
 {{ end -}}
 
 # --- Theme ---
+{{ if eq .chezmoi.hostname "macbook-fedora-omarchy" -}}
+# omedora owns the colours: omarchy-theme-set rewrites this file and reloads
+# kitty. The .auto.conf palettes are excluded on this host (.chezmoiignore).
+include ~/.local/state/omarchy/current/theme/kitty.conf
+{{ else -}}
 # Automatic theme switching is managed by Kitty using the .auto.conf files.
 # No explicit include is needed for current-theme.conf if you want it to follow system theme.
 # By default, no-preference-theme it's actually a light theme
+{{ end -}}

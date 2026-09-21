@@ -1,0 +1,8 @@
+export ZDOTDIR=~/.config/zsh
+{{- if eq .chezmoi.hostname "macbook-fedora-omarchy" }}
+# omedora ships mise for its agent tooling; asdf owns ~/.tool-versions here.
+# Renaming the file mise looks for keeps it from reading (and warning about)
+# asdf's list. Same value as ~/.config/environment.d/10-mise.conf for the
+# graphical session; this covers ssh/tty shells.
+export MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES=.asdf-tool-versions
+{{- end }}
