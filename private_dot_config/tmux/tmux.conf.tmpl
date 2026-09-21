@@ -69,6 +69,11 @@ bind-key -n C-S-Right swap-window -t +1\; select-window -t +1
 bind ( run-shell "~/.local/bin/tmux-session-cycle prev"
 bind ) run-shell "~/.local/bin/tmux-session-cycle next"
 
+# Hide those scratch sessions from the session/window trees as well. A filter
+# that evaluates to zero hides the item; tmux ignores it if nothing would be left.
+bind s choose-tree -Zs -f '#{?#{m:floating-*,#{session_name}},0,1}'
+bind w choose-tree -Zw -f '#{?#{m:floating-*,#{session_name}},0,1}'
+
 # go to the top/first pane and maximize it
 bind Z select-pane -t 1 \; resize-pane -Z
 
@@ -89,9 +94,15 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'josemiguelo/tmux-floating-scratchpad'
 
 set -g @floating_scratch_term 'C-t'
-set -g @floating_scratch_width '95%'
-set -g @floating_scratch_height '95%'
+set -g @floating_scratch_width '90%'
+set -g @floating_scratch_height '90%'
 set -g @continuum-restore 'on'
+
+# The floating scratch sessions are saved and restored like any other, but if
+# a save runs while the popup is open (continuum autosaves) the state line
+# names floating-<session> as the active session and restore would land the
+# client there. Map it back to its parent. perl, not sed -i: the flag differs on macOS.
+set -g @resurrect-hook-post-save-layout "perl -pi -e 's/\\tfloating-/\\t/g if /^state\\t/'"
 
 #######################
 ## TOKYO NIGHT THEME ##
@@ -153,18 +164,32 @@ set -g @prefix_highlight_sync_mode_attr 'fg=#{E:@fg_on_accent},bg=color2'
 set -g @prefix_highlight_copy_prompt 'COPY'
 set -g @prefix_highlight_sync_prompt 'SYNC'
 
-# Right
-set-option -g status-right "#[fg=#{E:@fg_on_accent},bg=color5,bold] #S #[default]"
+# Right. Blank in the floating scratch sessions: the popup sits on top of the
+# session it belongs to, so the name is already on screen underneath. One
+# #[..] per attribute: commas would split the #{?} conditional.
+set-option -g status-right "#{?#{m:floating-*,#S},,#[fg=#{E:@fg_on_accent}]#[bg=color5]#[bold] #S #[default]}"
 
 # Status bar
 # 1. Enable two lines for the status bar
 # 2. Set the top line (index 0) to be the "padding" line (as an empty line)
 # 3. Move your existing status content to the bottom line (index 1)
+# The window list is dropped in a floating scratch session while it has a
+# single window; there it only repeats "1 zsh".
 set -g status 2
 set -g status-format[0] ""
-set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{W:#{T:window-status-format},#{T:window-status-current-format}#[default]}#[align=right]#{E:status-right}"
+set -g @window_list "#{W:#{T:window-status-format},#{T:window-status-current-format}#[default]}"
+set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{?#{&&:#{m:floating-*,#S},#{==:#{session_windows},1}},,#{E:@window_list}}#[align=right]#{E:status-right}"
 
 ##########
 ## INIT ##
 ##########
 run 'tpack init'
+
+# Rebound after the plugins so this wins over resurrect's own binding. Restore
+# ends by switching the calling client to the saved active session; from the
+# scratch popup that nests the real session inside the popup.
+bind C-r if-shell -F '#{m:floating-*,#S}' {
+  display-message "not from the scratchpad: detach first"
+} {
+  run-shell "#{@resurrect-restore-script-path}"
+}
