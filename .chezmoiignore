@@ -1,10 +1,3 @@
 .config/zsh/.zplugins.zsh.zwc
 .config/zsh/.zplugins.zsh.zwc.old
 .config/zsh/.zcompdump
-{{ if eq .chezmoi.hostname "macbook-fedora-omarchy" }}
-# omedora owns kitty's colours (kitty.conf includes the omarchy theme), so the
-# auto light/dark palettes must not load on top of it.
-.config/kitty/dark-theme.auto.conf
-.config/kitty/light-theme.auto.conf
-.config/kitty/no-preference-theme.auto.conf
-{{ end }}
