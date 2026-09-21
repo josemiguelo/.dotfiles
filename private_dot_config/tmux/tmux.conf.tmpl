@@ -133,6 +133,16 @@ set-option -g pane-active-border-style "fg=color4"
 set-option -g display-panes-colour "color8"
 set-option -g display-panes-active-colour "color4"
 
+{{ if eq .chezmoi.hostname "macbook-fedora-omarchy" -}}
+# omarchy-theme-set-tmux writes the omarchy theme's fg/bg/cursor into these on
+# every theme switch, so panes stop matching kitty's palette and go opaque.
+# Pinned so a reload undoes it; loadout's omarchy-tmux-theme script watches
+# the live server (and the per-pane colours it also pushes).
+set-option -g window-style default
+set-option -g window-active-style default
+set-option -gu cursor-colour
+{{ end -}}
+
 # Copy mode search
 set-option -g copy-mode-match-style "bg=color3,fg=#{E:@fg_on_accent}"
 set-option -g copy-mode-current-match-style "bg=color4,fg=#{E:@fg_on_accent}"
