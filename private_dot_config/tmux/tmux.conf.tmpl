@@ -156,8 +156,8 @@ set-option -g clock-mode-colour "color4"
 
 # Center
 set-option -g status-justify left
-set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color4]#[bg=default]▐#[fg=#{E:@fg_on_accent}]#[bg=color4]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),} #[fg=color4]#[bg=default]▌}#[norange]"
-set-window-option -g window-status-format "#[range=window|#{window_index}]#{?#{m:_*,#W},, #I #W }#[norange]"
+set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color4]#[bg=default]▐#[fg=#{E:@fg_on_accent}]#[bg=color4]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),}#{?@workmux_status, #{@workmux_status},} #[fg=color4]#[bg=default]▌}#[norange]"
+set-window-option -g window-status-format "#[range=window|#{window_index}]#{?#{m:_*,#W},, #I #W#{?@workmux_status, #{@workmux_status},} }#[norange]"
 
 set-window-option -g window-status-separator ' '
 set-window-option -g window-status-style "bg=default"

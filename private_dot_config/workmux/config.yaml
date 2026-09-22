@@ -1,5 +1,36 @@
+# worktrees
+worktree_dir: all_worktrees         # my own convention. this needs repos to be cloned as bare
+merge_strategy: rebase              # Make workmux merge do rebase by default
+merge_keep: true                    # Keep worktree, window, and branch after merge by default
+worktree_naming: full               # Strategy for deriving names from branch names.
+worktree_prefix: "wm-"              # Prefix added to worktree directories and tmux window names.
+
+# agents
+agent: claude
+
+# tmux
+mode: session                       # Create tmux sessions for each worktree
+status_format: false                # Manage window-status-format myself so the @workmux_status icon sits inside my custom frame
+
+# appearance
 nerdfont: true
-worktree_dir: all_worktrees
+theme: default                      # Auto dark/light — no custom overrides, so it adapts correctly to the terminal
+status_icons:
+  working: "🚀"
+  waiting: "⏰"
+  done: "✅"
+
+# layout
+windows:
+  - name: agent
+    panes:
+      - command: <agent>
+        focus: true
+  - name: repo
+    panes:
+      - {}
+
+#symlinks
 files:
   symlink:
     - .claude/settings.local.json
