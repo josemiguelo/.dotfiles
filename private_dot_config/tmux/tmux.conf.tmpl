@@ -96,7 +96,11 @@ set -g @plugin 'josemiguelo/tmux-floating-scratchpad'
 set -g @floating_scratch_term 'C-t'
 set -g @floating_scratch_width '90%'
 set -g @floating_scratch_height '90%'
-set -g @continuum-restore 'on'
+# Let tmux-attach create project sessions from their tmuxinator layouts.  If
+# Continuum restores on server start, it recreates a same-named session first,
+# causing tmux-attach to switch to that saved layout instead.  Continuum still
+# autosaves; restore remains available explicitly with prefix + C-r below.
+set -g @continuum-restore 'off'
 
 # The floating scratch sessions are saved and restored like any other, but if
 # a save runs while the popup is open (continuum autosaves) the state line
