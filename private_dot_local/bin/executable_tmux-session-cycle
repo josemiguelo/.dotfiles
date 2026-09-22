@@ -30,4 +30,4 @@ else
   target_index=$(( (current_index - 1 + count) % count ))
 fi
 
-tmux switch-client -t "${sessions[$target_index]}"
+"$HOME/.local/bin/tmux-goto" "${sessions[$target_index]}"
