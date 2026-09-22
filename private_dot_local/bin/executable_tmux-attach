@@ -79,9 +79,6 @@ else
   fi
 fi
 
-# 5. Attach or Switch
-if [[ -z "$TMUX" ]]; then
-  tmux attach-session -t "$target"
-else
-  tmux switch-client -t "$target"
-fi
+# 5. Hand off to the popup-aware switcher (attaches when outside tmux, moves the
+# outer client and closes the popup when run from inside a floating scratchpad).
+"$HOME/.local/bin/tmux-goto" "$target"
