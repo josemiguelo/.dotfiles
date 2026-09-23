@@ -5,9 +5,14 @@
 # fzf-tmux forwards the variable into the popup it opens.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 
+# The C-M-a binding passes the active pane's directory (run-shell doesn't run us
+# there). Move into it so `git worktree list` below sees the current repo.
+[[ -n "$1" && -d "$1" ]] && cd "$1"
+
 # Icons for differentiation (Nerd Fonts)
-session_icon="󱂬"
+session_icon=""
 dir_icon="󰉋"
+worktree_icon=""
 
 # 1. Collect existing sessions, excluding the per-session floating scratch
 # sessions. The current session is kept in the list on purpose — it's easy to
@@ -47,14 +52,55 @@ else
   dirs=""
 fi
 
-# 3. Combine and select using fzf-tmux popup
-choice=$(printf "%s\n%s" "$sessions" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
+# 2b. Collect this repo's worktrees to open, straight from git (instant and
+# always fresh, unlike `workmux list` which spends seconds on per-worktree status
+# checks). Repo comes from the script's cwd: the C-M-a binding passes the pane's
+# dir (see cd above) inside tmux, and the zsh widget runs us in the shell's dir
+# outside tmux. handle = the worktree's directory name. Drop the bare repo and
+# any worktree that already has a tmux session (shown as a session instead),
+# using the same session-match helper. Skipped only from the floating scratchpad
+# (workmux would open into the popup).
+worktrees=""
+if [[ "$current_session" != floating-* ]] &&
+  command -v workmux &>/dev/null && command -v git &>/dev/null; then
+  worktrees=$(
+    git worktree list --porcelain 2>/dev/null | awk '
+      /^worktree /{path=$2; bare=0}
+      /^bare/{bare=1}
+      /^branch /{ if (!bare) { n=split(path, a, "/"); print a[n] } }
+    ' | while IFS= read -r handle; do
+      _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "$handle"
+    done
+  )
+fi
+
+# 3. Combine and select using fzf-tmux popup. Order: sessions, then worktrees,
+# then the long zoxide list.
+choice=$(printf '%s\n%s\n%s' "$sessions" "$worktrees" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
 
 [[ -z "$choice" ]] && exit 0
 
 # 4. Determine target
 icon="${choice%% *}"
 value="${choice#* }"
+
+if [[ "$icon" == "$worktree_icon" ]]; then
+  # A workmux worktree handle. `-s` forces session mode, overriding whatever mode
+  # workmux has frozen per-worktree in its state (e.g. an old worktree created
+  # before `mode: session` stays stored as window and then fails the `windows:`
+  # requirement). workmux resolves the worktree from cwd and switches to its
+  # session itself. Inside tmux, hand straight to it. Outside tmux, workmux needs
+  # the tmux backend, so enter tmux via a throwaway session that runs the open;
+  # workmux switches this client into the worktree's session and the throwaway
+  # session ends when the open returns.
+  # >/dev/null drops workmux's success banner so we land straight in the session
+  # (tmux otherwise shows it in a dismiss-me pager); stderr stays for real errors.
+  if [[ -n "$TMUX" ]]; then
+    exec workmux open -s "$value" >/dev/null
+  else
+    exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$value' >/dev/null"
+  fi
+fi
 
 if [[ "$icon" == "$session_icon" ]]; then
   # It's an existing session
