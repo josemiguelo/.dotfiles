@@ -56,20 +56,25 @@ fi
 # always fresh, unlike `workmux list` which spends seconds on per-worktree status
 # checks). Repo comes from the script's cwd: the C-M-a binding passes the pane's
 # dir (see cd above) inside tmux, and the zsh widget runs us in the shell's dir
-# outside tmux. handle = the worktree's directory name. Drop the bare repo and
-# any worktree that already has a tmux session (shown as a session instead),
-# using the same session-match helper. Skipped only from the floating scratchpad
-# (workmux would open into the popup).
+# outside tmux. handle = the worktree's directory name. Each entry is shown as
+# "<project> <handle>" so it carries its repo like its session does (window_prefix
+# names the session "<project> <handle>" too). Drop the bare repo and any worktree
+# that already has a tmux session (shown as a session instead), via the session-
+# match helper. Skipped only from the floating scratchpad (workmux would open
+# into the popup).
 worktrees=""
 if [[ "$current_session" != floating-* ]] &&
   command -v workmux &>/dev/null && command -v git &>/dev/null; then
+  # project = main worktree's dir name, matching workmux's {project}.
+  project=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree /{print $2; exit}')
+  project="${project##*/}"
   worktrees=$(
     git worktree list --porcelain 2>/dev/null | awk '
       /^worktree /{path=$2; bare=0}
       /^bare/{bare=1}
       /^branch /{ if (!bare) { n=split(path, a, "/"); print a[n] } }
     ' | while IFS= read -r handle; do
-      _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "$handle"
+      _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "${project:+$project }$handle"
     done
   )
 fi
@@ -95,10 +100,13 @@ if [[ "$icon" == "$worktree_icon" ]]; then
   # session ends when the open returns.
   # >/dev/null drops workmux's success banner so we land straight in the session
   # (tmux otherwise shows it in a dismiss-me pager); stderr stays for real errors.
+  # The entry is "<project> <handle>"; the handle (workmux's identifier) is the
+  # last word.
+  handle="${value##* }"
   if [[ -n "$TMUX" ]]; then
-    exec workmux open -s "$value" >/dev/null
+    exec workmux open -s "$handle" >/dev/null
   else
-    exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$value' >/dev/null"
+    exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
   fi
 fi
 
