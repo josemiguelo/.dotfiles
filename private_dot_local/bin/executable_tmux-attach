@@ -5,37 +5,40 @@
 # fzf-tmux forwards the variable into the popup it opens.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 
-# The server inherits its cwd from whatever shell first spawns it, not from
-# new-session's -c. Pin a fresh server to $HOME so it can't end up rooted in a
-# project directory. exit-empty is on by default, so this session must stay to
-# keep an otherwise-empty server alive.
-tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
-
-# C-M-a passes the active pane's directory as $1 (run-shell has no cwd of its
-# own); cd there so `git worktree list` below reads the right repo.
-[[ -n "$1" && -d "$1" ]] && cd "$1"
-
 # Icons for differentiation (Nerd Fonts)
 session_icon=""
 dir_icon="󰉋"
 worktree_icon=""
 
-# 1. Sessions, excluding floating scratchpads and the bootstrap session. The
-# current session stays in the list — easy to forget you're already in it.
-sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-|^_bootstrap$')
-if [[ -n "$TMUX" ]]; then
-  current_session=$(tmux display-message -p '#S' 2>/dev/null)
-fi
+# The server inherits its cwd from whatever shell first spawns it, not from
+# new-session's -c. Pin a fresh server to $HOME so it can't end up rooted in a
+# project directory. exit-empty is on by default, so this session must stay to
+# keep an otherwise-empty server alive.
+ensure_server_home() {
+  tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
+}
 
-if [[ -n "$sessions_raw" ]]; then
-  sessions=$(echo "$sessions_raw" | sed "s|^|$session_icon |")
-else
-  sessions=""
-fi
+# Sessions, excluding floating scratchpads and the bootstrap session. The
+# current session stays in the list — easy to forget you're already in it.
+# Also sets open_names, used by _has_session_for below.
+collect_sessions() {
+  sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-|^_bootstrap$')
+  if [[ -n "$TMUX" ]]; then
+    current_session=$(tmux display-message -p '#S' 2>/dev/null)
+  fi
+
+  if [[ -n "$sessions_raw" ]]; then
+    sessions=$(echo "$sessions_raw" | sed "s|^|$session_icon |")
+  else
+    sessions=""
+  fi
+
+  open_names=$(tmux list-sessions -F '#S' 2>/dev/null)
+}
 
 # workmux (nerdfont: true) prefixes session names with a glyph, so a match is
-# the exact name or a " <name>" suffix.
-open_names=$(tmux list-sessions -F '#S' 2>/dev/null)
+# the exact name or a " <name>" suffix. Depends on open_names from
+# collect_sessions.
 _has_session_for() {
   local target="$1" sname
   while IFS= read -r sname; do
@@ -44,24 +47,28 @@ _has_session_for() {
   return 1
 }
 
-# 2. zoxide directories, minus any whose session already exists (selecting one
-# would just switch to that session anyway — see step 4).
-if command -v zoxide &>/dev/null; then
-  dirs=$(zoxide query -l | while IFS= read -r d; do
-    b="${d##*/}"; b="${b//[ .]/_}"
-    _has_session_for "$b" || printf '%s %s\n' "$dir_icon" "$d"
-  done)
-else
-  dirs=""
-fi
+# zoxide directories, minus any whose session already exists (selecting one
+# would just switch to that session anyway — see determine_target).
+collect_dirs() {
+  if command -v zoxide &>/dev/null; then
+    dirs=$(zoxide query -l | while IFS= read -r d; do
+      b="${d##*/}"; b="${b//[ .]/_}"
+      _has_session_for "$b" || printf '%s %s\n' "$dir_icon" "$d"
+    done)
+  else
+    dirs=""
+  fi
+}
 
-# 2b. This repo's worktrees, read from git (fast; `workmux list` is slow).
-# Entries show as "<project> <handle>", matching the session name workmux's
+# This repo's worktrees, read from git (fast; `workmux list` is slow). Entries
+# show as "<project> <handle>", matching the session name workmux's
 # window_prefix produces. Skip worktrees with an existing session (shown as a
 # session instead) and skip entirely inside the floating scratchpad.
-worktrees=""
-if [[ "$current_session" != floating-* ]] &&
-  command -v workmux &>/dev/null && command -v git &>/dev/null; then
+collect_worktrees() {
+  worktrees=""
+  [[ "$current_session" == floating-* ]] && return
+  command -v workmux &>/dev/null && command -v git &>/dev/null || return
+
   project=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree /{print $2; exit}')
   project="${project##*/}"
   worktrees=$(
@@ -73,72 +80,99 @@ if [[ "$current_session" != floating-* ]] &&
       _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "${project:+$project }$handle"
     done
   )
-fi
+}
 
-# 3. Combine and select using fzf-tmux popup. Order: sessions, then worktrees,
+# Combine and select using fzf-tmux popup. Order: sessions, then worktrees,
 # then the long zoxide list.
-choice=$(printf '%s\n%s\n%s' "$sessions" "$worktrees" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
+pick() {
+  choice=$(printf '%s\n%s\n%s' "$sessions" "$worktrees" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
+}
 
-[[ -z "$choice" ]] && exit 0
+# Resolves $choice into either an exec (worktree open) or $target (session
+# name), creating a session for a directory pick if one doesn't exist yet.
+determine_target() {
+  icon="${choice%% *}"
+  value="${choice#* }"
 
-# 4. Determine target
-icon="${choice%% *}"
-value="${choice#* }"
+  if [[ "$icon" == "$worktree_icon" ]]; then
+    # Last word is the handle. -s forces session mode regardless of any stale
+    # per-worktree mode workmux may have stored. Outside tmux, workmux needs a
+    # tmux backend, so open from inside a throwaway session; >/dev/null drops
+    # the success banner so we land straight in the session.
+    handle="${value##* }"
+    if [[ -n "$TMUX" ]]; then
+      exec workmux open -s "$handle" >/dev/null
+    else
+      exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
+    fi
+  fi
 
-if [[ "$icon" == "$worktree_icon" ]]; then
-  # Last word is the handle. -s forces session mode regardless of any stale
-  # per-worktree mode workmux may have stored. Outside tmux, workmux needs a
-  # tmux backend, so open from inside a throwaway session; >/dev/null drops
-  # the success banner so we land straight in the session.
-  handle="${value##* }"
-  if [[ -n "$TMUX" ]]; then
-    exec workmux open -s "$handle" >/dev/null
+  if [[ "$icon" == "$session_icon" ]]; then
+    # It's an existing session
+    target="$value"
   else
-    exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
-  fi
-fi
+    # It's a directory: create session if needed
+    target_path="$value"
+    # Sanitize: use basename and replace characters that might annoy tmux
+    target=$(basename "$target_path" | tr ' .' '__')
 
-if [[ "$icon" == "$session_icon" ]]; then
-  # It's an existing session
-  target="$value"
-else
-  # It's a directory: create session if needed
-  target_path="$value"
-  # Sanitize: use basename and replace characters that might annoy tmux
-  target=$(basename "$target_path" | tr ' .' '__')
+    if ! tmux has-session -t "$target" 2>/dev/null; then
+      layout_file=""
+      named_file=""
+      for candidate in "$target_path/.tmuxinator.yml" "$target_path/.tmuxinator.yaml"; do
+        if [[ -f "$candidate" ]]; then
+          layout_file="$candidate"
+          break
+        fi
+      done
+      for candidate in "$HOME/.config/tmuxinator/${target}.yml" "$HOME/.config/tmuxinator/${target}.yaml"; do
+        if [[ -f "$candidate" ]]; then
+          named_file="$candidate"
+          break
+        fi
+      done
 
-  if ! tmux has-session -t "$target" 2>/dev/null; then
-    layout_file=""
-    named_file=""
-    for candidate in "$target_path/.tmuxinator.yml" "$target_path/.tmuxinator.yaml"; do
-      if [[ -f "$candidate" ]]; then
-        layout_file="$candidate"
-        break
+      started=0
+      if command -v tmuxinator &>/dev/null; then
+        tmuxinator_flags=(--no-attach --suppress-tmux-version-warning --name "$target")
+        if [[ -n "$layout_file" ]]; then
+          tmuxinator start --project-config "$layout_file" "${tmuxinator_flags[@]}" && started=1
+        elif [[ -n "$named_file" ]]; then
+          tmuxinator start "$target" "${tmuxinator_flags[@]}" && started=1
+        fi
       fi
-    done
-    for candidate in "$HOME/.config/tmuxinator/${target}.yml" "$HOME/.config/tmuxinator/${target}.yaml"; do
-      if [[ -f "$candidate" ]]; then
-        named_file="$candidate"
-        break
-      fi
-    done
 
-    started=0
-    if command -v tmuxinator &>/dev/null; then
-      tmuxinator_flags=(--no-attach --suppress-tmux-version-warning --name "$target")
-      if [[ -n "$layout_file" ]]; then
-        tmuxinator start --project-config "$layout_file" "${tmuxinator_flags[@]}" && started=1
-      elif [[ -n "$named_file" ]]; then
-        tmuxinator start "$target" "${tmuxinator_flags[@]}" && started=1
+      if [[ "$started" -eq 0 ]] && ! tmux has-session -t "$target" 2>/dev/null; then
+        tmux new-session -ds "$target" -c "$target_path"
       fi
     fi
-
-    if [[ "$started" -eq 0 ]] && ! tmux has-session -t "$target" 2>/dev/null; then
-      tmux new-session -ds "$target" -c "$target_path"
-    fi
   fi
-fi
+}
 
-# 5. Hand off to the popup-aware switcher (attaches when outside tmux, moves the
-# outer client and closes the popup when run from inside a floating scratchpad).
-"$HOME/.local/bin/tmux-goto" "$target"
+main() {
+  ensure_server_home
+
+  # C-M-a passes the active pane's directory as $1 (run-shell has no cwd of
+  # its own); cd there so `git worktree list` reads the right repo.
+  [[ -n "$1" && -d "$1" ]] && cd "$1"
+
+  collect_sessions
+  collect_dirs
+  collect_worktrees
+  pick
+
+  [[ -z "$choice" ]] && exit 0
+
+  determine_target
+
+  # Hand off to the popup-aware switcher (attaches when outside tmux, moves
+  # the outer client and closes the popup when run from inside a floating
+  # scratchpad).
+  "$HOME/.local/bin/tmux-goto" "$target"
+}
+
+# Allow sourcing this file (e.g. from tests) without running the interactive
+# picker.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi
