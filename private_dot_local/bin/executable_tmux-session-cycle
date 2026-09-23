@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # Cycles real tmux sessions, skipping the per-session floating scratch sessions
-# (named floating-<session_name>) created by tmux-floating-scratchpad.
+# (named floating-<session_name>) created by tmux-floating-scratchpad, and the
+# _bootstrap session tmux-attach uses to pin the server's cwd to $HOME.
 
 direction="$1"
 current_session=$(tmux display-message -p '#S')
@@ -9,7 +10,7 @@ current_session=$(tmux display-message -p '#S')
 sessions=()
 while IFS= read -r line; do
   sessions+=("$line")
-done < <(tmux list-sessions -F '#S' | grep -vE '^floating-')
+done < <(tmux list-sessions -F '#S' | grep -vE '^floating-|^_bootstrap$')
 
 count=${#sessions[@]}
 [[ "$count" -eq 0 ]] && exit 0
