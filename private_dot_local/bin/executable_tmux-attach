@@ -5,18 +5,14 @@
 # fzf-tmux forwards the variable into the popup it opens.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 
-# If no server is running yet, the first `new-session` below (picking a
-# directory, or the worktree bootstrap) would root the server's own cwd
-# wherever THIS script happens to run from. Deleting/recreating that directory
-# later breaks every future pane server-wide (happened once already). The
-# server inherits its cwd from the shell that spawns it — new-session's -c only
-# sets the new PANE's directory, not the daemon's — so cd to $HOME in a subshell
-# before spawning it. exit-empty is on by default so this session can't be
-# killed once created, hence the permanent, filtered name.
+# The server inherits its cwd from whatever shell first spawns it, not from
+# new-session's -c. Pin a fresh server to $HOME so it can't end up rooted in a
+# project directory. exit-empty is on by default, so this session must stay to
+# keep an otherwise-empty server alive.
 tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
 
-# The C-M-a binding passes the active pane's directory (run-shell doesn't run us
-# there). Move into it so `git worktree list` below sees the current repo.
+# C-M-a passes the active pane's directory as $1 (run-shell has no cwd of its
+# own); cd there so `git worktree list` below reads the right repo.
 [[ -n "$1" && -d "$1" ]] && cd "$1"
 
 # Icons for differentiation (Nerd Fonts)
@@ -24,10 +20,8 @@ session_icon=""
 dir_icon="󰉋"
 worktree_icon=""
 
-# 1. Collect existing sessions, excluding the per-session floating scratch
-# sessions and the server-cwd bootstrap session. The current session is kept
-# in the list on purpose — it's easy to forget you're already in the session
-# you're looking for.
+# 1. Sessions, excluding floating scratchpads and the bootstrap session. The
+# current session stays in the list — easy to forget you're already in it.
 sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-|^_bootstrap$')
 if [[ -n "$TMUX" ]]; then
   current_session=$(tmux display-message -p '#S' 2>/dev/null)
@@ -39,9 +33,8 @@ else
   sessions=""
 fi
 
-# All existing session names, for de-duplicating dirs (and worktrees, later)
-# below. workmux (nerdfont: true) names worktree sessions "<glyph> <name>", so
-# a match is either the exact name or that glyph-prefixed " <name>" suffix.
+# workmux (nerdfont: true) prefixes session names with a glyph, so a match is
+# the exact name or a " <name>" suffix.
 open_names=$(tmux list-sessions -F '#S' 2>/dev/null)
 _has_session_for() {
   local target="$1" sname
@@ -51,9 +44,8 @@ _has_session_for() {
   return 1
 }
 
-# 2. Collect zoxide directories, minus any whose tmux session already exists.
-# Selecting a dir creates/switches to a session named after its sanitized
-# basename (see step 4), so hide dirs that would just duplicate a session.
+# 2. zoxide directories, minus any whose session already exists (selecting one
+# would just switch to that session anyway — see step 4).
 if command -v zoxide &>/dev/null; then
   dirs=$(zoxide query -l | while IFS= read -r d; do
     b="${d##*/}"; b="${b//[ .]/_}"
@@ -63,20 +55,13 @@ else
   dirs=""
 fi
 
-# 2b. Collect this repo's worktrees to open, straight from git (instant and
-# always fresh, unlike `workmux list` which spends seconds on per-worktree status
-# checks). Repo comes from the script's cwd: the C-M-a binding passes the pane's
-# dir (see cd above) inside tmux, and the zsh widget runs us in the shell's dir
-# outside tmux. handle = the worktree's directory name. Each entry is shown as
-# "<project> <handle>" so it carries its repo like its session does (window_prefix
-# names the session "<project> <handle>" too). Drop the bare repo and any worktree
-# that already has a tmux session (shown as a session instead), via the session-
-# match helper. Skipped only from the floating scratchpad (workmux would open
-# into the popup).
+# 2b. This repo's worktrees, read from git (fast; `workmux list` is slow).
+# Entries show as "<project> <handle>", matching the session name workmux's
+# window_prefix produces. Skip worktrees with an existing session (shown as a
+# session instead) and skip entirely inside the floating scratchpad.
 worktrees=""
 if [[ "$current_session" != floating-* ]] &&
   command -v workmux &>/dev/null && command -v git &>/dev/null; then
-  # project = main worktree's dir name, matching workmux's {project}.
   project=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree /{print $2; exit}')
   project="${project##*/}"
   worktrees=$(
@@ -101,18 +86,10 @@ icon="${choice%% *}"
 value="${choice#* }"
 
 if [[ "$icon" == "$worktree_icon" ]]; then
-  # A workmux worktree handle. `-s` forces session mode, overriding whatever mode
-  # workmux has frozen per-worktree in its state (e.g. an old worktree created
-  # before `mode: session` stays stored as window and then fails the `windows:`
-  # requirement). workmux resolves the worktree from cwd and switches to its
-  # session itself. Inside tmux, hand straight to it. Outside tmux, workmux needs
-  # the tmux backend, so enter tmux via a throwaway session that runs the open;
-  # workmux switches this client into the worktree's session and the throwaway
-  # session ends when the open returns.
-  # >/dev/null drops workmux's success banner so we land straight in the session
-  # (tmux otherwise shows it in a dismiss-me pager); stderr stays for real errors.
-  # The entry is "<project> <handle>"; the handle (workmux's identifier) is the
-  # last word.
+  # Last word is the handle. -s forces session mode regardless of any stale
+  # per-worktree mode workmux may have stored. Outside tmux, workmux needs a
+  # tmux backend, so open from inside a throwaway session; >/dev/null drops
+  # the success banner so we land straight in the session.
   handle="${value##* }"
   if [[ -n "$TMUX" ]]; then
     exec workmux open -s "$handle" >/dev/null
