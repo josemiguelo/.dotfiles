@@ -45,7 +45,10 @@ unbind C-b
 set-option -g prefix C-a
 bind C-a send-prefix
 
-bind -n C-M-a run-shell "~/.local/bin/tmux-attach"
+# Pass the active pane's dir as an argument so tmux-attach can list the current
+# repo's workmux worktrees. The format only resolves to the keypress pane inside
+# the command string; run-shell's -c flag mis-resolves it to $HOME instead.
+bind -n C-M-a run-shell "~/.local/bin/tmux-attach '#{pane_current_path}'"
 
 bind -n C-PPage previous-window
 bind -n C-NPage next-window
