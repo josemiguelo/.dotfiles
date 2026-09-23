@@ -5,6 +5,16 @@
 # fzf-tmux forwards the variable into the popup it opens.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 
+# If no server is running yet, the first `new-session` below (picking a
+# directory, or the worktree bootstrap) would root the server's own cwd
+# wherever THIS script happens to run from. Deleting/recreating that directory
+# later breaks every future pane server-wide (happened once already). The
+# server inherits its cwd from the shell that spawns it — new-session's -c only
+# sets the new PANE's directory, not the daemon's — so cd to $HOME in a subshell
+# before spawning it. exit-empty is on by default so this session can't be
+# killed once created, hence the permanent, filtered name.
+tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
+
 # The C-M-a binding passes the active pane's directory (run-shell doesn't run us
 # there). Move into it so `git worktree list` below sees the current repo.
 [[ -n "$1" && -d "$1" ]] && cd "$1"
@@ -15,9 +25,10 @@ dir_icon="󰉋"
 worktree_icon=""
 
 # 1. Collect existing sessions, excluding the per-session floating scratch
-# sessions. The current session is kept in the list on purpose — it's easy to
-# forget you're already in the session you're looking for.
-sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-')
+# sessions and the server-cwd bootstrap session. The current session is kept
+# in the list on purpose — it's easy to forget you're already in the session
+# you're looking for.
+sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-|^_bootstrap$')
 if [[ -n "$TMUX" ]]; then
   current_session=$(tmux display-message -p '#S' 2>/dev/null)
 fi
