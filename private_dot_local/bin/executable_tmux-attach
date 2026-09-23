@@ -16,9 +16,9 @@ tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _boo
 [[ -n "$1" && -d "$1" ]] && cd "$1"
 
 # Icons for differentiation (Nerd Fonts)
-session_icon=""
+session_icon=""
 dir_icon="󰉋"
-worktree_icon=""
+worktree_icon=""
 
 # 1. Sessions, excluding floating scratchpads and the bootstrap session. The
 # current session stays in the list — easy to forget you're already in it.
