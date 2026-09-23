@@ -23,9 +23,26 @@ else
   sessions=""
 fi
 
-# 2. Collect zoxide directories
+# All existing session names, for de-duplicating dirs (and worktrees, later)
+# below. workmux (nerdfont: true) names worktree sessions "<glyph> <name>", so
+# a match is either the exact name or that glyph-prefixed " <name>" suffix.
+open_names=$(tmux list-sessions -F '#S' 2>/dev/null)
+_has_session_for() {
+  local target="$1" sname
+  while IFS= read -r sname; do
+    [[ "$sname" == "$target" || "$sname" == *" $target" ]] && return 0
+  done <<< "$open_names"
+  return 1
+}
+
+# 2. Collect zoxide directories, minus any whose tmux session already exists.
+# Selecting a dir creates/switches to a session named after its sanitized
+# basename (see step 4), so hide dirs that would just duplicate a session.
 if command -v zoxide &>/dev/null; then
-  dirs=$(zoxide query -l | sed "s|^|$dir_icon |")
+  dirs=$(zoxide query -l | while IFS= read -r d; do
+    b="${d##*/}"; b="${b//[ .]/_}"
+    _has_session_for "$b" || printf '%s %s\n' "$dir_icon" "$d"
+  done)
 else
   dirs=""
 fi
