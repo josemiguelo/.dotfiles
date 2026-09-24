@@ -75,6 +75,17 @@ return {
 
         extend(hl, "@variable", { fg = c.cyan })
 
+        -- terminal_black/comment as-is clear only ~3:1 contrast (< WCAG's
+        -- 4.5:1), and day's inversion collapses them to similar lightness
+        local code_fg = light and "#4c5372" or c.fg_dark
+        local code_bg = light and blend(c.fg_dark, 0.12, c.bg) or blend("#000000", 0.15, c.terminal_black)
+        extend(hl, "@markup.raw.markdown_inline", { fg = code_fg })
+
+        -- assigned directly: tokyonight links this group to a bare string,
+        -- which extend()'s tbl_extend can't merge onto, and a link can't
+        -- carry extra attrs anyway
+        hl.RenderMarkdownCodeInline = { fg = code_fg, bg = code_bg }
+
         -- c.git holds the sign colors, c.diff the region tints
         extend(hl, "Added", { fg = c.git.add })
         extend(hl, "Removed", { fg = c.git.delete })
