@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Opens a workmux worktree by handle, in session mode, whether or not we're
-# currently inside tmux. Shared by tmux-attach's worktree picker and the
-# `workmux` wrapper function (workmux.plugin.zsh), so both get the same
-# server-cwd safety and can't drift apart. Usage: tmux-workmux-open <handle>
+# Opens one or more workmux worktrees, in session mode, whether or not we're
+# currently inside tmux. Args are forwarded as-is to `workmux open`, so any
+# of its flags (--continue, --new, multiple names, ...) work too. Shared by
+# tmux-attach's worktree picker and the workmux wrapper function's open/add
+# handling (workmux.plugin.zsh), so both get the same server-cwd safety and
+# can't drift apart. Usage: tmux-workmux-open <name>... [workmux-open-flags]
 
-handle="$1"
-[[ -z "$handle" ]] && exit 1
+[[ $# -eq 0 ]] && exit 1
 
 # If no server is running yet, the first new-session below would root the
 # server's own cwd wherever THIS script happens to run from, and later
@@ -21,9 +22,12 @@ tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _boo
 # needs the tmux backend, so enter tmux via a throwaway session that runs
 # the open; workmux switches this client into the worktree's session and
 # the throwaway session ends when the open returns. >/dev/null drops the
-# success banner so we land straight in the session.
+# success banner so we land straight in the session. %q-quote each arg when
+# building the throwaway session's shell-command string, since args can
+# contain spaces or shell metacharacters.
 if [[ -n "$TMUX" ]]; then
-  exec workmux open -s "$handle" >/dev/null
+  exec workmux open -s "$@" >/dev/null
 else
-  exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
+  exec tmux new-session -s "wmboot-$$" -c "$PWD" \
+    "workmux open -s $(printf '%q ' "$@") >/dev/null"
 fi

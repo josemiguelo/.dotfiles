@@ -2,9 +2,9 @@
 # Tests private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh in
 # isolation: fakes `workmux` (on PATH) and tmux-workmux-open (found via
 # $HOME, which is pointed at a fixture) so this never touches your real
-# worktrees or tmux state. Uses the real `gum` binary — it's just a spinner
-# around a command, safe to exercise for real. Run:
-# tests/test-workmux-plugin.zsh
+# worktrees or tmux state. Covers both the open and add wrapping. Uses the
+# real `gum` binary — it's just a spinner around a command, safe to
+# exercise for real. Run: tests/test-workmux-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
 PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh"
@@ -63,13 +63,31 @@ run() {
     ' _ "$@"
 }
 
-### non-add subcommands pass straight through ###
-echo "non-add passthrough"
+### other subcommands pass straight through ###
+echo "passthrough for anything other than add/open"
 
 : > "$WORKMUX_LOG"
 run "" list --pr >/dev/null 2>&1
 eq "$(cat "$WORKMUX_LOG")" "list --pr" "forwards the subcommand and its args unchanged"
-eq "$(cat "$OPEN_LOG" 2>/dev/null)" "" "never touches tmux-workmux-open for a non-add call"
+eq "$(cat "$OPEN_LOG" 2>/dev/null)" "" "never touches tmux-workmux-open"
+
+### open, inside tmux: -s inserted, no bootstrap ###
+echo "open, inside tmux"
+
+: > "$WORKMUX_LOG"
+: > "$OPEN_LOG"
+run "fake" open wm-some-branch --continue >/dev/null 2>&1
+eq "$(cat "$WORKMUX_LOG")" "open -s wm-some-branch --continue" \
+  "calls workmux open -s directly with the rest of the args"
+eq "$(cat "$OPEN_LOG" 2>/dev/null)" "" "does not go through tmux-workmux-open (already attached)"
+
+### open, outside tmux: hands off to tmux-workmux-open, forwarding everything ###
+echo "open, outside tmux"
+
+: > "$OPEN_LOG"
+run "" open wm-a wm-b --continue >/dev/null 2>&1
+eq "$(cat "$OPEN_LOG" 2>/dev/null)" "wm-a wm-b --continue" \
+  "forwards multiple names and flags to tmux-workmux-open unchanged"
 
 ### inside tmux: -s inserted, rest forwarded, no headless/spinner path ###
 echo "add, inside tmux"
