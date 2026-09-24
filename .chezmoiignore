@@ -4,3 +4,12 @@
 
 # repo-internal test tooling — not meant to be deployed to $HOME
 tests
+
+# repo docs for agents working in this repo — not meant to land in $HOME.
+# .chezmoiremove doesn't apply here: these still exist in the source, it's
+# only the deployment that's unwanted, and chezmoiremove is specifically for
+# paths no longer in the source state (chezmoi rejects it otherwise as an
+# "inconsistent state"). Already-deployed copies need a one-time manual rm.
+AGENTS.md
+CLAUDE.md
+README.md
