@@ -24,3 +24,8 @@ gradle = ["8.14.2", "7.6.3"]
 # mise's default maven source starts after 3.6.3.
 "vfox:mise-plugins/vfox-maven" = "3.6.3"
 cocoapods = { version = "1.16.0", os = ["macos"] }
+
+# Omarchy's own setting: `mise up` (which `omarchy update` runs) keeps the
+# versions it upgrades from instead of pruning them.
+[settings.upgrade]
+auto_prune = false
