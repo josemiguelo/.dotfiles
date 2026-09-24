@@ -39,7 +39,7 @@ return {
           "build.gradle.kts",
         },
 
-        jdk_for_symbol_resolution = vim.env.HOME .. "/.asdf/installs/java/adoptopenjdk-21.0.6+7.0.LTS",
+        jdk_for_symbol_resolution = vim.env.HOME .. "/.local/share/mise/installs/java/temurin-21.0.6+7.0.LTS",
       })
     end,
   },
