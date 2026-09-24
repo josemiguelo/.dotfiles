@@ -5,26 +5,37 @@
 # popup instead and close the popup, so the scratchpad isn't hijacked into
 # another session. Shared by tmux-attach and tmux-session-cycle.
 
-target="$1"
-[[ -z "$target" ]] && exit 0
+goto() {
+  local target="$1"
+  [[ -z "$target" ]] && return 0
 
-# Outside tmux (e.g. login shell): plain attach.
-if [[ -z "$TMUX" ]]; then
-  tmux attach-session -t "$target"
-  exit 0
-fi
+  # Outside tmux (e.g. login shell): plain attach.
+  if [[ -z "$TMUX" ]]; then
+    tmux attach-session -t "$target"
+    return 0
+  fi
 
-current_session=$(tmux display-message -p '#S' 2>/dev/null)
+  # $2 lets tests inject the current session without a real attached client
+  # (display-message needs one); real invocations always omit it.
+  local current_session="${2:-$(tmux display-message -p '#S' 2>/dev/null)}"
 
-if [[ "$current_session" == floating-* ]]; then
-  # @floating_target_client is captured by the plugin when the popup opens.
-  outer_client=$(tmux show -gv @floating_target_client 2>/dev/null)
-  [[ -n "$outer_client" ]] && tmux switch-client -c "$outer_client" -t "$target"
-  # Close the popup by detaching its client explicitly. From a run-shell
-  # subprocess the "current client" is ambiguous, so find the client attached
-  # to this floating session (the popup) by name rather than relying on it.
-  popup_client=$(tmux list-clients -t "$current_session" -F '#{client_name}' 2>/dev/null | head -n1)
-  [[ -n "$popup_client" ]] && tmux detach-client -t "$popup_client"
-else
-  tmux switch-client -t "$target"
+  if [[ "$current_session" == floating-* ]]; then
+    # @floating_target_client is captured by the plugin when the popup opens.
+    local outer_client
+    outer_client=$(tmux show -gv @floating_target_client 2>/dev/null)
+    [[ -n "$outer_client" ]] && tmux switch-client -c "$outer_client" -t "$target"
+    # Close the popup by detaching its client explicitly. From a run-shell
+    # subprocess the "current client" is ambiguous, so find the client
+    # attached to this floating session (the popup) by name rather than
+    # relying on it.
+    local popup_client
+    popup_client=$(tmux list-clients -t "$current_session" -F '#{client_name}' 2>/dev/null | head -n1)
+    [[ -n "$popup_client" ]] && tmux detach-client -t "$popup_client"
+  else
+    tmux switch-client -t "$target"
+  fi
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  goto "$1"
 fi
