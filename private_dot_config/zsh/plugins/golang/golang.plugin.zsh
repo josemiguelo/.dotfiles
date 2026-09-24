@@ -1,8 +1,7 @@
-export ASDF_GOLANG_MOD_VERSION_ENABLED=true
-
+# mise exports GOROOT for the go in use (go.set_goroot); GOPATH stays per go
+# version, next to its install, with its bin on PATH.
 if (( ${+commands[go]} )); then
-  GOV=$(asdf where golang 2>/dev/null)
-  export GOROOT="$GOV/go"
+  GOV=$(mise where go 2>/dev/null)
   export GOPATH="$GOV/packages"
   export PATH="$PATH:$GOPATH/bin"
   export GOPRIVATE=""
