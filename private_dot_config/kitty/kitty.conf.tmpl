@@ -45,9 +45,9 @@ background_blur 1
 background_opacity 0.85
 
 # Remote control for scripting
-{{ if eq .chezmoi.hostname "macbook-fedora-omarchy" -}}
-# omedora: socket-only, on the per-window socket omarchy-cmd-terminal-cwd
-# queries so "open terminal here" lands in this window's cwd. omedora's own
+{{ if eq .chezmoi.hostname "t2-macbook-omarchy" -}}
+# Omarchy: socket-only, on the per-window socket omarchy-cmd-terminal-cwd
+# queries so "open terminal here" lands in this window's cwd. Omarchy's own
 # migrations comment out the unrestricted form, so don't use it here.
 allow_remote_control socket-only
 listen_on unix:${XDG_RUNTIME_DIR}/omarchy-kitty-{kitty_pid}
