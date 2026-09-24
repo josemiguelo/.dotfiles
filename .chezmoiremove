@@ -5,4 +5,5 @@
 .local/bin/toggle_wezterm_theme
 .config/raycast/script-commands/wezterm.sh
 .config/environment.d/10-mise.conf
+.config/starship
 .config/nvim/lua/features/langs/lisp.lua
