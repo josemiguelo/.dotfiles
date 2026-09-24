@@ -12,6 +12,6 @@ export EDITOR='nvim'
 #vim
 alias v="vim"
 alias nv="nvim"
-alias update-nvim-stable='asdf uninstall neovim stable && asdf install neovim stable'
-alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
-alias update-nvim-master='asdf uninstall neovim ref:master && asdf install neovim ref:master'
+# stable and nightly are moving tags: --force downloads them again.
+alias update-nvim-stable='mise install --force neovim@stable'
+alias update-nvim-nightly='mise install --force neovim@nightly'
