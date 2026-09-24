@@ -3,14 +3,13 @@ worktree_dir: all_worktrees         # my own convention. this needs repos to be 
 merge_strategy: rebase              # Make workmux merge do rebase by default
 merge_keep: true                    # Keep worktree, window, and branch after merge by default
 worktree_naming: full               # Strategy for deriving names from branch names.
-worktree_prefix: "wm-"              # Prefix added to worktree directories and tmux window names.
 
 # agents
 agent: claude
 
 # tmux
 mode: session                       # Create tmux sessions for each worktree
-window_prefix: "{project} "         # Scope session names by repo, e.g. "loadout wm-test", so the project is visible. Only affects tmux session/window names, not worktree dirs or handles.
+window_prefix: "{project} "         # Scope session names by repo, e.g. "loadout test4", so the project is visible. Only affects tmux session/window names, not worktree dirs or handles.
 status_format: false                # Manage window-status-format myself so the @workmux_status icon sits inside my custom frame
 
 # appearance
