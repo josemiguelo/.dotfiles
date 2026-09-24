@@ -9,7 +9,7 @@ export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
 
 # completion; compinit itself is run by belak/zsh-utils once antidote has
 # finished adding plugin directories to fpath. $ZSH_CACHE_DIR/completions holds
-# the completions plugins generate at runtime (_asdf, _kubectl) and has to be on
+# the completions plugins generate at runtime (_kubectl) and has to be on
 # fpath or compinit never picks them up.
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p $ZSH_CACHE_DIR/completions
 fpath=($ZDOTDIR/completions $ZSH_CACHE_DIR/completions "${fpath[@]-}")
@@ -51,9 +51,9 @@ fi
 unset _cd _compdef_queue
 
 # the brew plugin runs first so plugins don't shell out to the slow /usr/bin
-# stubs, but asdf prepends its shims afterwards; re-assert homebrew's
-# precedence here. typeset -U above keeps the first occurrence, so this is a
-# plain array move rather than another brew shellenv.
+# stubs, but mise's activation prepends its own paths afterwards; re-assert
+# homebrew's precedence here. typeset -U above keeps the first occurrence, so
+# this is a plain array move rather than another brew shellenv.
 path=( /opt/homebrew/{bin,sbin}(N-/) $path )
 {{- if eq .chezmoi.hostname "t2-macbook-omarchy" }}
 path=( /home/linuxbrew/.linuxbrew/{bin,sbin}(N-/) $path )
