@@ -4,4 +4,5 @@
 .config/kanata
 .local/bin/toggle_wezterm_theme
 .config/raycast/script-commands/wezterm.sh
+.config/environment.d/10-mise.conf
 .config/nvim/lua/features/langs/lisp.lua
