@@ -1,0 +1,26 @@
+# Global tool versions, managed by mise (was ~/.tool-versions under asdf).
+# A plain file on purpose: `mise use -g`, `mise up --bump` and Omarchy's
+# ~/.local/bin wrappers (which run `mise use -g <tool>` on first launch)
+# write here, and `chezmoi re-add` brings their change back into the source.
+[tools]
+# Put here by Omarchy's wrappers; `omarchy update` keeps them current.
+claude = "latest"
+codex = "latest"
+gh = "latest"
+
+# The first version of each list is the default.
+node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0", "14.21.3", "12.22.12", "10.24.1"]
+# temurin = what asdf-java still lists as adoptopenjdk (same Eclipse builds).
+java = ["temurin-21.0.6+7.0.LTS", "temurin-17.0.7+7", "temurin-11.0.18+10", "zulu-8.78.0.19"]
+# Prebuilt; mise has no free-threaded (3.14.7t) build.
+python = ["3.14.7", "2.7.18"]
+go = "1.27.1"
+rust = "1.98.1"
+ruby = "3.4.10"
+bun = "1.4.2"
+neovim = "nightly"
+tomcat = "9.0.88"
+gradle = ["8.14.2", "7.6.3"]
+# mise's default maven source starts after 3.6.3.
+"vfox:mise-plugins/vfox-maven" = "3.6.3"
+cocoapods = { version = "1.16.0", os = ["macos"] }
