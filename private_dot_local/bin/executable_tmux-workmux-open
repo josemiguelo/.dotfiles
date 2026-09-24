@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Opens a workmux worktree by handle, in session mode, whether or not we're
+# currently inside tmux. Shared by tmux-attach's worktree picker and the
+# `workmux` wrapper function (workmux.plugin.zsh), so both get the same
+# server-cwd safety and can't drift apart. Usage: tmux-workmux-open <handle>
+
+handle="$1"
+[[ -z "$handle" ]] && exit 1
+
+# If no server is running yet, the first new-session below would root the
+# server's own cwd wherever THIS script happens to run from, and later
+# deleting/recreating that directory breaks every future pane server-wide.
+# Pin a fresh server to $HOME first (a persistent session, since exit-empty
+# is on by default and would otherwise kill an empty server right back). See
+# tmux-attach's ensure_server_home / tests/test-tmux-attach.sh for the fuller
+# story and tests.
+tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
+
+# -s forces session mode regardless of any stale per-worktree mode workmux
+# may have stored. Inside tmux, hand straight to it. Outside tmux, workmux
+# needs the tmux backend, so enter tmux via a throwaway session that runs
+# the open; workmux switches this client into the worktree's session and
+# the throwaway session ends when the open returns. >/dev/null drops the
+# success banner so we land straight in the session.
+if [[ -n "$TMUX" ]]; then
+  exec workmux open -s "$handle" >/dev/null
+else
+  exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
+fi
