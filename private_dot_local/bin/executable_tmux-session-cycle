@@ -4,31 +4,55 @@
 # (named floating-<session_name>) created by tmux-floating-scratchpad, and the
 # _bootstrap session tmux-attach uses to pin the server's cwd to $HOME.
 
-direction="$1"
-current_session=$(tmux display-message -p '#S')
+collect_cycle_sessions() {
+  sessions=()
+  while IFS= read -r line; do
+    sessions+=("$line")
+  done < <(tmux list-sessions -F '#S' | grep -vE '^floating-|^_bootstrap$')
+}
 
-sessions=()
-while IFS= read -r line; do
-  sessions+=("$line")
-done < <(tmux list-sessions -F '#S' | grep -vE '^floating-|^_bootstrap$')
+# Given direction ("next" or "prev") and the current session name, echoes the
+# session to switch to, using the $sessions array from collect_cycle_sessions.
+# Falls back to the first session if the current one isn't in that (filtered)
+# list. Returns 1 (nothing to echo) when there are no sessions at all.
+next_target() {
+  local direction="$1" current="$2"
+  local count=${#sessions[@]}
+  [[ "$count" -eq 0 ]] && return 1
 
-count=${#sessions[@]}
-[[ "$count" -eq 0 ]] && exit 0
+  local current_index=-1 i
+  for i in "${!sessions[@]}"; do
+    if [[ "${sessions[$i]}" == "$current" ]]; then
+      current_index=$i
+      break
+    fi
+  done
 
-current_index=-1
-for i in "${!sessions[@]}"; do
-  if [[ "${sessions[$i]}" == "$current_session" ]]; then
-    current_index=$i
-    break
+  local target_index
+  if [[ "$current_index" -eq -1 ]]; then
+    target_index=0
+  elif [[ "$direction" == "next" ]]; then
+    target_index=$(( (current_index + 1) % count ))
+  else
+    target_index=$(( (current_index - 1 + count) % count ))
   fi
-done
 
-if [[ "$current_index" -eq -1 ]]; then
-  target_index=0
-elif [[ "$direction" == "next" ]]; then
-  target_index=$(( (current_index + 1) % count ))
-else
-  target_index=$(( (current_index - 1 + count) % count ))
+  printf '%s\n' "${sessions[$target_index]}"
+}
+
+main() {
+  local direction="$1"
+  local current_session
+  current_session=$(tmux display-message -p '#S')
+
+  collect_cycle_sessions
+
+  local target
+  target=$(next_target "$direction" "$current_session") || exit 0
+
+  "$HOME/.local/bin/tmux-goto" "$target"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
 fi
-
-"$HOME/.local/bin/tmux-goto" "${sessions[$target_index]}"
