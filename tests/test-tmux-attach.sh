@@ -122,11 +122,15 @@ eq "$worktrees" "" "returns nothing when workmux isn't available"
 ### determine_target ###
 echo "determine_target"
 
-# determine_target's worktree branch execs workmux/tmux to replace the shell,
-# so a `workmux() { ... }` function stub is silently ignored (exec only does
-# PATH lookups) — use a real fake executable on PATH instead. It also redirects
-# workmux's own stdout to /dev/null, so the fake records the call to a file
-# rather than printing it.
+# determine_target's worktree branch execs the real ~/.local/bin/tmux-workmux-open
+# (an absolute path, so it can't be faked via PATH), which itself execs
+# `workmux` as a bare command — a `workmux() { ... }` function stub would be
+# silently ignored either way (exec only does PATH lookups), so fake it as a
+# real executable on PATH instead. It also redirects workmux's own stdout to
+# /dev/null, so the fake records the call to a file rather than printing it.
+# Known gap: tmux-workmux-open's own `tmux list-sessions` check right before
+# the exec chain still hits the real tmux server (harmless and read-only,
+# since a real server is always running here, but not fully hermetic).
 FAKEBIN="$WORK/fakebin"
 mkdir -p "$FAKEBIN"
 CALL_LOG="$WORK/workmux-call.log"

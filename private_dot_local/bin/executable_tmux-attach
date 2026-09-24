@@ -95,16 +95,10 @@ determine_target() {
   value="${choice#* }"
 
   if [[ "$icon" == "$worktree_icon" ]]; then
-    # Last word is the handle. -s forces session mode regardless of any stale
-    # per-worktree mode workmux may have stored. Outside tmux, workmux needs a
-    # tmux backend, so open from inside a throwaway session; >/dev/null drops
-    # the success banner so we land straight in the session.
+    # Last word is the handle. tmux-workmux-open (shared with the workmux
+    # wrapper) handles the -s / inside-vs-outside-tmux details.
     handle="${value##* }"
-    if [[ -n "$TMUX" ]]; then
-      exec workmux open -s "$handle" >/dev/null
-    else
-      exec tmux new-session -s "wmboot-$$" -c "$PWD" "workmux open -s '$handle' >/dev/null"
-    fi
+    exec "$HOME/.local/bin/tmux-workmux-open" "$handle"
   fi
 
   if [[ "$icon" == "$session_icon" ]]; then
