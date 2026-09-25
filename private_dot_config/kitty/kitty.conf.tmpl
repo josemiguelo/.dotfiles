@@ -12,9 +12,20 @@ font_family Fira Code
 font_family FiraCode Nerd Font Mono
 {{ end -}}
 {{ if eq .chezmoi.hostname "t2-macbook-omarchy" -}}
-# Omarchy: its default terminal size (text size 12px = 9pt). Omarchy's text
-# size setting (omarchy-display-text-size) rewrites this line in place.
-font_size 9.0
+{{- /* Omarchy's text size setting (omarchy-display-text-size) rewrites this
+         line from its [font] base-size in ~/.config/omarchy/shell.toml:
+         pt = round(px * 9 / 12), 12px (the default, when unset) = 9pt.
+         Same source, same formula, so chezmoi never fights it. */ -}}
+{{-   $px := 12 -}}
+{{-   $shell := joinPath .chezmoi.homeDir ".config/omarchy/shell.toml" -}}
+{{-   if stat $shell -}}
+{{-     $font := get (include $shell | fromToml) "font" -}}
+{{-     if and $font (hasKey $font "base-size") -}}
+{{-       $px = get $font "base-size" -}}
+{{-     end -}}
+{{-   end -}}
+# Omarchy: follows its text size setting, which rewrites this line.
+font_size {{ div (add (mul $px 9) 6) 12 }}.0
 {{ else -}}
 font_size 12.0
 {{ end -}}
