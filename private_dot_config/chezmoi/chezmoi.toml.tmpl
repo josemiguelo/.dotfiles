@@ -1,6 +1,0 @@
-{{ if eq (dig "osRelease" "id" "" .chezmoi) "bazzite" }}
-sourceDir = "/var{{ .chezmoi.homeDir }}/.local/share/chezmoi"
-destDir = "/var{{ .chezmoi.homeDir }}"
-{{ end }}
-[cd]
-  command = "zsh"
