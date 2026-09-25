@@ -1,0 +1,8 @@
+# The coding agents Omarchy installs through mise (its ~/.local/bin wrappers
+# add them with `mise use -g`), and `omarchy update` keeps current. Omarchy
+# machines only (.chezmoiignore): elsewhere they come from their own
+# installers, and mise would only add a second copy ahead of them on PATH.
+[tools]
+claude = "latest"
+codex = "latest"
+gh = "latest"
