@@ -7,7 +7,7 @@
 # their own installers.
 [tools]
 # The first version of each list is the default.
-node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0", "14.21.3", "12.22.12", "10.24.1"]
+node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0"]
 # temurin = what asdf-java still lists as adoptopenjdk (same Eclipse builds).
 java = ["temurin-21.0.6+7.0.LTS", "temurin-17.0.7+7", "temurin-11.0.18+10", "zulu-8.78.0.19"]
 # Prebuilt; mise has no free-threaded (3.14.7t) build.
