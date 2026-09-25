@@ -12,7 +12,14 @@ if [[ -d $_tomcat_installs ]]; then
     [[ -d ${_catalina_cache:h} ]] || mkdir -p ${_catalina_cache:h}
     _catalina_sh=$(mise which catalina.sh 2>/dev/null)
     if [[ -n $_catalina_sh ]]; then
-      print -r -- "export CATALINA_HOME=${(q)${_catalina_sh:h:h}}" >| $_catalina_cache
+      {
+        print -r -- "export CATALINA_HOME=${(q)${_catalina_sh:h:h}}"
+        # CATALINA_BASE is the instance dir (conf/, bin/setenv.sh, logs/,
+        # webapps/, temp/, work/) kept outside the mise-managed CATALINA_HOME
+        # so a `mise install tomcat --force`/version bump never wipes it;
+        # setenv.sh -- and any secrets in it -- stays out of chezmoi too.
+        print -r -- "export CATALINA_BASE=${(q)${XDG_STATE_HOME:-$HOME/.local/state}}/tomcat/${(q)${${_catalina_sh:h:h:h}:t}}"
+      } >| $_catalina_cache
     fi
     unset _catalina_sh
   fi
