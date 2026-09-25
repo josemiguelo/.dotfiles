@@ -13,3 +13,8 @@ tests
 AGENTS.md
 CLAUDE.md
 README.md
+
+# The agents Omarchy installs through mise: Omarchy machines only.
+{{ if ne .chezmoi.hostname "t2-macbook-omarchy" }}
+.config/mise/conf.d/omarchy.toml
+{{ end }}

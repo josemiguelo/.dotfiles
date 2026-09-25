@@ -2,12 +2,10 @@
 # A plain file on purpose: `mise use -g`, `mise up --bump` and Omarchy's
 # ~/.local/bin wrappers (which run `mise use -g <tool>` on first launch)
 # write here, and `chezmoi re-add` brings their change back into the source.
+# The agents Omarchy installs through mise (claude, codex, gh) live in
+# conf.d/omarchy.toml, deployed on Omarchy only: elsewhere they come from
+# their own installers.
 [tools]
-# Put here by Omarchy's wrappers; `omarchy update` keeps them current.
-claude = "latest"
-codex = "latest"
-gh = "latest"
-
 # The first version of each list is the default.
 node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0", "14.21.3", "12.22.12", "10.24.1"]
 # temurin = what asdf-java still lists as adoptopenjdk (same Eclipse builds).
