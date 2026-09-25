@@ -14,7 +14,9 @@ AGENTS.md
 CLAUDE.md
 README.md
 
-# The agents Omarchy installs through mise: Omarchy machines only.
+# The agents Omarchy installs through mise: Omarchy machines only. The whole
+# directory, or chezmoi still creates it (empty) around the ignored file.
 {{ if ne .chezmoi.hostname "t2-macbook-omarchy" }}
-.config/mise/conf.d/omarchy.toml
+.config/mise/conf.d
+.config/mise/conf.d/**
 {{ end }}
