@@ -13,11 +13,29 @@ fzf-theme() {
   # bg is -1 so the picker has no fill of its own; the border is what separates
   # it from whatever is behind it.
   local shared="--highlight-line --info=inline-right --ansi --layout=reverse --border=rounded --gutter=' '"
-  local dark=1
+  local dark=1 scheme=""
 
-  # only macOS reports appearance; elsewhere stay on the storm palette
+  # Follow the signal the terminal follows. macOS: the system appearance.
+  # Linux: the XDG desktop portal's appearance color-scheme — kitty's own
+  # source, answered by every desktop's portal (GNOME, KDE, Hyprland…):
+  # 1 = dark picks its dark theme, 0 (no preference) and 2 its light one.
+  # busctl is systemd's, so brew can't shadow it the way brew's glib shadows
+  # gdbus and gsettings (no dconf backend: it always answers 'default').
+  # No portal: the system gsettings by path; neither: the storm palette.
   if [[ "$OSTYPE" == darwin* ]]; then
     [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == Dark ]] || dark=0
+  else
+    scheme=$(busctl --user --timeout=1 call org.freedesktop.portal.Desktop /org/freedesktop/portal/desktop \
+      org.freedesktop.portal.Settings ReadOne ss org.freedesktop.appearance color-scheme 2>/dev/null)
+    case "$scheme" in
+      "v u 1") ;;
+      "v u 0" | "v u 2") dark=0 ;;
+      *)
+        if [[ -x /usr/bin/gsettings ]]; then
+          [[ "$(/usr/bin/gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)" == "'prefer-dark'" ]] || dark=0
+        fi
+        ;;
+    esac
   fi
 
   if (( dark )); then
