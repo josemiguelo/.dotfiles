@@ -8,6 +8,8 @@ nvim() {
 }
 
 export EDITOR='nvim'
+# sudoedit too, as Omarchy's bash setup does (default/bash/envs).
+export SUDO_EDITOR="$EDITOR"
 
 #vim
 alias v="vim"
