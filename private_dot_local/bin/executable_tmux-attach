@@ -82,10 +82,86 @@ collect_worktrees() {
   )
 }
 
-# Combine and select using fzf-tmux popup. Order: sessions, then worktrees,
-# then the long zoxide list.
+# A dim horizontal rule, drawn only when there's something both above ($1)
+# and below ($2) it -- used between the sessions block and everything after
+# it, and again between worktrees and the zoxide dirs list. fzf has no
+# native section-header support for the middle of a list (--header-lines
+# only pins lines at the very top), so this is just a plain content line,
+# kept out of reach two ways: pick()'s enter binding rejects it outright
+# (Enter does nothing, picker stays open -- verified against a real
+# fzf-tmux popup), and main() no-ops if $choice ends up being it anyway
+# (belt and suspenders, e.g. if pick() is ever called differently).
+divider() {
+  [[ -n "$1" && -n "$2" ]] || return
+  local width
+  width=$(tput cols 2>/dev/null) || width=80
+  printf '\033[2m%s\033[0m\n' "$(printf '─%.0s' $(seq 1 "$width"))"
+}
+
+# Ctrl-j/Ctrl-k move to the start of the next/previous section (sessions,
+# worktrees, dirs) instead of scrolling line by line -- a divider alone
+# doesn't help once a section has more than a couple of items. Vim-style
+# (j down, k up); this also sidesteps Option/Alt, unreliable in terminals
+# on macOS (its default role is composing special characters) -- tried
+# first, dropped for that reason. Overrides fzf's default down/up bindings
+# on ctrl-j/ctrl-k, a deliberate trade for keys that actually work; plain
+# arrow keys still move one line at a time as before.
+#
+# Built as fzf `transform` bindings rather than a fixed pos(N): each press
+# needs the CURRENT cursor position ({n}, confirmed 0-indexed and distinct
+# from pos()'s own 1-indexed target) to decide which section is
+# next/previous relative to wherever the cursor already is. Both always
+# land in a DIFFERENT section than the current one -- "previous" first
+# works out which section the cursor is actually in (largest start <=
+# cur), then looks for a start before THAT, not just before cur; otherwise
+# pressing it from the middle of a section (not right at its own start)
+# would land back on that same section's start instead of the one before
+# it -- and both wrap around at either end.
+section_binds() {
+  local n_sessions n_worktrees n_dirs div1 div2 pos=0
+  local starts=()
+  n_sessions=$(printf '%s' "$sessions" | grep -c .)
+  n_worktrees=$(printf '%s' "$worktrees" | grep -c .)
+  n_dirs=$(printf '%s' "$dirs" | grep -c .)
+  div1=0; [[ -n "$sessions" && -n "$worktrees$dirs" ]] && div1=1
+  div2=0; [[ -n "$worktrees" && -n "$dirs" ]] && div2=1
+
+  (( n_sessions > 0 )) && starts+=("$((pos + 1))")
+  pos=$((pos + n_sessions + div1))
+  (( n_worktrees > 0 )) && starts+=("$((pos + 1))")
+  pos=$((pos + n_worktrees + div2))
+  (( n_dirs > 0 )) && starts+=("$((pos + 1))")
+
+  (( ${#starts[@]} < 2 )) && return # nothing to move between
+
+  # ${starts[-1]} needs bash 4.3+; the system /bin/bash on macOS is 3.2.
+  local starts_str="${starts[*]}" first="${starts[0]}" last="${starts[$((${#starts[@]} - 1))]}"
+
+  # pos($s) has to be quoted: sh (what fzf runs transform commands under,
+  # not bash) parses a bare word immediately followed by "(" as an attempt
+  # at a function definition and fails with a syntax error on whatever's
+  # inside the parens -- confirmed this is what silently broke every jump.
+  echo 'ctrl-j:transform:for s in '"$starts_str"'; do if (( s > {n} + 1 )); then echo "pos($s)"; exit; fi; done; echo "pos('"$first"')"'
+  echo 'ctrl-k:transform:my=; for s in '"$starts_str"'; do if (( s <= {n} + 1 )); then my=$s; fi; done; p='"$last"'; for s in '"$starts_str"'; do if (( s < my )); then p=$s; fi; done; echo "pos($p)"'
+}
+
+# Combine and select using fzf-tmux popup. Order: sessions, divider,
+# worktrees, divider, then the long zoxide list. Both dividers' lines are
+# the only ones containing '─', so enter:transform picks accept/ignore
+# based on that regardless of which one it is.
 pick() {
-  choice=$(printf '%s\n%s\n%s' "$sessions" "$worktrees" "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse)
+  local section_args=() bind
+  while IFS= read -r bind; do
+    [[ -n "$bind" ]] && section_args+=(--bind "$bind")
+  done < <(section_binds)
+
+  choice=$(printf '%s\n%s\n%s\n%s\n%s' \
+    "$sessions" "$(divider "$sessions" "$worktrees$dirs")" \
+    "$worktrees" "$(divider "$worktrees" "$dirs")" \
+    "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse \
+    --bind 'enter:transform:if [[ {} == *─* ]]; then echo ignore; else echo accept; fi' \
+    "${section_args[@]}" \
+    --header 'ctrl-j/ctrl-k next/previous section')
 }
 
 # Resolves $choice into either an exec (worktree open) or $target (session
@@ -156,6 +232,7 @@ main() {
   pick
 
   [[ -z "$choice" ]] && exit 0
+  [[ "$choice" == *'─'* ]] && exit 0 # the divider -- harmless no-op if picked
 
   determine_target
 
