@@ -99,6 +99,9 @@ set -g @plugin 'josemiguelo/tmux-floating-scratchpad'
 set -g @floating_scratch_term 'C-t'
 set -g @floating_scratch_width '90%'
 set -g @floating_scratch_height '90%'
+# Copied onto the scratch session by the plugin. It has no defaults of its own.
+set -g @floating_light_env 'COLORFGBG=0;15 TMUX_FLOATING_THEME=light'
+set -g @floating_dark_env 'COLORFGBG=15;0 TMUX_FLOATING_THEME=dark'
 # Let tmux-attach create project sessions from their tmuxinator layouts.  If
 # Continuum restores on server start, it recreates a same-named session first,
 # causing tmux-attach to switch to that saved layout instead.  Continuum still
@@ -123,9 +126,10 @@ set -g @resurrect-hook-post-save-layout "perl -pi -e 's/\\tfloating-/\\t/g if /^
 #   color16 orange  color17 red (Tokyo Night's own, in the extended slots)
 
 # Foreground for text on a bright accent. color0 is near black under storm but
-# #b4b5b9 under day, so take it from client_theme instead. Comma-free so
+# #b4b5b9 under day. Popup clients report an empty client_theme; @floating_theme
+# is the parent appearance stored on the scratch session. Comma-free so
 # tmux-prefix-highlight can still split its own settings on commas.
-set-option -g @fg_on_accent "#{?#{==:#{client_theme},light},#ffffff,color0}"
+set-option -g @fg_on_accent "#{?#{==:#{?#{==:#{client_theme},},#{@floating_theme},#{client_theme}},light},#ffffff,color0}"
 
 set-option -g status-style "bg=default"
 set-option -g mode-style "bg=color8,fg=color15"
