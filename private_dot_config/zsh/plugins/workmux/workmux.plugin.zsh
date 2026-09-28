@@ -1,4 +1,18 @@
-(( $+commands[workmux] )) || return
+(($+commands[workmux])) || return
+
+# Force the tmux backend for every workmux invocation, including
+# non-interactive ones that bypass the workmux() function below entirely
+# (e.g. galileo.nvim's overseer tasks, which exec workmux directly). Without
+# this, workmux auto-detects the backend from $TMUX/$KITTY_WINDOW_ID/etc.,
+# and a process with no $TMUX (nvim running directly in a kitty tab, no
+# tmux involved at all) gets detected as "kitty" and refuses session mode
+# outright -- even though a tmux server is reachable on the default socket
+# regardless of what terminal launched the process. Harmless for the
+# interactive paths below: they only ever call `command workmux add
+# --headless ...` (backend-check-exempt) or `command workmux add -s ...`
+# from inside a branch that already confirmed $TMUX is set, so this changes
+# nothing for either of them.
+export WORKMUX_BACKEND=tmux
 
 # `workmux add`/`open` both refuse session mode outside tmux ("Session mode
 # ... only supported with tmux"), even though workmux is always used with
@@ -38,7 +52,7 @@ workmux() {
     local json
     json=$(gum spin --title "Creating worktree..." --show-error -- command workmux add --headless --json "$@")
     local rc=$?
-    (( rc == 0 )) || return $rc
+    ((rc == 0)) || return $rc
 
     local handle
     handle=$(print -r -- "$json" | command jq -r '.handle // empty')
