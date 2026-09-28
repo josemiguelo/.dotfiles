@@ -119,6 +119,78 @@ PATH=/usr/bin:/bin collect_worktrees # a PATH without workmux's real location
 cd - >/dev/null
 eq "$worktrees" "" "returns nothing when workmux isn't available"
 
+### divider ###
+echo "divider"
+
+eq "$(divider "" "x")" "" "empty when there's nothing above"
+eq "$(divider "x" "")" "" "empty when there's nothing below"
+contains "$(divider "x" "y")" "─" "drawn when there's something on both sides"
+
+# main()'s guard checks for this same character, so a picked divider line
+# no-ops instead of falling through to determine_target as a bogus choice.
+choice=$(divider "x" "y")
+[[ "$choice" == *'─'* ]]
+eq "$?" "0" "divider output matches main()'s no-op guard"
+
+# pick()'s actual calls: sessions/(worktrees+dirs), and worktrees/dirs.
+sessions="a" worktrees="" dirs="b"
+contains "$(divider "$sessions" "$worktrees$dirs")" "─" \
+  "sessions/worktrees+dirs divider counts dirs alone as something after sessions"
+
+worktrees="" dirs="x"
+eq "$(divider "$worktrees" "$dirs")" "" \
+  "worktrees/dirs divider empty when worktrees alone is missing"
+
+worktrees="x" dirs=""
+eq "$(divider "$worktrees" "$dirs")" "" \
+  "worktrees/dirs divider empty when dirs alone is missing"
+
+worktrees="x" dirs="y"
+contains "$(divider "$worktrees" "$dirs")" "─" \
+  "worktrees/dirs divider drawn when both are present"
+
+### section_binds ###
+echo "section_binds"
+
+sessions="s1" worktrees="" dirs=""
+eq "$(section_binds)" "" "empty when only one section has entries -- nothing to move between"
+
+sessions="" worktrees="" dirs=""
+eq "$(section_binds)" "" "empty when nothing has entries"
+
+# Runs an emitted bind's transform body for real, under sh -c (what fzf
+# actually uses for transform commands, NOT bash -- this is what caught the
+# original bug: pos($s) parses fine in bash but is a syntax error in sh,
+# which reads a bare word immediately followed by "(" as an attempted
+# function definition. A plain string-contains check on the bind text
+# would never have caught that; only actually running it does.
+run_transform() {
+  local binds="$1" key="$2" n="$3" body
+  body=$(printf '%s\n' "$binds" | grep "^$key:transform:" | sed "s/^$key:transform://")
+  body="${body//\{n\}/$n}"
+  sh -c "$body"
+}
+
+sessions=$(printf 's1\ns2\ns3\n')
+worktrees=$(printf 'w1\nw2\n')
+dirs=$(printf 'd1\nd2\nd3\nd4\n')
+binds=$(section_binds)
+# Layout (1-indexed): s1=1 s2=2 s3=3 div=4 w1=5 w2=6 div=7 d1=8 d2=9 d3=10 d4=11
+# {n} is 0-indexed, so e.g. n=0 is s1, n=4 is w1, n=7 is d1.
+eq "$(run_transform "$binds" ctrl-j 0)" "pos(5)" "ctrl-j from sessions goes to worktrees"
+eq "$(run_transform "$binds" ctrl-j 4)" "pos(8)" "ctrl-j from worktrees goes to dirs"
+eq "$(run_transform "$binds" ctrl-j 7)" "pos(1)" "ctrl-j from dirs wraps around to sessions"
+eq "$(run_transform "$binds" ctrl-k 1)" "pos(8)" \
+  "ctrl-k from the MIDDLE of sessions (not its own start) wraps to dirs, not back to sessions itself"
+eq "$(run_transform "$binds" ctrl-k 4)" "pos(1)" "ctrl-k from worktrees' own start goes to sessions"
+eq "$(run_transform "$binds" ctrl-k 7)" "pos(5)" "ctrl-k from dirs' own start goes to worktrees"
+
+sessions="" worktrees="w1" dirs="d1"
+binds=$(section_binds)
+# Layout: w1=1 div=2 d1=3
+eq "$(run_transform "$binds" ctrl-j 0)" "pos(3)" "ctrl-j with no sessions goes straight to dirs"
+eq "$(run_transform "$binds" ctrl-k 0)" "pos(3)" "ctrl-k with no sessions wraps to dirs (only 2 sections exist)"
+
 ### determine_target ###
 echo "determine_target"
 
