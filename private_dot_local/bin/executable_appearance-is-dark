@@ -1,0 +1,26 @@
+#!/bin/sh
+# Exit 0 when the desktop is in dark mode, 1 when it's light — the signal the
+# terminal follows, so programs with their own colors (fzf, try) can match
+# kitty's light or dark theme. macOS: the system appearance. Linux: the XDG
+# desktop portal's appearance color-scheme — kitty's own source, answered by
+# every desktop's portal (GNOME, KDE, Hyprland…): 1 = dark picks its dark
+# theme, 0 (no preference) and 2 its light one. busctl is systemd's, so brew
+# can't shadow it the way brew's glib shadows gdbus and gsettings (no dconf
+# backend: it always answers 'default'). No portal: the system gsettings by
+# path; neither: dark.
+case "$(uname -s)" in
+Darwin)
+  [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = Dark ]
+  ;;
+*)
+  scheme=$(busctl --user --timeout=1 call org.freedesktop.portal.Desktop /org/freedesktop/portal/desktop \
+    org.freedesktop.portal.Settings ReadOne ss org.freedesktop.appearance color-scheme 2>/dev/null)
+  case "$scheme" in
+  "v u 1") exit 0 ;;
+  "v u 0" | "v u 2") exit 1 ;;
+  esac
+  if [ -x /usr/bin/gsettings ]; then
+    [ "$(/usr/bin/gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)" = "'prefer-dark'" ]
+  fi
+  ;;
+esac
