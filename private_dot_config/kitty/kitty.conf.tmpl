@@ -60,6 +60,11 @@ background_blur 30
 background_blur 1
 {{ end -}}
 background_opacity 0.85
+{{- if eq .chezmoi.hostname "t2-macbook-omarchy" }}
+# Lets Hyprland make scratchpad windows more opaque at runtime (see
+# ~/.config/hypr/hyprland.lua); the 0.85 above stays the default.
+dynamic_background_opacity yes
+{{- end }}
 
 # Remote control for scripting
 {{ if eq .chezmoi.hostname "t2-macbook-omarchy" -}}
