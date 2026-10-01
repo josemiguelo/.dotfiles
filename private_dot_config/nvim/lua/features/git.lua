@@ -1,11 +1,20 @@
 local get_window_by_ft = require("util.windows").get_window_by_ft
 
+-- :G outside a repository is an echoerr (a Lua error from a mapping); say so instead.
+local function open_fugitive()
+  if vim.fn.FugitiveGitDir() == "" then
+    vim.notify("Not a git repository: " .. vim.fn.getcwd(), vim.log.levels.WARN, { title = "Fugitive" })
+    return
+  end
+  vim.cmd("G")
+end
+
 local function fugitive_toggle_window()
   local fugitive_win = get_window_by_ft("fugitive")
   if fugitive_win then
     vim.api.nvim_win_close(fugitive_win, true)
   else
-    vim.cmd("G")
+    open_fugitive()
   end
 end
 
@@ -47,7 +56,7 @@ return {
         "<leader>gg",
         function()
           if vim.v.count > 0 then
-            vim.cmd("G")
+            open_fugitive()
           else
             fugitive_toggle_window()
           end
