@@ -16,7 +16,7 @@ CALLS="$WORK/calls.log"
 
 cleanup() {
   command tmux -L "$SOCK" kill-server >/dev/null 2>&1
-  rm -rf "$WORK"
+  rm -rf -- "${WORK:?}"
 }
 trap cleanup EXIT
 

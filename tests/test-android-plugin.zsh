@@ -11,7 +11,7 @@ SCRIPT_DIR="${0:A:h}/.."
 SCRIPT="$SCRIPT_DIR/private_dot_config/zsh/plugins/android/android.plugin.zsh"
 WORK="$(mktemp -d)"
 
-cleanup() { rm -rf "$WORK" }
+cleanup() { rm -rf -- "${WORK:?}" }
 trap cleanup EXIT
 
 # macOS's default APFS volume is case-insensitive (case-preserving): creating
@@ -20,7 +20,7 @@ trap cleanup EXIT
 mkdir -p "$WORK/.case-probe/Case"
 case_insensitive_fs=0
 [[ -d "$WORK/.case-probe/case" ]] && case_insensitive_fs=1
-rm -rf "$WORK/.case-probe"
+rm -rf -- "${WORK:?}/.case-probe"
 
 pass=0
 fail=0
