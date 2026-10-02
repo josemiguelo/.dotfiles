@@ -67,7 +67,11 @@ echo "both Sdk and sdk exist"
 fixture="$WORK/both"
 mkdir -p "$fixture/Library/Android/Sdk" "$fixture/Library/Android/sdk"
 result=$(run_with_home "$fixture")
-eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk (glob order, not a documented guarantee — pinned here so a future zsh/glob change is visible)"
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk"
+result=$(LC_ALL=C run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under the C locale"
+result=$(LC_ALL=en_US.UTF-8 run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under en_US.UTF-8 (whose collation sorts sdk first)"
 
 ### ANDROID_SDK_ROOT mirrors ANDROID_HOME ###
 echo "ANDROID_SDK_ROOT"
