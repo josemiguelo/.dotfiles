@@ -8,10 +8,10 @@
 # tmux involved at all) gets detected as "kitty" and refuses session mode
 # outright -- even though a tmux server is reachable on the default socket
 # regardless of what terminal launched the process. Harmless for the
-# interactive paths below: they only ever call `command workmux add
-# --headless ...` (backend-check-exempt) or `command workmux add -s ...`
-# from inside a branch that already confirmed $TMUX is set, so this changes
-# nothing for either of them.
+# interactive paths below: they only ever run `workmux add --headless ...`
+# (backend-check-exempt) or `command workmux add -s ...` from inside a branch
+# that already confirmed $TMUX is set, so this changes nothing for either of
+# them.
 export WORKMUX_BACKEND=tmux
 
 # `workmux add`/`open` both refuse session mode outside tmux ("Session mode
@@ -49,9 +49,18 @@ workmux() {
       return
     fi
 
+    # gum runs its arguments as a program, so the binary's own path: `command`
+    # is a shell builtin, not a program gum can start.
     local json
-    json=$(gum spin --title "Creating worktree..." --show-error -- command workmux add --headless --json "$@")
+    json=$(gum spin --title "Creating worktree..." --show-error -- "$(whence -p workmux)" add --headless --json "$@")
     local rc=$?
+    # gum 2 asks the terminal about display modes as it exits and doesn't wait
+    # for the answers; drop them before they reach the prompt or, on success,
+    # get typed into the new tmux session.
+    if [[ -t 0 ]]; then
+      local _reply
+      while read -s -t 0.05 -k 1 _reply; do :; done
+    fi
     ((rc == 0)) || return $rc
 
     local handle
