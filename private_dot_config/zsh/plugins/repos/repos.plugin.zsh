@@ -1,5 +1,6 @@
-# gclone <url> [git clone options]: clone a repo into ~/Repos/<host>/<owner>/<repo>
-# and cd into it, from nothing but its URL (https or ssh).
+# gclone <url> [--bare] [git clone options]: clone a repo into
+# ~/Repos/<host>/<owner>/<repo> and cd into it, from nothing but its URL
+# (https or ssh).
 #
 #   git@github.com:ai-hero-dev/ai-coding-crash-course.git
 #     -> ~/Repos/gh/ai-hero-dev/ai-coding-crash-course
@@ -10,6 +11,14 @@
 # (gitlab.com/group/sub/repo) lands in gl/sub/repo, and a URL copied from the
 # browser (…/owner/repo/tree/main/src) still finds owner/repo. The URL is
 # cloned exactly as given: https stays https, ssh stays ssh.
+#
+# --bare clones bare into that same path and adds a worktree for the
+# default branch under all_worktrees/<branch> (the layout workmux expects),
+# cd'ing into the worktree rather than the bare root. Without --bare, gum
+# asks whether to clone bare; answering no falls back to a plain clone. The
+# fetch refspec (remote.origin.fetch) is set explicitly on every bare clone,
+# since `git clone --bare` otherwise leaves it unconfigured and a later
+# `git fetch` silently fetches nothing.
 #
 # An existing folder is never touched: a clone of the same repo (compared by
 # host/owner/repo, whatever the URL form; bare repos too) offers to cd there,
@@ -84,6 +93,18 @@ _gclone_identity() {
   print -r -- "${(L)reply[1]}/${(L)reply[3]}/${(L)reply[4]}"
 }
 
+# _gclone_cleanup <target> <created>: remove a failed clone's empty parent
+# dirs, up to (and including) the first one this clone created.
+_gclone_cleanup() {
+  emulate -L zsh
+  local target=$1 created=$2
+  [[ -n $created ]] || return 0
+  local dir=${target:h}
+  while [[ $dir == $created* && -d $dir ]] && rmdir "$dir" 2>/dev/null; do
+    dir=${dir:h}
+  done
+}
+
 gclone() {
   emulate -L zsh -o extended_glob
 
@@ -94,15 +115,30 @@ gclone() {
 
   if (( $# == 0 )) || [[ $1 == (-h|--help) ]]; then
     gum style --border rounded --padding "0 1" \
-      "$(gum style --bold 'gclone <url> [git clone options]')" \
+      "$(gum style --bold 'gclone <url> [--bare] [git clone options]')" \
       "" \
       "Clones into ~/Repos/<host>/<owner>/<repo> and cds into it." \
-      "https and ssh URLs; gh gl bb cb srht, other hosts by name."
+      "https and ssh URLs; gh gl bb cb srht, other hosts by name." \
+      "" \
+      "--bare clones bare and adds a worktree under all_worktrees/<branch>." \
+      "Without it, gum asks whether to clone bare."
     return $(( $# == 0 ))
   fi
 
   local url=$1
   shift
+
+  local bare=
+  local -a rest a
+  for a in "$@"; do
+    if [[ $a == --bare ]]; then
+      bare=1
+    else
+      rest+=("$a")
+    fi
+  done
+  set -- "${rest[@]}"
+
   local -a reply
   if ! _gclone_parse "$url"; then
     gum log --level error "Not a repository URL:" url "$url"
@@ -124,6 +160,38 @@ gclone() {
       existing=$(git -C "$target" config --get remote.origin.url 2>/dev/null)
       if [[ -n $existing ]] && [[ "$(_gclone_identity "$existing")" == "$(_gclone_identity "$url")" ]]; then
         gum log --level info "Already cloned:" path "${target/#$HOME/~}"
+
+        if [[ "$(git -C "$target" rev-parse --is-bare-repository 2>/dev/null)" == true ]]; then
+          # A bare repo has no files of its own to cd into; offer its
+          # worktrees instead (excluding the bare entry itself, which
+          # `worktree list` always lists first, with a "bare" line instead
+          # of HEAD/branch).
+          local -a lines worktrees
+          lines=(${(f)"$(git -C "$target" worktree list --porcelain)"})
+          local wt= is_bare= line
+          for line in $lines; do
+            if [[ $line == worktree\ * ]]; then
+              [[ -n $wt && -z $is_bare ]] && worktrees+=("$wt")
+              wt=${line#worktree }
+              is_bare=
+            elif [[ $line == bare ]]; then
+              is_bare=1
+            fi
+          done
+          [[ -n $wt && -z $is_bare ]] && worktrees+=("$wt")
+
+          if (( ${#worktrees} == 1 )); then
+            gum confirm "cd into ${worktrees[1]/#$HOME/~}?" && cd "$worktrees[1]"
+          elif (( ${#worktrees} > 1 )); then
+            local chosen
+            chosen=$(printf '%s\n' "${worktrees[@]/#$HOME/~}" | gum choose --header "cd into which worktree?")
+            [[ -n $chosen ]] && cd "${chosen/#\~/$HOME}"
+          else
+            gum confirm "cd into ${target/#$HOME/~}?" && cd "$target"
+          fi
+          return 0
+        fi
+
         if gum confirm "cd into ${target/#$HOME/~}?"; then
           cd "$target"
         fi
@@ -138,6 +206,10 @@ gclone() {
     fi
   fi
 
+  if [[ -z $bare ]]; then
+    gum confirm "Clone $owner/$repo as a bare repo + worktree?" && bare=1
+  fi
+
   # The first folder this clone creates, so a failed clone can remove what it
   # made (only while empty: other repos may have landed there meanwhile).
   local created=$target
@@ -148,6 +220,45 @@ gclone() {
   # The spinner hides the terminal, so git and ssh must not stop to ask for a
   # password or an unknown host key: they fail instead, and --show-error
   # prints git's own message.
+  if [[ -n $bare ]]; then
+    if ! GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh} -o BatchMode=yes" \
+      gum spin --show-error --title "Cloning $owner/$repo (bare)…" -- git clone --bare "$@" -- "$url" "$target"; then
+      gum log --level error "git clone --bare failed:" url "$url"
+      _gclone_cleanup "$target" "$created"
+      return 1
+    fi
+
+    # `git clone --bare` mirrors refs/heads/* from the remote into the bare
+    # repo's own refs/heads/* once, but -- unlike a plain clone -- leaves
+    # remote.origin.fetch unset, so a later `git fetch`/`git fetch origin`
+    # has no refspec and silently fetches nothing.
+    git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    git -C "$target" fetch --prune origin >/dev/null 2>&1
+
+    local default_branch
+    default_branch=$(git -C "$target" symbolic-ref --quiet --short HEAD)
+    if [[ -z $default_branch ]]; then
+      gum log --level error "Couldn't determine the default branch:" path "${target/#$HOME/~}"
+      rm -rf -- "$target"
+      _gclone_cleanup "$target" "$created"
+      return 1
+    fi
+
+    local worktree=$target/all_worktrees/$default_branch
+    if ! git -C "$target" worktree add "$worktree" "$default_branch" >/dev/null 2>&1; then
+      gum log --level error "Couldn't add the initial worktree:" branch "$default_branch"
+      cd "$target"
+      return 0
+    fi
+    # Not set by `worktree add` on its own: the branch exists locally from
+    # the bare clone itself, not from a fetch that would have wired tracking up.
+    git -C "$worktree" branch --quiet --set-upstream-to="origin/$default_branch" "$default_branch" >/dev/null 2>&1
+
+    cd "$worktree"
+    gum log --level info "Cloned bare:" path "${target/#$HOME/~}" worktree "${worktree/#$HOME/~}"
+    return 0
+  fi
+
   if GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh} -o BatchMode=yes" \
     gum spin --show-error --title "Cloning $owner/$repo…" -- git clone "$@" -- "$url" "$target"; then
     cd "$target"
@@ -156,11 +267,6 @@ gclone() {
   fi
 
   gum log --level error "git clone failed:" url "$url"
-  if [[ -n $created ]]; then
-    local dir=${target:h}
-    while [[ $dir == $created* && -d $dir ]] && rmdir "$dir" 2>/dev/null; do
-      dir=${dir:h}
-    done
-  fi
+  _gclone_cleanup "$target" "$created"
   return 1
 }
