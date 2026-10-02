@@ -53,14 +53,9 @@ workmux() {
     # is a shell builtin, not a program gum can start.
     local json
     json=$(gum spin --title "Creating worktree..." --show-error -- "$(whence -p workmux)" add --headless --json "$@")
+    # gum is the gum plugin's function: it drops the terminal's answers to gum's
+    # exit-time queries, which would otherwise be typed into the new session.
     local rc=$?
-    # gum 2 asks the terminal about display modes as it exits and doesn't wait
-    # for the answers; drop them before they reach the prompt or, on success,
-    # get typed into the new tmux session.
-    if [[ -t 0 ]]; then
-      local _reply
-      while read -s -t 0.05 -k 1 _reply; do :; done
-    fi
     ((rc == 0)) || return $rc
 
     local handle
