@@ -68,6 +68,12 @@ _has_session_for "nope" && bad "does not match an unrelated name" || ok "does no
 echo "collect_dirs"
 
 tmux kill-server >/dev/null 2>&1
+# kill-server returns before the server exits; a new-session sent meanwhile
+# can reach the dying server and be lost. Wait until there's no server.
+for _ in $(seq 20); do
+  tmux list-sessions >/dev/null 2>&1 || break
+  sleep 0.1
+done
 tmux new-session -d -s existing-dir -c "$WORK"
 collect_sessions # refresh open_names for the new session state
 zoxide() { printf '%s\n' "/some/path/existing-dir" "/some/path/new-dir"; }
