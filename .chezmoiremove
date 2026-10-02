@@ -12,4 +12,3 @@
 .config/zsh/plugins/asdf-pre
 .config/starship
 .config/nvim/lua/features/langs/lisp.lua
-.local/bin/dotfiles-worktree-check

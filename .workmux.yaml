@@ -1,0 +1,9 @@
+# Worktrees beside the chezmoi source, not inside it: anything inside
+# ~/.local/share/chezmoi is a chezmoi source entry and would be deployed to
+# $HOME. The global worktree_dir (all_worktrees) is for bare clones.
+worktree_dir: ../{project}__worktrees
+
+# Stop `workmux remove` while files only the worktree manages exist in
+# $HOME (they'd be left behind); DOTFILES_CHECK_SKIP=1 overrides.
+pre_remove:
+  - dotfiles-worktree-check
