@@ -10,7 +10,7 @@ SCRIPT_DIR="${0:A:h}/.."
 PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh"
 WORK="$(mktemp -d)"
 
-cleanup() { rm -rf "$WORK" }
+cleanup() { rm -rf -- "${WORK:?}" }
 trap cleanup EXIT
 
 pass=0

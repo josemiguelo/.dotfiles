@@ -12,7 +12,7 @@ SCRIPT_DIR="${0:A:h}/.."
 SCRIPT="$SCRIPT_DIR/private_dot_config/zsh/plugins/java/java.plugin.zsh"
 WORK="$(mktemp -d)"
 
-cleanup() { rm -rf "$WORK" }
+cleanup() { rm -rf -- "${WORK:?}" }
 trap cleanup EXIT
 
 pass=0

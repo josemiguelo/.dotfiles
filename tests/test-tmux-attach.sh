@@ -12,7 +12,7 @@ WORK="$(mktemp -d)"
 
 cleanup() {
   tmux -L "$SOCK" kill-server >/dev/null 2>&1
-  rm -rf "$WORK"
+  rm -rf -- "${WORK:?}"
 }
 trap cleanup EXIT
 
@@ -93,7 +93,7 @@ tmp_seed=$(mktemp -d)
 git -C "$tmp_seed" init -q -b main
 git -C "$tmp_seed" -c user.email=t@t -c user.name=t commit -q --allow-empty -m seed
 git -C "$tmp_seed" push -q "$REPO" HEAD:main
-rm -rf "$tmp_seed"
+rm -rf -- "${tmp_seed:?}"
 git -C "$REPO" worktree add -q "$WORK/main-wt" main
 git -C "$REPO" worktree add -q -b feature "$WORK/feature-wt" main
 
