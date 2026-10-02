@@ -1,6 +1,7 @@
-# Locate the Android SDK directory, tolerating case differences (Sdk vs sdk)
-# across machines/installations.
-for _android_sdk_dir in "$HOME/Library/Android"/[Ss]dk(N); do
+# Locate the Android SDK directory, tolerating case differences across
+# machines/installations: Sdk first, then sdk, in that order everywhere (a
+# glob would sort by the locale, which puts sdk first on Linux).
+for _android_sdk_dir in "$HOME/Library/Android/Sdk" "$HOME/Library/Android/sdk"; do
   if [[ -d "$_android_sdk_dir" ]]; then
     export ANDROID_HOME="$_android_sdk_dir"
     export ANDROID_SDK_ROOT="$_android_sdk_dir"
