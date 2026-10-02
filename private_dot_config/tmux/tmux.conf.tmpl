@@ -195,10 +195,13 @@ set-option -g status-right "#{?#{m:floating-*,#S},,#[fg=#{E:@fg_on_accent}]#[bg=
 # 3. Move your existing status content to the bottom line (index 1)
 # The window list is dropped in a floating scratch session while it has a
 # single window; there it only repeats "1 zsh".
+# The list=* markup is what the stock status-format uses: when the windows
+# overflow, tmux trims the list (showing < / > markers) and scrolls it to keep
+# the focus (current window) visible, instead of drawing over status-right.
 set -g status 2
 set -g status-format[0] ""
-set -g @window_list "#{W:#{T:window-status-format},#{T:window-status-current-format}#[default]}"
-set -g status-format[1] "#[align=left]#{E:status-left}#[align=left]#{?#{&&:#{m:floating-*,#S},#{==:#{session_windows},1}},,#{E:@window_list}}#[align=right]#{E:status-right}"
+set -g @window_list "#{W:#{T:window-status-format},#[list=focus]#{T:window-status-current-format}#[default list=on]}"
+set -g status-format[1] "#[align=left]#{E:status-left}#[list=on align=left]#[list=left-marker fg=color8]<#[list=right-marker fg=color8]>#[list=on default]#{?#{&&:#{m:floating-*,#S},#{==:#{session_windows},1}},,#{E:@window_list}}#[nolist align=right]#{E:status-right}"
 
 ##########
 ## INIT ##
