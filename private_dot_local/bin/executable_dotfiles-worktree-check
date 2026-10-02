@@ -1,0 +1,51 @@
+#!/bin/sh
+# Lists what a chezmoi feature worktree would leave behind in $HOME: targets
+# its source manages but the main source doesn't, that exist on disk. Once
+# the worktree is gone nothing manages them, and `chezmoi verify` from the
+# main source never mentions them. Exits 1 when there are any, so as
+# workmux's pre_remove hook (.workmux.yaml) it stops `workmux remove` until
+# they're dealt with; DOTFILES_CHECK_SKIP=1 lets it through. It also says
+# when managed targets differ from the main source's state (an abandoned
+# feature's edits), which `chezmoi apply` from the main source restores.
+# Deletes nothing. Usage: dotfiles-worktree-check [worktree] [main-source];
+# the hook gets them from WM_WORKTREE_PATH and WM_PROJECT_ROOT.
+set -eu
+export LC_ALL=C
+
+wt=${1:-${WM_WORKTREE_PATH:-$(git rev-parse --show-toplevel)}}
+main=${2:-${WM_PROJECT_ROOT:-$(chezmoi source-path)}}
+wt=$(cd "$wt" && pwd -P)
+main=$(cd "$main" && pwd -P)
+if [ "$wt" = "$main" ]; then
+  echo "dotfiles-worktree-check: $wt is the main source; give a feature worktree" >&2
+  exit 2
+fi
+
+tmp=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-worktree-check.XXXXXX")
+trap 'rm -f "$tmp/main" "$tmp/wt" "$tmp/left"; rmdir "$tmp"' EXIT
+
+chezmoi --source "$main" managed --path-style absolute | sort > "$tmp/main"
+chezmoi --source "$wt" managed --path-style absolute | sort > "$tmp/wt"
+comm -13 "$tmp/main" "$tmp/wt" | while IFS= read -r p; do
+  if [ -e "$p" ] || [ -L "$p" ]; then printf '%s\n' "$p"; fi
+done > "$tmp/left"
+
+rc=0
+if [ -s "$tmp/left" ]; then
+  echo "Only $wt manages these, and they exist; they'd be left in \$HOME:"
+  sed 's/^/  /' "$tmp/left"
+  echo "Delete the ones you don't want, then remove the worktree again"
+  echo "(DOTFILES_CHECK_SKIP=1 workmux remove keeps them)."
+  rc=1
+fi
+
+if ! chezmoi --source "$main" verify >/dev/null 2>&1; then
+  echo "These differ from $main's state; chezmoi apply restores them:"
+  chezmoi --source "$main" status | sed 's/^/  /'
+fi
+
+if [ "$rc" -ne 0 ] && [ "${DOTFILES_CHECK_SKIP:-0}" = 1 ]; then
+  echo "DOTFILES_CHECK_SKIP=1: going ahead and leaving them."
+  rc=0
+fi
+exit "$rc"
