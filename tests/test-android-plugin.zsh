@@ -14,10 +14,19 @@ WORK="$(mktemp -d)"
 cleanup() { rm -rf "$WORK" }
 trap cleanup EXIT
 
+# macOS's default APFS volume is case-insensitive (case-preserving): creating
+# "Sdk" then "sdk" (or just "sdk" alone) yields one directory answering to
+# both names, so an sdk-only fixture can't be told apart from a Sdk one there.
+mkdir -p "$WORK/.case-probe/Case"
+case_insensitive_fs=0
+[[ -d "$WORK/.case-probe/case" ]] && case_insensitive_fs=1
+rm -rf "$WORK/.case-probe"
+
 pass=0
 fail=0
 ok() { pass=$((pass + 1)); echo "  ok - $1" }
 bad() { fail=$((fail + 1)); echo "  FAIL - $1" }
+skip() { echo "  skip - $1" }
 eq() { [[ "$1" == "$2" ]] && ok "$3" || bad "$3 (expected [$2], got [$1])" }
 contains() { [[ "$1" == *"$2"* ]] && ok "$3" || bad "$3 (expected to contain [$2], got [$1])" }
 not_contains() { [[ "$1" != *"$2"* ]] && ok "$3" || bad "$3 (expected NOT to contain [$2], got [$1])" }
@@ -58,11 +67,18 @@ echo "lowercase sdk"
 
 fixture="$WORK/lower"
 mkdir -p "$fixture/Library/Android/sdk/platform-tools"
-result=$(run_with_home "$fixture")
-eq "${result%%|*}" "$fixture/Library/Android/sdk" "finds sdk (lowercase), tolerating the case difference"
+if ((case_insensitive_fs)); then
+  skip "finds sdk (lowercase): filesystem is case-insensitive, Sdk and sdk are the same path here"
+else
+  result=$(run_with_home "$fixture")
+  eq "${result%%|*}" "$fixture/Library/Android/sdk" "finds sdk (lowercase), tolerating the case difference"
+fi
 
 ### both Sdk and sdk exist ###
 echo "both Sdk and sdk exist"
+# On a case-insensitive filesystem the second mkdir -p below is a no-op onto
+# the first, so these pass trivially there (only one directory ever exists)
+# rather than exercising the Sdk-over-sdk precedence itself.
 
 fixture="$WORK/both"
 mkdir -p "$fixture/Library/Android/Sdk" "$fixture/Library/Android/sdk"
