@@ -27,6 +27,10 @@ export GIT_CONFIG_GLOBAL="$WORK/gitconfig" GIT_CONFIG_NOSYSTEM=1
 SRC="$WORK/src"
 WT="$WORK/wt"
 mkdir -p "$HOME" "$XDG_CONFIG_HOME/chezmoi" "$SRC"
+# Resolves symlinks (macOS's /tmp and /var are symlinks into /private) so
+# $HOME matches the real path chezmoi and the script under test (pwd -P) use.
+HOME="$(cd "$HOME" && pwd -P)"
+export HOME
 : > "$GIT_CONFIG_GLOBAL"
 printf 'sourceDir = "%s"\n' "$SRC" > "$XDG_CONFIG_HOME/chezmoi/chezmoi.toml"
 
