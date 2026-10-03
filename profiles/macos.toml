@@ -5,6 +5,10 @@
 setup-brew = "macos"
 brew-taps = "script"
 
+[chezmoi]
+install = "brew"
+scripts = ["dotfiles-bootstrap", "dotfiles-pull", "dotfiles-push", "dotfiles-apply", "dotfiles-ssh-remote"]
+
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
 
