@@ -83,6 +83,9 @@ vim-enhanced = "brew"
 google-cloud-cli = "brew-cask"
 ngrok = "script"
 
+[keychron]
+scripts = ["keychron-launcher-access"]
+
 [dictation]
 scripts = ["omarchy-dictation", "omarchy-dictation-gpu"]
 
