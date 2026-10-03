@@ -94,6 +94,28 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+-- chezmoi.vim types a template source <lang>.chezmoitmpl. Treesitter parses
+-- it as <lang> alone, so the {{ }} parts break a strict format (a JSON
+-- template is one parse error, left unhighlighted), and while Treesitter
+-- highlights a buffer, chezmoi.vim's {{ }} syntax is off. Templates get Vim's
+-- syntax highlighting instead, <lang> and chezmoitmpl together. Only the
+-- highlighter stops: the parser stays, so render-markdown still renders
+-- markdown templates.
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("chezmoi_templates", { clear = true }),
+  pattern = "*.chezmoitmpl",
+  callback = function(ev)
+    -- After the FileType handler that starts Treesitter.
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(ev.buf) then
+        return
+      end
+      vim.treesitter.stop(ev.buf)
+      vim.bo[ev.buf].syntax = vim.bo[ev.buf].filetype
+    end)
+  end,
+})
+
 return {
   {
     "xvzc/chezmoi.nvim",
