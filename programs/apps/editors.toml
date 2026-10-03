@@ -3,8 +3,7 @@ description = "Visual Studio Code"
 
 [programs.code.install.dnf-repo]
 [programs.code.install.dnf-repo.with]
-# A repo-root path: the built-in dnf-repo installer runs from the repo root.
-repofile = "programs/apps/repos/vscode.repo"
+repofile = "file:repos/vscode.repo"
 
 # Omarchy's own VS Code build ([omarchy] repo); the omarchy-vscode script
 # adds Omarchy's settings with its installer.
@@ -16,8 +15,7 @@ description = "Antigravity IDE"
 
 [programs.antigravity.install.dnf-repo]
 [programs.antigravity.install.dnf-repo.with]
-# A repo-root path: the built-in dnf-repo installer runs from the repo root.
-repofile = "programs/apps/repos/antigravity.repo"
+repofile = "file:repos/antigravity.repo"
 
 # Arch: the AUR's antigravity-ide — Google's own IDE tarball from
 # dl.google.com, repackaged. Not the AUR's `antigravity`, which is

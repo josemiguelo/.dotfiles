@@ -4,6 +4,7 @@
 
 [meta]
 name = "jm's machines"
+min-tool-version = "1.0.0"
 
 [layout]
 fragments = ["programs/**/*.toml", "maintenance/**/*.toml", "configs/**/.loadout.toml"]

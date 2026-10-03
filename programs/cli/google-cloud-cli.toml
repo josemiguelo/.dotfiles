@@ -1,11 +1,10 @@
 [programs.google-cloud-cli]
 description = "Google Cloud CLI"
 
-# Fedora: Google's rpm repository. The built-in dnf-repo installer runs from
-# the repo root, so repofile is a repo-root path, not one relative to here.
+# Fedora: Google's rpm repository (the .repo file beside this one).
 [programs.google-cloud-cli.install.dnf-repo]
 [programs.google-cloud-cli.install.dnf-repo.with]
-repofile = "programs/cli/google-cloud-cli.repo"
+repofile = "file:google-cloud-cli.repo"
 
 # Homebrew's cask (gcloud-cli, formerly google-cloud-sdk) downloads the
 # Linux tarball on Linux; on Arch the CLI is AUR-only.
