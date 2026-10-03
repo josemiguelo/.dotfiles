@@ -16,7 +16,11 @@ return {
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    opts = {},
+    -- chezmoi.vim types a .md.tmpl source as markdown.chezmoitmpl, and the
+    -- plugin attaches only to filetypes listed here, by exact name.
+    opts = {
+      file_types = { "markdown", "markdown.chezmoitmpl" },
+    },
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
     lazy = true,
     event = { "BufReadPre", "BufNewFile" },
