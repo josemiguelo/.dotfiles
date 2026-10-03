@@ -16,6 +16,10 @@ brew-taps = "script"
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]
 
+[mise]
+install = "omarchy"
+scripts = ["mise-tools", "mise-default-packages", "omarchy-default-agent claude"]
+
 [kitty]
 scripts = ["omarchy-default-terminal"]
 

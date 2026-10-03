@@ -8,6 +8,10 @@ brew-taps = "script"
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
 
+[mise]
+install = "brew"
+scripts = ["mise-tools", "mise-default-packages", "java-macos-integration"]
+
 [kitty]
 install = "brew-cask"
 
