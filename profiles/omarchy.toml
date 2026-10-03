@@ -1,0 +1,9 @@
+# Every Omarchy machine. System packages install through Omarchy's own
+# commands (the built-in omarchy installer).
+
+[zsh]
+install = "omarchy"
+scripts = ["default-shell", "zsh-plugins", "setup-completions"]
+
+[data]
+omarchy = true

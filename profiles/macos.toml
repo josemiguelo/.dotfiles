@@ -1,0 +1,5 @@
+# Every macOS machine. macOS ships zsh as the login shell, so zsh is
+# neither installed nor switched to here.
+
+[zsh]
+scripts = ["zsh-plugins", "setup-completions"]
