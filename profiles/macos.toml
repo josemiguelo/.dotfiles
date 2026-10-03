@@ -75,3 +75,12 @@ terraform = "brew"
 claude = "script"
 codex = "brew-cask"
 ngrok = "script"
+
+# Desktop apps (programs/apps/).
+[apps.install]
+1password-cli = "brew-cask"
+jordanbaird-ice = "brew-cask"
+lunar = "brew-cask"
+meetingbar = "brew-cask"
+obs = "brew-cask"
+scrcpy = "brew"
