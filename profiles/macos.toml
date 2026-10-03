@@ -27,6 +27,9 @@ install = "brew"
 [starship]
 install = "brew"
 
+[workmux]
+install = "brew"
+
 [tmux]
 scripts = ["tmux-plugins"]
 

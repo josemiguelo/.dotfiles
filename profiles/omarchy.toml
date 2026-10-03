@@ -39,6 +39,9 @@ install = "omarchy"
 [starship]
 install = "omarchy"
 
+[workmux]
+install = "brew"
+
 [tmux]
 scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 
