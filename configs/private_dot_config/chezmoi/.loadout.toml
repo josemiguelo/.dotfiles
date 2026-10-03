@@ -1,7 +1,7 @@
 # chezmoi: the dotfiles manager and its checkout (this repo). Its own config
 # is this directory; paths below are relative to this file. The dotfiles-*
 # scripts keep the checkout fresh and applied until loadout observes configs
-# itself (engine steps 8-10 retire them).
+# itself (loadout 1.1 retires them).
 
 [programs.chezmoi]
 via = ["brew", "omarchy"]
