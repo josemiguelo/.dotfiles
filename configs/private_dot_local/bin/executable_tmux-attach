@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# tmux runs this through run-shell, which hands it tmux's environment rather
-# than an interactive shell's, so FZF_DEFAULT_OPTS is not set. Load it here;
-# fzf-tmux forwards the variable into the popup it opens.
+# It runs from kitty-tmux-attach's overlay or from tmux's run-shell, neither of
+# which has an interactive shell's environment, so FZF_DEFAULT_OPTS is not set.
+# Load it here; fzf-tmux forwards the variable into the popup it opens.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
 
 # Icons for differentiation (Nerd Fonts)
@@ -150,15 +150,20 @@ section_binds() {
 # the only ones containing '─', so enter:transform picks accept/ignore
 # based on that regardless of which one it is.
 pick() {
-  local section_args=() bind
+  local section_args=() bind picker=(fzf-tmux -p 70%,70%)
   while IFS= read -r bind; do
     [[ -n "$bind" ]] && section_args+=(--bind "$bind")
   done < <(section_binds)
 
+  # TMUX_ATTACH_INLINE is set by kitty-tmux-attach, which runs this in a kitty
+  # overlay with TMUX set (so tmux-goto switches the client). fzf-tmux would
+  # open its own popup on that client instead of drawing in the overlay.
+  [[ -n "${TMUX_ATTACH_INLINE:-}" ]] && picker=(fzf)
+
   choice=$(printf '%s\n%s\n%s\n%s\n%s' \
     "$sessions" "$(divider "$sessions" "$worktrees$dirs")" \
     "$worktrees" "$(divider "$worktrees" "$dirs")" \
-    "$dirs" | grep . | fzf-tmux -p 70%,70% --reverse \
+    "$dirs" | grep . | "${picker[@]}" --reverse \
     --bind 'enter:transform:if [[ {} == *─* ]]; then echo ignore; else echo accept; fi' \
     "${section_args[@]}" \
     --header 'ctrl-j/ctrl-k next/previous section')
@@ -222,8 +227,8 @@ determine_target() {
 main() {
   ensure_server_home
 
-  # C-M-a passes the active pane's directory as $1 (run-shell has no cwd of
-  # its own); cd there so `git worktree list` reads the right repo.
+  # The caller passes a directory as $1 (kitty-tmux-attach: the active pane's,
+  # or its own); cd there so `git worktree list` reads the right repo.
   [[ -n "$1" && -d "$1" ]] && cd "$1"
 
   collect_sessions

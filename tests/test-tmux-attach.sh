@@ -241,6 +241,25 @@ after=$(tmux list-sessions -F '#S' 2>/dev/null | wc -l | tr -d ' ')
 eq "$target" "main-wt" "a directory choice matching an existing session reuses it"
 eq "$after" "$((before + 1))" "without creating a duplicate"
 
+### pick ###
+echo "pick"
+
+# Stub both pickers to log which one ran and print nothing (so $choice stays
+# empty). Inline mode is what kitty-tmux-attach asks for: fzf-tmux would open
+# a popup on the attached client instead of drawing in the overlay.
+picked_log="$WORK/picked"
+fzf-tmux() { echo fzf-tmux >> "$picked_log"; }
+fzf() { echo fzf >> "$picked_log"; }
+# Two sections, so section_binds emits real binds: bash 3.2 under `set -u`
+# rejects expanding an empty array, and a real picker always has sections.
+sessions="one-session"; worktrees="proj wt"; dirs=""
+pick
+eq "$(cat "$picked_log" 2>/dev/null)" "fzf-tmux" "uses fzf-tmux (popup) by default"
+rm -f "$picked_log"
+TMUX_ATTACH_INLINE=1 pick
+eq "$(cat "$picked_log" 2>/dev/null)" "fzf" "uses plain fzf when TMUX_ATTACH_INLINE is set"
+unset -f fzf fzf-tmux
+
 echo
 echo "$pass passed, $fail failed"
 [[ "$fail" -eq 0 ]]

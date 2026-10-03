@@ -75,11 +75,6 @@ zcache starship starship init zsh --print-full-init
 
 [[ -n "$ZSH_PROFILE" ]] && zprof
 
-# Auto-attach to tmux in kitty
-if [[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]; then
-  tmux-attach
-fi
-
 # Signal this pane's shell is fully initialized -- automation that creates a
 # tmux window/pane and needs to send it a real command (sofi.nvim's task
 # runner, say) waits on the matching channel instead of guessing with sleep.
