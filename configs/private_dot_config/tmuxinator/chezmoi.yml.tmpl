@@ -1,0 +1,6 @@
+name: chezmoi
+root: ~/.local/share/chezmoi
+
+windows:
+  - repo: nvim
+  - agent: {{ if (includeTemplate "machine" . | fromJson).work }}cursor-agent --continue{{ else }}claude --continue{{ end }}

@@ -1,6 +1,0 @@
-name: chezmoi
-root: ~/.local/share/chezmoi
-
-windows:
-  - repo: nvim
-  - agent: {{ if eq .chezmoi.hostname "work-mac" }}cursor-agent --continue{{ else }}claude --continue{{ end }}
