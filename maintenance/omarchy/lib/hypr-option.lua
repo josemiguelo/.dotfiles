@@ -1,0 +1,254 @@
+-- The value a Hyprland option gets from the user's Lua config, without a
+-- running Hyprland: runs ~/.config/hypr/hyprland.lua (Omarchy's defaults,
+-- then the personal overrides, in Hyprland's own load order) with a
+-- stand-in `hl` whose config() merges every call the way Hyprland applies
+-- them — later calls win, key by key — and whose bind()/unbind() keep the
+-- key bindings the way Hyprland does: a bind adds to the key (two binds on
+-- one key both fire), an unbind clears it. Every other hl.* / o.* use is a
+-- no-op. Hyprland embeds Lua 5.5 and depends on the `lua` package, so plain
+-- `lua` runs the same language.
+--
+-- usage: lua hypr-option.lua <option.path> [config]
+--   prints the value (true, 0.4, "us", …) or nil when nothing sets it;
+--        lua hypr-option.lua "bind:SUPER + SHIFT + E" [config]
+--   prints the command each bind on that key runs, one per line (a built-in
+--   dispatcher prints as <window.close>, <layout>, …), or nil;
+--        lua hypr-option.lua "action:<window.close>" [config]
+--   the reverse: every key bound to that action (as the bind wrote it), one
+--   per line, sorted, or nil;
+--        lua hypr-option.lua "rules:size" [config]
+--   every window rule that sets that property, in load order, one per line:
+--   <class regex>\t<tag>\t<value> (empty when the rule doesn't match on
+--   it; a list value joined by spaces), or nil;
+--        lua hypr-option.lua env:PATH [config]
+--   the value the config's hl.env calls leave that variable at (they change
+--   what later os.getenv calls in the config read, as in Hyprland), or nil;
+--        lua hypr-option.lua leaves [config]
+--   every setting the config ends up with, one per line: <path>\t<value>
+--   (general.gaps_in\t3; a list value joined by spaces; hl.device settings
+--   as device:<name>.<key>\t<value>; hl.animation as
+--   animation:<leaf>.<key>\t<value>, the leaf's last call only), sorted;
+--   exits 2 when the config itself fails to load.
+-- Limits: this RUNS the config (Omarchy's does read-only probes at load:
+-- `find`, command-exists checks), and anything the stand-in returns is a
+-- placeholder — a setting under `if hl.<query>() then` sees a fake answer.
+
+local path, config = arg[1], arg[2] or (os.getenv("HOME") .. "/.config/hypr/hyprland.lua")
+if not path then
+  io.stderr:write("usage: lua hypr-option.lua <option.path> [config]\n")
+  os.exit(2)
+end
+
+local merged = {}
+
+local function merge(into, from)
+  for k, v in pairs(from) do
+    if type(v) == "table" then
+      if type(into[k]) ~= "table" then into[k] = {} end
+      merge(into[k], v)
+    else
+      into[k] = v
+    end
+  end
+end
+
+-- Absorbs anything: indexing, calls, concatenation, comparison, arithmetic.
+local sink
+local absorb = {
+  __index = function() return sink end,
+  __newindex = function() end,
+  __call = function() return sink end,
+  __concat = function() return "" end,
+  __tostring = function() return "" end,
+  __len = function() return 0 end,
+  __eq = function() return false end,
+  __lt = function() return false end,
+  __le = function() return false end,
+  __unm = function() return 0 end,
+  __add = function() return 0 end,
+  __sub = function() return 0 end,
+  __mul = function() return 0 end,
+  __div = function() return 0 end,
+}
+sink = setmetatable({}, absorb)
+
+-- "SUPER + SHIFT + E" and "super+shift+e" are the same key.
+local function key_of(keys)
+  return tostring(keys):upper():gsub("%s+", "")
+end
+
+local binds = {}
+local window_rules = {}
+-- Per-device settings (hl.device), by device name; later calls win key by key.
+local devices = {}
+-- Animations (hl.animation), by leaf; a later call replaces the leaf's.
+local animations = {}
+
+-- hl.env sets the variable for what the config reads next, like Hyprland's.
+local envs = {}
+local real_getenv = os.getenv
+os.getenv = function(name)
+  if envs[name] ~= nil then return envs[name] end
+  return real_getenv(name)
+end
+local written = {} -- key -> the key as the bind wrote it ("SUPER + Q")
+
+-- hl.dsp.window.close() -> { builtin = "window.close" }, however deep.
+local function builtin(name)
+  return setmetatable({}, {
+    __index = function(_, field) return builtin(name .. "." .. field) end,
+    __call = function() return { builtin = name } end,
+  })
+end
+
+hl = setmetatable({
+  config = function(t)
+    if type(t) == "table" then merge(merged, t) end
+  end,
+  bind = function(keys, dispatcher)
+    local key = key_of(keys)
+    local exec = type(dispatcher) == "table"
+        and (rawget(dispatcher, "exec") or rawget(dispatcher, "builtin") and "<" .. dispatcher.builtin .. ">")
+      or "<dispatcher>"
+    binds[key] = binds[key] or {}
+    table.insert(binds[key], exec)
+    written[key] = tostring(keys)
+  end,
+  env = function(name, value)
+    envs[tostring(name)] = tostring(value)
+  end,
+  window_rule = function(rule)
+    if type(rule) == "table" then table.insert(window_rules, rule) end
+  end,
+  device = function(settings)
+    if type(settings) ~= "table" or settings.name == nil then return end
+    local name = tostring(settings.name)
+    devices[name] = devices[name] or {}
+    for k, v in pairs(settings) do
+      if k ~= "name" then devices[name][k] = v end
+    end
+  end,
+  animation = function(settings)
+    if type(settings) ~= "table" or settings.leaf == nil then return end
+    local leaf = {}
+    for k, v in pairs(settings) do
+      if k ~= "leaf" then leaf[k] = v end
+    end
+    animations[tostring(settings.leaf)] = leaf
+  end,
+  unbind = function(keys)
+    binds[key_of(keys)] = nil
+  end,
+  -- o.bind turns a command into hl.dsp.exec_cmd(command): keep the command.
+  -- Every other hl.dsp.* (window.close(), layout(…)) is a built-in action:
+  -- keep its name, as a plain table — not the sink, whose every field is
+  -- truthy and would pass o.bind's { omarchy = … } / { webapp = … } tests.
+  dsp = setmetatable({
+    exec_cmd = function(command) return { exec = command } end,
+  }, { __index = function(_, name) return builtin(name) end }),
+}, { __index = function() return sink end })
+
+local ok, err = pcall(dofile, config)
+if not ok then
+  -- A missing module appends Lua's whole search path: keep the first line,
+  -- and the second when the first only introduces it ("…from file 'x':").
+  local first, second = tostring(err):match("([^\n]*)\n?%s*([^\n]*)")
+  local why = first:sub(-1) == ":" and first .. " " .. second or first
+  io.stderr:write("hypr-option: " .. config .. " failed to load: " .. why .. "\n")
+  os.exit(2)
+end
+
+-- A table of only 1..n keys is a value ({ 1, 1 }), not a section.
+local function is_list(t)
+  local n = 0
+  for _ in pairs(t) do n = n + 1 end
+  return n > 0 and #t == n
+end
+
+local function value_text(v)
+  if type(v) == "table" then
+    local parts = {}
+    for _, x in ipairs(v) do table.insert(parts, tostring(x)) end
+    return table.concat(parts, " ")
+  end
+  return tostring(v)
+end
+
+if path:sub(1, 4) == "env:" then
+  print(envs[path:sub(5)] or "nil")
+  os.exit(0)
+end
+
+if path == "leaves" then
+  local lines = {}
+  local function walk(t, prefix)
+    for k, v in pairs(t) do
+      local p = prefix == "" and tostring(k) or prefix .. "." .. tostring(k)
+      if type(v) == "table" and not is_list(v) then
+        walk(v, p)
+      else
+        table.insert(lines, p .. "\t" .. value_text(v))
+      end
+    end
+  end
+  walk(merged, "")
+  for name, settings in pairs(devices) do
+    for k, v in pairs(settings) do
+      table.insert(lines, "device:" .. name .. "." .. tostring(k) .. "\t" .. value_text(v))
+    end
+  end
+  for leaf, settings in pairs(animations) do
+    for k, v in pairs(settings) do
+      table.insert(lines, "animation:" .. leaf .. "." .. tostring(k) .. "\t" .. value_text(v))
+    end
+  end
+  table.sort(lines)
+  print(table.concat(lines, "\n"))
+  os.exit(0)
+end
+
+if path:sub(1, 6) == "rules:" then
+  local prop, lines = path:sub(7), {}
+  for _, rule in ipairs(window_rules) do
+    local value = rule[prop]
+    if value ~= nil then
+      local match = type(rule.match) == "table" and rule.match or {}
+      if type(value) == "table" then
+        local parts = {}
+        for _, v in ipairs(value) do table.insert(parts, tostring(v)) end
+        value = table.concat(parts, " ")
+      end
+      table.insert(lines, tostring(match.class or "") .. "\t" .. tostring(match.tag or "") .. "\t" .. tostring(value))
+    end
+  end
+  print(#lines > 0 and table.concat(lines, "\n") or "nil")
+  os.exit(0)
+end
+
+if path:sub(1, 7) == "action:" then
+  local want, keys = path:sub(8), {}
+  for key, list in pairs(binds) do
+    for _, exec in ipairs(list) do
+      if exec == want then
+        table.insert(keys, written[key])
+        break
+      end
+    end
+  end
+  table.sort(keys)
+  print(#keys > 0 and table.concat(keys, "\n") or "nil")
+  os.exit(0)
+end
+
+if path:sub(1, 5) == "bind:" then
+  local list = binds[key_of(path:sub(6))]
+  print(list and table.concat(list, "\n") or "nil")
+  os.exit(0)
+end
+
+local value = merged
+for part in path:gmatch("[^.]+") do
+  -- Not `and value[part] or nil`: that turns a set `false` into nil.
+  if type(value) == "table" then value = value[part] else value = nil end
+end
+print(type(value) == "table" and value_text(value) or tostring(value))

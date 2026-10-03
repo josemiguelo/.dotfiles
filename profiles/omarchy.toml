@@ -86,6 +86,10 @@ ngrok = "script"
 [keychron]
 scripts = ["keychron-launcher-access"]
 
+# Local replacements of Omarchy commands, first on the session PATH.
+[omarchy-overrides]
+scripts = ["omarchy-command-overrides", "omarchy-keyboard-backlight-guard"]
+
 [dictation]
 scripts = ["omarchy-dictation", "omarchy-dictation-gpu"]
 

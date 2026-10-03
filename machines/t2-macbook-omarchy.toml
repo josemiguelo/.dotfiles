@@ -11,7 +11,12 @@ scripts = ["setup-ssh id_ed25519", "omarchy-sshd josemiguelo"]
 
 # MacBookPro16,1 (T2) hardware.
 [t2]
-scripts = ["t2-hid-apple-keyboard-arch", "t2-fan-curve", "t2-boot-clock"]
+scripts = ["t2-hid-apple-keyboard-arch", "t2-fan-curve", "t2-boot-clock", "t2-gmux-backlight"]
+
+# Scratchpad kitties less see-through (kitty.conf turns dynamic opacity on
+# here).
+[scratchpad]
+scripts = ["omarchy-scratchpad-opacity 0.99"]
 
 [t2.install]
 t2fanrd = "omarchy"
