@@ -1,7 +1,11 @@
 return {
   "WilliamHsieh/overlook.nvim",
   config = function()
-    require("overlook").setup({})
+    require("overlook").setup({
+      -- above Snacks' zoom window (<leader>wm, zindex 40) so peeks show up while
+      -- zoomed, below Snacks' pickers and notifications (50)
+      ui = { z_index_base = 45 },
+    })
 
     -- stylua: ignore
     vim.keymap.set( "n", "<leader>po", require("overlook.api").open_in_original_window, { desc = "Open popup in current window" })
