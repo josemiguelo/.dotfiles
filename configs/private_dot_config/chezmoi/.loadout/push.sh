@@ -17,9 +17,10 @@ check | install) ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac
 
-# chezmoi owns the source location; don't hardcode it.
-SOURCE=$(chezmoi source-path 2>/dev/null || true)
-[ -n "$SOURCE" ] && [ -d "$SOURCE/.git" ] || { echo "missing: dotfiles not initialized"; exit 1; }
+# chezmoi owns the source location; don't hardcode it. The source path is
+# .chezmoiroot's folder, so the repo is the git top level above it.
+SOURCE=$(git -C "$(chezmoi source-path 2>/dev/null || echo /nonexistent)" rev-parse --show-toplevel 2>/dev/null || true)
+[ -n "$SOURCE" ] || { echo "missing: dotfiles not initialized"; exit 1; }
 
 dirty=$(git -C "$SOURCE" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
 ahead=$(git -C "$SOURCE" rev-list --count '@{u}..HEAD' 2>/dev/null || echo 0)
