@@ -4,6 +4,7 @@
 # `source-path` with the fixture source), and the fixture holds a tiny git
 # repo as the source, a linked worktree of it and an unrelated repo, all
 # inside one mktemp dir. Never touches the real dotfiles, chezmoi or $HOME.
+# chztry's program is a fake `tmux` (logs its args and $TMUX) or `sh`.
 # Run: tests/test-chezmoi-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
@@ -41,7 +42,9 @@ mkdir -p "$FIXTURE_HOME" "$SRC" "$OTHER" "$FAKEBIN"
 printf '%s\n' '#!/usr/bin/env bash' \
   'if [[ "$1" == source-path ]]; then echo "$FAKE_SOURCE"; exit 0; fi' \
   'echo "$*" >> "$CHEZMOI_LOG"' > "$FAKEBIN/chezmoi"
-chmod +x "$FAKEBIN/chezmoi"
+printf '%s\n' '#!/usr/bin/env bash' \
+  'echo "tmux $* TMUX=${TMUX-unset}"' > "$FAKEBIN/tmux"
+chmod +x "$FAKEBIN/chezmoi" "$FAKEBIN/tmux"
 
 g() { git -c user.name=test -c user.email=test@example.com "$@" }
 export GIT_CONFIG_GLOBAL="$WORK/gitconfig" GIT_CONFIG_NOSYSTEM=1
@@ -60,6 +63,16 @@ run() {
   : > "$LOG"
   err=$(cd "$dir" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" \
     PLUGIN="$PLUGIN" zsh -fc 'source "$PLUGIN"; "$@"' _ "$@" 2>&1 >/dev/null)
+  code=$?
+  calls=$(<"$LOG")
+}
+
+# Like run, but keeps stdout in $out (for what chztry's program printed).
+run_out() {
+  local dir="$1"; shift
+  : > "$LOG"
+  out=$(cd "$dir" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" \
+    PLUGIN="$PLUGIN" TMUX=/tmp/outer,1,0 XDG_RUNTIME_DIR="$WORK/runtime" zsh -fc 'source "$PLUGIN"; "$@"' _ "$@" 2>&1)
   code=$?
   calls=$(<"$LOG")
 }
@@ -94,6 +107,45 @@ echo "in a subdirectory of the worktree"
 mkdir -p "$WT/sub/dir"
 run "$WT/sub/dir" chzdi
 eq "$calls" "--source $WT diff" "uses the worktree root, not the subdirectory"
+
+echo "when source-path is a .chezmoiroot folder inside the repo"
+mkdir -p "$SRC/configs"
+run_root() { local s=$SRC; SRC="$SRC/configs"; run "$@"; SRC=$s }
+run_root "$WT" chzdi
+eq "$calls" "--source $WT diff" "still finds the worktree"
+run_root "$SRC" chzdi
+eq "$calls" "diff" "the main checkout is still not a worktree"
+run_root "$WT" chzap
+eq "$code" 1 "chzap still refuses in the worktree"
+
+PREVIEW="$WORK/runtime/chztry/wt"
+echo "chztry"
+run_out "$WT" chztry sh -c 'echo "cfg=$XDG_CONFIG_HOME zdot=$ZDOTDIR star=$STARSHIP_CONFIG path1=${PATH%%:*} tmux=$TMUX"'
+eq "$code" 0 "exits with the program's status"
+eq "$calls" "--source $WT --destination $PREVIEW --persistent-state $PREVIEW.boltdb apply --force --exclude scripts,externals" \
+  "renders the worktree, without scripts or externals, into a preview home"
+eq "$out" "cfg=$PREVIEW/.config zdot=$PREVIEW/.config/zsh star=$PREVIEW/.config/starship.toml path1=$PREVIEW/.local/bin tmux=/tmp/outer,1,0" \
+  "runs the program with its configs and scripts from the preview, TMUX kept"
+mkdir -p "$PREVIEW/stale"
+run_out "$WT/sub/dir" chztry true
+[[ ! -e $PREVIEW/stale ]] && ok "re-renders from scratch" || bad "re-renders from scratch (a stale file survived)"
+mkdir -p "$PREVIEW/stale"
+: > "$LOG"
+out=$(cd "$WT" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" XDG_RUNTIME_DIR="$WORK/runtime" \
+  PLUGIN="$PLUGIN" zsh -fc 'alias rm="echo use trash; false"; source "$PLUGIN"; chztry true' 2>&1)
+[[ ! -e $PREVIEW/stale && $out != *"use trash"* ]] && ok "re-renders from scratch despite an rm alias" \
+  || bad "re-renders from scratch despite an rm alias (got [$out])"
+run_out "$WT" chztry tmux new -s x
+eq "$out" "tmux -L chztry-wt new -s x TMUX=unset" "tmux gets its own server, outside the current one"
+run_out "$WT" chztry sh -c 'exit 7'
+eq "$code" 7 "passes the program's failure on"
+run_out "$OTHER" chztry true
+eq "$code" 1 "outside a worktree: exits 1"
+eq "$calls" "" "outside a worktree: renders nothing"
+contains "$out" "not in a feature worktree" "outside a worktree: says why"
+run_out "$WT" chztry
+eq "$code" 2 "no program: exits 2"
+contains "$out" "usage: chztry" "no program: prints usage"
 
 echo
 echo "$pass passed, $fail failed"

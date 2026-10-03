@@ -1,4 +1,6 @@
-export ZDOTDIR=~/.config/zsh
+# The folder this file is in: ~/.config/zsh, or a preview's copy of it
+# (chztry), which must not switch back to ~/.config/zsh for .zshrc.
+export ZDOTDIR=${${(%):-%x}:h}
 
 # mise skips the dotfiles' source copies of its config (templates for
 # ~/.config/mise, not project configs); as a setting in that config it comes
