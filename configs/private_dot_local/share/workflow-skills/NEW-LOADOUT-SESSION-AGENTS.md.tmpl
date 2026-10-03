@@ -1,0 +1,91 @@
+{{- $m := includeTemplate "machine" . | fromJson -}}
+# Loadout session
+
+This folder is a scratch session opened by `start-loadout`. You run in the
+`agent` window of a tmux session named after it, and you do the work
+yourself, in the repos below. This session's settings already let you read
+them and edit their worktrees, so nothing needs adding: you open what a
+request needs, when it needs it. Work this way from the first message on;
+nobody will ask for it by name.
+
+## Where a request goes
+
+| The request is about… | Repo | Where you edit |
+|---|---|---|
+| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `[data]` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts` |
+| the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree, window `loadout` |
+| loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree, window `wiki` |
+| a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree, window `skills` |
+{{- if $m.work }}
+| the sofi.nvim Neovim plugin | `~/Repos/gh/josemiguelo/sofi.nvim` | a feature worktree, window `sofi` |
+{{- end }}
+
+Unsure which repo, or a request that spans two (an engine feature and its
+wiki page, a feature and the `min-tool-version` bump in `.dotfiles`): say
+which repos you'd touch and ask first. Each repo's part is its own
+worktree and its own commit.
+
+**A message starting with a repo and a colon goes there, no guessing:**
+`dotfiles:`, `loadout:`, `wiki:`, `skills:`{{ if $m.work }}, `sofi:`{{ end }}. The
+rest of the message is the task. `loadout:` is always the app; a new or
+changed loadout is `dotfiles:`.
+
+## Starting work in a repo
+
+1. **Read that repo's `AGENTS.md` before your first edit there**, and follow
+   it for the rest of the session: it decides how features are made, tested
+   and committed (in `.dotfiles`: commit only when asked, `--source` inside a
+   worktree, never apply a whole worktree).
+2. **A feature worktree**, by the repo's own workmux config, without
+   workmux's windows or agent (you are the agent):
+   ```bash
+   cd ~/.local/share/chezmoi && workmux add <feature> --headless
+   ```
+   It lands at `~/.local/share/chezmoi__worktrees/<feature>`. The others are
+   bare repos: run it from their default worktree, and it lands beside it in
+   `all_worktrees/<feature>`.
+   For `loadout`, `~/Repos/gh/josemiguelo/loadout/all_worktrees/master`.
+   For `wiki`, `~/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/master`.
+   For `skills`, `~/Repos/gh/josemiguelo/skills/all_worktrees/main`
+{{ if $m.work }}
+   For `sofi`, `~/Repos/gh/josemiguelo/sofi.nvim/all_worktrees/master`
+{{ end }}.
+3. **A window for the user**, a shell in that folder, in this session:
+   ```bash
+   tmux list-windows -F '#W'                                   # taken already?
+   tmux new-window -d -n loadouts -c ~/.local/share/chezmoi__worktrees/<feature>
+   ```
+   A second feature in the same repo gets `loadouts-2`, and so on.
+4. **Work there**: read and edit its files by their full paths, run its
+   commands with `cd <worktree> && …`. Say which worktree and window you
+   used. Merging and removing a worktree follow the repo's `AGENTS.md`.
+
+## The repos
+
+- **`~/.local/share/chezmoi`** (josemiguelo/.dotfiles) — the one config
+  repo. `configs/` is chezmoi's source (`.chezmoiroot`); the rest is what
+  `loadout` reads (`LOADOUT_REPO` points here): `loadout.toml`, `programs/`,
+  `maintenance/`, `profiles/`, `machines/`, `state/`. A tool's loadout
+  fragment sits beside its dotfiles as `.loadout.toml` + `.loadout/`. The
+  main checkout stays on `master` and is what this machine applies; features
+  live in `../chezmoi__worktrees/`. This file's source is
+  `configs/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,
+  rendered per machine.
+- **`~/Repos/gh/josemiguelo/loadout`** (bare + worktree,
+  `all_worktrees/<branch>`) — the `loadout` CLI (Kotlin/Native). A feature
+  here often needs a `min-tool-version` bump in `.dotfiles` and a wiki
+  update: separate repos, separate commits.
+- **`~/Repos/gh/josemiguelo/loadout.wiki`** (bare + worktree,
+  `all_worktrees/<branch>`) — the user-facing wiki; its examples link into
+  `.dotfiles` master.
+- **`~/Repos/gh/josemiguelo/skills`** (bare + worktree) — general-purpose
+  agent skills, linked into `~/.claude/skills/<name>` on every machine by
+  `.dotfiles`' `skills-repo` script.
+{{- if $m.work }}
+- **`~/Repos/gh/josemiguelo/sofi.nvim`** (bare + worktree,
+  `all_worktrees/<branch>`) — a Neovim plugin (private), cloned on the work
+  machine only.
+{{- end }}
+- **A private, local-only repo** exists on at least one machine, outside
+  this convention; it depends on `.dotfiles` and the skills repo. Leave it
+  alone unless the user names it.

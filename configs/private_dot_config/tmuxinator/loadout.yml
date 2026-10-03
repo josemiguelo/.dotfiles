@@ -7,4 +7,4 @@ windows:
   - dotfiles:
       root: ~/.local/share/chezmoi
   - wiki:
-      root: ~/Repos/gh/josemiguelo/loadout.wiki
+      root: ~/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/master

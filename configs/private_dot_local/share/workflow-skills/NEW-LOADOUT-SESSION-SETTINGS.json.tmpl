@@ -1,0 +1,26 @@
+{{- $m := includeTemplate "machine" . | fromJson -}}
+{{- $h := .chezmoi.homeDir -}}
+{
+  "permissions": {
+    "allow": [
+      "Read(/{{ $h }}/.local/share/chezmoi/**)",
+      "Read(/{{ $h }}/.local/share/chezmoi__worktrees/**)",
+      "Edit(/{{ $h }}/.local/share/chezmoi__worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/loadout/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout/all_worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/skills/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/skills/all_worktrees/**)",
+{{- if $m.work }}
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/sofi.nvim/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/sofi.nvim/all_worktrees/**)",
+{{- end }}
+      "Bash(cd:*)",
+      "Bash(workmux add:*)",
+      "Bash(tmux list-windows:*)",
+      "Bash(tmux select-window:*)",
+      "Bash(tmux new-window:*)"
+    ]
+  }
+}
