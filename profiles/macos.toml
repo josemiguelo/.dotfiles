@@ -21,6 +21,9 @@ install = "brew-cask"
 [yazi]
 install = "brew"
 
+[fzf]
+install = "brew"
+
 [tmux]
 scripts = ["tmux-plugins"]
 
