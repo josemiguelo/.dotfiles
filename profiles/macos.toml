@@ -28,6 +28,9 @@ install = "brew-cask"
 [raycast]
 install = "brew-cask"
 
+[fonts]
+scripts = ["download-fonts"]
+
 [yazi]
 install = "brew"
 
