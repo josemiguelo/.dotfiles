@@ -1,6 +1,6 @@
-# T2 Macs (MacBookPro16,1): fan daemon and curve, the EC clock, and the
-# internal keyboard. Paths are relative to this file. (The gmux backlight
-# fix sources Omarchy's shared libraries and lives with the Omarchy scripts.)
+# T2 Macs (MacBookPro16,1): fan daemon and curve, the EC clock, the internal
+# keyboard and the screen backlight. Paths are relative to this file; the
+# backlight fix sources Omarchy's shared libraries (../omarchy/lib/).
 
 # The T2 fan daemon (arch-mact2 repo; Omarchy's T2 install step installs and
 # enables it). Tracked so the fan curve's daemon is part of the loadout, not
@@ -41,3 +41,13 @@ check = "file:hid-apple-keyboard-arch.sh check"
 description = "internal keyboard fn/ctrl swap and fnmode"
 file = "hid-apple-keyboard.sh"
 check = "file:hid-apple-keyboard.sh check"
+
+# T2 MacBook Pros: the gmux backlight wakes from sleep at its own bright
+# default while the kernel still holds the old level; a sleep hook sends the
+# level back on resume. A udev rule puts it under systemd-backlight, which
+# skipped it, so the level also survives reboots.
+[scripts.t2-gmux-backlight]
+description = "screen brightness kept across suspend and reboots (T2 Mac)"
+file = "gmux-backlight.sh"
+check = "file:gmux-backlight.sh check"
+after = ["scripts.omarchy-command-overrides"]

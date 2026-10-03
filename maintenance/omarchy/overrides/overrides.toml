@@ -1,0 +1,20 @@
+# Omarchy command overrides: a directory first on the PATH of everything
+# Hyprland starts, where fixes put local replacements of Omarchy commands.
+# Paths are relative to this file; the scripts source ../lib/.
+
+# ~/.local/share/omarchy-overrides/bin first on the PATH of everything
+# Hyprland starts (a block in ~/.config/hypr/hyprland.lua).
+[scripts.omarchy-command-overrides]
+description = "local replacements of Omarchy commands come first"
+file = "omarchy-command-overrides.sh"
+check = "file:omarchy-command-overrides.sh check"
+
+# Omarchy's `omarchy-brightness-keyboard off` saves 0 over the real level when
+# blanking repeats, so the keyboard backlight wakes dark. A wrapper in the
+# overrides directory skips `off` on an already-dark light, and goes away once
+# Omarchy's command is fixed.
+[scripts.omarchy-keyboard-backlight-guard]
+description = "keyboard backlight comes back after sleep"
+file = "omarchy-keyboard-backlight-guard.sh"
+check = "file:omarchy-keyboard-backlight-guard.sh check"
+after = ["scripts.omarchy-command-overrides"]
