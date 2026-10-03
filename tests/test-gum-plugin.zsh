@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/gum/gum.plugin.zsh in isolation: a
+# Tests configs/private_dot_config/zsh/plugins/gum/gum.plugin.zsh in isolation: a
 # fake `gum` on PATH logs its arguments, prints a line and exits with
 # $FAKE_GUM_RC. Covers that the function passes arguments, output and exit
 # status through. The answers it drops only come from a real terminal
@@ -8,7 +8,7 @@
 # Run: tests/test-gum-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
-PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/gum/gum.plugin.zsh"
+PLUGIN="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/gum/gum.plugin.zsh"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/gum-plugin-test.XXXXXX")"
 WORK="${WORK:A}"
 

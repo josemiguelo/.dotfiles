@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh in
+# Tests configs/private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh in
 # isolation: a fake `chezmoi` on PATH logs its arguments (and answers
 # `source-path` with the fixture source), and the fixture holds a tiny git
 # repo as the source, a linked worktree of it and an unrelated repo, all
@@ -7,7 +7,7 @@
 # Run: tests/test-chezmoi-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
-PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh"
+PLUGIN="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/chezmoi-plugin-test.XXXXXX")"
 WORK="${WORK:A}"
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/android/android.plugin.zsh in
+# Tests configs/private_dot_config/zsh/plugins/android/android.plugin.zsh in
 # isolation: each case sources it in a fresh `zsh -c` subshell with $HOME
 # pointed at a throwaway fixture directory, so it never touches your real
 # Android SDK install or PATH. Run: tests/test-android-plugin.zsh
@@ -8,7 +8,7 @@
 # bash — it can't even be parsed by bash.
 
 SCRIPT_DIR="${0:A:h}/.."
-SCRIPT="$SCRIPT_DIR/private_dot_config/zsh/plugins/android/android.plugin.zsh"
+SCRIPT="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/android/android.plugin.zsh"
 WORK="$(mktemp -d)"
 
 cleanup() { rm -rf -- "${WORK:?}" }

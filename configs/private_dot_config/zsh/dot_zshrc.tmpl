@@ -55,7 +55,7 @@ unset _cd _compdef_queue
 # homebrew's precedence here. typeset -U above keeps the first occurrence, so
 # this is a plain array move rather than another brew shellenv.
 path=( /opt/homebrew/{bin,sbin}(N-/) $path )
-{{- if eq .chezmoi.hostname "t2-macbook-omarchy" }}
+{{- if (includeTemplate "machine" . | fromJson).omarchy }}
 path=( /home/linuxbrew/.linuxbrew/{bin,sbin}(N-/) $path )
 {{- end }}
 

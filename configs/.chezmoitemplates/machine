@@ -1,0 +1,23 @@
+{{- /*
+  This machine's [data], as JSON: ../loadout.toml declares every key with
+  its default, then each base in ../machines/<hostname>.toml's extends chain
+  and finally the machine file itself go on top (merge-data, the way loadout
+  merges). A host without a machine file gets the defaults. Templates read
+  it with: includeTemplate "machine" . | fromJson
+*/ -}}
+{{- $data := get (include "../loadout.toml" | fromToml) "data" | default dict -}}
+{{- if stat (joinPath .chezmoi.sourceDir (printf "../machines/%s.toml" .chezmoi.hostname)) -}}
+{{-   $chain := list -}}
+{{-   $name := .chezmoi.hostname -}}
+{{-   range until 8 -}}
+{{-     if $name -}}
+{{-       $file := include (printf "../machines/%s.toml" $name) | fromToml -}}
+{{-       $chain = prepend $chain $file -}}
+{{-       $name = get $file "extends" | default "" -}}
+{{-     end -}}
+{{-   end -}}
+{{-   range $chain -}}
+{{-     $data = includeTemplate "merge-data" (dict "under" $data "over" (get . "data" | default dict)) | fromJson -}}
+{{-   end -}}
+{{- end -}}
+{{- $data | toJson -}}

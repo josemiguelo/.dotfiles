@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/repos/repos.plugin.zsh (gclone) in
+# Tests configs/private_dot_config/zsh/plugins/repos/repos.plugin.zsh (gclone) in
 # isolation: $HOME is a fixture inside a fresh mktemp directory (so ~/Repos is
 # too), and git's url.<base>.insteadOf (in a throwaway global config) redirects
 # the GitHub URLs to local repos, so clones are real but never touch the
@@ -12,7 +12,7 @@
 # a path built only from $HOME. Run: tests/test-repos-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
-PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/repos/repos.plugin.zsh"
+PLUGIN="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/repos/repos.plugin.zsh"
 REAL_HOME=$HOME
 
 WORK="$(mktemp -d)" || exit 1
