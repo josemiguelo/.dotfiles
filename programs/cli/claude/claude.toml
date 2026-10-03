@@ -10,6 +10,11 @@ regex = "([0-9]+\\.[0-9][0-9.]*)"
 [programs.claude.install.script]
 command = "curl -fsSL https://claude.ai/install.sh | bash"
 
+[scripts.skills-repo]
+description = "clone the skills repo (bare + worktree) and symlink its skills into ~/.claude/skills"
+file = "skills-repo.sh"
+check = "file:skills-repo.sh check"
+
 # Is the claude binary itself behind the latest published Claude Code release?
 [outdated.claude]
 command = "file:outdated-claude.sh"

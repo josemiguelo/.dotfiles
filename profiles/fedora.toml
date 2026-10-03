@@ -53,6 +53,9 @@ scripts = [
 [git]
 scripts = ["setup-git"]
 
+[claude]
+scripts = ["skills-repo"]
+
 [zsh]
 install = "dnf"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]
