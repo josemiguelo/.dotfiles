@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
+{{ if (includeTemplate "machine" . | fromJson).zscaler }}
 # only point the tooling at the corporate root CA when it is actually readable;
 # otherwise curl, aws and node fail with opaque TLS errors instead of falling
 # back to the system trust store

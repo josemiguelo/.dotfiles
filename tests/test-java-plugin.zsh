@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/java/java.plugin.zsh in isolation: each
+# Tests configs/private_dot_config/zsh/plugins/java/java.plugin.zsh in isolation: each
 # case sources it in a fresh `zsh -c` subshell with $HOME (and PATH, to
 # control whether `java` and `mise` are "installed") pointed at a throwaway
 # fixture, so it never touches your real mise installs or cache. Run:
@@ -9,7 +9,7 @@
 # under zsh, not bash.
 
 SCRIPT_DIR="${0:A:h}/.."
-SCRIPT="$SCRIPT_DIR/private_dot_config/zsh/plugins/java/java.plugin.zsh"
+SCRIPT="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/java/java.plugin.zsh"
 WORK="$(mktemp -d)"
 
 cleanup() { rm -rf -- "${WORK:?}" }

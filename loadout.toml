@@ -1,0 +1,21 @@
+# jm's machines: programs, maintenance scripts, machines and dotfiles in
+# one repo. loadout reads this file; chezmoi reads configs/ (.chezmoiroot),
+# and its templates read [data] through configs/.chezmoitemplates/machine.
+
+[meta]
+name = "jm's machines"
+
+[layout]
+fragments = ["programs/**/*.toml", "maintenance/**/*.toml", "configs/**/.loadout.toml"]
+machines = "machines"
+state = "state"
+configs = "configs"
+
+# Every per-machine setting, with its default; machines/<hostname>.toml
+# overrides them, and dotfile templates branch on them instead of on
+# hostnames.
+[data]
+# An Omarchy machine (Linuxbrew reaches the shell from the zsh config).
+omarchy = false
+# Behind Zscaler's TLS inspection: tools trust its root CA when readable.
+zscaler = false

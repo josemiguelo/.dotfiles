@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh in
+# Tests configs/private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh in
 # isolation: fakes `workmux` (on PATH) and tmux-workmux-open (found via
 # $HOME, which is pointed at a fixture) so this never touches your real
 # worktrees or tmux state. Covers both the open and add wrapping. Uses the
@@ -7,7 +7,7 @@
 # exercise for real. Run: tests/test-workmux-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
-PLUGIN="$SCRIPT_DIR/private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh"
+PLUGIN="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/workmux/workmux.plugin.zsh"
 WORK="$(mktemp -d)"
 
 cleanup() { rm -rf -- "${WORK:?}" }
