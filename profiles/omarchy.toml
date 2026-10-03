@@ -20,6 +20,9 @@ scripts = ["default-shell", "zsh-plugins", "setup-completions"]
 install = "omarchy"
 scripts = ["mise-tools", "mise-default-packages", "omarchy-default-agent claude"]
 
+[nvim]
+scripts = ["nvim-plugins"]
+
 [kitty]
 scripts = ["omarchy-default-terminal"]
 

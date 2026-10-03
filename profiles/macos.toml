@@ -12,6 +12,9 @@ scripts = ["zsh-plugins", "setup-completions"]
 install = "brew"
 scripts = ["mise-tools", "mise-default-packages", "java-macos-integration"]
 
+[nvim]
+scripts = ["nvim-plugins"]
+
 [kitty]
 install = "brew-cask"
 
