@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-03T06:59:46.408475492Z",
+  "updatedAt": "2026-10-03T07:01:23.657856491Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -329,11 +329,6 @@
       "lastRun": "2026-09-25T15:11:22.233389182Z",
       "exitCode": 0
     },
-    "dotfiles-apply": {
-      "status": "done",
-      "lastRun": "2026-09-25T15:11:24.775257457Z",
-      "exitCode": 0
-    },
     "dotfiles-push": {
       "status": "pending",
       "lastRun": "2026-10-02T15:43:01.888794006Z",
@@ -528,11 +523,6 @@
       "status": "done",
       "lastRun": null,
       "exitCode": null
-    },
-    "dotfiles-bootstrap": {
-      "status": "done",
-      "lastRun": "2026-09-24T21:34:49.667693031Z",
-      "exitCode": 0
     },
     "setup-ssh": {
       "status": "done",
