@@ -4,7 +4,7 @@ root: ~/Repos/gh/josemiguelo/loadout
 windows:
   - agent: claude --continue
   - loadout:
-  - loadouts:
-      root: ~/.config/loadouts
+  - dotfiles:
+      root: ~/.local/share/chezmoi
   - wiki:
       root: ~/Repos/gh/josemiguelo/loadout.wiki

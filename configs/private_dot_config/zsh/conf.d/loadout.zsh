@@ -1,1 +1,1 @@
-export LOADOUT_REPO=~/.config/loadouts
+export LOADOUT_REPO=~/.local/share/chezmoi
