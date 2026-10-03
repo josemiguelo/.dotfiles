@@ -19,7 +19,7 @@ README.md
 
 # The agents Omarchy installs through mise: Omarchy machines only. The whole
 # directory, or chezmoi still creates it (empty) around the ignored file.
-{{ if ne .chezmoi.hostname "t2-macbook-omarchy" }}
+{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
 .config/mise/conf.d
 .config/mise/conf.d/**
 {{ end }}
