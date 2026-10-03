@@ -16,6 +16,9 @@ brew-taps = "script"
 install = "omarchy"
 scripts = ["dotfiles-pull", "dotfiles-apply", "dotfiles-push", "dotfiles-ssh-remote"]
 
+[git]
+scripts = ["setup-git"]
+
 [zsh]
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]

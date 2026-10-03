@@ -3,3 +3,8 @@ extends = ["omarchy"]
 
 [chezmoi]
 scripts = ["dotfiles-bootstrap"]
+
+# The key `gh auth login` generated and uploaded (GitHub: "t2-macbook-omarchy");
+# key-only SSH for the keys on GitHub (mirrored: deleting one there revokes it).
+[ssh]
+scripts = ["setup-ssh id_ed25519", "omarchy-sshd josemiguelo"]
