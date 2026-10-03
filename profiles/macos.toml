@@ -1,5 +1,9 @@
 # Every macOS machine. macOS ships zsh as the login shell, so zsh is
 # neither installed nor switched to here.
 
+[brew.install]
+setup-brew = "macos"
+brew-taps = "script"
+
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]

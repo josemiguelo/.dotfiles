@@ -1,0 +1,56 @@
+# Homebrew: its install mechanisms, brew itself, and the third-party taps.
+# Paths are relative to this file; brew.sh, setup-brew.sh and brew-taps.sh
+# sit beside it.
+
+# The brew mechanisms, replacing loadout's built-ins of the same name so brew
+# is reached by absolute path (brew.sh) instead of a PATH probe: on a fresh
+# machine programs converge before a shell that has run `brew shellenv`.
+# Everything else (upgrade, oracle, regex) matches the built-in; compare
+# with `loadout installers brew`.
+[installers.brew]
+install = "file:brew.sh install {pkg}"
+upgrade = "file:brew.sh upgrade"
+check = "file:brew.sh list --versions {pkg}"
+outdated-all = "HOMEBREW_NO_AUTO_UPDATE=1 sh brew.sh outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'"
+regex = "([0-9]+\\.[0-9][0-9.]*)"
+
+[installers.brew-cask]
+install = "file:brew.sh install --cask {pkg}"
+upgrade = "file:brew.sh upgrade --cask"
+check = "file:brew.sh list --cask --versions {pkg}"
+outdated-all = "HOMEBREW_NO_AUTO_UPDATE=1 sh brew.sh outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'"
+regex = "([0-9]+\\.[0-9][0-9.]*)"
+
+# Homebrew must exist and be writable by the login user before anything
+# installs with brew. Homebrew is single-owner: a prefix installed by another
+# account fails every `brew install` with a permissions error, so this
+# reclaims it. PATH is deliberately not touched here: brew reaches
+# interactive shells via the zsh brew plugin, never via /etc/profile.d.
+[programs.setup-brew]
+description = "Homebrew installed and owned by the login user"
+
+# Linux: /home/linuxbrew, reclaimed for the login user, and Homebrew's own
+# build prerequisites first (programs/core.toml).
+[programs.setup-brew.install.script]
+depends-on = ["curl", "git", "gcc", "procps-ng"]
+command = "file:setup-brew.sh install"
+check = "file:setup-brew.sh check && echo ready"
+regex = "(ready)"
+
+# macOS: Homebrew's official installer into /opt/homebrew (Apple silicon).
+# It asks for sudo itself, and Xcode's command line tools come with it.
+[programs.setup-brew.install.macos]
+command = "NONINTERACTIVE=1 /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+check = "/opt/homebrew/bin/brew --version"
+regex = "Homebrew ([0-9][0-9.]*)"
+
+# Third-party taps, tapped and trusted for this user, before anything that
+# installs from one; the programs that need a tap depend on this explicitly.
+[programs.brew-taps]
+description = "third-party Homebrew taps, tapped and trusted for this user"
+depends-on = ["setup-brew"]
+
+[programs.brew-taps.install.script]
+command = "file:brew-taps.sh install"
+check = "file:brew-taps.sh check && echo trusted"
+regex = "(trusted)"

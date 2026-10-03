@@ -1,0 +1,14 @@
+# Base system tools other programs build on (Homebrew's Linux install needs
+# all four). Config-less; a tool that gains a config moves beside it.
+
+[programs.curl]
+via = ["dnf", "omarchy"]
+
+[programs.git]
+via = ["dnf", "omarchy"]
+
+[programs.gcc]
+via = ["dnf", "omarchy"]
+
+[programs.procps-ng]
+via = ["dnf", "omarchy"]
