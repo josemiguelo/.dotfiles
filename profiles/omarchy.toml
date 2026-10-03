@@ -12,6 +12,10 @@ procps-ng = "omarchy"
 setup-brew = "script"
 brew-taps = "script"
 
+[chezmoi]
+install = "omarchy"
+scripts = ["dotfiles-pull", "dotfiles-apply", "dotfiles-push", "dotfiles-ssh-remote"]
+
 [zsh]
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]
