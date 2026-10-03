@@ -8,3 +8,15 @@ scripts = ["dotfiles-bootstrap"]
 # key-only SSH for the keys on GitHub (mirrored: deleting one there revokes it).
 [ssh]
 scripts = ["setup-ssh id_ed25519", "omarchy-sshd josemiguelo"]
+
+# MacBookPro16,1 (T2) hardware.
+[t2]
+scripts = ["t2-hid-apple-keyboard-arch", "t2-fan-curve", "t2-boot-clock"]
+
+[t2.install]
+t2fanrd = "omarchy"
+
+# Logitech receiver/mouse manager, without its session autostart.
+[solaar]
+install = "omarchy"
+scripts = ["solaar-no-autostart"]
