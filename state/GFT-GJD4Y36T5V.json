@@ -4,8 +4,8 @@
   "os": "macos",
   "distro": null,
   "arch": "arm64",
-  "toolVersion": "1.0.0",
-  "updatedAt": "2026-10-03T06:58:37.971301Z",
+  "toolVersion": "1.1.0",
+  "updatedAt": "2026-10-03T21:52:03.725882Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -249,11 +249,6 @@
     }
   },
   "scripts": {
-    "dotfiles-bootstrap": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
-    },
     "dotfiles-pull": {
       "status": "done",
       "lastRun": null,
@@ -263,11 +258,6 @@
       "status": "pending",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
-    },
-    "dotfiles-apply": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
     },
     "dotfiles-ssh-remote": {
       "status": "done",
@@ -323,6 +313,93 @@
       "status": "done",
       "lastRun": null,
       "exitCode": null
+    }
+  },
+  "configs": {
+    ".default-gems": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".default-npm-packages": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".ideavimrc": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".local": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".zshenv": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "chezmoi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "fzf": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "kitty": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "mise": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "nvim": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "raycast": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "starship.toml": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "tmux": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "tmuxinator": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "workmux": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "yazi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "zsh": {
+      "status": "applied",
+      "files": [],
+      "reason": null
     }
   }
 }
