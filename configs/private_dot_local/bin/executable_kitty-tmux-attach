@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Runs tmux-attach in a kitty overlay (see kitty.conf's ctrl+cmd+a). Like
+# kitty-workmux-dashboard, it gets PATH from Homebrew: kitty's launch
+# environment doesn't have it. The overlay isn't a tmux client, so without
+# TMUX set, tmux-goto would attach a second client inside the overlay. Setting
+# TMUX to the running server makes it switch the most recently used client
+# instead. TMUX also makes fzf-tmux open a popup on that client, so
+# TMUX_ATTACH_INLINE asks tmux-attach for a plain fzf that draws here. The
+# listing starts from that client's pane directory, as the tmux binding does,
+# and falls back to the overlay's own directory with no server.
+export PATH="/opt/homebrew/bin:$PATH"
+
+socket=$(tmux display-message -p '#{socket_path}' 2>/dev/null)
+if [[ -n "$socket" ]]; then
+  export TMUX="$socket,$$,0" TMUX_ATTACH_INLINE=1
+  path=$(tmux display-message -p '#{pane_current_path}' 2>/dev/null)
+fi
+
+exec "$HOME/.local/bin/tmux-attach" "${path:-$PWD}"

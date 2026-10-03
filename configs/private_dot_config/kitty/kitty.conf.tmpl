@@ -91,15 +91,15 @@ tab_title_template " {index}: {title} "
 # --- Keybindings ---
 map ctrl+alt+e set_tab_title
 
-# Open the tmux-attach picker. Sends C-M-a (ESC + C-a), bound in tmux's root
-# table and in zsh via bindkey, so it works in or out of tmux. Mapped here
-# because on macOS Option only reaches programs as Alt with macos_option_as_alt.
-# The modifier differs per OS so the physical key matches: Linux's Alt sits
-# where macOS puts Command.
+# Open the tmux-attach picker as an overlay over the current window, in or out
+# of tmux. The script sets PATH and TMUX (see its header). The modifier differs
+# per OS so the physical key matches: Linux's Alt sits where macOS puts Command.
+# Keys sent over ssh don't reach this overlay; the tmux and zsh bindings that
+# used to cover that were removed.
 {{ if (eq .chezmoi.os "darwin") -}}
-map ctrl+cmd+a send_text all \x1b\x01
+map ctrl+cmd+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attach
 {{ else if (eq .chezmoi.os "linux") -}}
-map ctrl+alt+a send_text all \x1b\x01
+map ctrl+alt+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attach
 {{ end -}}
 
 # Open the workmux dashboard as an overlay over the current window. It runs
@@ -107,9 +107,9 @@ map ctrl+alt+a send_text all \x1b\x01
 # agent switches tmux's client to that session. The script sets PATH and the
 # tmux backend (see its header). Same modifier split as above.
 {{ if (eq .chezmoi.os "darwin") -}}
-map ctrl+cmd+shift+d launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
+map ctrl+cmd+shift+a launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
 {{ else if (eq .chezmoi.os "linux") -}}
-map ctrl+alt+shift+d launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
+map ctrl+alt+shift+a launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
 {{ end -}}
 
 # kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
