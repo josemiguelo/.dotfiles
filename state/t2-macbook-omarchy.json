@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "1.0.0",
-  "updatedAt": "2026-10-03T05:55:21.635579451Z",
+  "toolVersion": "1.1.0",
+  "updatedAt": "2026-10-03T06:59:46.408475492Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -593,6 +593,93 @@
       "status": "done",
       "lastRun": null,
       "exitCode": null
+    }
+  },
+  "configs": {
+    ".default-gems": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".default-npm-packages": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".ideavimrc": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".local": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".zshenv": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "chezmoi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "fzf": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "kitty": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "mise": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "nvim": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "raycast": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "starship.toml": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "tmux": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "tmuxinator": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "workmux": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "yazi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "zsh": {
+      "status": "applied",
+      "files": [],
+      "reason": null
     }
   }
 }
