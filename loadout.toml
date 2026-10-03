@@ -8,6 +8,7 @@ name = "jm's machines"
 [layout]
 fragments = ["programs/**/*.toml", "maintenance/**/*.toml", "configs/**/.loadout.toml"]
 machines = "machines"
+profiles = "profiles"
 state = "state"
 configs = "configs"
 

@@ -1,0 +1,20 @@
+{{- /*
+  JSON of one machine or profile file's [data] with its profiles beneath:
+  each of its extends (../profiles/<name>.toml, recursively) first, then
+  the file's own [data] and its groups' [<group>.data] (as data.<group>).
+  Called with (dict "file" "<path relative to configs/>"). loadout refuses
+  profiles of one extends list that disagree, so their order never matters.
+*/ -}}
+{{- $file := include .file | fromToml -}}
+{{- $data := dict -}}
+{{- range (get $file "extends" | default list) -}}
+{{-   $profile := includeTemplate "machine-layer" (dict "file" (printf "../profiles/%s.toml" .)) | fromJson -}}
+{{-   $data = includeTemplate "merge-data" (dict "under" $data "over" $profile) | fromJson -}}
+{{- end -}}
+{{- $own := get $file "data" | default dict -}}
+{{- range $key, $value := $file -}}
+{{-   if and (ne $key "data") (kindIs "map" $value) (hasKey $value "data") -}}
+{{-     $own = includeTemplate "merge-data" (dict "under" $own "over" (dict $key (get $value "data"))) | fromJson -}}
+{{-   end -}}
+{{- end -}}
+{{- includeTemplate "merge-data" (dict "under" $data "over" $own) -}}

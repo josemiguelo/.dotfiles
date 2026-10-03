@@ -4,7 +4,7 @@
 
 # macOS ships zsh, so only Linux machines map it.
 [programs.zsh]
-via = ["dnf", "omarchy-pkg"]
+via = ["dnf", "omarchy"]
 
 # antidote and the bundles .zplugins declares, present as clones. Whether a
 # clone is behind its remote is the antidote / antidote-plugins oracles'

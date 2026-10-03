@@ -1,5 +1,5 @@
 # The work MacBook.
-extends = "macos"
+extends = ["macos"]
 
 [data]
 zscaler = true
