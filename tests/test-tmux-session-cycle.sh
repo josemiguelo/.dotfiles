@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Tests private_dot_local/bin/executable_tmux-session-cycle in isolation,
+# Tests configs/private_dot_local/bin/executable_tmux-session-cycle in isolation,
 # against a throwaway tmux socket — never touches your real tmux server.
 # Run: tests/test-tmux-session-cycle.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/private_dot_local/bin/executable_tmux-session-cycle"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_tmux-session-cycle"
 SOCK="tmux-cycle-test-$$"
 
 cleanup() { command tmux -L "$SOCK" kill-server >/dev/null 2>&1; }

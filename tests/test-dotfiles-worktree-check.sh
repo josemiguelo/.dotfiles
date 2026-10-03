@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests private_dot_local/bin/executable_dotfiles-worktree-check against a
+# Tests configs/private_dot_local/bin/executable_dotfiles-worktree-check against a
 # throwaway fixture: a fake $HOME, a tiny git repo as the main chezmoi source
 # and a linked worktree of it, all inside one mktemp dir. HOME and the XDG
 # dirs point there, so the real chezmoi binary only ever sees fixture
@@ -7,7 +7,7 @@
 # Run: tests/test-dotfiles-worktree-check.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/private_dot_local/bin/executable_dotfiles-worktree-check"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_dotfiles-worktree-check"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-worktree-check-test.XXXXXX")"
 
 # Deletes only the dir this run created.
