@@ -42,6 +42,12 @@ install = "omarchy"
 [workmux]
 install = "brew"
 
+[jetbrains]
+scripts = ["link-jetbrains-launchers-linux"]
+
+[jetbrains.install]
+jetbrains-toolbox = "script"
+
 [tmux]
 scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 
