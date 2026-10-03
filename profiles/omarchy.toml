@@ -30,6 +30,9 @@ scripts = ["omarchy-default-terminal"]
 kitty = "omarchy"
 ttf-firacode-nerd = "omarchy"
 
+[yazi]
+install = "omarchy"
+
 [tmux]
 scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 

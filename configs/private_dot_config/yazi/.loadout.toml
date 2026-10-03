@@ -1,0 +1,4 @@
+# yazi: the terminal file manager. Its dotfiles are this directory.
+
+[programs.yazi]
+via = ["brew", "omarchy"]
