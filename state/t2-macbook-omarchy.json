@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "1.0.0",
-  "updatedAt": "2026-10-03T05:54:19.621482750Z",
+  "updatedAt": "2026-10-03T05:55:21.635579451Z",
   "programs": {
     "1password": {
       "status": "installed",
