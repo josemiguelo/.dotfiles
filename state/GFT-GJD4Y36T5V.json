@@ -5,7 +5,7 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-03T21:52:03.725882Z",
+  "updatedAt": "2026-10-03T22:28:03.619149Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -74,7 +74,7 @@
     },
     "claude": {
       "status": "installed",
-      "version": "2.1.288",
+      "version": "2.1.289",
       "reason": null
     },
     "codex": {
@@ -255,7 +255,7 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
     },
