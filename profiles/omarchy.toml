@@ -1,5 +1,16 @@
 # Every Omarchy machine. System packages install through Omarchy's own
-# commands (the built-in omarchy installer).
+# commands (the built-in omarchy installer); brew only carries tools with no
+# trustworthy Arch package.
+
+[core.install]
+curl = "omarchy"
+git = "omarchy"
+gcc = "omarchy"
+procps-ng = "omarchy"
+
+[brew.install]
+setup-brew = "script"
+brew-taps = "script"
 
 [zsh]
 install = "omarchy"
