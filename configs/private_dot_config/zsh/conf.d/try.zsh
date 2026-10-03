@@ -22,19 +22,19 @@ if (( $+commands[try] )); then
 fi
 
 # start-loadout [query]: a try session that knows it may touch the
-# interconnected loadout/loadouts/chezmoi/skills ecosystem. ~/Work holds
+# interconnected loadout/dotfiles/skills ecosystem. ~/Work holds
 # anything, not just this, so plain `try` stays untouched -- this copies
 # (not links: a try folder is ephemeral/self-contained, not meant to
-# track loadouts live) the "repo-ecosystem" skill from loadouts into
-# THIS session's local .claude/skills/, only when called through this
-# specific function.
+# track the dotfiles repo live) the "repo-ecosystem" skill from the
+# dotfiles repo ($LOADOUT_REPO) into THIS session's local .claude/skills/,
+# only when called through this specific function.
 start-loadout() {
   emulate -L zsh
   try "$@"
-  local source="$HOME/.config/loadouts/repo-ecosystem"
+  local source="$LOADOUT_REPO/repo-ecosystem"
   local dest=".claude/skills/repo-ecosystem"
-  if [[ ! -d $source ]]; then
-    print -u2 "start-loadout: $source not found -- is loadouts cloned?"
+  if [[ -z $LOADOUT_REPO || ! -d $source ]]; then
+    print -u2 "start-loadout: $source not found -- is LOADOUT_REPO set?"
     return 1
   fi
   [[ -e $dest ]] && return 0
