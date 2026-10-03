@@ -59,5 +59,26 @@ scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 tmux = "omarchy"
 tpack = "brew-cask"
 
+# Config-less command-line tools (programs/cli/).
+[cli.install]
+atuin = "omarchy"
+bat = "omarchy"
+btop = "omarchy"
+fd = "omarchy"
+git-delta = "omarchy"
+gum = "omarchy"
+lazydocker = "omarchy"
+lazygit = "omarchy"
+ripgrep = "omarchy"
+tree-sitter-cli = "omarchy"
+zoxide = "omarchy"
+awscli = "brew"
+just = "brew"
+trash-cli = "brew"
+yq = "brew"
+vim-enhanced = "brew"
+google-cloud-cli = "brew-cask"
+ngrok = "script"
+
 [data]
 omarchy = true

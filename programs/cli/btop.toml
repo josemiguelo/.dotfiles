@@ -1,0 +1,2 @@
+[programs.btop]
+via = ["brew", "omarchy"]

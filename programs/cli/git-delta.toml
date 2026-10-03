@@ -1,0 +1,2 @@
+[programs.git-delta]
+via = ["brew", "omarchy"]

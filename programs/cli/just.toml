@@ -1,0 +1,2 @@
+[programs.just]
+via = ["brew", "dnf"]
