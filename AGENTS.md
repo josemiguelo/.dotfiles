@@ -27,7 +27,7 @@ Features are developed in workmux worktrees beside the source, at `../chezmoi__w
 To try a feature, in this order of preference (`WT` is the worktree root):
 
 - `chezmoi --source "$WT" diff`.
-- Render into a scratch destination, then point the program at it: `PREVIEW=$(mktemp -d)`, then `chezmoi --source "$WT" --destination "$PREVIEW" --persistent-state "$PREVIEW/.state.boltdb" apply`. Programs: `XDG_CONFIG_HOME="$PREVIEW/.config" nvim`, `tmux -L feature -f "$PREVIEW/.config/tmux/tmux.conf"`, `kitty --config …`, `GIT_CONFIG_GLOBAL=…`.
+- `chztry <program> [args…]` from inside the worktree (`plugins/chezmoi`): it renders the whole worktree, minus scripts and externals, into `$XDG_RUNTIME_DIR/chztry/<feature>` (in memory; `$TMPDIR` without one), then runs the program with `XDG_CONFIG_HOME`, `ZDOTDIR` and `STARSHIP_CONFIG` pointing there and the preview's `~/.local/bin` first on `PATH`; `tmux` gets its own server (`-L chztry-<feature>`; `chztry tmux kill-server` before trying a changed `tmux.conf` again). E.g. `chztry nvim`, `chztry zsh`, `chztry tmux`, `chztry kitty`, `chztry yazi`. A program that reads its config from somewhere else needs its own variable added there, or rendering by hand: `chezmoi --source "$WT" --destination "$PREVIEW" --persistent-state "$PREVIEW.boltdb" apply --exclude scripts,externals`, then `GIT_CONFIG_GLOBAL=…` and the like.
 - `chezmoi --source "$WT" apply <target>…` for only the targets being tested, for what only works in place (Hyprland, shell startup files).
 
 Never apply a whole worktree: the next apply from `master` reverts its edits, and its new files stay in `$HOME` if the feature is abandoned.
