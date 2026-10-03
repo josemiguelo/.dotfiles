@@ -9,6 +9,9 @@ brew-taps = "script"
 install = "brew"
 scripts = ["dotfiles-bootstrap", "dotfiles-pull", "dotfiles-push", "dotfiles-apply", "dotfiles-ssh-remote"]
 
+[git]
+scripts = ["setup-git"]
+
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
 
