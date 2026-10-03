@@ -17,6 +17,17 @@ local custom_vertical_layout = {
   },
 }
 
+-- From a float, `wincmd` goes to the previous window whatever the direction,
+-- so vim-tmux-navigator never sees the explorer list at nvim's edge. Navigate
+-- from the explorer's sidebar split (its layout root) instead.
+local function tmux_navigate(direction)
+  return function(picker)
+    vim.api.nvim_win_call(picker.layout.root.win, function()
+      vim.cmd("TmuxNavigate" .. direction)
+    end)
+  end
+end
+
 local custom_explorer_layout = {
   layout = {
     layout = {
@@ -32,6 +43,20 @@ local custom_explorer_layout = {
         title_pos = "center",
       },
       { win = "list", border = "none" },
+    },
+  },
+  actions = {
+    tmux_left = tmux_navigate("Left"),
+    tmux_down = tmux_navigate("Down"),
+    tmux_up = tmux_navigate("Up"),
+  },
+  win = {
+    list = {
+      keys = {
+        ["<c-h>"] = "tmux_left",
+        ["<c-j>"] = "tmux_down",
+        ["<c-k>"] = "tmux_up",
+      },
     },
   },
 }
