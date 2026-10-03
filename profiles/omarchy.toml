@@ -36,6 +36,9 @@ install = "omarchy"
 [fzf]
 install = "omarchy"
 
+[starship]
+install = "omarchy"
+
 [tmux]
 scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 
