@@ -19,6 +19,9 @@ scripts = ["dotfiles-pull", "dotfiles-apply", "dotfiles-push", "dotfiles-ssh-rem
 [git]
 scripts = ["setup-git"]
 
+[claude]
+scripts = ["skills-repo"]
+
 [zsh]
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]

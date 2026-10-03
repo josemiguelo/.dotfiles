@@ -12,6 +12,9 @@ scripts = ["dotfiles-bootstrap", "dotfiles-pull", "dotfiles-push", "dotfiles-app
 [git]
 scripts = ["setup-git"]
 
+[claude]
+scripts = ["skills-repo"]
+
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
 
@@ -81,6 +84,7 @@ terraform = "brew"
 claude = "script"
 codex = "brew-cask"
 ngrok = "script"
+try = "brew"
 
 # Desktop apps (programs/apps/).
 [apps.install]

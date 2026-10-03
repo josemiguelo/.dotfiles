@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "1.0.0",
-  "updatedAt": "2026-10-03T05:39:19.753952397Z",
+  "updatedAt": "2026-10-03T05:54:19.621482750Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -347,6 +347,11 @@
     "setup-git": {
       "status": "done",
       "lastRun": "2026-09-24T22:03:06.585287649Z",
+      "exitCode": 0
+    },
+    "skills-repo": {
+      "status": "done",
+      "lastRun": "2026-10-03T05:54:15.188582679Z",
       "exitCode": 0
     },
     "default-shell": {
