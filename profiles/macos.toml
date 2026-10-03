@@ -7,3 +7,10 @@ brew-taps = "script"
 
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
+
+[tmux]
+scripts = ["tmux-plugins"]
+
+[tmux.install]
+tmux = "brew"
+tpack = "brew-cask"
