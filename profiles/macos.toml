@@ -24,6 +24,9 @@ install = "brew"
 [fzf]
 install = "brew"
 
+[starship]
+install = "brew"
+
 [tmux]
 scripts = ["tmux-plugins"]
 
