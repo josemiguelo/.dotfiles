@@ -16,5 +16,12 @@ brew-taps = "script"
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]
 
+[tmux]
+scripts = ["tmux-plugins", "omarchy-tmux-theme"]
+
+[tmux.install]
+tmux = "omarchy"
+tpack = "brew-cask"
+
 [data]
 omarchy = true
