@@ -3,7 +3,7 @@
 # Catches "edited dotfiles on machine A, machine B is stale". The check
 # fetches at most every 6h (throttled on FETCH_HEAD's mtime) and fails soft
 # offline, so `status` can afford it; converge is a pull only — applying the
-# pulled target state is dotfiles-apply's job (order them in maintain).
+# pulled target state is loadout's (`sync`, `apply`).
 # Modes: `check` / `install` (default).
 set -eu
 # chezmoi is a brew program: only an interactive zsh has brew on PATH, and
