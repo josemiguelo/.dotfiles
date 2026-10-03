@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests private_dot_local/bin/executable_tmux-goto in isolation, against a
+# Tests configs/private_dot_local/bin/executable_tmux-goto in isolation, against a
 # throwaway tmux socket — never touches your real tmux server. Every tmux
 # call is also logged to a file so assertions can check exact arguments,
 # since goto's own output isn't very telling (mostly tmux side effects).
@@ -9,7 +9,7 @@
 # target existed. Run: tests/test-tmux-goto.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/private_dot_local/bin/executable_tmux-goto"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_tmux-goto"
 SOCK="tmux-goto-test-$$"
 WORK="$(mktemp -d)"
 CALLS="$WORK/calls.log"

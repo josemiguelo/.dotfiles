@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Tests private_dot_local/bin/executable_tmux-attach in isolation: a shadowed
+# Tests configs/private_dot_local/bin/executable_tmux-attach in isolation: a shadowed
 # `tmux` function redirects every call the script makes to a throwaway test
 # socket, so this never touches your real tmux server or sessions. `zoxide`
 # and `workmux` are shadowed too, for deterministic input and to avoid
 # depending on what's actually installed. Run: tests/test-tmux-attach.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/private_dot_local/bin/executable_tmux-attach"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_tmux-attach"
 SOCK="tmux-attach-test-$$"
 WORK="$(mktemp -d)"
 
