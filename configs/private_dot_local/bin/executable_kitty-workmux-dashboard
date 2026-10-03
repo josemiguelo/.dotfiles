@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Runs `workmux dashboard` in a kitty overlay (see kitty.conf's ctrl+cmd+shift+d).
+# kitty launches overlays with the GUI's own environment, not a login shell's:
+# on macOS that PATH has no /opt/homebrew/bin, so workmux can't find tmux and
+# reports "No tmux server running". Put Homebrew first, and pin the backend:
+# kitty sets KITTY_WINDOW_ID in the overlay, which would otherwise make workmux
+# pick the kitty backend and find no agents.
+export PATH="/opt/homebrew/bin:$PATH"
+export WORKMUX_BACKEND=tmux
+exec workmux dashboard
