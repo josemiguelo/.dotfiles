@@ -14,7 +14,7 @@ brew-taps = "script"
 
 [chezmoi]
 install = "omarchy"
-scripts = ["dotfiles-pull", "dotfiles-apply", "dotfiles-push", "dotfiles-ssh-remote"]
+scripts = ["dotfiles-pull", "dotfiles-push", "dotfiles-ssh-remote"]
 
 [git]
 scripts = ["setup-git"]

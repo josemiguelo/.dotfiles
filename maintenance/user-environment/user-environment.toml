@@ -4,4 +4,3 @@
 description = "systemd user environment matches ~/.config/environment.d"
 file = "user-environment.sh"
 check = "file:user-environment.sh check"
-after = ["scripts.dotfiles-bootstrap", "scripts.dotfiles-apply"]

@@ -7,7 +7,7 @@ brew-taps = "script"
 
 [chezmoi]
 install = "brew"
-scripts = ["dotfiles-bootstrap", "dotfiles-pull", "dotfiles-push", "dotfiles-apply", "dotfiles-ssh-remote"]
+scripts = ["dotfiles-pull", "dotfiles-push", "dotfiles-ssh-remote"]
 
 [git]
 scripts = ["setup-git"]
