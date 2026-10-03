@@ -86,6 +86,16 @@ ngrok = "script"
 [keychron]
 scripts = ["keychron-launcher-access"]
 
+# Hyprland: settings from hypr-config/ (natural scrolling, look and feel),
+# SUPER+Q to close, Google in HEY's place, Hyper+letter app hotkeys.
+[hyprland]
+scripts = [
+  "omarchy-hypr-config input looknfeel",
+  "omarchy-close-window-key",
+  "omarchy-google-bindings",
+  "omarchy-harpoon",
+]
+
 # Local replacements of Omarchy commands, first on the session PATH.
 [omarchy-overrides]
 scripts = ["omarchy-command-overrides", "omarchy-keyboard-backlight-guard"]
