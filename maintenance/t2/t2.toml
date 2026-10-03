@@ -1,0 +1,43 @@
+# T2 Macs (MacBookPro16,1): fan daemon and curve, the EC clock, and the
+# internal keyboard. Paths are relative to this file. (The gmux backlight
+# fix sources Omarchy's shared libraries and lives with the Omarchy scripts.)
+
+# The T2 fan daemon (arch-mact2 repo; Omarchy's T2 install step installs and
+# enables it). Tracked so the fan curve's daemon is part of the loadout, not
+# an installer side effect.
+[programs.t2fanrd]
+description = "T2 Mac fan control daemon"
+via = ["omarchy"]
+
+# t2fanrd reads /etc/t2fand.conf, which no package owns: this script is the
+# only record of the intended fan curve. Content must match exactly.
+[scripts.t2-fan-curve]
+description = "t2fanrd fan curve in /etc/t2fand.conf"
+file = "fan-curve.sh"
+check = "file:fan-curve.sh check"
+after = ["programs.t2fanrd"]
+
+# T2 Macs keep their real clock in the EC, reachable only through the ACPI
+# TAD's _SRT: the kernel's normal RTC writeback goes to the legacy CMOS view
+# and is discarded, so the clock was never set and every boot started in
+# 1970. Sets it, and installs a shutdown hook to keep it true.
+[scripts.t2-boot-clock]
+description = "keep the EC hardware clock set (T2 Mac)"
+file = "boot-clock.sh"
+check = "file:boot-clock.sh check"
+
+# Internal keyboard on Arch/Omarchy: Fn/Ctrl and Alt/Super swaps and the
+# fnmode that keeps Fn+arrows working alongside the touchbar, with the boot
+# image rebuilt through Limine (limine-mkinitcpio). Checks the modprobe.d
+# file AND the live module parameters: a stale initramfs can keep the two
+# disagreeing.
+[scripts.t2-hid-apple-keyboard-arch]
+description = "internal keyboard fn/ctrl swap and fnmode (Arch)"
+file = "hid-apple-keyboard-arch.sh"
+check = "file:hid-apple-keyboard-arch.sh check"
+
+# The same on Fedora, with the boot image rebuilt through dracut.
+[scripts.t2-hid-apple-keyboard]
+description = "internal keyboard fn/ctrl swap and fnmode"
+file = "hid-apple-keyboard.sh"
+check = "file:hid-apple-keyboard.sh check"

@@ -1,0 +1,12 @@
+# solaar: Logitech receiver and device manager, without its session
+# autostart (it's launched when wanted).
+
+[programs.solaar]
+description = "Logitech device manager"
+via = ["dnf", "omarchy"]
+
+[scripts.solaar-no-autostart]
+description = "remove solaar autostart entry"
+run = "sudo rm -f /etc/xdg/autostart/solaar.desktop"
+check = "test ! -f /etc/xdg/autostart/solaar.desktop"
+after = ["programs.solaar"]
