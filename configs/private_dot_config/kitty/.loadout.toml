@@ -1,0 +1,33 @@
+# kitty: the terminal, the font its kitty.conf names, and (on Omarchy) kitty
+# as the terminal everything opens. Its dotfiles are this directory; paths
+# below are relative to this file.
+
+# Fedora: the solopasha COPR (fresher than the distro package); the copr
+# enable step is the dnf-copr mechanism's, and only that variant needs
+# dnf-plugins-core. Omarchy: the Arch package through Omarchy's installer.
+# macOS: Homebrew's cask downloads the same signed .dmg straight from kitty's
+# GitHub releases (no repackaging), and gets `brew upgrade --cask` with it.
+[programs.kitty]
+description = "kitty terminal emulator"
+
+[programs.kitty.install.dnf-copr]
+depends-on = ["dnf-plugins-core"]
+[programs.kitty.install.dnf-copr.with]
+copr = "solopasha/kitty"
+
+[programs.kitty.install.omarchy]
+
+[programs.kitty.install.brew-cask]
+
+# FiraCode Nerd Font from the Arch repos: the family kitty.conf names
+# (FiraCode Nerd Font Mono) on Linux.
+[programs.ttf-firacode-nerd]
+description = "FiraCode Nerd Font"
+via = ["omarchy"]
+
+# Omarchy only: kitty as the terminal every Omarchy keybinding and menu opens.
+[scripts.omarchy-default-terminal]
+description = "kitty as omarchy's default terminal"
+file = ".loadout/default-terminal.sh"
+check = "file:.loadout/default-terminal.sh check"
+after = ["programs.kitty"]

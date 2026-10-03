@@ -20,3 +20,8 @@ configs = "configs"
 omarchy = false
 # Behind Zscaler's TLS inspection: tools trust its root CA when readable.
 zscaler = false
+
+# kitty (a machine overrides it with [kitty.data]).
+[data.kitty]
+# background_opacity; Omarchy's scratchpad repaints its own windows on top.
+opacity = 0.85

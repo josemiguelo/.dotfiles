@@ -1,0 +1,7 @@
+# Fedora-only packages other programs' Fedora variants need. No machine runs
+# Fedora today; the variants stay declared so one can again.
+
+# dnf plugins (provides the copr command kitty's dnf-copr variant uses).
+[programs.dnf-plugins-core]
+description = "dnf plugins (provides the copr command)"
+via = ["dnf"]

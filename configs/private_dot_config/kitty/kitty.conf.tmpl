@@ -11,7 +11,7 @@ font_family Fira Code
 {{ else if (eq .chezmoi.os "linux") -}}
 font_family FiraCode Nerd Font Mono
 {{ end -}}
-{{ if eq .chezmoi.hostname "t2-macbook-omarchy" -}}
+{{ if (includeTemplate "machine" . | fromJson).omarchy -}}
 {{- /* Omarchy's text size setting (omarchy-display-text-size) rewrites this
          line from its [font] base-size in ~/.config/omarchy/shell.toml:
          pt = round(px * 9 / 12), 12px (the default, when unset) = 9pt.
@@ -59,15 +59,15 @@ background_blur 30
 {{ else if (eq .chezmoi.os "linux") -}}
 background_blur 1
 {{ end -}}
-background_opacity 0.85
-{{- if eq .chezmoi.hostname "t2-macbook-omarchy" }}
+background_opacity {{ (includeTemplate "machine" . | fromJson).kitty.opacity }}
+{{- if (includeTemplate "machine" . | fromJson).omarchy }}
 # Lets Hyprland make scratchpad windows more opaque at runtime (see
 # ~/.config/hypr/hyprland.lua); the 0.85 above stays the default.
 dynamic_background_opacity yes
 {{- end }}
 
 # Remote control for scripting
-{{ if eq .chezmoi.hostname "t2-macbook-omarchy" -}}
+{{ if (includeTemplate "machine" . | fromJson).omarchy -}}
 # Omarchy: socket-only, on the per-window socket omarchy-cmd-terminal-cwd
 # queries so "open terminal here" lands in this window's cwd. Omarchy's own
 # migrations comment out the unrestricted form, so don't use it here.
