@@ -102,6 +102,16 @@ map ctrl+cmd+a send_text all \x1b\x01
 map ctrl+alt+a send_text all \x1b\x01
 {{ end -}}
 
+# Open the workmux dashboard as an overlay over the current window. It runs
+# outside tmux: it reads agent status from the tmux server, and picking an
+# agent switches tmux's client to that session. The script sets PATH and the
+# tmux backend (see its header). Same modifier split as above.
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+shift+d launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+alt+shift+d launch --type=overlay --cwd=current ~/.local/bin/kitty-workmux-dashboard
+{{ end -}}
+
 # kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
 # no_op releases them so tmux receives them for swapping windows.
 map ctrl+shift+left no_op
