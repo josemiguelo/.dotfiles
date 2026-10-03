@@ -1,0 +1,24 @@
+# Omarchy web apps: the ones this machine doesn't want removed, and Google's
+# mail and calendar in HEY's place. Paths are relative to this file.
+
+# Omarchy web apps this machine doesn't want, named by its opt-in
+# ("omarchy-webapps-remove Basecamp HEY"), removed the native way and kept
+# removed across Omarchy re-provisioning.
+[scripts.omarchy-webapps-remove]
+description = "Omarchy web apps removed"
+file = "omarchy-webapps-remove.sh"
+check = "file:omarchy-webapps-remove.sh check $@"
+
+# Gmail as a web app (own window) and the mailto handler, in HEY's place.
+[scripts.omarchy-webapp-gmail]
+description = "Gmail web app, the default for email links"
+file = "omarchy-webapp-gmail.sh"
+check = "file:omarchy-webapp-gmail.sh check"
+# HEY's launcher claims mailto too: take the default after it's gone.
+after = ["scripts.omarchy-webapps-remove"]
+
+# Google Calendar as a web app (own window), in HEY Calendar's place.
+[scripts.omarchy-webapp-google-calendar]
+description = "Google Calendar web app"
+file = "omarchy-webapp-google-calendar.sh"
+check = "file:omarchy-webapp-google-calendar.sh check"

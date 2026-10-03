@@ -13,6 +13,10 @@ scripts = ["setup-ssh id_ed25519", "omarchy-sshd josemiguelo"]
 [t2]
 scripts = ["t2-hid-apple-keyboard-arch", "t2-fan-curve", "t2-boot-clock", "t2-gmux-backlight"]
 
+# Docker without a prompt: the docker group is root-equivalent.
+[omarchy-apps]
+scripts = ["omarchy-sudoless-docker"]
+
 # A bigger activity monitor, relative to whatever screen it opens on.
 [hyprland]
 scripts = ["omarchy-activity-monitor-size 90% 90%"]
