@@ -18,6 +18,9 @@ scripts = ["nvim-plugins"]
 [kitty]
 install = "brew-cask"
 
+[raycast]
+install = "brew-cask"
+
 [yazi]
 install = "brew"
 
