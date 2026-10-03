@@ -9,3 +9,8 @@ regex = "([0-9]+\\.[0-9][0-9.]*)"
 
 [programs.claude.install.script]
 command = "curl -fsSL https://claude.ai/install.sh | bash"
+
+# Is the claude binary itself behind the latest published Claude Code release?
+[outdated.claude]
+command = "file:outdated-claude.sh"
+upgrade = "file:outdated-claude.sh update {item}"
