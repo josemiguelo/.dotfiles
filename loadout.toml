@@ -20,6 +20,8 @@ configs = "configs"
 omarchy = false
 # Behind Zscaler's TLS inspection: tools trust its root CA when readable.
 zscaler = false
+# The work machine: work-only tools in, personal ones (e.g. Copilot) out.
+work = false
 
 # kitty (a machine overrides it with [kitty.data]).
 [data.kitty]

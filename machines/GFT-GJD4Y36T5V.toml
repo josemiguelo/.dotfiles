@@ -3,3 +3,4 @@ extends = ["macos"]
 
 [data]
 zscaler = true
+work = true

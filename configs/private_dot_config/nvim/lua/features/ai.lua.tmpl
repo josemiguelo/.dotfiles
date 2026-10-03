@@ -75,7 +75,7 @@ return {
     end,
   },
 
-  {{ if eq .chezmoi.hostname "GFT-GJD4Y36T5V" }}
+  {{ if (includeTemplate "machine" . | fromJson).work }}
   {
     "zbirenbaum/copilot.lua",
     cond = false,
