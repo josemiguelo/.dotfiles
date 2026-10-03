@@ -1,0 +1,40 @@
+# zsh: the shell, its plugins and completions, and the login shell. Its
+# dotfiles are this directory plus ~/.zshenv (configs/dot_zshenv, which
+# points ZDOTDIR here). Paths below are relative to this file.
+
+# macOS ships zsh, so only Linux machines map it.
+[programs.zsh]
+via = ["dnf", "omarchy-pkg"]
+
+# antidote and the bundles .zplugins declares, present as clones. Whether a
+# clone is behind its remote is the antidote / antidote-plugins oracles'
+# question.
+[scripts.zsh-plugins]
+description = "antidote and the bundles .zplugins declares"
+file = ".loadout/plugins.sh"
+check = "file:.loadout/plugins.sh check"
+after = ["programs.zsh"]
+
+[scripts.setup-completions]
+description = "shell completions"
+file = ".loadout/completions.sh"
+check = "file:.loadout/completions.sh check"
+
+# The login shell flips only once zsh exists and its dotfiles are in place
+# (~/.zshenv -> ZDOTDIR), so the first zsh login is never a bare one. Takes
+# effect on the next login.
+[scripts.default-shell]
+description = "login shell set to zsh"
+file = ".loadout/default-shell.sh"
+check = "file:.loadout/default-shell.sh check"
+after = ["programs.zsh"]
+
+# Is the antidote clone itself behind its GitHub tip?
+[outdated.antidote]
+command = "file:.loadout/outdated-antidote.sh"
+upgrade = "file:.loadout/outdated-antidote.sh update {item}"
+
+# Are the antidote bundle clones behind their GitHub tips?
+[outdated.antidote-plugins]
+command = "file:.loadout/outdated-antidote-plugins.sh"
+upgrade = "file:.loadout/outdated-antidote-plugins.sh update {item}"

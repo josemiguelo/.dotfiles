@@ -1,0 +1,66 @@
+#!/bin/sh
+# Custom `loadout outdated` oracle for the antidote bundles $ZDOTDIR/.zplugins
+# declares (the file comes from the chezmoi dotfiles; local $ZDOTDIR/...
+# entries are dotfiles, not clones). The config is the list, not the clone
+# dirs: a declared bundle with no clone is a row ("not installed", candidate
+# = its remote tip), an installed one is a row when its clone is behind its
+# remote tip. antidote itself is a separate oracle. Silent when zsh isn't
+# set up on this machine.
+#
+# `update <owner/repo>` (loadout calls it per row): clone what's missing
+# with `antidote bundle`, fast-forward the one clone that's behind.
+set -eu
+
+ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
+BUNDLES="$ZDOTDIR/.zplugins"
+ANTIDOTE="${XDG_DATA_HOME:-$HOME/.local/share}/mattmc3/antidote"
+GCB="$LOADOUT_REPO/maintenance/lib/git-clones-behind.sh"
+# name = owner/repo, the last two path segments of the clone dir
+export GCB_NAME='printf "%s/%s" "$(basename "$(dirname "$dir")")" "$(basename "$dir")"'
+
+[ -f "$BUNDLES" ] || exit 0
+[ -f "$ANTIDOTE/antidote.zsh" ] || exit 0
+
+declared() {
+  sed -n 's/^[[:space:]]*\([A-Za-z0-9_.-]*\/[A-Za-z0-9_.-]*\)\([[:space:]].*\)\{0,1\}$/\1/p' "$BUNDLES" | sort -u
+}
+
+# "<owner/repo> <clone dir>" per declared bundle, "-" for one not cloned —
+# ask antidote (`antidote path`), never guess. Its home differs per OS (macOS:
+# ~/Library/Caches/antidote) and its layout per version (2.x nests clones
+# under github.com/); guessing reported installed bundles as "not installed"
+# forever, since no reinstall could put the clone where we looked.
+bundle_paths() {
+  # shellcheck disable=SC2046
+  ANTIDOTE="$ANTIDOTE" zsh -fc '
+    source "$ANTIDOTE/antidote.zsh" || exit 1
+    for r in "$@"; do
+      p=$(antidote path "$r" 2>/dev/null) && print -r -- "$r $p" || print -r -- "$r -"
+    done' zsh $(declared)
+}
+
+if [ "${1:-}" = "update" ]; then
+  want=${2:?usage: antidote-plugins.sh update <owner/repo>}
+  dir=$(bundle_paths | awk -v w="$want" '$1 == w && $2 != "-" { print $2 }')
+  if [ -n "$dir" ]; then
+    exec sh "$GCB" update "$want" "$dir/"
+  fi
+  declared | grep -qx "$want" || { echo ".zplugins declares no bundle '$want'" >&2; exit 1; }
+  echo "installing $want"
+  exec zsh -c "source '$ANTIDOTE/antidote.zsh' && antidote bundle < '$BUNDLES' > /dev/null"
+fi
+
+dirs=""
+PATHS=$(mktemp)
+trap 'rm -f "$PATHS"' EXIT
+bundle_paths >"$PATHS"
+while read -r repo dir; do
+  if [ "$dir" != "-" ]; then
+    dirs="$dirs $dir/"
+  else
+    tip=$(git ls-remote "https://github.com/$repo" HEAD 2>/dev/null | cut -c1-9)
+    printf '%s - %s not installed https://github.com/%s\n' "$repo" "${tip:-?}" "$repo"
+  fi
+done <"$PATHS"
+# shellcheck disable=SC2086
+[ -z "$dirs" ] || exec sh "$GCB" $dirs
