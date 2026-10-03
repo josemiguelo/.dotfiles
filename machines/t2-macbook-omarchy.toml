@@ -16,6 +16,20 @@ scripts = ["t2-hid-apple-keyboard-arch", "t2-fan-curve", "t2-boot-clock"]
 [t2.install]
 t2fanrd = "omarchy"
 
+# KVM/QEMU with virt-manager.
+[virtualization]
+scripts = ["setup-libvirt-arch", "ufw-libvirt"]
+
+[virtualization.install]
+libvirt = "omarchy"
+qemu-desktop = "omarchy"
+virt-manager = "omarchy"
+virt-install = "omarchy"
+virt-viewer = "omarchy"
+dnsmasq = "omarchy"
+edk2-ovmf = "omarchy"
+swtpm = "omarchy"
+
 # Logitech receiver/mouse manager, without its session autostart.
 [solaar]
 install = "omarchy"

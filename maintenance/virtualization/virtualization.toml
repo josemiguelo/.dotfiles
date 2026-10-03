@@ -1,0 +1,77 @@
+# Virtualization: KVM/QEMU with virt-manager, libvirt running for the login
+# user, and ufw letting its default NAT network through. Paths are relative
+# to this file.
+
+# Arch: what Fedora's "virtualization" dnf group installed (mandatory:
+# virt-install; default: virt-manager, virt-viewer, qemu-kvm,
+# libvirt-daemon-kvm, libvirt-daemon-config-network), one package each;
+# Arch's libvirt is daemon, client and default network in one. dnsmasq is
+# libvirt's default NAT/DHCP; the NAT's firewall side needs iptables-nft,
+# which Arch's iptables package already provides. edk2-ovmf (UEFI guests)
+# and swtpm (TPM, Windows 11) are optional deps of libvirt the Fedora group
+# installed too.
+[programs.libvirt]
+description = "libvirt virtualization daemon and tools"
+via = ["omarchy"]
+
+[programs.qemu-desktop]
+description = "QEMU/KVM for desktop guests"
+via = ["omarchy"]
+
+[programs.virt-manager]
+description = "virt-manager GUI"
+via = ["omarchy"]
+
+[programs.virt-install]
+description = "virt-install, command-line VM creation"
+via = ["omarchy"]
+
+[programs.virt-viewer]
+description = "virt-viewer, a guest's graphical console"
+via = ["omarchy"]
+
+[programs.dnsmasq]
+description = "DNS/DHCP for libvirt's default NAT network"
+via = ["omarchy"]
+
+[programs.edk2-ovmf]
+description = "UEFI firmware for guests"
+via = ["omarchy"]
+
+[programs.swtpm]
+description = "TPM emulator for guests"
+via = ["omarchy"]
+
+# Fedora: the virtualization dnf group; a group, not a package, so the
+# two-mode script is the check oracle.
+[programs.virtualization]
+description = "virtualization stack (libvirt, qemu, virt-manager)"
+
+[programs.virtualization.install.dnf]
+command = "file:virtualization.sh install"
+check = "file:virtualization.sh check"
+
+# Arch: libvirtd running, the user in the libvirt group, the default NAT
+# network autostarting. The Fedora one (setup-libvirt) used the kvm group.
+[scripts.setup-libvirt-arch]
+description = "libvirtd enabled and the libvirt group joined (Arch)"
+file = "setup-libvirt-arch.sh"
+check = "file:setup-libvirt-arch.sh check"
+after = ["programs.libvirt", "programs.qemu-desktop", "programs.dnsmasq"]
+
+# Fedora. The source script ran usermod as root ($(whoami) bug); the intent
+# was the login user, which is what this does.
+[scripts.setup-libvirt]
+description = "enable libvirtd and join the kvm group"
+run = "sudo systemctl enable libvirtd && sudo systemctl start libvirtd && sudo usermod -a -G kvm \"$USER\""
+check = "systemctl is-enabled libvirtd >/dev/null 2>&1 && id -nG \"$USER\" | grep -qw kvm"
+after = ["programs.virtualization"]
+
+# Omarchy's ufw lets libvirt's default NAT network (virbr0) through: DHCP/DNS
+# to the host and routed guest traffic, as explicit commented rules the way
+# Omarchy allows Docker's DNS.
+[scripts.ufw-libvirt]
+description = "ufw allows libvirt's default NAT network (virbr0)"
+file = "ufw-libvirt.sh"
+check = "file:ufw-libvirt.sh check"
+after = ["scripts.setup-libvirt-arch"]
