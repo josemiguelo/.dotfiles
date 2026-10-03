@@ -1,0 +1,15 @@
+# Shared truth for every Omarchy machine. System packages install through
+# Omarchy's own commands.
+base = true
+
+scripts = [
+  "default-shell",
+  "zsh-plugins",
+  "setup-completions",
+]
+
+[pm]
+zsh = "omarchy-pkg"
+
+[data]
+omarchy = true
