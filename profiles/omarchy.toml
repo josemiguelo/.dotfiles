@@ -83,6 +83,15 @@ vim-enhanced = "brew"
 google-cloud-cli = "brew-cask"
 ngrok = "script"
 
+[dictation]
+scripts = ["omarchy-dictation", "omarchy-dictation-gpu"]
+
+[dictation.install]
+voxtype = "omarchy"
+wtype = "omarchy"
+zenity = "omarchy"
+voxtype-tui = "omarchy-aur"
+
 # Desktop apps (programs/apps/). AUR ones were each approved by hand.
 [apps.install]
 code = "omarchy"
