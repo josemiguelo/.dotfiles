@@ -2,7 +2,7 @@
 
 # Force the tmux backend for every workmux invocation, including
 # non-interactive ones that bypass the workmux() function below entirely
-# (e.g. galileo.nvim's overseer tasks, which exec workmux directly). Without
+# (e.g. sofi.nvim's overseer tasks, which exec workmux directly). Without
 # this, workmux auto-detects the backend from $TMUX/$KITTY_WINDOW_ID/etc.,
 # and a process with no $TMUX (nvim running directly in a kitty tab, no
 # tmux involved at all) gets detected as "kitty" and refuses session mode

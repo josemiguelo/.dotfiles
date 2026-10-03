@@ -81,7 +81,7 @@ if [[ -n "$KITTY_WINDOW_ID" && -z "$TMUX" ]]; then
 fi
 
 # Signal this pane's shell is fully initialized -- automation that creates a
-# tmux window/pane and needs to send it a real command (galileo.nvim's task
+# tmux window/pane and needs to send it a real command (sofi.nvim's task
 # runner, say) waits on the matching channel instead of guessing with sleep.
 # `tmux wait-for -S` latches even if nothing is waiting yet, so this is safe
 # regardless of which side runs first.

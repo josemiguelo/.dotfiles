@@ -30,7 +30,7 @@ require("lazy").setup({
     { import = "features.langs" },
     {{ if (includeTemplate "machine" . | fromJson).work }}
     {
-      "galileo.nvim",
+      "sofi.nvim",
       dev = true,
       opts = {},
       dependencies = {
