@@ -16,6 +16,13 @@ brew-taps = "script"
 install = "omarchy"
 scripts = ["default-shell", "zsh-plugins", "setup-completions"]
 
+[kitty]
+scripts = ["omarchy-default-terminal"]
+
+[kitty.install]
+kitty = "omarchy"
+ttf-firacode-nerd = "omarchy"
+
 [tmux]
 scripts = ["tmux-plugins", "omarchy-tmux-theme"]
 

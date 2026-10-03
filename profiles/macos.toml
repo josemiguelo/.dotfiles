@@ -8,6 +8,9 @@ brew-taps = "script"
 [zsh]
 scripts = ["zsh-plugins", "setup-completions"]
 
+[kitty]
+install = "brew-cask"
+
 [tmux]
 scripts = ["tmux-plugins"]
 
