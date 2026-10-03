@@ -96,6 +96,62 @@ scripts = [
   "omarchy-harpoon",
 ]
 
+# The Omarchy shell: the bar at the bottom, a little thinner than Omarchy's
+# 26, with Spaces (each workspace's app icons) for the workspaces, its
+# settings in omarchy-bar/settings/.
+[shell]
+scripts = [
+  "omarchy-bar bottom 24 tornikegomareli.spaces",
+  # shell plugins, by git URL: Keystroke replaces the Omarchy menu; the
+  # notification center keeps past notifications behind a bell in the bar;
+  # Spaces shows each workspace's apps (placed by omarchy-bar); a Pomodoro
+  # timer (configured by omarchy-pomodoro); a Voxtype panel (needs
+  # voxtype-tui); media controls with album art (placed by
+  # omarchy-bar-widgets)
+  '''omarchy-plugins
+     https://github.com/evindor/keystroke.git
+     https://github.com/jankeesvw/omarchy-notification-center.git
+     https://github.com/tornikegomareli/omarchy-spaces.git
+     https://github.com/binoymanoj/pomodoro-omarchy.git
+     https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git
+     https://github.com/crmne/omarchy-mpris.git''',
+  # bar widgets drawing SVG icons instead of glyphs (github.com/josemiguelo/
+  # omarchy-bar-icons): its own menu button (the Omarchy logo, opening the
+  # menu) and workspace layout icon, and the rest rebuilt from their source
+  # with its patches (placed by omarchy-bar-widgets)
+  '''omarchy-bar-icons
+     josemiguelo.menu-button
+     josemiguelo.workspace-layout
+     omarchy.monitor
+     omarchy.bluetooth
+     omarchy.network
+     omarchy.audio
+     omarchy.power
+     omarchy.agents
+     omarchy.system-update
+     omarchy.indicators
+     omarchy.weather
+     omarchy.tray
+     jankeesvw.notification-center
+     io.github.zeus-deus.voxtype
+     pomodoro-omarchy
+     crmne.mpris
+     omarchy.clock
+     tornikegomareli.spaces''',
+  # the menu button in the place of Keystroke's bar button
+  "omarchy-menu-button",
+  # where installed bar widgets sit, one per line:
+  # <id> <section> <before|after> <neighbour>
+  '''omarchy-bar-widgets
+     josemiguelo.workspace-layout left before tornikegomareli.spaces
+     josemiguelo.menu-button left before josemiguelo.workspace-layout
+     crmne.mpris left after tornikegomareli.spaces''',
+  # Keystroke's Windows extension, from a checkout until it ships upstream
+  "omarchy-keystroke-windows",
+  # the Pomodoro timer by the clock, 50+10, and its Trigger menu entries
+  "omarchy-pomodoro",
+]
+
 # Local replacements of Omarchy commands, first on the session PATH.
 [omarchy-overrides]
 scripts = ["omarchy-command-overrides", "omarchy-keyboard-backlight-guard"]

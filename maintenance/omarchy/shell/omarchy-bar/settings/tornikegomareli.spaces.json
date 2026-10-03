@@ -1,0 +1,14 @@
+{
+  "iconSize": 24,
+  "maxIcons": 10,
+  "iconStyle": "color",
+  "dimUnfocused": true,
+  "focusedTitle": false,
+  "activeStyle": "accent",
+  "labelStyle": "number",
+  "density": "roomy",
+  "previewSize": "medium",
+  "settingsButton": "never",
+  "showApps": "all",
+  "groupApps": true
+}
