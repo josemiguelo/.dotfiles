@@ -80,5 +80,21 @@ vim-enhanced = "brew"
 google-cloud-cli = "brew-cask"
 ngrok = "script"
 
+# Desktop apps (programs/apps/). AUR ones were each approved by hand.
+[apps.install]
+code = "omarchy"
+sublime-text = "omarchy"
+obsidian = "omarchy"
+spotify = "omarchy"
+vlc = "omarchy"
+1password = "omarchy"
+1password-cli = "omarchy"
+antigravity = "omarchy-aur"
+slack = "omarchy-aur"
+teams-for-linux = "omarchy-aur"
+anydesk = "omarchy-aur"
+brave = "omarchy-aur"
+scrcpy = "brew"
+
 [data]
 omarchy = true

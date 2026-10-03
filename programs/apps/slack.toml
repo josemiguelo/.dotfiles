@@ -1,0 +1,11 @@
+[programs.slack]
+description = "Slack desktop app"
+
+[programs.slack.install.dnf-repo]
+[programs.slack.install.dnf-repo.with]
+# A repo-root path: the built-in dnf-repo installer runs from the repo root.
+repofile = "programs/apps/repos/slack.repo"
+
+# Arch: the AUR's slack-desktop (Slack's own build, repackaged).
+[programs.slack.install.omarchy-aur]
+pkg = "slack-desktop"
