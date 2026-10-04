@@ -5,11 +5,11 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-04T01:57:45.859351Z",
+  "updatedAt": "2026-10-04T04:39:28.012669Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
-      "version": "2.39.0",
+      "version": "2.40.0",
       "reason": null
     },
     "jordanbaird-ice": {
@@ -54,7 +54,7 @@
     },
     "awscli": {
       "status": "installed",
-      "version": "2.37.7",
+      "version": "2.37.9",
       "reason": null
     },
     "azure-cli": {
@@ -79,7 +79,7 @@
     },
     "codex": {
       "status": "installed",
-      "version": "0.159.3",
+      "version": "0.160.0",
       "reason": null
     },
     "coreutils": {
@@ -224,7 +224,7 @@
     },
     "mise": {
       "status": "installed",
-      "version": "2026.9.15",
+      "version": "2026.10.1",
       "reason": null
     },
     "raycast": {
@@ -260,7 +260,7 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
     },
@@ -337,8 +337,10 @@
       "reason": null
     },
     ".local": {
-      "status": "applied",
-      "files": [],
+      "status": "drifted",
+      "files": [
+        ".local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md"
+      ],
       "reason": null
     },
     ".zshenv": {
