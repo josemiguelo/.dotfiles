@@ -16,6 +16,7 @@ install_with:
     - starship
     - atuin
     - bat
+    - eza
     - btop
     - fd
     - git-delta
@@ -42,7 +43,6 @@ install_with:
     - ngrok
   brew:
     - workmux
-    - eza
     - awscli
     - just
     - trash-cli
