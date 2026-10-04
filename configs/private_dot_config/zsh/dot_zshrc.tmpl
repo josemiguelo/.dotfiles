@@ -75,21 +75,25 @@ zcache starship starship init zsh --print-full-init
 
 [[ -n "$ZSH_PROFILE" ]] && zprof
 
-# Signal this pane's shell is fully initialized -- automation that creates a
-# tmux window/pane and needs to send it a real command (sofi.nvim's task
-# runner, say) waits on the matching channel instead of guessing with sleep.
-# `tmux wait-for -S` latches even if nothing is waiting yet, so this is safe
-# regardless of which side runs first.
+# Publish whether this pane's shell is idle at a prompt, for automation that
+# types into a pane (sofi.nvim's task runner, say) to wait on. Each pane gets
+# a file named by $TMUX_PANE holding "idle" from the first prompt on, and
+# "busy" while a command runs. A `tmux wait-for` latch was tried first, but
+# it is consumed by one waiter and never fires again, so a later send would
+# hang. This is a flag that can be read any number of times.
 #
-# $TMUX_PANE, not `tmux display-message -p '#{pane_id}'`: the latter has no
-# -t and resolves to the CLIENT's current/active pane, not the pane this
-# shell is actually running in -- harmless for a lone pane (it IS the
-# active one), but wrong the moment something creates several windows in a
-# row, since each `new-window` switches which one is "current". An earlier
-# window's shell finishing after a later one was created would then signal
-# under the LATER window's pane id instead of its own, leaving the earlier
-# one's own waiter hanging forever (confirmed: $TMUX_PANE and
-# `display-message`'s pane_id can point at two different panes entirely).
-if [[ -n "$TMUX" ]]; then
-  tmux wait-for -S "shell-ready-$TMUX_PANE"
+# Builtins only (print, no forks per prompt), and nothing is typed into the
+# pane. The file goes under /tmp, not $TMPDIR: a tmux server's environment
+# may not carry the same $TMPDIR as the process that reads the file.
+if [[ -n "$TMUX_PANE" ]]; then
+  _pane_state_dir=/tmp/pane-shell-state-$UID
+  [[ -d $_pane_state_dir ]] || mkdir -p $_pane_state_dir
+  _pane_state_file=$_pane_state_dir/$TMUX_PANE
+  _pane_state_precmd() { print -r -- idle >| $_pane_state_file }
+  _pane_state_preexec() { print -r -- busy >| $_pane_state_file }
+  _pane_state_exit() { command rm -f $_pane_state_file }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd _pane_state_precmd
+  add-zsh-hook preexec _pane_state_preexec
+  add-zsh-hook zshexit _pane_state_exit
 fi
