@@ -1,10 +1,57 @@
 # Every macOS machine. macOS ships zsh as the login shell, so zsh is
 # neither installed nor switched to here.
 
-setup-brew:
-  install_with: macos
-brew-taps:
-  install_with: script
+install_with:
+  macos:
+    - setup-brew
+  script:
+    - brew-taps
+    - ngrok
+  brew-cask:
+    - kitty
+    - raycast
+    - tpack
+    - codex
+    - 1password-cli
+    - jordanbaird-ice
+    - lunar
+    - meetingbar
+    - obs
+  brew:
+    - yazi
+    - fzf
+    - starship
+    - workmux
+    - atuin
+    - bat
+    - eza
+    - btop
+    - fd
+    - git-delta
+    - gum
+    - lazydocker
+    - lazygit
+    - ripgrep
+    - tree-sitter-cli
+    - zoxide
+    - awscli
+    - trash-cli
+    - yq
+    - azure-cli
+    - coreutils
+    - gawk
+    - gh
+    - gnu-sed
+    - jira-cli
+    - jq
+    - qemu
+    - tree
+    - unixodbc
+    - wget
+    - terraform
+    - try
+    - scrcpy
+
 chezmoi:
   install_with: brew
   scripts:
@@ -31,96 +78,10 @@ mise:
 nvim:
   scripts:
     - nvim-plugins
-kitty:
-  install_with: brew-cask
-raycast:
-  install_with: brew-cask
 fonts:
   scripts:
     - download-fonts
-yazi:
-  install_with: brew
-fzf:
-  install_with: brew
-starship:
-  install_with: brew
-workmux:
-  install_with: brew
 tmux:
   install_with: brew
   scripts:
     - tmux-plugins
-tpack:
-  install_with: brew-cask
-atuin:
-  install_with: brew
-bat:
-  install_with: brew
-eza:
-  install_with: brew
-btop:
-  install_with: brew
-fd:
-  install_with: brew
-git-delta:
-  install_with: brew
-gum:
-  install_with: brew
-lazydocker:
-  install_with: brew
-lazygit:
-  install_with: brew
-ripgrep:
-  install_with: brew
-tree-sitter-cli:
-  install_with: brew
-zoxide:
-  install_with: brew
-awscli:
-  install_with: brew
-trash-cli:
-  install_with: brew
-yq:
-  install_with: brew
-azure-cli:
-  install_with: brew
-coreutils:
-  install_with: brew
-gawk:
-  install_with: brew
-gh:
-  install_with: brew
-gnu-sed:
-  install_with: brew
-jira-cli:
-  install_with: brew
-jq:
-  install_with: brew
-qemu:
-  install_with: brew
-tree:
-  install_with: brew
-unixodbc:
-  install_with: brew
-wget:
-  install_with: brew
-terraform:
-  install_with: brew
-codex:
-  install_with: brew-cask
-ngrok:
-  install_with: script
-try:
-  install_with: brew
-1password-cli:
-  install_with: brew-cask
-jordanbaird-ice:
-  install_with: brew-cask
-lunar:
-  install_with: brew-cask
-meetingbar:
-  install_with: brew-cask
-obs:
-  install_with: brew-cask
-scrcpy:
-  install_with: brew

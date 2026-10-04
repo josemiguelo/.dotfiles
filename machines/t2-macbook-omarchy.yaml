@@ -2,12 +2,22 @@
 
 extends: [omarchy]
 
+install_with:
+  omarchy:
+    - t2fanrd
+    - libvirt
+    - qemu-desktop
+    - virt-manager
+    - virt-install
+    - virt-viewer
+    - dnsmasq
+    - edk2-ovmf
+    - swtpm
+
 ssh:
   scripts:
     - setup-ssh id_ed25519
     - omarchy-sshd josemiguelo
-t2fanrd:
-  install_with: omarchy
 t2:
   scripts:
     - t2-hid-apple-keyboard-arch
@@ -23,22 +33,6 @@ hyprland:
 scratchpad:
   scripts:
     - omarchy-scratchpad-opacity 0.99
-libvirt:
-  install_with: omarchy
-qemu-desktop:
-  install_with: omarchy
-virt-manager:
-  install_with: omarchy
-virt-install:
-  install_with: omarchy
-virt-viewer:
-  install_with: omarchy
-dnsmasq:
-  install_with: omarchy
-edk2-ovmf:
-  install_with: omarchy
-swtpm:
-  install_with: omarchy
 virtualization:
   scripts:
     - setup-libvirt-arch
