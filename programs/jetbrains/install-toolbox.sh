@@ -60,13 +60,12 @@ DESK
 # cask record pointing at another account's home, or `brew upgrade --cask`
 # fails for everyone. Whole-directory removal because `brew uninstall` itself
 # trips over those paths.
-for prefix in /home/linuxbrew/.linuxbrew /opt/homebrew; do
-  if [ -d "$prefix/Caskroom/jetbrains-toolbox-linux" ]; then
-    echo "removing stale cask record $prefix/Caskroom/jetbrains-toolbox-linux"
-    rm -rf "$prefix/Caskroom/jetbrains-toolbox-linux"
-    [ -L "$prefix/bin/jetbrains-toolbox" ] && rm -f "$prefix/bin/jetbrains-toolbox"
-  fi
-done
+. "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
+if [ -d "$BREW_PREFIX/Caskroom/jetbrains-toolbox-linux" ]; then
+  echo "removing stale cask record $BREW_PREFIX/Caskroom/jetbrains-toolbox-linux"
+  rm -rf "$BREW_PREFIX/Caskroom/jetbrains-toolbox-linux"
+  [ -L "$BREW_PREFIX/bin/jetbrains-toolbox" ] && rm -f "$BREW_PREFIX/bin/jetbrains-toolbox"
+fi
 
 # The cask's tap has no other consumer; left tapped-but-untrusted it makes
 # every brew command warn for accounts that never trusted it.

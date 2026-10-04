@@ -9,7 +9,8 @@
 set -eu
 # chezmoi is a brew program: only an interactive zsh has brew on PATH, and
 # the converge runs from whatever shell the desktop opened (bash, first).
-export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/homebrew/bin:$PATH"
+. "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 MODE="${1:-install}"
 case "$MODE" in
