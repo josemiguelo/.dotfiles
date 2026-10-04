@@ -69,6 +69,7 @@ tpack = "brew-cask"
 [cli.install]
 atuin = "omarchy"
 bat = "omarchy"
+eza = "brew"
 btop = "omarchy"
 fd = "omarchy"
 git-delta = "omarchy"
