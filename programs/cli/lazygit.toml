@@ -1,2 +1,0 @@
-[programs.lazygit]
-via = ["brew", "omarchy"]

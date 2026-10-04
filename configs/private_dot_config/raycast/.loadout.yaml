@@ -1,0 +1,7 @@
+programs:
+  # Raycast: the macOS launcher. Its dotfiles are this directory (script
+  # commands Raycast runs).
+
+  raycast:
+    description: Raycast launcher
+    via: [brew-cask]

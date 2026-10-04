@@ -1,0 +1,14 @@
+programs:
+  firefox:
+    description: Firefox browser
+    install:
+
+      dnf:
+        command: 'file:fedora/install-firefox.sh'
+scripts:
+
+  # The rpm firefox wins; the flatpak gets removed.
+  remove-firefox-flatpak:
+    description: remove the firefox flatpak
+    run: flatpak --user uninstall --delete-data -y org.mozilla.firefox
+    check: '! flatpak --user info org.mozilla.firefox >/dev/null 2>&1'

@@ -1,0 +1,6 @@
+description: scrcpy Android screen mirroring
+via: [brew]
+install:
+
+  dnf:
+    command: 'sudo dnf copr enable -y zeno/scrcpy && sudo dnf install -y scrcpy'

@@ -1,0 +1,22 @@
+# claude.ai/install.sh installs Claude Code as a self-updating binary
+# (claude update checks/installs new releases); not managed by a package manager.
+description: Claude Code CLI
+
+install:
+  script:
+    command: curl -fsSL https://claude.ai/install.sh | bash
+
+version:
+  command: claude --version 2>/dev/null || $HOME/.local/bin/claude --version
+  regex: '([0-9]+\.[0-9][0-9.]*)'
+
+# Is the claude binary itself behind the latest published Claude Code release?
+outdated:
+  command: file:outdated-claude.sh
+  upgrade: file:outdated-claude.sh update
+
+scripts:
+  skills-repo:
+    description: clone the skills repo (bare + worktree) and symlink its skills into ~/.claude/skills
+    file: skills-repo.sh
+    check: file:skills-repo.sh check

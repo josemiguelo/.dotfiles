@@ -1,0 +1,9 @@
+programs:
+  # Fedora's full vim is vim-enhanced (vim-minimal is the stub); Homebrew's
+  # formula is just vim.
+  vim-enhanced:
+    via: [dnf]
+    install:
+
+      brew:
+        pkg: vim

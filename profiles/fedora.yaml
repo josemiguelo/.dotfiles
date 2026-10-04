@@ -1,0 +1,155 @@
+# Every Fedora workstation. dnf (with its repos and COPRs) carries system
+# packages, brew the tools Fedora lags on, flatpak a few apps. Host-specifics
+# (hardware, virtualization choices, ssh key names) live in the machine
+# files. No machine runs Fedora today; this keeps one ready.
+
+setup-dnf:
+  install_with: dnf
+dnf-plugins-core:
+  install_with: dnf
+curl:
+  install_with: dnf
+git:
+  install_with: dnf
+  scripts:
+    - setup-git
+gcc:
+  install_with: dnf
+procps-ng:
+  install_with: dnf
+development-tools-group:
+  install_with: dnf
+autoconf:
+  install_with: dnf
+patch:
+  install_with: dnf
+rust:
+  install_with: dnf
+findutils:
+  install_with: dnf
+zlib-devel:
+  install_with: dnf
+bzip2-devel:
+  install_with: dnf
+readline-devel:
+  install_with: dnf
+sqlite:
+  install_with: dnf
+sqlite-devel:
+  install_with: dnf
+openssl-devel:
+  install_with: dnf
+xz-devel:
+  install_with: dnf
+libffi-devel:
+  install_with: dnf
+tk-devel:
+  install_with: dnf
+libzstd-devel:
+  install_with: dnf
+libyaml-devel:
+  install_with: dnf
+gdbm-devel:
+  install_with: dnf
+ncurses-devel:
+  install_with: dnf
+dbus-devel:
+  install_with: dnf
+perl-FindBin:
+  install_with: dnf
+libxcrypt-compat:
+  install_with: dnf
+setup-brew:
+  install_with: script
+brew-taps:
+  install_with: script
+chezmoi:
+  install_with: brew
+  scripts:
+    - dotfiles-pull
+    - dotfiles-push
+    - dotfiles-ssh-remote
+claude:
+  scripts:
+    - skills-repo
+zsh:
+  install_with: dnf
+  scripts:
+    - default-shell
+    - zsh-plugins
+    - setup-completions
+user-environment:
+  scripts:
+    - user-environment
+fonts:
+  scripts:
+    - download-fonts
+nvim:
+  scripts:
+    - nvim-plugins
+kitty:
+  install_with: dnf-copr
+yazi:
+  install_with: brew
+workmux:
+  install_with: brew
+jetbrains-toolbox:
+  install_with: script
+jetbrains:
+  scripts:
+    - link-jetbrains-launchers-linux
+tmux:
+  install_with: dnf
+  scripts:
+    - tmux-plugins
+tpack:
+  install_with: brew-cask
+yq:
+  install_with: brew
+eza:
+  install_with: brew
+awscli:
+  install_with: brew
+atuin:
+  install_with: brew
+trash-cli:
+  install_with: brew
+git-delta:
+  install_with: brew
+ngrok:
+  install_with: script
+just:
+  install_with: dnf
+vim-enhanced:
+  install_with: dnf
+google-cloud-cli:
+  install_with: dnf-repo
+vlc:
+  install_with: dnf
+code:
+  install_with: dnf-repo
+antigravity:
+  install_with: dnf-repo
+firefox:
+  install_with: dnf
+1password:
+  install_with: dnf-repo
+google-chrome-stable:
+  install_with: dnf
+slack:
+  install_with: dnf-repo
+anydesk:
+  install_with: dnf
+teams-for-linux:
+  install_with: dnf-repo
+sublime-text:
+  install_with: dnf-repo
+scrcpy:
+  install_with: dnf
+flathub-remote:
+  install_with: flatpak
+obsidian:
+  install_with: flatpak
+apps:
+  scripts:
+    - remove-firefox-flatpak

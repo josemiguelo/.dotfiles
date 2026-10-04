@@ -1,0 +1,43 @@
+programs:
+  # tmux: the multiplexer, its plugin manager and plugins, and (on Omarchy)
+  # keeping kitty's palette across theme switches. Its dotfile is tmux.conf.tmpl
+  # beside this file; paths below are relative to this file.
+
+  # brew on macOS; on Omarchy tmux is a base package, mapped to Omarchy's own
+  # installer so workmux resolves it without brew installing a second copy.
+  tmux:
+    via: [brew, dnf, omarchy]
+
+  # Installed from a tap, so the full tap path is required; it ships as a
+  # cask, so brew-cask mechanics observe it.
+  tpack:
+    description: tmux package manager
+    depends-on: [brew-taps]
+    install:
+
+      brew-cask:
+        command: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" install tmuxpack/tpack/tpack'
+scripts:
+
+  # The plugins tmux.conf declares, present as clones. Whether a clone is
+  # behind its remote is the tmux-plugins oracle's question.
+  tmux-plugins:
+    description: tmux plugins tmux.conf declares
+    file: '.loadout/plugins.sh'
+    check: 'file:.loadout/plugins.sh check'
+    after: [programs.tmux, programs.tpack]
+
+  # Omarchy only: omarchy-theme-set-tmux repaints the live tmux server with the
+  # omarchy theme on every theme switch, while tmux here follows kitty's palette.
+  # Installs a theme-set hook that undoes it after each switch.
+  omarchy-tmux-theme:
+    description: 'tmux keeps kitty''s palette across omarchy theme switches'
+    file: '.loadout/omarchy-theme.sh'
+    check: 'file:.loadout/omarchy-theme.sh check'
+    after: [programs.tmux]
+outdated:
+
+  # Are the tmux plugin clones behind their GitHub tips?
+  tmux-plugins:
+    command: 'file:.loadout/outdated-plugins.sh'
+    upgrade: 'file:.loadout/outdated-plugins.sh update {item}'

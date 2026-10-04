@@ -1,0 +1,40 @@
+scripts:
+  # Hyprland on Omarchy: settings, key bindings, window sizes and app hotkeys,
+  # each written into ~/.config/hypr/ as a managed block. Paths are relative to
+  # this file; the scripts source ../lib/.
+
+  # Hyprland settings from hypr-config/<file>.lua, written into the matching
+  # ~/.config/hypr/<file>.lua, named by the machine's opt-in
+  # ("omarchy-hypr-config input looknfeel").
+  omarchy-hypr-config:
+    description: 'Hyprland settings from hypr-config/*.lua'
+    file: omarchy-hypr-config.sh
+    check: 'file:omarchy-hypr-config.sh check $@'
+
+  # SUPER+Q closes windows, instead of whatever key Omarchy uses for it.
+  omarchy-close-window-key:
+    description: SUPER+Q closes windows
+    file: omarchy-close-window-key.sh
+    check: 'file:omarchy-close-window-key.sh check'
+
+  # Omarchy's email/new-email/calendar keys (SUPER+SHIFT+E, SUPER+SHIFT+ALT+E,
+  # SUPER+SHIFT+C) rebound from HEY to Gmail and Google Calendar web apps.
+  omarchy-google-bindings:
+    description: email and calendar keys open Gmail and Google Calendar
+    file: omarchy-google-bindings.sh
+    check: 'file:omarchy-google-bindings.sh check'
+
+  # The activity monitor (SUPER+CTRL+T, btop) at the machine's size, named by
+  # its opt-in ("omarchy-activity-monitor-size 80% 80%"), instead of Omarchy's
+  # 875x600 for every floating window. Pixels or a share of the monitor (80%).
+  omarchy-activity-monitor-size:
+    description: 'activity monitor (btop) window size'
+    file: omarchy-activity-monitor-size.sh
+    check: 'file:omarchy-activity-monitor-size.sh check $@'
+
+  # Per-app hotkeys on Hyper (SUPER+CTRL+ALT+SHIFT), like Raycast's: each key
+  # jumps to its app or shows it as an overlay (omarchy-harpoon/).
+  omarchy-harpoon:
+    description: 'Hyper+letter app hotkeys (jump, overlay)'
+    file: omarchy-harpoon.sh
+    check: 'file:omarchy-harpoon.sh check'

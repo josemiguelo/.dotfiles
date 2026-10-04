@@ -1,0 +1,12 @@
+description: Google Cloud CLI
+install:
+
+  # Fedora: Google's rpm repository (the .repo file beside this one).
+  dnf-repo:
+    with:
+      repofile: 'file:google-cloud-cli.repo'
+
+  # Homebrew's cask (gcloud-cli, formerly google-cloud-sdk) downloads the
+  # Linux tarball on Linux; on Arch the CLI is AUR-only.
+  brew-cask:
+    pkg: gcloud-cli

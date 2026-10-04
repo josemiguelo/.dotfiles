@@ -7,11 +7,11 @@
 #   check      does the disk match the lock? EVERY plugin the spec enables is
 #              cloned AND sits on its locked commit — a lock moved on another
 #              machine lands here as a file change only; the clone is what
-#              runs. (the [scripts.nvim-plugins] check)
+#              runs. (the scripts.nvim-plugins check)
 #   install    make it so: Lazy's own `restore`.  (the script's run)
 #   outdated   is a newer commit available upstream? Lazy's own check, honouring
 #              each plugin's version/tag/commit/branch/pin.
-#              (the [outdated.nvim-plugins] source)
+#              (the outdated.nvim-plugins source)
 #   update     move one plugin to what `outdated` reported — Lazy's own update,
 #              so Lazy stays the only writer of the pins.
 #              (the source's per-row upgrade)

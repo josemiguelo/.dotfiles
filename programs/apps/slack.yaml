@@ -1,0 +1,10 @@
+description: Slack desktop app
+install:
+
+  dnf-repo:
+    with:
+      repofile: 'file:repos/slack.repo'
+
+  # Arch: the AUR's slack-desktop (Slack's own build, repackaged).
+  omarchy-aur:
+    pkg: slack-desktop

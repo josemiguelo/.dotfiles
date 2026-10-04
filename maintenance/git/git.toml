@@ -1,8 +1,0 @@
-# git: identity and delta as pager, written into ~/.gitconfig (not a chezmoi
-# file). git and git-delta themselves are programs (programs/core.toml,
-# programs/cli/git-delta.toml).
-
-[scripts.setup-git]
-description = "git identity and delta configuration"
-file = "setup-git.sh"
-check = "file:setup-git.sh check"

@@ -12,7 +12,7 @@ nobody will ask for it by name.
 
 | The request is about… | Repo | Where you edit |
 |---|---|---|
-| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `[data]` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts <feature>` |
+| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `data` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts <feature>` |
 | the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree, window `loadout <feature>` |
 | loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree, window `wiki <feature>` |
 | a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree, window `skills <feature>` |
@@ -96,9 +96,9 @@ in the meantime.
 
 - **`~/.local/share/chezmoi`** (josemiguelo/.dotfiles) — the one config
   repo. `configs/` is chezmoi's source (`.chezmoiroot`); the rest is what
-  `loadout` reads (`LOADOUT_REPO` points here): `loadout.toml`, `programs/`,
+  `loadout` reads (`LOADOUT_REPO` points here): `loadout.yaml`, `programs/`,
   `maintenance/`, `profiles/`, `machines/`, `state/`. A tool's loadout
-  fragment sits beside its dotfiles as `.loadout.toml` + `.loadout/`. The
+  fragment sits beside its dotfiles as `.loadout.yaml` + `.loadout/`. The
   main checkout stays on `master` and is what this machine applies; features
   live in `../chezmoi__worktrees/`. This file's source is
   `configs/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,

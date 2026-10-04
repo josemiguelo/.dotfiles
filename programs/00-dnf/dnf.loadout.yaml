@@ -1,0 +1,14 @@
+programs:
+  # dnf.conf tweaks must land before anything is installed with dnf. Programs
+  # with no dependency edges install in declaration order (the layout
+  # fragments globs' order, path-sorted within one), so this folder's 00-
+  # prefix is what puts it first among programs/: keep it sorting before
+  # every other program-declaring path. Paths are relative to this file.
+  setup-dnf:
+    description: dnf.conf performance and behavior tweaks
+    install:
+
+      dnf:
+        command: 'file:setup-dnf.sh install'
+        check: 'file:setup-dnf.sh check && echo configured'
+        regex: '(configured)'

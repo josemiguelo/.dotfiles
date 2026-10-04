@@ -1,0 +1,54 @@
+scripts:
+  # Apps set up the Omarchy way: 1Password, Brave as the default browser,
+  # VS Code, sudoless Docker, and the coding-agent launchers in use. The apps
+  # themselves are programs (programs/apps/, programs/cli/). Paths are
+  # relative to this file; omarchy-1password sources ../lib/.
+
+  # 1Password through Omarchy's installer, which adds the Chromium extension
+  # entry and opens the app when done; started at login unscaled like
+  # Omarchy's launcher does (Quick Access fits), and Ctrl+Shift+Space opens
+  # Quick Access.
+  omarchy-1password:
+    description: '1Password via Omarchy''s installer, unscaled, Ctrl+Shift+Space Quick Access'
+    file: omarchy-1password.sh
+    check: 'file:omarchy-1password.sh check'
+    after: [programs.1password, programs.1password-cli]
+
+  # Brave through Omarchy's browser installer (policy, flags, theme).
+  omarchy-brave:
+    description: 'Brave, set up by Omarchy''s browser installer'
+    file: omarchy-brave.sh
+    check: 'file:omarchy-brave.sh check'
+    after: [programs.brave]
+
+  # Omarchy on Arch: the default browser, named by the machine's opt-in
+  # ("omarchy-default-browser-arch brave").
+  omarchy-default-browser-arch:
+    description: 'Omarchy''s default browser (Arch)'
+    file: omarchy-default-browser-arch.sh
+    check: 'test "$(omarchy default browser)" = "$1"'
+    after: [programs.brave, scripts.omarchy-brave]
+
+  # VS Code through Omarchy's installer (keyring, no self-update, Omarchy's
+  # theme). It overwrites settings.json and opens VS Code once.
+  omarchy-vscode:
+    description: 'VS Code, set up by Omarchy''s installer'
+    file: omarchy-vscode.sh
+    check: 'file:omarchy-vscode.sh check'
+    after: [programs.code]
+
+  # Omarchy's sudoless Docker (docker group membership: root-equivalent),
+  # opted into per machine.
+  omarchy-sudoless-docker:
+    description: 'sudoless Docker (user in the docker group)'
+    file: omarchy-sudoless-docker.sh
+    check: 'file:omarchy-sudoless-docker.sh check'
+    after: [programs.lazydocker]
+
+  # Omarchy's ~/.local/bin launchers for coding agents, pruned to the ones this
+  # machine uses, named by its opt-in ("omarchy-agent-launchers-prune claude
+  # codex gh gemini"). The kept agents themselves come from mise either way.
+  omarchy-agent-launchers-prune:
+    description: only the Omarchy agent launchers in use
+    file: omarchy-agent-launchers-prune.sh
+    check: 'file:omarchy-agent-launchers-prune.sh check $@'

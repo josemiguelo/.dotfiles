@@ -1,3 +1,0 @@
-[programs.azure-cli]
-description = "Azure CLI"
-via = ["brew"]

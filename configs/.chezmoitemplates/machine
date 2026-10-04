@@ -1,12 +1,12 @@
 {{- /*
-  This machine's [data], as JSON: ../loadout.toml declares every key with
-  its default, and ../machines/<hostname>.toml with the profiles it extends
+  This machine's data, as JSON: ../loadout.yaml declares every key with
+  its default, and ../machines/<hostname>.yaml with the profiles it extends
   goes on top (machine-layer; merge-data merges the way loadout does). A
   host without a machine file gets the defaults. Templates read it with:
   includeTemplate "machine" . | fromJson
 */ -}}
-{{- $data := get (include "../loadout.toml" | fromToml) "data" | default dict -}}
-{{- $file := printf "../machines/%s.toml" .chezmoi.hostname -}}
+{{- $data := get (include "../loadout.yaml" | fromYaml) "data" | default dict -}}
+{{- $file := printf "../machines/%s.yaml" .chezmoi.hostname -}}
 {{- if stat (joinPath .chezmoi.sourceDir $file) -}}
 {{-   $machine := includeTemplate "machine-layer" (dict "file" $file) | fromJson -}}
 {{-   $data = includeTemplate "merge-data" (dict "under" $data "over" $machine) | fromJson -}}

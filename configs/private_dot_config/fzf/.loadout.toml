@@ -1,5 +1,0 @@
-# fzf: the fuzzy finder. Its dotfiles are this directory (the zsh side lives
-# in zsh's conf.d/ and plugins/).
-
-[programs.fzf]
-via = ["brew", "dnf", "omarchy"]

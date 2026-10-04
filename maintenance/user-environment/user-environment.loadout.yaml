@@ -1,0 +1,7 @@
+scripts:
+  # Linux only (systemd user manager): the user environment matches
+  # ~/.config/environment.d. Mapped by profiles/fedora.yaml.
+  user-environment:
+    description: systemd user environment matches ~/.config/environment.d
+    file: user-environment.sh
+    check: 'file:user-environment.sh check'

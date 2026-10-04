@@ -1,0 +1,9 @@
+scripts:
+  # Fonts: the FiraCode Nerd Fonts kitty.conf names, downloaded where no
+  # package carries them (macOS, Fedora). Omarchy gets them as a package
+  # (ttf-firacode-nerd, in kitty's fragment).
+
+  download-fonts:
+    description: FiraCode nerd fonts
+    file: download-fonts.sh
+    check: 'file:download-fonts.sh check'

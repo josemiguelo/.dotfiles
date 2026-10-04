@@ -1,6 +1,6 @@
 {{- /*
   JSON of .over on top of .under: tables merge key by key, anything else
-  (lists too) replaces, as loadout merges [data]. Not sprig's mergeOverwrite:
+  (lists too) replaces, as loadout merges data. Not sprig's mergeOverwrite:
   it skips zero values, so a machine's `false` could never override a base's
   `true`.
 */ -}}
