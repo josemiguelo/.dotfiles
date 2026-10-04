@@ -9,7 +9,8 @@
 # `update <name>` (loadout calls it per row): clone what's missing with
 # `tpack install`, fast-forward the one clone that's behind.
 set -eu
-export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/homebrew/bin:$PATH"
+. "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 CONF="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 # tpack clones under XDG_DATA_HOME (~/.local/share/tmux/plugins); older

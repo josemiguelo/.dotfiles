@@ -53,11 +53,9 @@ unset _cd _compdef_queue
 # the brew plugin runs first so plugins don't shell out to the slow /usr/bin
 # stubs, but mise's activation prepends its own paths afterwards; re-assert
 # homebrew's precedence here. typeset -U above keeps the first occurrence, so
-# this is a plain array move rather than another brew shellenv.
-path=( /opt/homebrew/{bin,sbin}(N-/) $path )
-{{- if (includeTemplate "machine" . | fromJson).omarchy }}
-path=( /home/linuxbrew/.linuxbrew/{bin,sbin}(N-/) $path )
-{{- end }}
+# this is a plain array move rather than another brew shellenv. BREW_PREFIX
+# comes from the brew plugin (brew-prefix.sh).
+path=( $BREW_PREFIX/{bin,sbin}(N-/) $path )
 
 # history must be set after antidote load: ohmyzsh's lib/history.zsh raises
 # HISTSIZE to 50000 whenever it finds a smaller value, so anything set earlier

@@ -1,14 +1,16 @@
 #!/bin/sh
-# Homebrew on Linux, owned by the login user. Single source of truth: the
-# prefix and the directories Homebrew itself demands write access to.
+# Homebrew on Linux, owned by the login user. Single source of truth for the
+# directories Homebrew itself demands write access to; the prefix comes from
+# brew-prefix.sh.
 #
 # check   brew binary present and every DIR writable by $USER
 # install install Homebrew if missing (official installer, non-interactive),
 #         then chown the prefix to $USER if any part of it is owned by
 #         someone else
 set -eu
+. "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
 
-PREFIX="/home/linuxbrew/.linuxbrew"
+PREFIX="$BREW_PREFIX"
 BREW="$PREFIX/bin/brew"
 
 # The directories `brew install` refuses to run without write access to.

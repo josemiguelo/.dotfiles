@@ -5,7 +5,8 @@
 # behind its remote is the tmux-plugins oracle's question, not this one's.
 # Modes: `check` / `install` (default).
 set -eu
-export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/homebrew/bin:$PATH"
+. "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 CONF="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 # Same dirs the tmux-plugins oracle walks (outdated-plugins.sh, beside this).
