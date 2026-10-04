@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-03T07:01:23.657856491Z",
+  "toolVersion": "2.0.0",
+  "updatedAt": "2026-10-04T14:58:57.616537454Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -89,7 +89,7 @@
     },
     "awscli": {
       "status": "installed",
-      "version": "2.37.7",
+      "version": "2.37.9",
       "reason": null
     },
     "bat": {
@@ -100,6 +100,11 @@
     "btop": {
       "status": "installed",
       "version": "1.4.7",
+      "reason": null
+    },
+    "eza": {
+      "status": "installed",
+      "version": "0.23.5",
       "reason": null
     },
     "fd": {
@@ -324,6 +329,11 @@
     }
   },
   "scripts": {
+    "setup-git": {
+      "status": "done",
+      "lastRun": "2026-09-24T22:03:06.585287649Z",
+      "exitCode": 0
+    },
     "dotfiles-pull": {
       "status": "done",
       "lastRun": "2026-09-25T15:11:22.233389182Z",
@@ -337,11 +347,6 @@
     "dotfiles-ssh-remote": {
       "status": "done",
       "lastRun": "2026-09-24T21:49:22.059595241Z",
-      "exitCode": 0
-    },
-    "setup-git": {
-      "status": "done",
-      "lastRun": "2026-09-24T22:03:06.585287649Z",
       "exitCode": 0
     },
     "skills-repo": {
