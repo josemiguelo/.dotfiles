@@ -34,6 +34,20 @@ return {
           })
         end,
       })
+
+      -- the hunk-header emphasis (FugitiveHunkHeader/Context, colorscheme.lua) only
+      -- applies in the status window: commit, blame and flog diffs share diffLine
+      -- and diffSubname, so map them per window rather than globally
+      local hunk_map = "diffLine:FugitiveHunkHeader,diffSubname:FugitiveHunkContext"
+      vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
+        callback = function(ev)
+          if vim.bo[ev.buf].filetype == "fugitive" then
+            vim.wo.winhighlight = hunk_map
+          elseif vim.wo.winhighlight == hunk_map then
+            vim.wo.winhighlight = ""
+          end
+        end,
+      })
     end,
     cmd = {
       "G",

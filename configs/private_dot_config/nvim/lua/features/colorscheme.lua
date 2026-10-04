@@ -96,21 +96,17 @@ return {
         extend(hl, "diffAdded", { fg = c.green })
         extend(hl, "diffRemoved", { fg = c.red })
 
-        -- Tokyo Night already gives each diff header its own color, so carry over
-        -- only the emphasis and let its palette supply the foreground
-        for _, group in ipairs({
-          "diffFile",
-          "diffLine",
-          "diffIndexLine",
-          "diffOldFile",
-          "diffNewFile",
-        }) do
-          extend(hl, group, emphasis)
-        end
+        -- the fugitive status window maps diffLine and diffSubname onto these
+        -- groups (see features/git.lua), so its hunk headers keep the underlined
+        -- look while the global diffLine below changes
+        hl.FugitiveHunkHeader = vim.tbl_extend("force", hl.diffLine or {}, emphasis, { bg = c.bg_visual })
+        hl.FugitiveHunkContext = vim.tbl_extend("force", emphasis, { fg = c.blue })
 
-        -- these two it leaves undefined, so they still need a color of their own
-        extend(hl, "diffSubname", vim.tbl_extend("force", emphasis, { fg = c.blue }))
-        extend(hl, "gitdiff", vim.tbl_extend("force", emphasis, { fg = c.blue }))
+        -- the file divider (diff --git) and the hunk divider (@@) sit on a band:
+        -- bg_visual, a step above the bg_highlight CursorLine uses, so they read
+        -- as dividers; the file line also gets an underline in its own color
+        extend(hl, "diffFile", { bg = c.bg_visual, bold = true, underline = true })
+        extend(hl, "diffLine", { bg = c.bg_visual, bold = true })
 
         extend(hl, "DiffText", { bg = c.diff.text, fg = contrast_fg(c.diff.text), bold = true })
 
