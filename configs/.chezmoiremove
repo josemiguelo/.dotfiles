@@ -13,3 +13,4 @@
 .config/starship
 .config/nvim/lua/features/langs/lisp.lua
 .config/zsh/functions/start-loadout
+.local/bin/kitty-workmux-dashboard

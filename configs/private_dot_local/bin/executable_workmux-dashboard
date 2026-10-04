@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Runs `workmux dashboard` from kitty's overlay (kitty.conf's ctrl+cmd+shift+a)
+# or a tmux popup (tmux.conf's prefix + M-A, which works over ssh). Neither has a
+# login shell's environment: kitty's PATH has no Homebrew, so on macOS workmux
+# can't find tmux and reports "No tmux server running", and on Linux workmux
+# isn't found at all and the overlay closes at once. Put Homebrew first
+# (brew-prefix.sh), and pin the backend: kitty sets KITTY_WINDOW_ID in the
+# overlay, and a tmux server started from kitty hands it to its popups too,
+# which would otherwise make workmux pick the kitty backend and find no agents.
+. "$HOME/.local/lib/brew-prefix.sh"
+export PATH="$BREW_PREFIX/bin:$PATH"
+export WORKMUX_BACKEND=tmux
+exec workmux dashboard
