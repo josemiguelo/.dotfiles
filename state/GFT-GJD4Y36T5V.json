@@ -4,8 +4,8 @@
   "os": "macos",
   "distro": null,
   "arch": "arm64",
-  "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-04T04:39:28.012669Z",
+  "toolVersion": "2.0.0",
+  "updatedAt": "2026-10-04T15:05:52.049413Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -337,10 +337,8 @@
       "reason": null
     },
     ".local": {
-      "status": "drifted",
-      "files": [
-        ".local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md"
-      ],
+      "status": "applied",
+      "files": [],
       "reason": null
     },
     ".zshenv": {
