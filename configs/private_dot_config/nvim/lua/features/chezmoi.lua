@@ -116,6 +116,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Only files under configs/ are chezmoi sources. The extra's BufRead hook calls
+-- watch() on every file in the checkout, and for a repo-root file (README.md)
+-- chezmoi refuses the save-time apply with "not in .../configs". Skip those.
+local sources = vim.env.HOME .. "/.local/share/chezmoi/configs/"
+
 return {
   {
     "xvzc/chezmoi.nvim",
@@ -129,6 +134,18 @@ return {
         on_apply = { notification = { enable = true } },
       },
     },
+    config = function(_, opts)
+      require("chezmoi").setup(opts)
+      local edit = require("chezmoi.commands.__edit")
+      local watch = edit.watch
+      edit.watch = function(bufnr, force)
+        local path = vim.api.nvim_buf_get_name(bufnr or 0)
+        if path:sub(1, #sources) ~= sources then
+          return
+        end
+        return watch(bufnr, force)
+      end
+    end,
   },
   {
     "folke/snacks.nvim",
