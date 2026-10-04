@@ -5,20 +5,65 @@
 data:
   omarchy: true
 
-curl:
-  install_with: omarchy
+install_with:
+  omarchy:
+    - curl
+    - gcc
+    - procps-ng
+    - ttf-firacode-nerd
+    - yazi
+    - fzf
+    - starship
+    - atuin
+    - bat
+    - btop
+    - fd
+    - git-delta
+    - gum
+    - lazydocker
+    - lazygit
+    - ripgrep
+    - tree-sitter-cli
+    - zoxide
+    - voxtype
+    - wtype
+    - zenity
+    - code
+    - sublime-text
+    - obsidian
+    - spotify
+    - vlc
+    - 1password
+    - 1password-cli
+  script:
+    - setup-brew
+    - brew-taps
+    - jetbrains-toolbox
+    - ngrok
+  brew:
+    - workmux
+    - eza
+    - awscli
+    - just
+    - trash-cli
+    - yq
+    - vim-enhanced
+    - scrcpy
+  brew-cask:
+    - tpack
+    - google-cloud-cli
+  omarchy-aur:
+    - voxtype-tui
+    - antigravity
+    - slack
+    - teams-for-linux
+    - anydesk
+    - brave
+
 git:
   install_with: omarchy
   scripts:
     - setup-git
-gcc:
-  install_with: omarchy
-procps-ng:
-  install_with: omarchy
-setup-brew:
-  install_with: script
-brew-taps:
-  install_with: script
 chezmoi:
   install_with: omarchy
   scripts:
@@ -47,18 +92,6 @@ kitty:
   install_with: omarchy
   scripts:
     - omarchy-default-terminal
-ttf-firacode-nerd:
-  install_with: omarchy
-yazi:
-  install_with: omarchy
-fzf:
-  install_with: omarchy
-starship:
-  install_with: omarchy
-workmux:
-  install_with: brew
-jetbrains-toolbox:
-  install_with: script
 jetbrains:
   scripts:
     - link-jetbrains-launchers-linux
@@ -67,46 +100,6 @@ tmux:
   scripts:
     - tmux-plugins
     - omarchy-tmux-theme
-tpack:
-  install_with: brew-cask
-atuin:
-  install_with: omarchy
-bat:
-  install_with: omarchy
-eza:
-  install_with: brew
-btop:
-  install_with: omarchy
-fd:
-  install_with: omarchy
-git-delta:
-  install_with: omarchy
-gum:
-  install_with: omarchy
-lazydocker:
-  install_with: omarchy
-lazygit:
-  install_with: omarchy
-ripgrep:
-  install_with: omarchy
-tree-sitter-cli:
-  install_with: omarchy
-zoxide:
-  install_with: omarchy
-awscli:
-  install_with: brew
-just:
-  install_with: brew
-trash-cli:
-  install_with: brew
-yq:
-  install_with: brew
-vim-enhanced:
-  install_with: brew
-google-cloud-cli:
-  install_with: brew-cask
-ngrok:
-  install_with: script
 keychron:
   scripts:
     - keychron-launcher-access
@@ -168,41 +161,7 @@ omarchy-overrides:
   scripts:
     - omarchy-command-overrides
     - omarchy-keyboard-backlight-guard
-voxtype:
-  install_with: omarchy
-wtype:
-  install_with: omarchy
-zenity:
-  install_with: omarchy
-voxtype-tui:
-  install_with: omarchy-aur
 dictation:
   scripts:
     - omarchy-dictation
     - omarchy-dictation-gpu
-code:
-  install_with: omarchy
-sublime-text:
-  install_with: omarchy
-obsidian:
-  install_with: omarchy
-spotify:
-  install_with: omarchy
-vlc:
-  install_with: omarchy
-1password:
-  install_with: omarchy
-1password-cli:
-  install_with: omarchy
-antigravity:
-  install_with: omarchy-aur
-slack:
-  install_with: omarchy-aur
-teams-for-linux:
-  install_with: omarchy-aur
-anydesk:
-  install_with: omarchy-aur
-brave:
-  install_with: omarchy-aur
-scrcpy:
-  install_with: brew
