@@ -12,12 +12,12 @@ nobody will ask for it by name.
 
 | The request is about… | Repo | Where you edit |
 |---|---|---|
-| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `[data]` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts` |
-| the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree, window `loadout` |
-| loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree, window `wiki` |
-| a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree, window `skills` |
+| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `[data]` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts <feature>` |
+| the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree, window `loadout <feature>` |
+| loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree, window `wiki <feature>` |
+| a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree, window `skills <feature>` |
 {{- if $m.work }}
-| the sofi.nvim Neovim plugin | `~/Repos/gh/josemiguelo/sofi.nvim` | a feature worktree, window `sofi` |
+| the sofi.nvim Neovim plugin | `~/Repos/gh/josemiguelo/sofi.nvim` | a feature worktree, window `sofi <feature>` |
 {{- end }}
 
 Unsure which repo, or a request that spans two (an engine feature and its
@@ -41,6 +41,10 @@ changed loadout is `dotfiles:`.
    ```bash
    cd ~/.local/share/chezmoi && workmux add <feature> --headless
    ```
+   Name the feature short and say why the change is being made, e.g.
+   `kitty-dashboard-key`, `finish-feature-rule`. That name is the branch, the
+   worktree folder, and the part of the window's name after its prefix (step
+   3). Every repo's part of one feature uses the same name.
    It lands at `~/.local/share/chezmoi__worktrees/<feature>`. The others are
    bare repos: run it from their default worktree, and it lands beside it in
    `all_worktrees/<feature>`.
@@ -50,12 +54,15 @@ changed loadout is `dotfiles:`.
 {{ if $m.work }}
    For `sofi`, `~/Repos/gh/josemiguelo/sofi.nvim/all_worktrees/master`
 {{ end }}.
-3. **A window for the user**, a shell in that folder, in this session:
+3. **A window for the user**, a shell in that folder, in this session. Its
+   name is the repo's prefix from the table, a space, then the feature's
+   name: `loadouts kitty-dashboard-key`, or `wiki kitty-dashboard-key` for the
+   wiki part of the same feature. The prefix tells the repos apart, and the
+   feature name matches the worktree.
    ```bash
    tmux list-windows -F '#W'                                   # taken already?
-   tmux new-window -d -n loadouts -c ~/.local/share/chezmoi__worktrees/<feature>
+   tmux new-window -d -n "<prefix> <feature>" -c ~/.local/share/chezmoi__worktrees/<feature>
    ```
-   A second feature in the same repo gets `loadouts-2`, and so on.
 4. **Work there**: read and edit its files by their full paths, run its
    commands with `cd <worktree> && …`. Say which worktree and window you
    used. Merging and removing a worktree follow the repo's `AGENTS.md`.
