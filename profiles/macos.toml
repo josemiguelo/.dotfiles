@@ -57,6 +57,7 @@ tpack = "brew-cask"
 [cli.install]
 atuin = "brew"
 bat = "brew"
+eza = "brew"
 btop = "brew"
 fd = "brew"
 git-delta = "brew"

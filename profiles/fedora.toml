@@ -88,6 +88,7 @@ tpack = "brew-cask"
 # Config-less command-line tools (programs/cli/).
 [cli.install]
 yq = "brew"
+eza = "brew"
 awscli = "brew"
 atuin = "brew"
 trash-cli = "brew"
