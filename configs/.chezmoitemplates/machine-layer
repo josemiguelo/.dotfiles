@@ -1,14 +1,14 @@
 {{- /*
-  JSON of one machine or profile file's [data] with its profiles beneath:
-  each of its extends (../profiles/<name>.toml, recursively) first, then
-  the file's own [data] and its groups' [<group>.data] (as data.<group>).
+  JSON of one machine or profile file's data with its profiles beneath:
+  each of its extends (../profiles/<name>.yaml, recursively) first, then
+  the file's own data.
   Called with (dict "file" "<path relative to configs/>"). loadout refuses
   profiles of one extends list that disagree, so their order never matters.
 */ -}}
-{{- $file := include .file | fromToml -}}
+{{- $file := include .file | fromYaml -}}
 {{- $data := dict -}}
 {{- range (get $file "extends" | default list) -}}
-{{-   $profile := includeTemplate "machine-layer" (dict "file" (printf "../profiles/%s.toml" .)) | fromJson -}}
+{{-   $profile := includeTemplate "machine-layer" (dict "file" (printf "../profiles/%s.yaml" .)) | fromJson -}}
 {{-   $data = includeTemplate "merge-data" (dict "under" $data "over" $profile) | fromJson -}}
 {{- end -}}
 {{- $own := get $file "data" | default dict -}}

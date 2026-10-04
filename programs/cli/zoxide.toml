@@ -1,2 +1,0 @@
-[programs.zoxide]
-via = ["brew", "omarchy"]

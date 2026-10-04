@@ -1,2 +1,0 @@
-[programs.lazydocker]
-via = ["brew", "omarchy"]

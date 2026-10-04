@@ -1,0 +1,12 @@
+programs:
+  # workmux: git worktrees + tmux sessions for parallel agent sessions. Its
+  # dotfiles are this directory (its zsh wrapper lives in zsh's plugins/).
+
+  # From its author's tap (brew-taps), by the full tap path.
+  workmux:
+    description: git worktrees + tmux windows for parallel agent sessions
+    depends-on: [tmux, brew-taps]
+    install:
+
+      brew:
+        command: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" install raine/workmux/workmux'

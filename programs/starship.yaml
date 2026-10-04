@@ -1,0 +1,6 @@
+# starship: the shell prompt. Its config is a single file in a folder other
+# tools share (configs/private_dot_config/starship.toml, deployed to
+# ~/.config/starship.toml, starship's default path), so its fragment lives
+# here rather than beside it.
+
+via: [brew, omarchy]

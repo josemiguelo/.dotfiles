@@ -1,3 +1,0 @@
-[programs.jordanbaird-ice]
-description = "Ice -- menu bar icon organizer"
-via = ["brew-cask"]

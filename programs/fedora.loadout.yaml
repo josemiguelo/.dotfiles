@@ -1,0 +1,86 @@
+programs:
+  # Fedora-only packages: what other programs' Fedora variants need, and the
+  # toolchain batch (the Development Tools group and the build libraries
+  # language-runtime builds need, installed together). Mapped by
+  # profiles/fedora.yaml. (gcc and procps-ng live in programs/core.loadout.yaml.)
+
+  # dnf plugins (provides the copr command kitty's dnf-copr variant uses).
+  dnf-plugins-core:
+    description: 'dnf plugins (provides the copr command)'
+    via: [dnf]
+
+  development-tools-group:
+    description: dnf Development Tools group
+    install:
+
+      # A dnf group, not a package: its own install command and check.
+      dnf:
+        command: sudo dnf group install -y development-tools
+        check: 'dnf group list --installed 2>/dev/null | grep ''^development-tools '''
+        regex: '(development-tools)'
+
+  autoconf:
+    via: [dnf]
+
+  patch:
+    via: [dnf]
+
+  rust:
+    via: [dnf]
+
+  findutils:
+    via: [dnf]
+
+  zlib-devel:
+    via: [dnf]
+    install:
+
+      # Virtual provide on modern Fedora: override the dnf installer's check.
+      dnf:
+        check: rpm -q --whatprovides zlib-devel
+
+  bzip2-devel:
+    via: [dnf]
+
+  readline-devel:
+    via: [dnf]
+
+  sqlite:
+    via: [dnf]
+
+  sqlite-devel:
+    via: [dnf]
+
+  openssl-devel:
+    via: [dnf]
+
+  xz-devel:
+    via: [dnf]
+
+  libffi-devel:
+    via: [dnf]
+
+  tk-devel:
+    via: [dnf]
+
+  libzstd-devel:
+    via: [dnf]
+
+  libyaml-devel:
+    via: [dnf]
+
+  gdbm-devel:
+    via: [dnf]
+
+  ncurses-devel:
+    via: [dnf]
+
+  dbus-devel:
+    via: [dnf]
+    description: D-Bus development headers
+
+  perl-FindBin:
+    via: [dnf]
+
+  libxcrypt-compat:
+    via: [dnf]

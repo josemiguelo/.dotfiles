@@ -1,0 +1,58 @@
+programs:
+  # mise: the tool-version manager, the tools its config.toml pins, the default
+  # packages inside them, and what depends on those tools (macOS JDK
+  # registration, Omarchy's default coding agent). Its dotfiles are this
+  # directory plus ~/.default-gems and ~/.default-npm-packages
+  # (configs/dot_default-*); paths below are relative to this file.
+
+  # On Omarchy it's Omarchy's own mise-bin from the [omarchy] repo, which runs
+  # ahead of Arch's extra/mise.
+  mise:
+    description: mise tool-version manager
+    install:
+
+      omarchy:
+        pkg: mise-bin
+
+      brew: {}
+scripts:
+
+  # Tools first, exactly the versions config.toml pins, then the default
+  # packages inside them.
+  mise-tools:
+    description: mise tools at the versions ~/.config/mise/config.toml pins
+    file: '.loadout/tools.sh'
+    check: 'file:.loadout/tools.sh check'
+    after: [programs.mise]
+
+  # mise only seeds default packages into versions it installs from then on;
+  # this backfills ~/.default-npm-packages and ~/.default-gems into every one.
+  mise-default-packages:
+    description: default npm/gem packages in every mise node/ruby version
+    file: '.loadout/default-packages.sh'
+    check: 'file:.loadout/default-packages.sh check'
+    after: [scripts.mise-tools]
+
+  # macOS: mise's JDKs registered in /Library/Java/JavaVirtualMachines, as
+  # asdf-java's macOS integration did; also clears asdf's leftover entries.
+  java-macos-integration:
+    description: 'mise''s JDKs registered with macOS (java_home)'
+    file: '.loadout/java-macos.sh'
+    check: 'file:.loadout/java-macos.sh check'
+    os: [macos]
+    after: [scripts.mise-tools]
+
+  # Omarchy only: the coding agent Omarchy's keybinding and menu launch, named
+  # by the opt-in ("omarchy-default-agent claude"). The agent comes from mise
+  # (conf.d/omarchy.toml), hence after mise-tools.
+  omarchy-default-agent:
+    description: 'Omarchy''s default coding agent'
+    file: '.loadout/default-agent.sh'
+    check: 'test "$(omarchy default agent)" = "$1"'
+    after: [scripts.mise-tools]
+outdated:
+
+  # Are the pins in ~/.config/mise/config.toml behind their upstream releases?
+  mise-tools:
+    command: 'file:.loadout/outdated-tools.sh'
+    upgrade: 'file:.loadout/outdated-tools.sh update {item}'

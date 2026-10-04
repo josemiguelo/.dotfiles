@@ -1,0 +1,6 @@
+programs:
+  # fzf: the fuzzy finder. Its dotfiles are this directory (the zsh side lives
+  # in zsh's conf.d/ and plugins/).
+
+  fzf:
+    via: [brew, dnf, omarchy]

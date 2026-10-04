@@ -1,0 +1,49 @@
+# MacBookPro16,1 (T2) running Omarchy.
+
+extends: [omarchy]
+
+ssh:
+  scripts:
+    - setup-ssh id_ed25519
+    - omarchy-sshd josemiguelo
+t2fanrd:
+  install_with: omarchy
+t2:
+  scripts:
+    - t2-hid-apple-keyboard-arch
+    - t2-fan-curve
+    - t2-boot-clock
+    - t2-gmux-backlight
+omarchy-apps:
+  scripts:
+    - omarchy-sudoless-docker
+hyprland:
+  scripts:
+    - omarchy-activity-monitor-size 90% 90%
+scratchpad:
+  scripts:
+    - omarchy-scratchpad-opacity 0.99
+libvirt:
+  install_with: omarchy
+qemu-desktop:
+  install_with: omarchy
+virt-manager:
+  install_with: omarchy
+virt-install:
+  install_with: omarchy
+virt-viewer:
+  install_with: omarchy
+dnsmasq:
+  install_with: omarchy
+edk2-ovmf:
+  install_with: omarchy
+swtpm:
+  install_with: omarchy
+virtualization:
+  scripts:
+    - setup-libvirt-arch
+    - ufw-libvirt
+solaar:
+  install_with: omarchy
+  scripts:
+    - solaar-no-autostart

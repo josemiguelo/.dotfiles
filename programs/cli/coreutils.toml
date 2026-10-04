@@ -1,3 +1,0 @@
-# GNU coreutils (macOS ships BSD versions of ls, date, etc).
-[programs.coreutils]
-via = ["brew"]

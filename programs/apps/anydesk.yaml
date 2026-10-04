@@ -1,0 +1,10 @@
+description: AnyDesk remote desktop
+install:
+
+  dnf:
+    command: 'file:fedora/install-anydesk.sh'
+
+  # Arch: the AUR's anydesk-bin (AnyDesk's own build, repackaged). Its
+  # anydesk.service (unattended access) is left disabled.
+  omarchy-aur:
+    pkg: anydesk-bin

@@ -1,3 +1,0 @@
-[programs.jira-cli]
-description = "Jira CLI"
-via = ["brew"]

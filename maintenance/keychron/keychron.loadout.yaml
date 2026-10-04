@@ -1,0 +1,8 @@
+scripts:
+  # Keychron keyboards' HID nodes open to the logged-in user (udev uaccess), so
+  # the Keychron Launcher (WebHID) can connect instead of "connecting" forever.
+
+  keychron-launcher-access:
+    description: 'Keychron Launcher can reach the keyboard (WebHID)'
+    file: launcher-access.sh
+    check: 'file:launcher-access.sh check'

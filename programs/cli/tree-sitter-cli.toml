@@ -1,2 +1,0 @@
-[programs.tree-sitter-cli]
-via = ["brew", "omarchy"]

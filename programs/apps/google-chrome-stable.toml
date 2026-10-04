@@ -1,5 +1,0 @@
-[programs.google-chrome-stable]
-description = "Google Chrome browser"
-
-[programs.google-chrome-stable.install.dnf]
-command = "file:fedora/install-chrome.sh"

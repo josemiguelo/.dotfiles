@@ -1,0 +1,16 @@
+scripts:
+  # ssh: this machine's key and agent, and (on Omarchy) the ssh server.
+
+  setup-ssh:
+    description: machine ssh key and agent auto-add config
+    file: setup-ssh.sh
+    # The agent-unit clause is Linux-only; uname short-circuits it on macOS.
+    check: 'test -f $HOME/.ssh/$1 && grep -q ''AddKeysToAgent yes'' $HOME/.ssh/config && { test "$(uname -s)" != Linux || systemctl --user -q is-enabled ssh-agent.socket; }'
+
+  # SSH access through Omarchy's own setup (sshd, a rate-limited ufw rule,
+  # key-only logins), with authorized_keys mirroring the GitHub user named by
+  # the machine's opt-in ("omarchy-sshd josemiguelo").
+  omarchy-sshd:
+    description: 'sshd with key-only logins for the GitHub user''s keys'
+    file: omarchy-sshd.sh
+    check: 'file:omarchy-sshd.sh check "$1"'

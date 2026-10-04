@@ -1,3 +1,0 @@
-[programs.lunar]
-description = "Lunar -- external display brightness/contrast control"
-via = ["brew-cask"]

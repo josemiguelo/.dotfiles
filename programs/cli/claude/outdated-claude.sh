@@ -1,12 +1,11 @@
 #!/bin/sh
-# Custom `loadout outdated` oracle: is the claude binary itself behind the
-# latest published Claude Code release? claude.ai/install.sh installs it as
-# a plain self-updating binary (see manifest.d/install/cli-tools/claude.toml),
-# so no package manager knows about it.
-# `claude update` does the actual upgrade in place, so no re-install needed.
+# claude's own outdated check (programs/cli/claude/claude.yaml): is the claude
+# binary behind the latest published Claude Code release? claude.ai/install.sh
+# installs it as a plain self-updating binary, so no package manager knows
+# about it. `claude update` does the upgrade in place, so no re-install needed.
 #
-#   claude.sh                print `claude <current> <latest>` when behind, else nothing
-#   claude.sh update claude  install the latest release over the current binary
+#   outdated-claude.sh          print the latest version when behind, else nothing
+#   outdated-claude.sh update   install the latest release over the current binary
 #
 # Silent when claude isn't installed or the network is down — and when the
 # claude here isn't the native install: on Omarchy mise owns it (the dotfiles'
@@ -32,7 +31,6 @@ latest() {
 
 case ${1:-} in
 update)
-  [ "${2:-}" = claude ] || { echo "usage: $0 update claude" >&2; exit 2; }
   "$NATIVE" update
   echo "claude $(current)"
   ;;
@@ -40,11 +38,11 @@ update)
   cur=$(current) || exit 0
   [ -n "$cur" ] || exit 0
   new=$(latest) || exit 0
-  [ -n "$new" ] && [ "$new" != "$cur" ] && echo "claude $cur $new"
+  [ -n "$new" ] && [ "$new" != "$cur" ] && echo "$new"
   exit 0
   ;;
 *)
-  echo "usage: $0 [update claude]" >&2
+  echo "usage: $0 [update]" >&2
   exit 2
   ;;
 esac

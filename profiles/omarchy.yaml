@@ -1,0 +1,208 @@
+# Every Omarchy machine. System packages install through Omarchy's own
+# commands (the built-in omarchy installer); brew only carries tools with no
+# trustworthy Arch package.
+
+data:
+  omarchy: true
+
+curl:
+  install_with: omarchy
+git:
+  install_with: omarchy
+  scripts:
+    - setup-git
+gcc:
+  install_with: omarchy
+procps-ng:
+  install_with: omarchy
+setup-brew:
+  install_with: script
+brew-taps:
+  install_with: script
+chezmoi:
+  install_with: omarchy
+  scripts:
+    - dotfiles-pull
+    - dotfiles-push
+    - dotfiles-ssh-remote
+claude:
+  scripts:
+    - skills-repo
+zsh:
+  install_with: omarchy
+  scripts:
+    - default-shell
+    - zsh-plugins
+    - setup-completions
+mise:
+  install_with: omarchy
+  scripts:
+    - mise-tools
+    - mise-default-packages
+    - omarchy-default-agent claude
+nvim:
+  scripts:
+    - nvim-plugins
+kitty:
+  install_with: omarchy
+  scripts:
+    - omarchy-default-terminal
+ttf-firacode-nerd:
+  install_with: omarchy
+yazi:
+  install_with: omarchy
+fzf:
+  install_with: omarchy
+starship:
+  install_with: omarchy
+workmux:
+  install_with: brew
+jetbrains-toolbox:
+  install_with: script
+jetbrains:
+  scripts:
+    - link-jetbrains-launchers-linux
+tmux:
+  install_with: omarchy
+  scripts:
+    - tmux-plugins
+    - omarchy-tmux-theme
+tpack:
+  install_with: brew-cask
+atuin:
+  install_with: omarchy
+bat:
+  install_with: omarchy
+eza:
+  install_with: brew
+btop:
+  install_with: omarchy
+fd:
+  install_with: omarchy
+git-delta:
+  install_with: omarchy
+gum:
+  install_with: omarchy
+lazydocker:
+  install_with: omarchy
+lazygit:
+  install_with: omarchy
+ripgrep:
+  install_with: omarchy
+tree-sitter-cli:
+  install_with: omarchy
+zoxide:
+  install_with: omarchy
+awscli:
+  install_with: brew
+just:
+  install_with: brew
+trash-cli:
+  install_with: brew
+yq:
+  install_with: brew
+vim-enhanced:
+  install_with: brew
+google-cloud-cli:
+  install_with: brew-cask
+ngrok:
+  install_with: script
+keychron:
+  scripts:
+    - keychron-launcher-access
+hyprland:
+  scripts:
+    - omarchy-hypr-config input looknfeel
+    - omarchy-close-window-key
+    - omarchy-google-bindings
+    - omarchy-harpoon
+shell:
+  scripts:
+    - omarchy-bar bottom 24 tornikegomareli.spaces
+    - "omarchy-plugins
+     https://github.com/evindor/keystroke.git
+     https://github.com/jankeesvw/omarchy-notification-center.git
+     https://github.com/tornikegomareli/omarchy-spaces.git
+     https://github.com/binoymanoj/pomodoro-omarchy.git
+     https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git
+     https://github.com/crmne/omarchy-mpris.git"
+    - "omarchy-bar-icons
+     josemiguelo.menu-button
+     josemiguelo.workspace-layout
+     omarchy.monitor
+     omarchy.bluetooth
+     omarchy.network
+     omarchy.audio
+     omarchy.power
+     omarchy.agents
+     omarchy.system-update
+     omarchy.indicators
+     omarchy.weather
+     omarchy.tray
+     jankeesvw.notification-center
+     io.github.zeus-deus.voxtype
+     pomodoro-omarchy
+     crmne.mpris
+     omarchy.clock
+     tornikegomareli.spaces"
+    - omarchy-menu-button
+    - "omarchy-bar-widgets
+     josemiguelo.workspace-layout left before tornikegomareli.spaces
+     josemiguelo.menu-button left before josemiguelo.workspace-layout
+     crmne.mpris left after tornikegomareli.spaces"
+    - omarchy-keystroke-windows
+    - omarchy-pomodoro
+omarchy-apps:
+  scripts:
+    - omarchy-1password
+    - omarchy-default-browser-arch brave
+    - omarchy-vscode
+    - omarchy-brave
+    - omarchy-agent-launchers-prune claude codex gh gemini
+webapps:
+  scripts:
+    - omarchy-webapps-remove Basecamp HEY
+    - omarchy-webapp-gmail
+    - omarchy-webapp-google-calendar
+omarchy-overrides:
+  scripts:
+    - omarchy-command-overrides
+    - omarchy-keyboard-backlight-guard
+voxtype:
+  install_with: omarchy
+wtype:
+  install_with: omarchy
+zenity:
+  install_with: omarchy
+voxtype-tui:
+  install_with: omarchy-aur
+dictation:
+  scripts:
+    - omarchy-dictation
+    - omarchy-dictation-gpu
+code:
+  install_with: omarchy
+sublime-text:
+  install_with: omarchy
+obsidian:
+  install_with: omarchy
+spotify:
+  install_with: omarchy
+vlc:
+  install_with: omarchy
+1password:
+  install_with: omarchy
+1password-cli:
+  install_with: omarchy
+antigravity:
+  install_with: omarchy-aur
+slack:
+  install_with: omarchy-aur
+teams-for-linux:
+  install_with: omarchy-aur
+anydesk:
+  install_with: omarchy-aur
+brave:
+  install_with: omarchy-aur
+scrcpy:
+  install_with: brew

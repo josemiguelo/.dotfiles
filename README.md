@@ -24,7 +24,7 @@ installs, maintains and keeps applied.
    chezmoi init https://github.com/josemiguelo/.dotfiles.git
    ```
 5. A machine new to the repo gets its file before the first apply, since
-   the templates read it: `~/.local/share/chezmoi/machines/$(hostname).toml`
+   the templates read it: `~/.local/share/chezmoi/machines/$(hostname).yaml`
    with `extends = ["omarchy"]`, `["macos"]` or `["fedora"]`.
 6. Apply the dotfiles, install loadout, and open a new shell (the
    dotfiles set `LOADOUT_REPO`):
