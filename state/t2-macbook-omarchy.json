@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "2.0.0",
-  "updatedAt": "2026-10-04T14:58:57.616537454Z",
+  "toolVersion": "2.1.0",
+  "updatedAt": "2026-10-04T16:17:06.584911478Z",
   "programs": {
     "1password": {
       "status": "installed",
