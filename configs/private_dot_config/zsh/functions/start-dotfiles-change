@@ -1,5 +1,5 @@
 #!/bin/zsh
-# start-loadout [-p prompt] [query]: a try folder whose claude works on the
+# start-dotfiles-change [-p prompt] [query]: a try folder whose claude works on the
 # loadout repos. Copies in, from ~/.local/share/workflow-skills (rendered per
 # machine by chezmoi), NEW-LOADOUT-SESSION-AGENTS.md as AGENTS.md (Claude
 # Code reads it at every start there, so it applies from the first message)
@@ -12,16 +12,16 @@
 # it's pasted into the agent window, only while claude is what runs there.
 #
 # The helpers below are defined on each call (zfunctions autoloads this
-# file's own name only); the _start_loadout_ prefix keeps them out of the way.
+# file's own name only); the _start_dotfiles_change_ prefix keeps them out of the way.
 
 # AGENTS.md and the session's settings in the current folder. What's
 # already there is left as it is.
-_start_loadout_prepare() {
+_start_dotfiles_change_prepare() {
   local src=$HOME/.local/share/workflow-skills
   local f
   for f in NEW-LOADOUT-SESSION-AGENTS.md NEW-LOADOUT-SESSION-SETTINGS.json; do
     if [[ ! -f $src/$f ]]; then
-      print -u2 "start-loadout: $src/$f not found -- run chezmoi apply (or loadout apply .local)"
+      print -u2 "start-dotfiles-change: $src/$f not found -- run chezmoi apply (or loadout apply .local)"
       return 1
     fi
   done
@@ -33,7 +33,7 @@ _start_loadout_prepare() {
 # Prints the session name for the current folder: its name without try's
 # date (tmux names can't hold '.' or ':'). A session of that name from
 # another folder (the same name, another day) keeps the date on this one.
-_start_loadout_name() {
+_start_dotfiles_change_name() {
   local dated=${${PWD:t}//[.:]/-}
   local name=${dated#[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-}
   [[ -n $name ]] || name=$dated
@@ -44,9 +44,9 @@ _start_loadout_name() {
   print -r -- $name
 }
 
-# _start_loadout_open <name> [prompt]: the session, its one window running
+# _start_dotfiles_change_open <name> [prompt]: the session, its one window running
 # claude in the current folder.
-_start_loadout_open() {
+_start_dotfiles_change_open() {
   local name=$1 prompt=$2 agent=claude
   # A server started here would keep this folder as its own cwd; start it
   # from $HOME, as tmux-workmux-open does.
@@ -60,30 +60,30 @@ _start_loadout_open() {
   tmux new-session -d -s $name -n agent -c $PWD "$agent; exec ${SHELL:-zsh}"
 }
 
-# _start_loadout_send <name> <prompt>: pastes the prompt into an open
+# _start_dotfiles_change_send <name> <prompt>: pastes the prompt into an open
 # session's agent window and submits it. Pasted, not typed: a typed newline
 # would submit each line on its own. Into a shell it would run as a command,
 # so only while claude runs there — asked of the pane's processes, not
 # #{pane_current_command}: the session starts claude from `sh -c`, which has
 # no job control, so tmux names the shell. ${name}: zsh reads "$name:a…" as
 # the :a (absolute path) modifier.
-_start_loadout_send() {
+_start_dotfiles_change_send() {
   local name=$1 prompt=$2
   local window="=${name}:agent"
   if pgrep -x -P "$(tmux display-message -p -t $window '#{pane_pid}')" claude >/dev/null; then
-    tmux set-buffer -b start-loadout -- $prompt
-    tmux paste-buffer -p -d -b start-loadout -t $window
+    tmux set-buffer -b start-dotfiles-change -- $prompt
+    tmux paste-buffer -p -d -b start-dotfiles-change -t $window
     tmux send-keys -t $window Enter
   else
-    print -u2 "start-loadout: claude isn't running in ${name}:agent -- prompt not sent"
+    print -u2 "start-dotfiles-change: claude isn't running in ${name}:agent -- prompt not sent"
   fi
 }
 
-# _start_loadout_go <name>: this terminal onto the session, through
+# _start_dotfiles_change_go <name>: this terminal onto the session, through
 # tmux-goto: attach outside tmux, switch inside it, and from a floating
 # scratchpad switch the client that opened it and close the popup, so the
 # session never lands inside the popup.
-_start_loadout_go() {
+_start_dotfiles_change_go() {
   tmux-goto "=$1"
 }
 
@@ -92,11 +92,11 @@ local -a prompt_opt
 zparseopts -D -E -F -- p:=prompt_opt || return
 local prompt=${${prompt_opt[-1]}#-p}
 try "$@" || return
-_start_loadout_prepare || return
-local name=$(_start_loadout_name)
+_start_dotfiles_change_prepare || return
+local name=$(_start_dotfiles_change_name)
 if ! tmux has-session -t "=$name" 2>/dev/null; then
-  _start_loadout_open $name $prompt
+  _start_dotfiles_change_open $name $prompt
 elif [[ -n $prompt ]]; then
-  _start_loadout_send $name $prompt
+  _start_dotfiles_change_send $name $prompt
 fi
-_start_loadout_go $name
+_start_dotfiles_change_go $name
