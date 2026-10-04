@@ -54,14 +54,17 @@ changed loadout is `dotfiles:`.
 {{ if $m.work }}
    For `sofi`, `~/Repos/gh/josemiguelo/sofi.nvim/all_worktrees/master`
 {{ end }}.
-3. **A window for the user**, a shell in that folder, in this session. Its
+3. **A window for the user**, a shell in that folder, in this session,
+   running `nvim -c G` (fugitive's git status) so they can follow the
+   changes; quitting nvim leaves the shell. Its
    name is the repo's prefix from the table, a space, then the feature's
    name: `loadouts kitty-dashboard-key`, or `wiki kitty-dashboard-key` for the
    wiki part of the same feature. The prefix tells the repos apart, and the
    feature name matches the worktree.
    ```bash
    tmux list-windows -F '#W'                                   # taken already?
-   tmux new-window -d -n "<prefix> <feature>" -c ~/.local/share/chezmoi__worktrees/<feature>
+   w=$(tmux new-window -d -P -F '#{window_id}' -n "<prefix> <feature>" -c ~/.local/share/chezmoi__worktrees/<feature>)
+   tmux send-keys -t "$w" 'nvim -c G' Enter
    ```
 4. **Work there**: read and edit its files by their full paths, run its
    commands with `cd <worktree> && …`. Say which worktree and window you
