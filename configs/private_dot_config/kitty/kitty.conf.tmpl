@@ -91,11 +91,12 @@ tab_title_template " {index}: {title} "
 # --- Keybindings ---
 map ctrl+alt+e set_tab_title
 
-# Open the tmux-attach picker as an overlay over the current window, in or out
-# of tmux. The script sets PATH and TMUX (see its header). The modifier differs
-# per OS so the physical key matches: Linux's Alt sits where macOS puts Command.
-# Over ssh kitty isn't there to open it: tmux's prefix + M-a opens the same
-# picker as a popup (tmux.conf).
+# Open the tmux-attach picker as an overlay over the current window, which then
+# attaches to the session you pick. Use it from outside tmux; inside tmux, use
+# prefix + A (tmux.conf). The script sets PATH (see its header). The modifier
+# differs per OS so the physical key matches: Linux's Alt sits where macOS puts
+# Command. Over ssh kitty isn't there to open it, so tmux's prefix + A is the
+# picker there too, as a popup.
 {{ if (eq .chezmoi.os "darwin") -}}
 map ctrl+cmd+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attach
 {{ else if (eq .chezmoi.os "linux") -}}
@@ -106,7 +107,7 @@ map ctrl+alt+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attac
 # outside tmux: it reads agent status from the tmux server, and picking an
 # agent switches tmux's client to that session. The script sets PATH and the
 # tmux backend (see its header). Same modifier split as above. Over ssh, tmux's
-# prefix + M-A opens it as a popup instead (tmux.conf).
+# prefix + W opens it as a popup instead (tmux.conf).
 {{ if (eq .chezmoi.os "darwin") -}}
 map ctrl+cmd+shift+a launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
 {{ else if (eq .chezmoi.os "linux") -}}

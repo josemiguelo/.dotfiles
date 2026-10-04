@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Runs `workmux dashboard` from kitty's overlay (kitty.conf's ctrl+cmd+shift+a)
-# or a tmux popup (tmux.conf's prefix + M-A, which works over ssh). Neither has a
+# or a tmux popup (tmux.conf's prefix + W, which works over ssh). Neither has a
 # login shell's environment: kitty's PATH has no Homebrew, so on macOS workmux
 # can't find tmux and reports "No tmux server running", and on Linux workmux
 # isn't found at all and the overlay closes at once. Put Homebrew first

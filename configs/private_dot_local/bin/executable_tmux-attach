@@ -146,7 +146,7 @@ section_binds() {
 }
 
 # Combine and select using a full-screen fzf-tmux popup, like kitty's overlay
-# and the workmux dashboard's (tmux.conf's prefix + M-A). Order: sessions,
+# and the workmux dashboard's (tmux.conf's prefix + W). Order: sessions,
 # divider, worktrees, divider, then the long zoxide list. Both dividers' lines
 # are the only ones containing '─', so enter:transform picks accept/ignore
 # based on that regardless of which one it is.
@@ -157,8 +157,8 @@ pick() {
   done < <(section_binds)
 
   # TMUX_ATTACH_INLINE is set by kitty-tmux-attach, which runs this in a kitty
-  # overlay with TMUX set (so tmux-goto switches the client). fzf-tmux would
-  # open its own popup on that client instead of drawing in the overlay.
+  # overlay outside tmux. fzf-tmux would open its own popup on the attached
+  # client instead of drawing in the overlay.
   [[ -n "${TMUX_ATTACH_INLINE:-}" ]] && picker=(fzf)
 
   choice=$(printf '%s\n%s\n%s\n%s\n%s' \
