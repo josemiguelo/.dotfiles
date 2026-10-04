@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Runs tmux-attach in a kitty overlay (see kitty.conf's ctrl+cmd+a). Like
-# kitty-workmux-dashboard, it gets PATH from Homebrew (brew-prefix.sh):
+# workmux-dashboard, it gets PATH from Homebrew (brew-prefix.sh):
 # kitty's launch environment doesn't have it. The overlay isn't a tmux client,
 # so without TMUX set, tmux-goto would attach a second client inside the
 # overlay. Setting TMUX makes tmux-goto switch the most recently used client

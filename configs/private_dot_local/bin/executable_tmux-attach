@@ -145,12 +145,13 @@ section_binds() {
   echo 'ctrl-k:transform:my=; for s in '"$starts_str"'; do if (( s <= {n} + 1 )); then my=$s; fi; done; p='"$last"'; for s in '"$starts_str"'; do if (( s < my )); then p=$s; fi; done; echo "pos($p)"'
 }
 
-# Combine and select using fzf-tmux popup. Order: sessions, divider,
-# worktrees, divider, then the long zoxide list. Both dividers' lines are
-# the only ones containing '─', so enter:transform picks accept/ignore
+# Combine and select using a full-screen fzf-tmux popup, like kitty's overlay
+# and the workmux dashboard's (tmux.conf's prefix + M-A). Order: sessions,
+# divider, worktrees, divider, then the long zoxide list. Both dividers' lines
+# are the only ones containing '─', so enter:transform picks accept/ignore
 # based on that regardless of which one it is.
 pick() {
-  local section_args=() bind picker=(fzf-tmux -p 70%,70%)
+  local section_args=() bind picker=(fzf-tmux -p 100%,100%)
   while IFS= read -r bind; do
     [[ -n "$bind" ]] && section_args+=(--bind "$bind")
   done < <(section_binds)

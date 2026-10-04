@@ -45,6 +45,18 @@ unbind C-b
 set-option -g prefix C-a
 bind C-a send-prefix
 
+# The tmux-attach picker and the workmux dashboard, for where kitty's overlay
+# keys (kitty.conf) can't reach, like over ssh. Those keys stay kitty's, so
+# these are the same keys after the prefix: M-a and M-A (Alt+Shift+a), as on
+# Linux's kitty. Pass the active pane's dir as an argument so tmux-attach can
+# list the current repo's workmux worktrees. The format only resolves to the
+# keypress pane inside the command string; run-shell's -c flag mis-resolves it
+# to $HOME instead. tmux-attach opens its own fzf-tmux popup; the dashboard
+# gets one here, full screen and borderless like kitty's overlay, and closes
+# it when it jumps to an agent.
+bind M-a run-shell "~/.local/bin/tmux-attach '#{pane_current_path}'"
+bind M-A display-popup -E -B -w 100% -h 100% -d "#{pane_current_path}" "~/.local/bin/workmux-dashboard"
+
 bind -n C-PPage previous-window
 bind -n C-NPage next-window
 
