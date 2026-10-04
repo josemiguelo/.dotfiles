@@ -4,7 +4,7 @@
 
 meta:
   name: 'jm''s machines'
-  min-tool-version: '1.1.0'
+  min-tool-version: '2.0.0'
 
 layout:
   fragments: ['programs/**/*.yaml', 'maintenance/**/*.loadout.yaml', 'configs/**/.loadout.yaml']
