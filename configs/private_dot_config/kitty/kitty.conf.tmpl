@@ -109,9 +109,9 @@ map ctrl+alt+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attac
 # tmux backend (see its header). Same modifier split as above. Over ssh, tmux's
 # prefix + W opens it as a popup instead (tmux.conf).
 {{ if (eq .chezmoi.os "darwin") -}}
-map ctrl+cmd+shift+a launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
+map ctrl+cmd+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
 {{ else if (eq .chezmoi.os "linux") -}}
-map ctrl+alt+shift+a launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
+map ctrl+alt+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
 {{ end -}}
 
 # kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
