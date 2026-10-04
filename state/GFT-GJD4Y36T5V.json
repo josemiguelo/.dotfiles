@@ -5,7 +5,7 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "1.1.0",
-  "updatedAt": "2026-10-03T22:28:03.619149Z",
+  "updatedAt": "2026-10-04T01:57:45.859351Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -85,6 +85,11 @@
     "coreutils": {
       "status": "installed",
       "version": "9.12",
+      "reason": null
+    },
+    "eza": {
+      "status": "installed",
+      "version": "0.23.5",
       "reason": null
     },
     "fd": {
@@ -255,7 +260,7 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
     },
