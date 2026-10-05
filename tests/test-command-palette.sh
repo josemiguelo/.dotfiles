@@ -25,6 +25,14 @@ cat >"$FZF_INPUT"
 grep -m1 -F -- "${FAKE_PICK:-}" "$FZF_INPUT"
 EOF
 
+# Fake gum: logs its command line to $GUM_LOG and exits with $FAKE_GUM_STATUS
+# (0 for the affirmative button, 1 for the negative, 130 for Ctrl-C).
+cat >"$fix/.local/bin/gum" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >"$GUM_LOG"
+exit "${FAKE_GUM_STATUS:-0}"
+EOF
+
 # Fake zsh: the argument prompt (a `vared` call) logs its command line to
 # $ZSH_PROMPT_LOG, reads the typed line from stdin, and writes it to the file
 # the palette passed last, as the real prompt does. Any other call logs whether
@@ -40,15 +48,17 @@ fi
 printf '%s|%s\n' "${TMUX:-unset}" "$*" >>"$ZSH_LOG"
 exit "${FAKE_ZSH_STATUS:-0}"
 EOF
-chmod +x "$fix/.local/bin/fzf" "$fix/.local/bin/zsh"
+chmod +x "$fix/.local/bin/fzf" "$fix/.local/bin/zsh" "$fix/.local/bin/gum"
 
 # Runs the palette with the given stdin; sets out (stdout+stderr) and status.
 run_palette() {
   : >"$fix/zsh.log"
   : >"$fix/prompt.log"
+  : >"$fix/gum.log"
   out=$(env -i HOME="$fix" PATH="/usr/bin:/bin" XDG_CONFIG_HOME="$fix/.config" \
     COMMAND_PALETTE_COMMANDS="${REGISTRY_FILE:-$REGISTRY}" \
-    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" ZSH_PROMPT_LOG="$fix/prompt.log" TMUX=/fake/tmux,1,0 \
+    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" ZSH_PROMPT_LOG="$fix/prompt.log" \
+    GUM_LOG="$fix/gum.log" TMUX=/fake/tmux,1,0 \
     "$@" bash "$SCRIPT" 2>&1)
   status=$?
 }
@@ -83,6 +93,24 @@ eq "$(cat "$fix/fzf.in")" "$(grep -vE '^[[:space:]]*(#|$)' "$REGISTRY")" \
 run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change " \
   "empty input runs the command with no arguments"
+
+# After the pick, the question is a two-button gum confirm.
+run_palette FAKE_PICK=start-dotfiles-change < <(printf 'x\n')
+case "$(cat "$fix/gum.log")" in
+*'--affirmative enter arguments --negative run by name'*) ok "arguments question is a confirm with both buttons" ;;
+*) bad "arguments question is a confirm with both buttons (got [$(cat "$fix/gum.log")])" ;;
+esac
+
+# The negative button: the command runs with no arguments, and no prompt opens.
+run_palette FAKE_PICK=start-dotfiles-change FAKE_GUM_STATUS=1 < <(printf 'ignored\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change " \
+  "run by name: command runs with no arguments"
+eq "$(cat "$fix/prompt.log")" "" "run by name: no argument prompt opens"
+
+# Ctrl-C at the question (gum exits 130): nothing runs, and the palette exits 0.
+run_palette FAKE_PICK=start-dotfiles-change FAKE_GUM_STATUS=130 < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "" "Ctrl-C at the question: no command runs"
+eq "$status" "0" "Ctrl-C at the question: palette exits 0"
 
 # A custom registry: the picked line's name is what runs, not its description.
 printf '# comment\n\nalpha\tfirst thing\nbeta\tsecond thing\n' >"$fix/custom"
