@@ -60,6 +60,22 @@ collect_dirs() {
   fi
 }
 
+# `git worktree list --porcelain` for the repo the cwd is in. From workmux's
+# default worktree folder (<repo>__worktrees, beside the repo) the cwd isn't in
+# any repo, so ask one of the worktrees inside it: they all belong to the same
+# repo. Other folders outside a repo give nothing, as before.
+repo_worktrees() {
+  local out child
+  out=$(git worktree list --porcelain 2>/dev/null)
+  if [[ -z "$out" && "$PWD" == *__worktrees ]]; then
+    for child in "$PWD"/*/; do
+      out=$(git -C "$child" worktree list --porcelain 2>/dev/null)
+      [[ -n "$out" ]] && break
+    done
+  fi
+  printf '%s\n' "$out"
+}
+
 # This repo's worktrees, read from git (fast; `workmux list` is slow). Entries
 # show as "<project> <handle>", matching the session name workmux's
 # window_prefix produces. Skip worktrees with an existing session (shown as a
@@ -69,14 +85,16 @@ collect_worktrees() {
   [[ "$current_session" == floating-* ]] && return
   command -v workmux &>/dev/null && command -v git &>/dev/null || return
 
-  project=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree /{print $2; exit}')
+  local list
+  list=$(repo_worktrees)
+  project=$(awk '/^worktree /{print $2; exit}' <<< "$list")
   project="${project##*/}"
   worktrees=$(
-    git worktree list --porcelain 2>/dev/null | awk '
+    awk '
       /^worktree /{path=$2; bare=0}
       /^bare/{bare=1}
       /^branch /{ if (!bare) { n=split(path, a, "/"); print a[n] } }
-    ' | while IFS= read -r handle; do
+    ' <<< "$list" | while IFS= read -r handle; do
       _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "${project:+$project }$handle"
     done
   )

@@ -125,6 +125,28 @@ PATH=/usr/bin:/bin collect_worktrees # a PATH without workmux's real location
 cd - >/dev/null
 eq "$worktrees" "" "returns nothing when workmux isn't available"
 
+### collect_worktrees from workmux's default worktree folder (beside the repo) ###
+echo "collect_worktrees, from <repo>__worktrees beside the repo"
+
+SIB="$WORK/sib"
+mkdir -p "$SIB/proj__worktrees"
+git init -q -b main "$SIB/proj"
+git -C "$SIB/proj" -c user.email=t@t -c user.name=t commit -q --allow-empty -m seed
+git -C "$SIB/proj" worktree add -q -b feat-x "$SIB/proj__worktrees/feat-x" main
+git -C "$SIB/proj" worktree add -q -b feat-y "$SIB/proj__worktrees/feat-y" main
+
+workmux() { :; }
+current_session=""
+out=$(cd "$SIB/proj__worktrees" && collect_worktrees && printf '%s' "$worktrees")
+contains "$out" "proj feat-x" "lists a worktree from the folder beside the repo"
+contains "$out" "proj feat-y" "lists the other worktree from that folder"
+contains "$out" "proj proj" "lists the repo's main checkout too, named by its folder"
+
+mkdir -p "$SIB/elsewhere"
+out=$(cd "$SIB/elsewhere" && collect_worktrees && printf '%s' "$worktrees")
+eq "$out" "" "a folder outside any repo, not named __worktrees, lists nothing"
+unset -f workmux
+
 ### divider ###
 echo "divider"
 
