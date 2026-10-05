@@ -32,12 +32,21 @@ workmux() {
   case "$1" in
   open)
     shift
+    # workmux finds a project's .workmux.yaml by walking up from the cwd, so it
+    # only sees a worktree's own file from inside that worktree. From a folder
+    # of worktrees (no repo above it, e.g. all_worktrees/), the file is missed
+    # and the global config's windows are used instead. So pass the named
+    # worktree's file explicitly, unless the caller already gave --config.
+    local -a config_args=()
+    if [[ -n "$1" && "$1" != -* && "$*" != *--config* && -f "$PWD/$1/.workmux.yaml" ]]; then
+      config_args=(--config "$PWD/$1/.workmux.yaml")
+    fi
     if [[ -n "$TMUX" ]]; then
       # -s forces session mode; safe even though it's already the configured
       # default, and matches tmux-workmux-open's same defensive choice.
-      command workmux open -s "$@"
+      command workmux open -s "${config_args[@]}" "$@"
     else
-      "$HOME/.local/bin/tmux-workmux-open" "$@"
+      "$HOME/.local/bin/tmux-workmux-open" "${config_args[@]}" "$@"
     fi
     ;;
 

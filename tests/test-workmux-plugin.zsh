@@ -89,6 +89,35 @@ run "" open wm-a wm-b --continue >/dev/null 2>&1
 eq "$(cat "$OPEN_LOG" 2>/dev/null)" "wm-a wm-b --continue" \
   "forwards multiple names and flags to tmux-workmux-open unchanged"
 
+### open from a folder of worktrees: the named worktree's .workmux.yaml is passed ###
+# workmux looks for a project config from the cwd, so run from all_worktrees/
+# (no repo above it) it would miss wm-cfg's own file. The wrapper passes it.
+echo "open, from a folder of worktrees"
+
+WT_DIR="$WORK/all_worktrees"
+mkdir -p "$WT_DIR/wm-cfg" "$WT_DIR/wm-plain"
+: > "$WT_DIR/wm-cfg/.workmux.yaml"
+
+: > "$WORKMUX_LOG"
+(cd "$WT_DIR" && run "fake" open wm-cfg >/dev/null 2>&1)
+eq "$(cat "$WORKMUX_LOG")" "open -s --config $WT_DIR/wm-cfg/.workmux.yaml wm-cfg" \
+  "inside tmux: passes the named worktree's .workmux.yaml with --config"
+
+: > "$OPEN_LOG"
+(cd "$WT_DIR" && run "" open wm-cfg >/dev/null 2>&1)
+eq "$(cat "$OPEN_LOG" 2>/dev/null)" "--config $WT_DIR/wm-cfg/.workmux.yaml wm-cfg" \
+  "outside tmux: passes the same --config to tmux-workmux-open"
+
+: > "$WORKMUX_LOG"
+(cd "$WT_DIR" && run "fake" open wm-plain >/dev/null 2>&1)
+eq "$(cat "$WORKMUX_LOG")" "open -s wm-plain" \
+  "no .workmux.yaml in the worktree: args are unchanged"
+
+: > "$WORKMUX_LOG"
+(cd "$WT_DIR" && run "fake" open --config /other.yaml wm-cfg >/dev/null 2>&1)
+eq "$(cat "$WORKMUX_LOG")" "open -s --config /other.yaml wm-cfg" \
+  "an explicit --config is left alone"
+
 ### inside tmux: -s inserted, rest forwarded, no headless/spinner path ###
 echo "add, inside tmux"
 
