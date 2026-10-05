@@ -8,6 +8,6 @@
 # overlay, and a tmux server started from kitty hands it to its popups too,
 # which would otherwise make workmux pick the kitty backend and find no agents.
 . "$HOME/.local/lib/brew-prefix.sh"
-export PATH="$BREW_PREFIX/bin:$PATH"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 export WORKMUX_BACKEND=tmux
 exec workmux dashboard
