@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# Tests configs/private_dot_local/bin/executable_command-palette end to end: the
+# registry is read, the picked command gets the typed text as its arguments, TMUX
+# is unset before zsh runs it, and a failure is held on screen. fzf and zsh are
+# fakes on a throwaway $HOME's PATH, so no real picker or tmux session opens.
+# Run: tests/test-command-palette.sh
+set -u
+
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_command-palette"
+REGISTRY="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_config/command-palette/commands"
+BREW_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/lib/brew-prefix.sh"
+
+fix=$(mktemp -d)
+trap 'rm -rf "$fix"' EXIT
+mkdir -p "$fix/.local/bin" "$fix/.local/lib" "$fix/.config/fzf" "$fix/.config/command-palette"
+cp "$BREW_LIB" "$fix/.local/lib/brew-prefix.sh"
+echo '# theme stub' >"$fix/.config/fzf/theme.sh"
+
+# Fake fzf: records what it was given, then prints the first line matching
+# $FAKE_PICK (the first line when unset), or fails when FAKE_CANCEL is set.
+cat >"$fix/.local/bin/fzf" <<'EOF'
+#!/usr/bin/env bash
+cat >"$FZF_INPUT"
+[[ -z "${FAKE_CANCEL:-}" ]] || exit 130
+grep -m1 -F -- "${FAKE_PICK:-}" "$FZF_INPUT"
+EOF
+
+# Fake zsh: logs whether TMUX is set and the command line it got, then exits
+# with $FAKE_ZSH_STATUS.
+cat >"$fix/.local/bin/zsh" <<'EOF'
+#!/usr/bin/env bash
+printf '%s|%s\n' "${TMUX:-unset}" "$*" >>"$ZSH_LOG"
+exit "${FAKE_ZSH_STATUS:-0}"
+EOF
+chmod +x "$fix/.local/bin/fzf" "$fix/.local/bin/zsh"
+
+# Runs the palette with the given stdin; sets out (stdout+stderr) and status.
+run_palette() {
+  : >"$fix/zsh.log"
+  out=$(env -i HOME="$fix" PATH="/usr/bin:/bin" XDG_CONFIG_HOME="$fix/.config" \
+    COMMAND_PALETTE_COMMANDS="${REGISTRY_FILE:-$REGISTRY}" \
+    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" TMUX=/fake/tmux,1,0 \
+    "$@" bash "$SCRIPT" 2>&1)
+  status=$?
+}
+
+pass=0
+fail=0
+ok() { pass=$((pass + 1)); echo "  ok - $1"; }
+bad() { fail=$((fail + 1)); echo "  FAIL - $1"; }
+eq() { [[ "$1" == "$2" ]] && ok "$3" || bad "$3 (expected [$2], got [$1])"; }
+
+echo "command-palette"
+
+# Typed text becomes the command's arguments, and TMUX is unset for the run.
+run_palette FAKE_PICK=start-dotfiles-change < <(printf 'hello world\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change hello world" \
+  "picked command runs with the typed text as arguments, TMUX unset"
+eq "$status" "0" "successful command: palette exits 0"
+
+# The picker is fed the registry without comments or blank lines.
+run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')
+eq "$(cat "$fix/fzf.in")" "$(grep -vE '^[[:space:]]*(#|$)' "$REGISTRY")" \
+  "picker lists the registry's commands only"
+
+# With no arguments typed, the command runs with none.
+run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change " \
+  "empty input runs the command with no arguments"
+
+# A custom registry: the picked line's name is what runs, not its description.
+printf '# comment\n\nalpha\tfirst thing\nbeta\tsecond thing\n' >"$fix/custom"
+REGISTRY_FILE="$fix/custom" run_palette FAKE_PICK=beta < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic beta x" \
+  "the name before the tab runs, not the description"
+
+# Esc in the picker: nothing runs.
+run_palette FAKE_CANCEL=1 < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "" "cancelled picker: no command runs"
+eq "$status" "0" "cancelled picker: palette exits 0"
+
+# A failing command is held on screen until a key is pressed.
+run_palette FAKE_PICK=start-dotfiles-change FAKE_ZSH_STATUS=3 < <(printf 'x\n\n')
+eq "$status" "3" "failing command: palette exits with its status"
+case "$out" in
+*"start-dotfiles-change exited 3"*) ok "failing command: its status is shown before the palette closes" ;;
+*) bad "failing command: its status is shown (got [$out])" ;;
+esac
+
+echo
+echo "$pass passed, $fail failed"
+[[ $fail -eq 0 ]]

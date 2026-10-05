@@ -114,6 +114,16 @@ map ctrl+cmd+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboar
 map ctrl+alt+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
 {{ end -}}
 
+# The command palette: fuzzy-find a command from its registry
+# (~/.config/command-palette/commands), type its arguments, and run it. One key
+# for every command, so none needs a binding of its own. Same modifier split as
+# above. It runs outside tmux, like the pickers, so it works from either.
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+p launch --type=overlay --cwd=current ~/.local/bin/command-palette
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+alt+p launch --type=overlay --cwd=current ~/.local/bin/command-palette
+{{ end -}}
+
 # kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
 # no_op releases them so tmux receives them for swapping windows.
 map ctrl+shift+left no_op
