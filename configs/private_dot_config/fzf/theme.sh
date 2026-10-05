@@ -13,11 +13,15 @@ fzf-theme() {
   # bg is -1 so the picker has no fill of its own; the border is what separates
   # it from whatever is behind it.
   local shared="--highlight-line --info=inline-right --ansi --layout=reverse --border=rounded --gutter=' '"
-  local dark=1
+  local dark=1 appearance
 
   # Follow the terminal's light or dark theme (appearance-is-dark, in
-  # ~/.local/bin, says how it's read); without it, the storm palette.
-  if command -v appearance-is-dark >/dev/null 2>&1 && ! appearance-is-dark; then
+  # ~/.local/bin, says how it's read); without it, the storm palette. PATH
+  # usually has ~/.local/bin, but not in a process started from kitty or tmux
+  # (kitty-tmux-attach and tmux run-shell), so fall back to the full path.
+  appearance=$(command -v appearance-is-dark 2>/dev/null)
+  [ -n "$appearance" ] || appearance="$HOME/.local/bin/appearance-is-dark"
+  if [ -x "$appearance" ] && ! "$appearance"; then
     dark=0
   fi
 

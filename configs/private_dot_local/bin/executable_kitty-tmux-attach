@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs tmux-attach in a kitty overlay (see kitty.conf's ctrl+cmd+a). Like
-# workmux-dashboard, it gets PATH from Homebrew (brew-prefix.sh):
-# kitty's launch environment doesn't have it. The overlay always attaches
+# workmux-dashboard, it puts ~/.local/bin and Homebrew on PATH, as a login
+# shell would: kitty's launch environment has neither. The overlay always attaches
 # itself: TMUX stays unset, so tmux-goto runs a plain attach-session here.
 # Setting TMUX would make tmux-goto switch the most recently used client, which
 # can be another kitty tab. Inside tmux, prefix + A is the picker that switches
@@ -9,7 +9,7 @@
 # as the tmux binding does, and falls back to the overlay's own directory with
 # no server.
 . "$HOME/.local/lib/brew-prefix.sh"
-export PATH="$BREW_PREFIX/bin:$PATH"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 socket=$(tmux display-message -p '#{socket_path}' 2>/dev/null)
 if [[ -n "$socket" ]]; then
