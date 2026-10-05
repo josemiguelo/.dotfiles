@@ -1,23 +1,44 @@
 #!/usr/bin/env bash
 # Runs tmux-attach in a kitty overlay (see kitty.conf's ctrl+cmd+a). Like
 # workmux-dashboard, it puts ~/.local/bin and Homebrew on PATH, as a login
-# shell would: kitty's launch environment has neither. The overlay always attaches
-# itself: TMUX stays unset, so tmux-goto runs a plain attach-session here.
-# Setting TMUX would make tmux-goto switch the most recently used client, which
-# can be another kitty tab. Inside tmux, prefix + A is the picker that switches
-# the client you're using. The listing starts from the client's pane directory,
-# as the tmux binding does, and falls back to the overlay's own directory with
-# no server.
-. "$HOME/.local/lib/brew-prefix.sh"
-export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
+# shell would: kitty's launch environment has neither (brew-prefix.sh). The
+# overlay always attaches itself: TMUX stays unset, so tmux-goto runs a plain
+# attach-session here. Setting TMUX would make tmux-goto switch the most
+# recently used client, which can be another kitty tab. Inside tmux, prefix + A
+# is the picker that switches the client you're using. The listing starts from
+# the directory of the tmux pane in the window the shortcut was pressed in, and
+# falls back to the overlay's own directory when that window isn't running tmux.
 
-socket=$(tmux display-message -p '#{socket_path}' 2>/dev/null)
-if [[ -n "$socket" ]]; then
-  path=$(tmux display-message -p '#{pane_current_path}' 2>/dev/null)
+# Prints the current path of the tmux pane shown in the overlay's parent window,
+# when that window runs a tmux client. tmux can't tell which window this is:
+# kitty consumes the shortcut before tmux sees it, so tmux's "current" client is
+# whichever one was used last. So ask kitty which processes the parent window
+# runs, and find the tmux client among them by its pid.
+parent_pane_path() {
+  local pids tty
+  pids=$(kitty @ ls --match state:overlay_parent 2>/dev/null |
+    jq -r '.. | objects | .foreground_processes? // [] | .[].pid' 2>/dev/null) || return 0
+  [[ -n "$pids" ]] || return 0
+
+  tty=$(tmux list-clients -F '#{client_pid} #{client_tty}' 2>/dev/null |
+    awk -v pids="$pids" 'BEGIN { n = split(pids, a, "\n"); for (i = 1; i <= n; i++) want[a[i]] = 1 }
+      ($1 in want) { print $2; exit }')
+  [[ -n "$tty" ]] || return 0
+
+  tmux display-message -p -c "$tty" '#{pane_current_path}' 2>/dev/null
+}
+
+# Sourced by tests/test-kitty-tmux-attach.sh to reach parent_pane_path without
+# launching the picker.
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  . "$HOME/.local/lib/brew-prefix.sh"
+  export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
+
+  path=$(parent_pane_path)
+
+  # TMUX_ATTACH_INLINE asks tmux-attach for a plain fzf that draws here, not
+  # fzf-tmux's popup. Set on the exec only, never exported: a tmux server started
+  # by the calls above would inherit it, and every popup it opens would then draw
+  # plain fzf.
+  exec env TMUX_ATTACH_INLINE=1 "$HOME/.local/bin/tmux-attach" "${path:-$PWD}"
 fi
-
-# TMUX_ATTACH_INLINE asks tmux-attach for a plain fzf that draws here, not
-# fzf-tmux's popup. Set on the exec only, never exported: a tmux server started
-# by the calls above would inherit it, and every popup it opens would then draw
-# plain fzf.
-exec env TMUX_ATTACH_INLINE=1 "$HOME/.local/bin/tmux-attach" "${path:-$PWD}"
