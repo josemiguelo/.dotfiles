@@ -1,0 +1,4 @@
+# The command palette's registry (ctrl+cmd+p): one command per line, its name,
+# a tab, then what it does. A name is a zsh function or alias. The text typed
+# after it in the palette is its arguments, as on a command line.
+start-dotfiles-change	new try folder for a loadout change: a claude session on the loadout repos in its own tmux session. Arguments: the folder query, or -p 'first message'
