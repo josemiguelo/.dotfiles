@@ -25,10 +25,18 @@ cat >"$FZF_INPUT"
 grep -m1 -F -- "${FAKE_PICK:-}" "$FZF_INPUT"
 EOF
 
-# Fake zsh: logs whether TMUX is set and the command line it got, then exits
-# with $FAKE_ZSH_STATUS.
+# Fake zsh: the argument prompt (a `vared` call) logs its command line to
+# $ZSH_PROMPT_LOG, reads the typed line from stdin, and writes it to the file
+# the palette passed last, as the real prompt does. Any other call logs whether
+# TMUX is set and the command line it got, then exits with $FAKE_ZSH_STATUS.
 cat >"$fix/.local/bin/zsh" <<'EOF'
 #!/usr/bin/env bash
+if [[ "$*" == *'vared -p'* ]]; then
+  printf '%s\n' "$*" >>"$ZSH_PROMPT_LOG"
+  IFS= read -r line
+  printf '%s\n' "$line" >"${@: -1}"
+  exit 0
+fi
 printf '%s|%s\n' "${TMUX:-unset}" "$*" >>"$ZSH_LOG"
 exit "${FAKE_ZSH_STATUS:-0}"
 EOF
@@ -37,9 +45,10 @@ chmod +x "$fix/.local/bin/fzf" "$fix/.local/bin/zsh"
 # Runs the palette with the given stdin; sets out (stdout+stderr) and status.
 run_palette() {
   : >"$fix/zsh.log"
+  : >"$fix/prompt.log"
   out=$(env -i HOME="$fix" PATH="/usr/bin:/bin" XDG_CONFIG_HOME="$fix/.config" \
     COMMAND_PALETTE_COMMANDS="${REGISTRY_FILE:-$REGISTRY}" \
-    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" TMUX=/fake/tmux,1,0 \
+    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" ZSH_PROMPT_LOG="$fix/prompt.log" TMUX=/fake/tmux,1,0 \
     "$@" bash "$SCRIPT" 2>&1)
   status=$?
 }
@@ -57,6 +66,13 @@ run_palette FAKE_PICK=start-dotfiles-change < <(printf 'hello world\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change hello world" \
   "picked command runs with the typed text as arguments, TMUX unset"
 eq "$status" "0" "successful command: palette exits 0"
+
+# The argument prompt is zsh's vared (its line editor and key bindings), with
+# the picked name as its prompt.
+case "$(cat "$fix/prompt.log")" in
+*'vared -p "$1 " args'*' _ start-dotfiles-change '*) ok "arguments are edited by zsh's vared, prompting with the name" ;;
+*) bad "arguments are edited by zsh's vared (got [$(cat "$fix/prompt.log")])" ;;
+esac
 
 # The picker is fed the registry without comments or blank lines.
 run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')

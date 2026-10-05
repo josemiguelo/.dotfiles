@@ -43,7 +43,14 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   choice=$(palette_list | fzf --prompt='command> ' --header='enter: pick, then type its arguments') || exit 0
   name=${choice%%$'\t'*}
 
-  read -r -e -p "$name " args || exit 0
+  # The arguments are edited with zsh's vared, not bash's readline: `read -e`
+  # inside zsh -ic did not take ctrl+arrows. vared draws to stdout, so the typed
+  # line goes to a temp file instead of being captured. On Esc or Ctrl-C vared
+  # fails, nothing is written, and the palette closes without running.
+  argsfile=$(mktemp) || exit 1
+  trap 'rm -f "$argsfile"' EXIT
+  zsh -ic 'typeset args=; vared -p "$1 " args && print -r -- "$args" >|"$2"' _ "$name" "$argsfile" || exit 0
+  args=$(cat "$argsfile")
   palette_run "$name" "$args"
   status=$?
 
