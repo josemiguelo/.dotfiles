@@ -56,6 +56,22 @@ contains "$sessions" "real-one" "lists a real session"
 not_contains "$sessions" "floating-real-one" "excludes floating-* scratchpad sessions"
 not_contains "$sessions" "_bootstrap" "excludes the _bootstrap session"
 
+### collect_sessions order ###
+echo "collect_sessions, most recently attached first"
+
+# tmux only stamps session_last_attached on a real attach, which a test can't
+# do without a tty, so fake that one query; every other call stays real.
+tmux() {
+  if [[ "$*" == *session_last_attached* ]]; then
+    printf '%s\n' "100 old" "300 newest" "200 middle" "0 never" "50 floating-x" "10 _bootstrap"
+  else
+    command tmux -L "$SOCK" "$@"
+  fi
+}
+collect_sessions
+eq "$(sed 's/^[^ ]* //' <<< "$sessions" | paste -sd' ' -)" "newest middle old never" "orders sessions by last attach, never-attached last, floating and bootstrap dropped"
+tmux() { command tmux -L "$SOCK" "$@"; }
+
 ### _has_session_for ###
 echo "_has_session_for"
 
@@ -76,10 +92,13 @@ for _ in $(seq 20); do
 done
 tmux new-session -d -s existing-dir -c "$WORK"
 collect_sessions # refresh open_names for the new session state
-zoxide() { printf '%s\n' "/some/path/existing-dir" "/some/path/new-dir"; }
+zoxide() { printf '%s\n' " 5.0 /some/path/existing-dir" " 3.0 /some/path/new-dir" " 0.5 /some/path/cold-dir" " 4.0 /with space/new dir"; }
 collect_dirs
 not_contains "$dirs" "existing-dir" "hides a dir whose session already exists"
 contains "$dirs" "new-dir" "shows a dir with no session yet"
+not_contains "$dirs" "cold-dir" "drops dirs below zoxide_min_score"
+contains "$dirs" "/with space/new dir" "keeps spaces inside a dir path"
+eq "$(sed 's/^[^ ]* //' <<< "$dirs" | paste -sd'|' -)" "/some/path/new-dir|/with space/new dir" "lists dirs in zoxide's frecency order, after the score cut"
 unset -f zoxide
 
 ### collect_worktrees ###

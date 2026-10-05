@@ -22,7 +22,10 @@ ensure_server_home() {
 # current session stays in the list — easy to forget you're already in it.
 # Also sets open_names, used by _has_session_for below.
 collect_sessions() {
-  sessions_raw=$(tmux list-sessions -F "#S" 2>/dev/null | grep -vE '^floating-|^_bootstrap$')
+  # Most recently attached first (tmux's own timestamp). The grep matches a
+  # space before the name because each line starts with the timestamp.
+  sessions_raw=$(tmux list-sessions -F "#{session_last_attached} #S" 2>/dev/null \
+    | grep -vE ' (floating-|_bootstrap$)' | sort -rn | cut -d' ' -f2-)
   if [[ -n "$TMUX" ]]; then
     current_session=$(tmux display-message -p '#S' 2>/dev/null)
   fi
@@ -47,11 +50,17 @@ _has_session_for() {
   return 1
 }
 
+# Zoxide's frecency score below which a directory is left out of the picker.
+# Its list is ranked by that score, so this only trims the long tail; the
+# dropped ones are still reachable with `z`.
+zoxide_min_score=2
+
 # zoxide directories, minus any whose session already exists (selecting one
-# would just switch to that session anyway — see determine_target).
+# would just switch to that session anyway — see determine_target). Ranked by
+# zoxide's frecency, most frecent first, and cut at zoxide_min_score.
 collect_dirs() {
   if command -v zoxide &>/dev/null; then
-    dirs=$(zoxide query -l | while IFS= read -r d; do
+    dirs=$(zoxide query -ls | awk -v min="$zoxide_min_score" '$1 >= min { sub(/^ *[^ ]+ /, ""); print }' | while IFS= read -r d; do
       b="${d##*/}"; b="${b//[ .]/_}"
       _has_session_for "$b" || printf '%s %s\n' "$dir_icon" "$d"
     done)
