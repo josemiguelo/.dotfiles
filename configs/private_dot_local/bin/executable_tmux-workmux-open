@@ -25,9 +25,30 @@ tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _boo
 # success banner so we land straight in the session. %q-quote each arg when
 # building the throwaway session's shell-command string, since args can
 # contain spaces or shell metacharacters.
+#
+# workmux reads a project's .workmux.yaml from the cwd upward, so from a folder
+# of worktrees (all_worktrees/, the picker's usual cwd) it would miss the
+# worktree's own file and create the global config's windows. For one name that
+# is a worktree of this repo with its own file, pass that file with --config.
+# The worktree is found the way the picker lists them, from git. Anything else
+# (several names, flags, no such worktree) is passed through unchanged.
+worktree_config() {
+  [[ $# -eq 1 && "$1" != -* ]] || return 0
+  local cfg
+  cfg=$(git worktree list --porcelain 2>/dev/null | awk -v h="$1" '
+    /^worktree /{ p = substr($0, 10); n = split(p, a, "/"); if (a[n] == h) { print p; exit } }')
+  [[ -n "$cfg" && -f "$cfg/.workmux.yaml" ]] && printf '%s\n' "$cfg/.workmux.yaml"
+  return 0
+}
+
+config_args=()
+if cfg=$(worktree_config "$@") && [[ -n "$cfg" ]]; then
+  config_args=(--config "$cfg")
+fi
+
 if [[ -n "$TMUX" ]]; then
-  exec workmux open -s "$@" >/dev/null
+  exec workmux open -s "${config_args[@]}" "$@" >/dev/null
 else
   exec tmux new-session -s "wmboot-$$" -c "$PWD" \
-    "workmux open -s $(printf '%q ' "$@") >/dev/null"
+    "workmux open -s $(printf '%q ' "${config_args[@]}" "$@") >/dev/null"
 fi
