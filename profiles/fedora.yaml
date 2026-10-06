@@ -40,7 +40,6 @@ install_with:
     - scrcpy
   script:
     - setup-brew
-    - brew-taps
     - jetbrains-toolbox
     - ngrok
   dnf-copr:

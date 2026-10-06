@@ -1,8 +1,11 @@
 # HashiCorp pulled terraform (and its other tools) from homebrew-core over
-# licensing (BSL); it's only available from their own tap now.
+# licensing (BSL); it's only available from their own tap now, which is tapped
+# and trusted here before the install.
 description: HashiCorp Terraform
-depends-on: [brew-taps]
+depends-on: [setup-brew]
 install:
 
   brew:
-    command: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" install hashicorp/tap/terraform'
+    command: >-
+      sh "$LOADOUT_REPO/programs/brew/brew-taps.sh" install hashicorp/tap &&
+      sh "$LOADOUT_REPO/programs/brew/brew.sh" install hashicorp/tap/terraform

@@ -38,7 +38,6 @@ install_with:
     - 1password-cli
   script:
     - setup-brew
-    - brew-taps
     - jetbrains-toolbox
     - ngrok
   brew:

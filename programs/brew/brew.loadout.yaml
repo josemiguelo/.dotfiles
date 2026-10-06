@@ -46,15 +46,3 @@ programs:
         command: 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
         check: 'file:brew.sh --version'
         regex: 'Homebrew ([0-9][0-9.]*)'
-
-  # Third-party taps, tapped and trusted for this user, before anything that
-  # installs from one; the programs that need a tap depend on this explicitly.
-  brew-taps:
-    description: 'third-party Homebrew taps, tapped and trusted for this user'
-    depends-on: [setup-brew]
-    install:
-
-      script:
-        command: 'file:brew-taps.sh install'
-        check: 'file:brew-taps.sh check && echo trusted'
-        regex: '(trusted)'
