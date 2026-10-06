@@ -4,8 +4,8 @@
   "os": "macos",
   "distro": null,
   "arch": "arm64",
-  "toolVersion": "2.0.0",
-  "updatedAt": "2026-10-04T15:05:52.049413Z",
+  "toolVersion": "2.1.0",
+  "updatedAt": "2026-10-06T15:51:02.981482Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -37,14 +37,14 @@
       "version": "4.1",
       "reason": null
     },
-    "setup-brew": {
+    "voxtype": {
       "status": "installed",
-      "version": "7.0.7",
+      "version": "0.7.5",
       "reason": null
     },
-    "brew-taps": {
+    "setup-brew": {
       "status": "installed",
-      "version": "trusted",
+      "version": "7.0.8",
       "reason": null
     },
     "atuin": {
@@ -74,7 +74,7 @@
     },
     "claude": {
       "status": "installed",
-      "version": "2.1.289",
+      "version": "2.1.291",
       "reason": null
     },
     "codex": {
@@ -347,6 +347,11 @@
       "reason": null
     },
     "chezmoi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "command-palette": {
       "status": "applied",
       "files": [],
       "reason": null
