@@ -1,0 +1,24 @@
+# Voxtype: push-to-talk speech-to-text. Its cask lives in its own tap
+# (peteonrails/voxtype), so the tap is declared here rather than in
+# brew-taps.sh. After install, `voxtype configure` picks a model, sets the
+# hotkey and walks through the microphone and Input Monitoring permissions;
+# that's interactive, so it's left to the user.
+
+# The tap, tapped and trusted for this user (same check as brew-taps).
+voxtype-tap:
+  description: 'the voxtype Homebrew tap, tapped and trusted for this user'
+  depends-on: [setup-brew]
+  install:
+
+    script:
+      command: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" tap peteonrails/voxtype && sh "$LOADOUT_REPO/programs/brew/brew.sh" trust --tap peteonrails/voxtype'
+      check: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" tap-info peteonrails/voxtype 2>/dev/null | grep -qx Trusted && echo trusted'
+      regex: '(trusted)'
+
+voxtype:
+  description: Voxtype -- push-to-talk speech-to-text
+  depends-on: [voxtype-tap]
+  install:
+
+    brew-cask:
+      command: 'sh "$LOADOUT_REPO/programs/brew/brew.sh" install --cask voxtype'

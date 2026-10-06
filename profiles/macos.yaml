@@ -17,6 +17,7 @@ install_with:
     - lunar
     - meetingbar
     - obs
+    - voxtype
   brew:
     - yazi
     - fzf
