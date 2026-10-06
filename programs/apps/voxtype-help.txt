@@ -1,0 +1,27 @@
+Voxtype is installed. Hold fn (Globe), speak, release: the text is typed where
+your cursor is.
+
+First-time setup
+  1. voxtype configure
+     Picks the speech model, confirms the hotkey (fn), and walks through the
+     permissions.
+  2. sudo voxtype setup app-bundle
+     Creates /Applications/Voxtype.app. Needs sudo.
+  3. Permissions: System Settings > Privacy & Security, turn on Voxtype under
+     - Accessibility   (types the text)
+     - Input Monitoring (the fn hotkey)
+     - Microphone      (macOS asks the first time you record)
+     These belong to Voxtype.app. Don't test by running `voxtype` in a
+     terminal: that gives the permissions to the terminal app instead.
+
+Start it
+  open /Applications/Voxtype.app
+  voxtype status            # "idle" means ready
+
+Troubleshooting
+  Logs:        tail -f ~/Library/Logs/voxtype/stdout.log
+  Mic prompt:  tccutil reset Microphone io.voxtype.daemon
+               then open the app and record again
+  Stop:        pkill -x voxtype-bin
+  "voxtype-osd not found" is harmless: it only means no on-screen indicator.
+  The "input group" warning from `voxtype setup check` is Linux only.
