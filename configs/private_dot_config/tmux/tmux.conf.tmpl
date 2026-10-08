@@ -27,6 +27,12 @@ set-window-option -g automatic-rename off
 set -g mouse on
 set -g @yank_action 'copy-pipe'
 
+# Copy mode keys. tmux otherwise picks vi or emacs from $EDITOR in whatever
+# process first started the server, and the kitty overlays and tmux-workmux-open
+# start it without one. tmux-yank already binds y in copy-mode-vi.
+setw -g mode-keys vi
+bind -T copy-mode-vi v send -X begin-selection
+
 set -g allow-passthrough on
 
 run-shell "tmux set-option -g default-shell $(command -v zsh)"
