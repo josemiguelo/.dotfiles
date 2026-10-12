@@ -3,3 +3,4 @@ install:
 
   dnf:
     command: 'file:fedora/install-chrome.sh'
+    sudo: true

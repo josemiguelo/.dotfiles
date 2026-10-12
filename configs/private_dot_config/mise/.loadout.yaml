@@ -38,6 +38,7 @@ scripts:
   java-macos-integration:
     description: 'mise''s JDKs registered with macOS (java_home)'
     file: '.loadout/java-macos.sh'
+    sudo: true
     check: 'file:.loadout/java-macos.sh check'
     os: [macos]
     after: [scripts.mise-tools]

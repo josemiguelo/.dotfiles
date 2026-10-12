@@ -38,5 +38,6 @@ scripts:
   omarchy-dictation-gpu:
     description: 'Voxtype dictation on the GPU (Vulkan)'
     file: dictation-gpu.sh
+    sudo: true
     check: 'file:dictation-gpu.sh check'
     after: [scripts.omarchy-dictation]

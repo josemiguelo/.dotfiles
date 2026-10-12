@@ -18,6 +18,7 @@ scripts:
   omarchy-brave:
     description: 'Brave, set up by Omarchy''s browser installer'
     file: omarchy-brave.sh
+    sudo: true
     check: 'file:omarchy-brave.sh check'
     after: [programs.brave]
 
@@ -42,6 +43,7 @@ scripts:
   omarchy-sudoless-docker:
     description: 'sudoless Docker (user in the docker group)'
     file: omarchy-sudoless-docker.sh
+    sudo: true
     check: 'file:omarchy-sudoless-docker.sh check'
     after: [programs.lazydocker]
 
