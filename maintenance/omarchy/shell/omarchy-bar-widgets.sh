@@ -18,6 +18,8 @@ if [ "${1:-}" = check ]; then MODE=check; shift; fi
 [ $# -gt 0 ] || { echo "usage: $0 [check] \"<id> <section> <before|after> <neighbour>\"..." >&2; exit 2; }
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
+. "$HERE/../lib/shell-ready.sh"
+shell_ready
 JSON=$HOME/.config/omarchy/shell.json
 
 enabled() {

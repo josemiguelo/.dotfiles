@@ -35,6 +35,8 @@ case "$SIZE" in '' | *[!0-9]*) echo "size must be a whole number" >&2; exit 2 ;;
 
 STOCK=omarchy.workspaces
 HERE="$(cd "$(dirname "$0")" && pwd)"
+. "$HERE/../lib/shell-ready.sh"
+shell_ready
 WIDGET_SETTINGS=$HERE/omarchy-bar/settings/$WIDGET.json
 JSON=$HOME/.config/omarchy/shell.json
 TOML=$HOME/.config/omarchy/shell.toml
