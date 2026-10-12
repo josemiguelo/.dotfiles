@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-12T21:39:28.160377617Z",
+  "updatedAt": "2026-10-12T22:02:59.224049811Z",
   "programs": {
     "setup-brew": {
       "status": "installed",
@@ -341,7 +341,7 @@
     },
     "dotfiles-ssh-remote": {
       "status": "done",
-      "lastRun": "2026-10-12T18:56:10.617064858Z",
+      "lastRun": "2026-10-12T21:49:50.695831771Z",
       "exitCode": 0
     },
     "skills-repo": {
@@ -529,8 +529,13 @@
       "lastRun": "2026-10-12T19:22:33.750437862Z",
       "exitCode": 0
     },
-    "omarchy-sshd": {
+    "github-ssh-key": {
       "status": "done",
+      "lastRun": "2026-10-12T22:02:43.079351425Z",
+      "exitCode": 0
+    },
+    "omarchy-sshd": {
+      "status": "pending",
       "lastRun": "2026-10-12T19:22:38.169256323Z",
       "exitCode": 0
     },

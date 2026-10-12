@@ -8,11 +8,12 @@ programs:
     via: [brew, omarchy]
 scripts:
 
-  # The checkout should push/pull over ssh (a new machine clones over https).
+  # The checkout pulls over https and pushes over ssh: the repo is public, so
+  # pulling works before GitHub knows this machine's key (github-ssh-key).
   dotfiles-ssh-remote:
-    description: point the chezmoi checkout at the ssh dotfiles remote
-    run: 'git -C $HOME/.local/share/chezmoi remote set-url origin git@github.com:josemiguelo/.dotfiles.git'
-    check: 'test "$(git -C $HOME/.local/share/chezmoi remote get-url origin 2>/dev/null)" = git@github.com:josemiguelo/.dotfiles.git'
+    description: point the chezmoi checkout's pushes at the ssh dotfiles remote
+    run: 'git -C $HOME/.local/share/chezmoi remote set-url origin https://github.com/josemiguelo/.dotfiles.git && git -C $HOME/.local/share/chezmoi config remote.origin.pushurl git@github.com:josemiguelo/.dotfiles.git'
+    check: 'test "$(git -C $HOME/.local/share/chezmoi config --get remote.origin.url)" = https://github.com/josemiguelo/.dotfiles.git && test "$(git -C $HOME/.local/share/chezmoi config --get remote.origin.pushurl)" = git@github.com:josemiguelo/.dotfiles.git'
 
   # Remote freshness: is the local source behind origin? (throttled fetch,
   # fail-soft offline). Converge = pull only; applying is loadout's job.
