@@ -5,4 +5,5 @@ scripts:
   keychron-launcher-access:
     description: 'Keychron Launcher can reach the keyboard (WebHID)'
     file: launcher-access.sh
+    sudo: true
     check: 'file:launcher-access.sh check'

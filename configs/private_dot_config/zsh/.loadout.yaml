@@ -28,6 +28,7 @@ scripts:
   default-shell:
     description: login shell set to zsh
     file: '.loadout/default-shell.sh'
+    sudo: true
     check: 'file:.loadout/default-shell.sh check'
     after: [programs.zsh]
 outdated:

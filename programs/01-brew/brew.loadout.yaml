@@ -41,12 +41,14 @@ programs:
       script:
         depends-on: [curl, git, gcc, procps-ng]
         command: 'file:setup-brew.sh install'
+        sudo: true
         check: 'file:setup-brew.sh check && echo ready'
         regex: '(ready)'
 
       # macOS: Homebrew's official installer into /opt/homebrew (Apple silicon).
       # It asks for sudo itself, and Xcode's command line tools come with it.
       macos:
+        sudo: true
         command: 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
         check: 'file:brew.sh --version'
         regex: 'Homebrew ([0-9][0-9.]*)'

@@ -3,6 +3,7 @@ install:
 
   dnf:
     command: 'file:fedora/install-anydesk.sh'
+    sudo: true
 
   # Arch: the AUR's anydesk-bin (AnyDesk's own build, repackaged). Its
   # anydesk.service (unattended access) is left disabled.

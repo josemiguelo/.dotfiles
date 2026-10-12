@@ -59,6 +59,7 @@ scripts:
   setup-libvirt-arch:
     description: 'libvirtd enabled and the libvirt group joined (Arch)'
     file: setup-libvirt-arch.sh
+    sudo: true
     check: 'file:setup-libvirt-arch.sh check'
     after: [programs.libvirt, programs.qemu-desktop, programs.dnsmasq]
 
@@ -76,5 +77,6 @@ scripts:
   ufw-libvirt:
     description: 'ufw allows libvirt''s default NAT network (virbr0)'
     file: ufw-libvirt.sh
+    sudo: true
     check: 'file:ufw-libvirt.sh check'
     after: [scripts.setup-libvirt-arch]

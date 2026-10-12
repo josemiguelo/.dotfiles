@@ -17,5 +17,6 @@ scripts:
   omarchy-keyboard-backlight-guard:
     description: keyboard backlight comes back after sleep
     file: omarchy-keyboard-backlight-guard.sh
+    sudo: true
     check: 'file:omarchy-keyboard-backlight-guard.sh check'
     after: [scripts.omarchy-command-overrides]

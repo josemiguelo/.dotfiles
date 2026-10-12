@@ -10,5 +10,6 @@ programs:
 
       dnf:
         command: 'file:setup-dnf.sh install'
+        sudo: true
         check: 'file:setup-dnf.sh check && echo configured'
         regex: '(configured)'

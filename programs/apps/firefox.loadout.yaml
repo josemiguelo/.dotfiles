@@ -5,6 +5,7 @@ programs:
 
       dnf:
         command: 'file:fedora/install-firefox.sh'
+        sudo: true
 scripts:
 
   # The rpm firefox wins; the flatpak gets removed.
