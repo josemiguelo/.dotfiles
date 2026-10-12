@@ -6,29 +6,25 @@ installs, maintains and keeps applied.
 
 ## New machine
 
-1. Install git and chezmoi (Omarchy ships both; macOS and Fedora:
-   `brew install chezmoi`).
-2. Give back anything under `~/.local` a root-run installer left owned by
-   root (prints nothing when all is yours):
-   ```bash
-   find ~/.local ! -user "$USER" -print0 | xargs -0 -r sudo chown "$USER:$(id -gn)"
-   ```
-3. Clone the repo (https: this machine may have no ssh key yet;
-   `dotfiles-ssh-remote` switches the checkout to ssh later):
-   ```bash
-   chezmoi init https://github.com/josemiguelo/.dotfiles.git
-   ```
-4. A machine new to the repo gets its file before the first apply, since
-   the templates read it: `~/.local/share/chezmoi/machines/$(hostname).yaml`
-   with `extends = ["omarchy"]`, `["macos"]` or `["fedora"]`.
-5. Apply the dotfiles, install loadout, and open a new shell (the
-   dotfiles set `LOADOUT_REPO`):
-   ```bash
-   chezmoi apply
-   curl -fsSL https://raw.githubusercontent.com/josemiguelo/loadout/master/install.sh | sh
-   ```
-6. `loadout setup-new-machine`. Commit the new machine file yourself
-   (`sync` commits only the state file), then `loadout sync` publishes both.
+One command, on a fresh Omarchy, macOS or Fedora install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
+```
+
+`<machine>` is a file in `machines/` and becomes the hostname (each install
+keeps its own state file, so a reinstall gets a name of its own, e.g.
+`t2-macbook-omarchy-2`). [`bootstrap.sh`](bootstrap.sh) installs git and
+chezmoi, sets the hostname, applies the dotfiles over https, installs loadout
+and runs `loadout setup-new-machine`; `--dry-run` prints the commands
+instead. What it asks for: the sudo password, and once, a GitHub login in the
+browser (`github-ssh-key` adds this machine's ssh key to the account). Reboot
+when it's done.
+
+A machine new to the repo needs its file first, pushed before the bootstrap
+reads it: `machines/<machine>.yaml` with `extends: [t2-macbook]`, `[omarchy]`,
+`[macos]` or `[fedora]`. `loadout sync` publishes its state afterwards (it
+commits only the state file).
 
 ## tmux
 
