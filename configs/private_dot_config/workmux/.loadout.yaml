@@ -6,10 +6,10 @@ programs:
   # first.
   workmux:
     description: git worktrees + tmux windows for parallel agent sessions
-    depends-on: [tmux, setup-brew]
+    depends-on: [tmux]
     install:
 
       brew:
         command: >-
-          sh "$LOADOUT_REPO/programs/brew/brew-taps.sh" install raine/workmux &&
-          sh "$LOADOUT_REPO/programs/brew/brew.sh" install raine/workmux/workmux
+          sh "$LOADOUT_REPO/programs/01-brew/brew-taps.sh" install raine/workmux &&
+          sh "$LOADOUT_REPO/programs/01-brew/brew.sh" install raine/workmux/workmux

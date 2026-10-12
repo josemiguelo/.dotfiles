@@ -13,13 +13,12 @@ programs:
   # observe it.
   tpack:
     description: tmux package manager
-    depends-on: [setup-brew]
     install:
 
       brew-cask:
         command: >-
-          sh "$LOADOUT_REPO/programs/brew/brew-taps.sh" install tmuxpack/tpack &&
-          sh "$LOADOUT_REPO/programs/brew/brew.sh" install tmuxpack/tpack/tpack
+          sh "$LOADOUT_REPO/programs/01-brew/brew-taps.sh" install tmuxpack/tpack &&
+          sh "$LOADOUT_REPO/programs/01-brew/brew.sh" install tmuxpack/tpack/tpack
 scripts:
 
   # The plugins tmux.conf declares, present as clones. Whether a clone is

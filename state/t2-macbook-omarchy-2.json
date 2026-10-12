@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-12T20:40:45.850832723Z",
+  "updatedAt": "2026-10-12T20:53:10.308878285Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -346,7 +346,7 @@
     },
     "skills-repo": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:58:31.906453711Z",
+      "lastRun": "2026-10-12T20:52:47.805223728Z",
       "exitCode": 128
     },
     "default-shell": {
@@ -401,7 +401,7 @@
     },
     "omarchy-tmux-theme": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:20:24.598075001Z",
+      "lastRun": "2026-10-12T20:52:53.373330887Z",
       "exitCode": 0
     },
     "keychron-launcher-access": {
@@ -441,22 +441,22 @@
     },
     "omarchy-bar-icons": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:58:41.036515615Z",
+      "lastRun": "2026-10-12T20:52:57.220157792Z",
       "exitCode": 128
     },
     "omarchy-menu-button": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:58:41.532511787Z",
+      "lastRun": "2026-10-12T20:52:57.720193576Z",
       "exitCode": 1
     },
     "omarchy-bar-widgets": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:58:44.637641119Z",
+      "lastRun": "2026-10-12T20:53:00.828417133Z",
       "exitCode": 1
     },
     "omarchy-keystroke-windows": {
       "status": "pending",
-      "lastRun": "2026-10-12T19:58:44.674165435Z",
+      "lastRun": "2026-10-12T20:53:00.865778193Z",
       "exitCode": 1
     },
     "omarchy-pomodoro": {
@@ -570,9 +570,9 @@
       "exitCode": 0
     },
     "omarchy-scratchpad-opacity": {
-      "status": "pending",
-      "lastRun": "2026-10-12T19:58:47.977305823Z",
-      "exitCode": 1
+      "status": "done",
+      "lastRun": "2026-10-12T20:53:04.244624472Z",
+      "exitCode": 0
     },
     "setup-libvirt-arch": {
       "status": "done",
