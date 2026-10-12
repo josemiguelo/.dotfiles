@@ -24,10 +24,10 @@ programs:
     via: [omarchy]
 scripts:
 
-  # Voxtype dictation through Omarchy's own installer, which asks before its
-  # ~150MB model download.
+  # Voxtype dictation: the steps of Omarchy's own installer, without the
+  # question it asks before its ~150MB model download.
   omarchy-dictation:
-    description: 'Voxtype dictation, set up by Omarchy''s installer'
+    description: 'Voxtype dictation, set up the way Omarchy''s installer does'
     file: dictation.sh
     check: 'file:dictation.sh check'
     after: [programs.voxtype, programs.wtype]

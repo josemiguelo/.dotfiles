@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-12T21:28:33.340508617Z",
+  "updatedAt": "2026-10-12T21:34:59.734161711Z",
   "programs": {
     "setup-brew": {
       "status": "installed",
@@ -516,7 +516,7 @@
     },
     "omarchy-dictation": {
       "status": "done",
-      "lastRun": "2026-10-12T19:22:33.389588173Z",
+      "lastRun": "2026-10-12T21:34:42.428444204Z",
       "exitCode": 0
     },
     "omarchy-dictation-gpu": {
