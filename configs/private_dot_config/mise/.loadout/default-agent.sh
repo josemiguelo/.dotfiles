@@ -10,5 +10,9 @@
 # usage: omarchy-default-agent.sh <agent>
 set -eu
 AGENT=${1:?usage: omarchy-default-agent.sh <agent>}
+# The global config only: `omarchy default agent` runs `mise where`/`mise use
+# -g`, and from the repo's cwd mise would also find the dotfiles' copy of its
+# config in a parent and stop to ask whether to trust it.
+cd "$HOME"
 command -v "$AGENT" >/dev/null 2>&1 || { echo "$AGENT is not installed" >&2; exit 1; }
 omarchy default agent "$AGENT"

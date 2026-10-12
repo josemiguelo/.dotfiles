@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-12T21:20:31.937273413Z",
+  "updatedAt": "2026-10-12T21:28:33.340508617Z",
   "programs": {
     "setup-brew": {
       "status": "installed",
@@ -401,7 +401,7 @@
     },
     "omarchy-tmux-theme": {
       "status": "pending",
-      "lastRun": "2026-10-12T20:52:53.373330887Z",
+      "lastRun": "2026-10-12T21:27:56.128704612Z",
       "exitCode": 0
     },
     "keychron-launcher-access": {
@@ -456,7 +456,7 @@
     },
     "omarchy-keystroke-windows": {
       "status": "pending",
-      "lastRun": "2026-10-12T20:53:00.865778193Z",
+      "lastRun": "2026-10-12T21:28:13.988218943Z",
       "exitCode": 1
     },
     "omarchy-pomodoro": {
