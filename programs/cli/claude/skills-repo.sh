@@ -6,12 +6,27 @@
 # ~/.claude/skills, and a blanket symlink would redirect that regenerable
 # content into this tracked repo.
 #
+# The repo is public: it's fetched over https, so a fresh machine clones it
+# before GitHub knows its ssh key, and pushed over ssh (remote.origin.pushurl).
+# An existing checkout gets both urls set too.
+#
 # Modes: `check` / `install` (default).
 set -eu
 
-REPO_URL="git@github.com:josemiguelo/skills.git"
+REPO_URL="https://github.com/josemiguelo/skills.git"
+PUSH_URL="git@github.com:josemiguelo/skills.git"
 REPO="$HOME/Repos/gh/josemiguelo/skills"
 SKILLS_DIR="$HOME/.claude/skills"
+
+remotes_ok() {
+  [ "$(git -C "$REPO" config --get remote.origin.url)" = "$REPO_URL" ] &&
+    [ "$(git -C "$REPO" config --get remote.origin.pushurl)" = "$PUSH_URL" ]
+}
+
+set_remotes() {
+  git -C "$REPO" config remote.origin.url "$REPO_URL"
+  git -C "$REPO" config remote.origin.pushurl "$PUSH_URL"
+}
 
 # clone_repo: bare clone + initial worktree, matching gclone --bare's own
 # logic (repos.plugin.zsh) for the interactive path. `git clone --bare`
@@ -19,6 +34,7 @@ SKILLS_DIR="$HOME/.claude/skills"
 # setting it explicitly, a later `git fetch` would silently fetch nothing.
 clone_repo() {
   git clone --quiet --bare -- "$REPO_URL" "$REPO"
+  set_remotes
   git -C "$REPO" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
   git -C "$REPO" fetch --quiet --prune origin || true
 
@@ -54,6 +70,7 @@ skill_names() {
 
 check_all() {
   [ -d "$REPO" ] || return 1
+  remotes_ok || return 1
   wt=$(worktree_path)
   [ -n "$wt" ] || return 1
 
@@ -72,6 +89,9 @@ install_all() {
   if [ ! -d "$REPO" ]; then
     echo "skills-repo: cloning $REPO_URL"
     clone_repo
+  elif ! remotes_ok; then
+    set_remotes
+    echo "skills-repo: origin fetches over https, pushes over ssh"
   fi
 
   wt=$(worktree_path)

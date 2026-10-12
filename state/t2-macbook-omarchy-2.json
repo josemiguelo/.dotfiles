@@ -5,8 +5,13 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-12T20:53:10.308878285Z",
+  "updatedAt": "2026-10-12T21:20:31.937273413Z",
   "programs": {
+    "setup-brew": {
+      "status": "installed",
+      "version": "ready",
+      "reason": null
+    },
     "1password": {
       "status": "installed",
       "version": "8.12.40",
@@ -75,11 +80,6 @@
     "voxtype": {
       "status": "installed",
       "version": "1.1.0",
-      "reason": null
-    },
-    "setup-brew": {
-      "status": "installed",
-      "version": "ready",
       "reason": null
     },
     "atuin": {
@@ -345,9 +345,9 @@
       "exitCode": 0
     },
     "skills-repo": {
-      "status": "pending",
-      "lastRun": "2026-10-12T20:52:47.805223728Z",
-      "exitCode": 128
+      "status": "done",
+      "lastRun": "2026-10-12T21:10:09.879310023Z",
+      "exitCode": 0
     },
     "default-shell": {
       "status": "done",
@@ -440,19 +440,19 @@
       "exitCode": 0
     },
     "omarchy-bar-icons": {
-      "status": "pending",
-      "lastRun": "2026-10-12T20:52:57.220157792Z",
-      "exitCode": 128
+      "status": "done",
+      "lastRun": "2026-10-12T21:20:04.963167799Z",
+      "exitCode": 0
     },
     "omarchy-menu-button": {
-      "status": "pending",
-      "lastRun": "2026-10-12T20:52:57.720193576Z",
-      "exitCode": 1
+      "status": "done",
+      "lastRun": "2026-10-12T21:20:06.820145487Z",
+      "exitCode": 0
     },
     "omarchy-bar-widgets": {
-      "status": "pending",
-      "lastRun": "2026-10-12T20:53:00.828417133Z",
-      "exitCode": 1
+      "status": "done",
+      "lastRun": "2026-10-12T21:20:16.449420167Z",
+      "exitCode": 0
     },
     "omarchy-keystroke-windows": {
       "status": "pending",

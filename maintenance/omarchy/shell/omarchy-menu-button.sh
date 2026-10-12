@@ -11,6 +11,9 @@ set -eu
 BUTTON=josemiguelo.menu-button
 KEYSTROKE=evindor.keystroke
 JSON=$HOME/.config/omarchy/shell.json
+HERE="$(cd "$(dirname "$0")" && pwd)"
+. "$HERE/../lib/shell-ready.sh"
+shell_ready
 
 enabled() {
   omarchy plugin list --json 2>/dev/null |
