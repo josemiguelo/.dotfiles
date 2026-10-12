@@ -1,20 +1,21 @@
 #!/bin/sh
 # Keystroke's Windows extension (every open window, grouped by workspace),
-# from a Keystroke checkout until it ships with Keystroke: the checkout's
-# extensions/windows is linked into ~/.local/share/keystroke/extensions/,
-# where Keystroke loads local extensions, and turned on in
-# ~/.config/omarchy/keystroke.json (providers.windows.enabled, the rest of
-# the file kept). Hyper+Space (SUPER+CTRL+ALT+SHIFT+SPACE) opens the palette
-# on its screen, from a block in ~/.config/hypr/bindings.lua. The check
-# reads the link and the setting, and has hypr-option.lua evaluate the whole
-# config: the key runs exactly that command. Install confirms the key in the
-# running Hyprland when there is one, by description.
+# the one Keystroke ships in its own extensions/ (since 1.5): turned on in
+# ~/.config/omarchy/keystroke.json (providers.windows.enabled, the rest of the
+# file kept), since every extension starts off. Hyper+Space
+# (SUPER+CTRL+ALT+SHIFT+SPACE) opens the palette on its screen, from a block
+# in ~/.config/hypr/bindings.lua. A copy under
+# ~/.local/share/keystroke/extensions/ would replace the shipped one (that's
+# where an author iterates on it), so the link an earlier version of this
+# script made to a Keystroke checkout goes. The check reads the setting, and
+# has hypr-option.lua evaluate the whole config: the key runs exactly that
+# command. Install confirms the key in the running Hyprland when there is
+# one, by description.
 # Modes: `check` / `install` (default).
 set -eu
 
-CHECKOUT=$HOME/Repos/gh/evindor/keystroke
-SRC=$CHECKOUT/extensions/windows
-LINK=$HOME/.local/share/keystroke/extensions/windows
+BUNDLED=$HOME/.config/omarchy/plugins/evindor.keystroke/extensions/windows
+OLD_LINK=$HOME/.local/share/keystroke/extensions/windows
 SETTINGS=$HOME/.config/omarchy/keystroke.json
 CONF=$HOME/.config/hypr/bindings.lua
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -41,8 +42,9 @@ current() {
   awk -v b="$BEGIN" -v e="$END" '$0 == b { keep = 1 } keep { print } $0 == e { keep = 0 }' "$CONF"
 }
 
-linked() {
-  [ -L "$LINK" ] && [ "$(readlink "$LINK")" = "$SRC" ] && [ -f "$SRC/extension.json" ]
+# Keystroke's own copy, not shadowed by a local one.
+bundled() {
+  [ -f "$BUNDLED/extension.json" ] && [ ! -e "$OLD_LINK" ] && [ ! -L "$OLD_LINK" ]
 }
 
 enabled() {
@@ -50,7 +52,7 @@ enabled() {
 }
 
 in_place() {
-  linked && enabled && [ "$(current)" = "$(block)" ] && [ "$(lua "$PROBE" "bind:$KEY")" = "$COMMAND" ]
+  bundled && enabled && [ "$(current)" = "$(block)" ] && [ "$(lua "$PROBE" "bind:$KEY")" = "$COMMAND" ]
 }
 
 case "${1:-install}" in
@@ -58,12 +60,16 @@ check)
   in_place
   ;;
 install)
-  [ -f "$SRC/extension.json" ] || {
-    echo "no Windows extension at $SRC: clone https://github.com/evindor/keystroke into $CHECKOUT and check out the branch that has it" >&2
+  [ -f "$BUNDLED/extension.json" ] || {
+    echo "no Windows extension at $BUNDLED: is Keystroke (evindor.keystroke, from omarchy-plugins) 1.5 or later installed?" >&2
     exit 1
   }
-  mkdir -p "$(dirname "$LINK")"
-  ln -sfn "$SRC" "$LINK"
+  if [ -L "$OLD_LINK" ]; then
+    rm "$OLD_LINK"
+  elif [ -e "$OLD_LINK" ]; then
+    echo "$OLD_LINK would replace Keystroke's own Windows extension; move it away first" >&2
+    exit 1
+  fi
   # Keystroke reloads the file when it changes and refuses one without
   # "version"; the new copy replaces the old one in a single rename.
   mkdir -p "$(dirname "$SETTINGS")"
