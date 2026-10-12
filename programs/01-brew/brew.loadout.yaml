@@ -24,10 +24,14 @@ installers:
 programs:
 
   # Homebrew must exist and be writable by the login user before anything
-  # installs with brew. Homebrew is single-owner: a prefix installed by another
-  # account fails every `brew install` with a permissions error, so this
-  # reclaims it. PATH is deliberately not touched here: brew reaches
-  # interactive shells via the zsh brew plugin, never via /etc/profile.d.
+  # installs with brew. No brew program declares that: this folder is
+  # numbered (01-, after 00-dnf) so its fragment loads first, and loadout
+  # installs in declaration order, dependencies first, so setup-brew (and
+  # its build prerequisites) precede every brew and brew-cask install.
+  # Homebrew is single-owner: a prefix installed by another account fails
+  # every `brew install` with a permissions error, so this reclaims it.
+  # PATH is deliberately not touched here: brew reaches interactive shells
+  # via the zsh brew plugin, never via /etc/profile.d.
   setup-brew:
     description: Homebrew installed and owned by the login user
     install:

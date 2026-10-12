@@ -4,7 +4,7 @@
 # programs). A PATH brew is honoured first so a custom prefix still works, then
 # this OS's prefix (brew-prefix.sh). Every brew/brew-cask command in the repo
 # runs through here: the installers beside it as `file:brew.sh`, anything
-# else as `sh "$LOADOUT_REPO/programs/brew/brew.sh" <brew args...>`.
+# else as `sh "$LOADOUT_REPO/programs/01-brew/brew.sh" <brew args...>`.
 set -eu
 . "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
 

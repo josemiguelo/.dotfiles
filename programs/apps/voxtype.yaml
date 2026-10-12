@@ -9,10 +9,9 @@ description: Voxtype push-to-talk speech-to-text
 install:
 
   brew-cask:
-    depends-on: [setup-brew]
     command: >-
-      sh "$LOADOUT_REPO/programs/brew/brew-taps.sh" install peteonrails/voxtype &&
-      sh "$LOADOUT_REPO/programs/brew/brew.sh" install --cask voxtype &&
+      sh "$LOADOUT_REPO/programs/01-brew/brew-taps.sh" install peteonrails/voxtype &&
+      sh "$LOADOUT_REPO/programs/01-brew/brew.sh" install --cask voxtype &&
       cat "$LOADOUT_REPO/programs/apps/voxtype-help.txt"
 
   omarchy:
