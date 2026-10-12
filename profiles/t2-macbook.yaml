@@ -20,6 +20,7 @@ install_with:
 ssh:
   scripts:
     - setup-ssh id_ed25519
+    - github-ssh-key id_ed25519
     - omarchy-sshd josemiguelo
 t2:
   scripts:
