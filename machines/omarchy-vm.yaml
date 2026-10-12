@@ -1,0 +1,9 @@
+# A libvirt VM for testing a new-machine setup end to end (bootstrap.sh):
+# plain Omarchy, no T2 hardware, plus the ssh key steps the T2 profile has.
+
+extends: [omarchy]
+
+ssh:
+  scripts:
+    - setup-ssh id_ed25519
+    - github-ssh-key id_ed25519
