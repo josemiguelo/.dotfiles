@@ -27,6 +27,9 @@ export PATH="$HOME/.local/bin:${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/sha
 
 LOCK="${XDG_CONFIG_HOME:-$HOME/.config}/nvim/lazy-lock.json"
 LUA="$(cd "$(dirname "$0")" && pwd)/plugins.lua"
+# The global config only: nvim runs through mise's shim, and from the repo's
+# cwd mise would also find the dotfiles' copy of its config in a parent.
+cd "$HOME"
 
 # Run the helper in [mode] on [item]; prints its lines, returns 1 when nvim
 # didn't answer (no sentinel). A hung nvim is capped so it can never stall
