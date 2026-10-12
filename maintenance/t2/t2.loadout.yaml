@@ -1,6 +1,6 @@
 programs:
   # T2 Macs (MacBookPro16,1): fan daemon and curve, the EC clock, the internal
-  # keyboard and the screen backlight. Paths are relative to this file; the
+  # keyboard, the screen backlight and the GPU Hyprland renders on. Paths are relative to this file; the
   # backlight fix sources Omarchy's shared libraries (../omarchy/lib/).
 
   # The T2 fan daemon (arch-mact2 repo; Omarchy's T2 install step installs and
@@ -53,3 +53,12 @@ scripts:
     file: gmux-backlight.sh
     check: 'file:gmux-backlight.sh check'
     after: [scripts.omarchy-command-overrides]
+
+  # Hyprland took the Intel iGPU as its renderer while the gmux wires the
+  # panel to the AMD dGPU: every frame was copied across and the cursor and
+  # typing lagged. A uwsm env block points it, at each login, at whichever
+  # card has the panel connected; no card or PCI address is hardcoded.
+  t2-render-gpu:
+    description: 'Hyprland renders on the GPU driving the panel (T2 Mac)'
+    file: render-gpu.sh
+    check: 'file:render-gpu.sh check'
