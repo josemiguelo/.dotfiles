@@ -48,9 +48,9 @@ _start_dotfiles_change_name() {
 # claude in the current folder.
 _start_dotfiles_change_open() {
   local name=$1 prompt=$2 agent=claude
-  # A server started here would keep this folder as its own cwd; start it
-  # from $HOME, as tmux-workmux-open does.
-  tmux list-sessions >/dev/null 2>&1 || (cd ~ && tmux new-session -d -s _bootstrap)
+  # A server started here would keep this folder as its own cwd, and this
+  # folder is removed when the feature is finished: start it from $HOME.
+  ~/.local/bin/tmux-ensure-server
   # The prompt goes through a file: no quoting survives two shells intact.
   if [[ -n $prompt ]]; then
     print -r -- $prompt > .claude/start-prompt.md
