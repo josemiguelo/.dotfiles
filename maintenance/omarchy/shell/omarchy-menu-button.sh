@@ -13,6 +13,7 @@ KEYSTROKE=evindor.keystroke
 JSON=$HOME/.config/omarchy/shell.json
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/../lib/shell-ready.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 shell_ready
 
 enabled() {
@@ -48,7 +49,7 @@ install)
       | .plugins = ((.plugins // []) | if any(.[]; .id == $id) then . else . + [{ id: $id }] end)' "$JSON" > "$tmp"
     mv "$tmp" "$JSON"
   fi
-  in_place || { echo "Keystroke is still on the bar after install" >&2; exit 1; }
+  in_place || { echo "Keystroke is still on the bar after install" >&2; plugin_update_hint "$KEYSTROKE"; exit 1; }
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac

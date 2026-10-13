@@ -1,6 +1,6 @@
 #!/bin/sh
 # Keystroke's Windows extension (every open window, grouped by workspace),
-# the one Keystroke ships in its own extensions/ (since 1.5): turned on in
+# the one Keystroke ships in its own extensions/ (since 1.5.1): turned on in
 # ~/.config/omarchy/keystroke.json (providers.windows.enabled, the rest of the
 # file kept), since every extension starts off. Hyper+Space
 # (SUPER+CTRL+ALT+SHIFT+SPACE) opens the palette on its screen, from a block
@@ -21,6 +21,7 @@ CONF=$HOME/.config/hypr/bindings.lua
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PROBE=$HERE/../lib/hypr-option.lua
 . "$HERE/../lib/hypr-live.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 BEGIN="-- >>> Managed by loadout (omarchy-keystroke-windows)"
 END="-- <<< Managed by loadout (omarchy-keystroke-windows)"
 KEY="SUPER + CTRL + ALT + SHIFT + SPACE"
@@ -61,7 +62,8 @@ check)
   ;;
 install)
   [ -f "$BUNDLED/extension.json" ] || {
-    echo "no Windows extension at $BUNDLED: is Keystroke (evindor.keystroke, from omarchy-plugins) 1.5 or later installed?" >&2
+    echo "no Windows extension at $BUNDLED: is Keystroke (evindor.keystroke, from omarchy-plugins) 1.5.1 or later installed?" >&2
+    plugin_update_hint evindor.keystroke
     exit 1
   }
   if [ -L "$OLD_LINK" ]; then

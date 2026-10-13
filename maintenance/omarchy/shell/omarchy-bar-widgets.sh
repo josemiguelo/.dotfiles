@@ -19,6 +19,7 @@ if [ "${1:-}" = check ]; then MODE=check; shift; fi
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/../lib/shell-ready.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 shell_ready
 JSON=$HOME/.config/omarchy/shell.json
 
@@ -78,7 +79,10 @@ lines "$@" | {
       configured "$id" "$name" || configure "$id" "$name"
     fi
     if ! { enabled "$id" && placed "$id" "$section" "$rel" "$neighbour" && configured "$id" "$name"; }; then
-      [ "$MODE" = check ] || echo "$id isn't at $section, $rel $neighbour, with its settings after install" >&2
+      if [ "$MODE" = install ]; then
+        echo "$id isn't at $section, $rel $neighbour, with its settings after install" >&2
+        plugin_update_hint "$name"
+      fi
       failed=1
     fi
   done

@@ -8,7 +8,10 @@
 # fast-forwards it first while it is clean and on master, and leaves local
 # work alone otherwise. The repo is public: fetched over https, so a fresh
 # machine clones it before GitHub knows its ssh key, and pushed over ssh
-# (remote.origin.pushurl); an existing checkout gets both urls set too.
+# (remote.origin.pushurl); an existing checkout gets both urls set too. When
+# install fails, the plugins it rebuilds from a checkout that is behind its
+# remote are named: the patches follow upstream, so one of those is the
+# likely cause.
 # usage: omarchy-bar-icons.sh [check] <id>...
 set -eu
 
@@ -18,6 +21,7 @@ CHECKOUT=$HOME/Repos/gh/josemiguelo/omarchy-bar-icons
 TOOL=$CHECKOUT/bin/omarchy-bar-icons
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/../lib/shell-ready.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 shell_ready
 
 remotes_ok() {
@@ -42,4 +46,4 @@ if [ "$(git -C "$CHECKOUT" branch --show-current)" = master ] && [ -z "$(git -C 
   git -C "$CHECKOUT" pull --quiet --ff-only ||
     echo "couldn't fast-forward $CHECKOUT; using it as it is" >&2
 fi
-exec "$TOOL" "$@"
+"$TOOL" "$@" || { status=$?; plugin_update_hint "$@"; exit "$status"; }

@@ -24,6 +24,9 @@
       "Bash(tmux-server-cwd)",
       "Bash(rm -rf {{ $h }}/Work/tries/*)",
       "Bash(chezmoi apply:*)",
+{{- if $m.omarchy }}
+      "Bash(omarchy plugin update:*)",
+{{- end }}
       "Bash(git push:*)"
     ]
   }

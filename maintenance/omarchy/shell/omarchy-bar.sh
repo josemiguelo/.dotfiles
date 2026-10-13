@@ -36,6 +36,7 @@ case "$SIZE" in '' | *[!0-9]*) echo "size must be a whole number" >&2; exit 2 ;;
 STOCK=omarchy.workspaces
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/../lib/shell-ready.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 shell_ready
 WIDGET_SETTINGS=$HERE/omarchy-bar/settings/$WIDGET.json
 JSON=$HOME/.config/omarchy/shell.json
@@ -124,6 +125,6 @@ install)
     done
   fi
   positioned && sized && replaced && configured ||
-    { echo "the bar's position, thickness or workspace widget isn't what the opt-in names after install" >&2; exit 1; }
+    { echo "the bar's position, thickness or workspace widget isn't what the opt-in names after install" >&2; plugin_update_hint "$WIDGET"; exit 1; }
   ;;
 esac
