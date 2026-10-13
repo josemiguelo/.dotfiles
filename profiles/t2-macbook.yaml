@@ -26,6 +26,7 @@ t2:
   scripts:
     - t2-hid-apple-keyboard-arch
     - t2-fan-curve
+    - t2-fan-gpu-card
     - t2-boot-clock
     - t2-gmux-backlight
     - t2-render-gpu
