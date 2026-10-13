@@ -13,20 +13,28 @@
 # configurable here. speed_curve is one of linear|exponential|logarithmic;
 # exponential ramps slowest at the bottom of the band.
 #
+# Linear 60-80. This Mac idles at 60-70 C (an i9 next to an awake AMD dGPU),
+# so the band starts at 60 to keep the fans near their minimum there, and
+# ends at 80 to reach full speed well before the CPU's 100 C limit. It was
+# exponential 55-85, which stayed near the minimum until ~75 C and then
+# ramped late and hard: once t2fanrd could read the GPU temperature
+# (t2-fan-gpu-card), the package throttled about 70 times a minute. Omarchy's
+# linear 55-75 throttles less but runs ~3700 RPM at a 65 C idle.
+#
 # t2fanrd reads this only at startup, hence the restart in install.
 set -eu
 
 CONF=/etc/t2fand.conf
 WANT='[Fan1]
-low_temp=55
-high_temp=85
-speed_curve=exponential
+low_temp=60
+high_temp=80
+speed_curve=linear
 always_full_speed=false
 
 [Fan2]
-low_temp=55
-high_temp=85
-speed_curve=exponential
+low_temp=60
+high_temp=80
+speed_curve=linear
 always_full_speed=false'
 
 case "${1:-install}" in
