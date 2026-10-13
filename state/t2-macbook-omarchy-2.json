@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.2.0",
-  "updatedAt": "2026-10-13T15:25:15.086739444Z",
+  "updatedAt": "2026-10-13T16:52:59.591743440Z",
   "programs": {
     "setup-brew": {
       "status": "installed",
@@ -399,9 +399,14 @@
       "lastRun": "2026-10-13T14:22:52.209253225Z",
       "exitCode": 0
     },
+    "remove-brew-tmux": {
+      "status": "done",
+      "lastRun": "2026-10-13T16:52:49.933517706Z",
+      "exitCode": 0
+    },
     "omarchy-tmux-theme": {
       "status": "pending",
-      "lastRun": "2026-10-13T14:22:52.223780891Z",
+      "lastRun": "2026-10-13T16:52:49.964724569Z",
       "exitCode": 0
     },
     "keychron-launcher-access": {
@@ -465,7 +470,7 @@
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-13T14:23:53.420139608Z",
       "exitCode": 0
     },
@@ -576,7 +581,7 @@
     },
     "omarchy-scratchpad-opacity": {
       "status": "done",
-      "lastRun": "2026-10-13T14:27:11.623878704Z",
+      "lastRun": "2026-10-13T16:52:55.884183418Z",
       "exitCode": 0
     },
     "setup-libvirt-arch": {
