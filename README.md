@@ -21,6 +21,10 @@ instead. What it asks for: the sudo password, and once, a GitHub login in the
 browser (`github-ssh-key` adds this machine's ssh key to the account). Reboot
 when it's done.
 
+On a fresh Omarchy, run `omarchy update` (or at least `sudo pacman -Sy`)
+first: the install leaves pacman without package lists, and installing
+chezmoi fails with "target not found".
+
 A machine new to the repo needs its file first, pushed before the bootstrap
 reads it: `machines/<machine>.yaml` with `extends: [t2-macbook]`, `[omarchy]`,
 `[macos]` or `[fedora]`. `loadout sync` publishes its state afterwards (it
