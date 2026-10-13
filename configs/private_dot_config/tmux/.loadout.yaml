@@ -8,9 +8,10 @@ programs:
   tmux:
     via: [brew, dnf, omarchy]
 
-  # Installed from a tap, so the full tap path is required, and the tap is
+  # macOS: from its tap, so the full tap path is required, and the tap is
   # tapped and trusted first; it ships as a cask, so brew-cask mechanics
-  # observe it.
+  # observe it. Linux: from its GitHub release, since the cask depends on
+  # brew's tmux and git, which would shadow the system's on PATH.
   tpack:
     description: tmux package manager
     install:
@@ -19,6 +20,13 @@ programs:
         command: >-
           sh "$LOADOUT_REPO/programs/01-brew/brew-taps.sh" install tmuxpack/tpack &&
           sh "$LOADOUT_REPO/programs/01-brew/brew.sh" install tmuxpack/tpack/tpack
+
+      # Its own copy only: a tpack on PATH may still be the cask's, which
+      # remove-brew-tmux takes away after this.
+      script:
+        command: 'file:.loadout/install-tpack.sh'
+        check: '$HOME/.local/bin/tpack --version'
+        regex: '([0-9]+\.[0-9][0-9.]*)'
 scripts:
 
   # The plugins tmux.conf declares, present as clones. Whether a clone is
@@ -28,6 +36,14 @@ scripts:
     file: '.loadout/plugins.sh'
     check: 'file:.loadout/plugins.sh check'
     after: [programs.tmux, programs.tpack]
+
+  # Linux: brew's tpack cask gone, and the tmux and git it pulled in, so the
+  # system's tmux and git are the ones on PATH.
+  remove-brew-tmux:
+    description: 'no tpack, tmux or git from brew (Linux has its own)'
+    file: '.loadout/remove-brew-tmux.sh'
+    check: 'file:.loadout/remove-brew-tmux.sh check'
+    after: [programs.tpack]
 
   # Omarchy only: omarchy-theme-set-tmux repaints the live tmux server with the
   # omarchy theme on every theme switch, while tmux here follows kitty's palette.

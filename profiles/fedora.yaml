@@ -42,6 +42,7 @@ install_with:
     - setup-brew
     - jetbrains-toolbox
     - ngrok
+    - tpack
   dnf-copr:
     - kitty
   brew:
@@ -53,8 +54,6 @@ install_with:
     - atuin
     - trash-cli
     - git-delta
-  brew-cask:
-    - tpack
   dnf-repo:
     - google-cloud-cli
     - code
@@ -102,6 +101,7 @@ tmux:
   install_with: dnf
   scripts:
     - tmux-plugins
+    - remove-brew-tmux
 apps:
   scripts:
     - remove-firefox-flatpak
