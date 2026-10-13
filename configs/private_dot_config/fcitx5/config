@@ -1,0 +1,9 @@
+# fcitx5's global settings, only what differs from its defaults (it fills in
+# the rest). Omarchy runs fcitx5 for its XCompose sequences and ships no file
+# here.
+
+# fcitx5 toggles its embedded preedit on Ctrl+Alt+P by default, which kitty
+# never sees then: that key opens the command palette (kitty.conf). The toggle
+# moves to Ctrl+Alt+Shift+P, which neither kitty nor Hyprland uses.
+[Hotkey/TogglePreedit]
+0=Control+Alt+Shift+P

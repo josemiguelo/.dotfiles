@@ -12,3 +12,9 @@
 .config/mise/conf.d
 .config/mise/conf.d/**
 {{ end }}
+
+# fcitx5 is Omarchy's input method: its settings are for Omarchy machines only.
+{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+.config/fcitx5
+.config/fcitx5/**
+{{ end }}
