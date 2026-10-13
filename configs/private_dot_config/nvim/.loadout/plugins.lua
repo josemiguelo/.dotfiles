@@ -42,6 +42,16 @@ local function check()
   local Config = require("lazy.core.config")
   local Lock = require("lazy.manage.lock")
   local Git = require("lazy.manage.git")
+  -- The lock as plugins.sh found it ($LOADOUT_NVIM_LOCK): if this start
+  -- installed anything, Lazy's own copy is already rewritten to match the disk.
+  local saved
+  local path = vim.env.LOADOUT_NVIM_LOCK
+  local fd = path and path ~= "" and io.open(path)
+  if fd then
+    local body = fd:read("*a")
+    fd:close()
+    if body ~= "" then saved = vim.json.decode(body) end
+  end
   local names = vim.tbl_keys(Config.plugins)
   table.sort(names)
   local lines = {}
@@ -49,7 +59,8 @@ local function check()
     local p = Config.plugins[name]
     -- Same rule Lazy's own install/restore applies.
     if p._.cond ~= false and p.enabled ~= false then
-      local locked = Lock.get(p)
+      local locked
+      if saved then locked = saved[name] else locked = Lock.get(p) end
       if not p._.installed then
         lines[#lines + 1] = "missing " .. name
       elseif locked and locked.commit then

@@ -31,14 +31,27 @@ LUA="$(cd "$(dirname "$0")" && pwd)/plugins.lua"
 # cwd mise would also find the dotfiles' copy of its config in a parent.
 cd "$HOME"
 
+# Lazy rewrites the lockfile whenever it installs, and any nvim start installs
+# what's missing: on a fresh machine, the plugins LazyVim's imports name only
+# once LazyVim is cloned land on their newest commits, and the lock is
+# rewritten to match. Only `update` may move pins, so every other nvim run here
+# puts the lock back as it found it, and the check compares the disk with that
+# copy (LOADOUT_NVIM_LOCK), not with Lazy's rewritten one.
+SAVED=$(mktemp)
+trap 'rm -f "$SAVED"' EXIT
+save_lock() { [ ! -f "$LOCK" ] || cp -p "$LOCK" "$SAVED"; }
+put_lock_back() { [ ! -s "$SAVED" ] || cp -p "$SAVED" "$LOCK"; }
+
 # Run the helper in [mode] on [item]; prints its lines, returns 1 when nvim
 # didn't answer (no sentinel). A hung nvim is capped so it can never stall
 # loadout.
 ask() {
   out=$(mktemp)
-  LOADOUT_NVIM_OUT="$out" LOADOUT_NVIM_MODE="$1" LOADOUT_NVIM_ITEM="${2:-}" \
+  [ "$1" = update ] || save_lock
+  LOADOUT_NVIM_OUT="$out" LOADOUT_NVIM_MODE="$1" LOADOUT_NVIM_ITEM="${2:-}" LOADOUT_NVIM_LOCK="$SAVED" \
     timeout 120 nvim --headless -n \
     -c "luafile $LUA" -c 'qa!' </dev/null >/dev/null 2>&1 || true
+  [ "$1" = update ] || put_lock_back
   if grep -qx '__LOADOUT_NVIM_OK__' "$out" 2>/dev/null; then
     grep -vx '__LOADOUT_NVIM_OK__' "$out" | grep -v '^[[:space:]]*$' || true
     rm -f "$out"
@@ -66,7 +79,13 @@ check() {
 
 install_all() {
   command -v nvim >/dev/null 2>&1 || { echo "nvim not found" >&2; exit 1; }
+  save_lock
+  # A plain start first: it installs every plugin the spec names, those
+  # behind LazyVim's imports included, so the restore below reaches them all.
+  nvim --headless +qa
+  put_lock_back
   nvim --headless "+Lazy! restore" +qa
+  put_lock_back
 }
 
 outdated() {
