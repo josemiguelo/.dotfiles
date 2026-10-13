@@ -13,6 +13,10 @@ MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
 [ $# -gt 0 ] || { echo "usage: $0 [check] <git-url>..." >&2; exit 2; }
 
+HERE="$(cd "$(dirname "$0")" && pwd)"
+. "$HERE/../lib/shell-ready.sh"
+shell_ready
+
 # omarchy-plugin-add's own location (it doesn't follow XDG_CONFIG_HOME).
 PLUGINS=$HOME/.config/omarchy/plugins
 SHELL_JSON=$HOME/.config/omarchy/shell.json
@@ -68,6 +72,8 @@ check)
   ;;
 install)
   for url in $(pending "$@"); do
+    # Each plugin added reloads the shell; the next waits for it.
+    shell_ready
     dir=$(plugin_dir "$url")
     if [ -z "$dir" ]; then
       omarchy plugin add "$url" --enable --yes
