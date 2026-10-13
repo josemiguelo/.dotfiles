@@ -10,6 +10,20 @@
 # on whatever branch is checked out), so a checkout with commits of its own,
 # or uncommitted changes, gets told to catch up by hand instead.
 
+# plugin_diverged <dir>: why `omarchy plugin update` can't fast-forward the
+# checkout in <dir> to its remote's HEAD ("N commit(s) of its own on
+# <branch>", "uncommitted changes"), or nothing when it can. Reads
+# FETCH_HEAD, so it comes right after a `git fetch origin HEAD` there.
+plugin_diverged() {
+  div_ahead=$(git -C "$1" rev-list --count FETCH_HEAD..HEAD 2>/dev/null) || div_ahead=0
+  if [ "$div_ahead" -gt 0 ]; then
+    div_branch=$(git -C "$1" branch --show-current 2>/dev/null)
+    echo "$div_ahead commit(s) of its own${div_branch:+ on $div_branch}"
+  elif [ -n "$(git -C "$1" status --porcelain 2>/dev/null)" ]; then
+    echo "uncommitted changes"
+  fi
+}
+
 # plugin_update_hint <id>...: on stderr, a line for each id that is a git
 # checkout behind its remote's HEAD. Ids without one (Omarchy's built-ins,
 # omarchy-bar-icons' clones) are skipped. Always succeeds.
@@ -20,18 +34,13 @@ plugin_update_hint() {
     git -C "$hint_dir" fetch --quiet origin HEAD 2>/dev/null || continue
     hint_behind=$(git -C "$hint_dir" rev-list --count HEAD..FETCH_HEAD 2>/dev/null) || continue
     [ "$hint_behind" -gt 0 ] || continue
-    hint_ahead=$(git -C "$hint_dir" rev-list --count FETCH_HEAD..HEAD 2>/dev/null) || hint_ahead=0
-    if [ "$hint_ahead" -gt 0 ]; then
-      hint_branch=$(git -C "$hint_dir" branch --show-current 2>/dev/null)
-      hint_why="$hint_ahead commit(s) of its own${hint_branch:+ on $hint_branch}"
-    elif [ -n "$(git -C "$hint_dir" status --porcelain 2>/dev/null)" ]; then
-      hint_why="uncommitted changes"
-    else
+    hint_why=$(plugin_diverged "$hint_dir")
+    if [ -z "$hint_why" ]; then
       echo "$hint_id is $hint_behind commit(s) behind its remote: run \`omarchy plugin update $hint_id\`, then this again" >&2
-      continue
+    else
+      echo "$hint_id is $hint_behind commit(s) behind its remote, and \`omarchy plugin update\` can't fast-forward it:" \
+        "$hint_dir has $hint_why; bring it up to date by hand" >&2
     fi
-    echo "$hint_id is $hint_behind commit(s) behind its remote, and \`omarchy plugin update\` can't fast-forward it:" \
-      "$hint_dir has $hint_why; bring it up to date by hand" >&2
   done
   return 0
 }
