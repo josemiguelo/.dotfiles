@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Starts the tmux server from $HOME when none is running, so it can't end up
+# rooted in a folder that's later deleted (a try folder, a worktree): from then
+# on tmux ignores -c and opens every new pane in the deleted folder. The
+# _bootstrap session keeps the server alive (exit-empty is on by default);
+# tmux-attach and tmux-session-cycle hide it. When a server is already running
+# from a deleted folder, it says so: only restarting it fixes that.
+#
+# Called before starting tmux by the zsh tmux function (plugins/tmux), by
+# start-dotfiles-change and by Neovim's PersistedTerm. tmux-attach and
+# tmux-workmux-open keep their own copy of the first line: their tests
+# redirect `tmux` to a throwaway socket with a shell function, which a
+# separate script would escape.
+
+if ! tmux list-sessions >/dev/null 2>&1; then
+  (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
+  exit 0
+fi
+
+cwd=$(tmux-server-cwd 2>/dev/null) || exit 0
+if [[ "$cwd" == *" (deleted)" ]]; then
+  echo "tmux: the server runs from a deleted folder (${cwd% (deleted)}), so new panes ignore -c; restart it (tmux kill-server ends every session)" >&2
+fi
+exit 0

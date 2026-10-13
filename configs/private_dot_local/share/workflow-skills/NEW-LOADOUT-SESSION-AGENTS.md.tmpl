@@ -75,20 +75,29 @@ changed loadout is `dotfiles:`.
 When the user asks you to finish a feature, do this for every repo and
 worktree the feature touched in this session, in this order:
 
-1. **Commit** everything in the worktree, in the repo's commit style and with
+1. **Check the tmux server's folder**: run `tmux-server-cwd`. A server keeps
+   the folder it was started from for life, and once that folder is deleted
+   tmux ignores `-c` and opens every new pane there. If it prints a path
+   inside this session's folder (the folder holding this file) or inside a
+   worktree the feature touched, or one ending in ` (deleted)`, warn the user
+   and stop before step 2: merging removes the worktree, and cleaning up
+   removes this folder. Only restarting the server fixes it, and that ends
+   every session, so it's theirs to do; they finish the feature again after.
+   Compare real paths (`realpath`), not the way they're spelled.
+2. **Commit** everything in the worktree, in the repo's commit style and with
    its `AGENTS.md`'s rules. If anything is still uncommitted, warn the user
    and stop.
-2. **Merge** into the repo's default branch (`master`, or `main` for `skills`),
+3. **Merge** into the repo's default branch (`master`, or `main` for `skills`),
    following the repo's `AGENTS.md`. In `.dotfiles` that is `workmux merge
    --cleanup` from the worktree, then `chezmoi diff` and `chezmoi apply` from
    the main checkout. If the worktree isn't merged, warn the user and stop.
-3. **Push** the default branch and the feature branch. If anything is still
+4. **Push** the default branch and the feature branch. If anything is still
    unpushed, warn the user and stop.
-4. **Clean up**, only once every touched worktree has passed steps 1 to 3:
-   remove each worktree the way the repo's `AGENTS.md` says, kill the tmux
-   session this agent runs in, then remove this session's folder (the folder
-   holding this file). Do the session kill and the folder removal last: killing
-   the session ends this agent.
+5. **Clean up**, only once every touched worktree has passed steps 1 to 4:
+   remove each worktree the way the repo's `AGENTS.md` says, then remove this
+   session's folder and kill the tmux session this agent runs in, in one
+   command and in that order (`rm -rf <folder> && tmux kill-session -t
+   <session>`): killing the session ends this agent, so nothing after it runs.
 
 If any worktree fails a step, warn the user with the full list of what is
 blocking (uncommitted, unpushed, unmerged), and remove nothing: the user may
