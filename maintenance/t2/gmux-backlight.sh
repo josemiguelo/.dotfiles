@@ -31,8 +31,26 @@
 # level was never saved or restored. A rule of our own tags it and pulls the
 # unit in without path_id, and names it (ID_PATH, which the saved file under
 # /var/lib/systemd/backlight/ is named after) by its ACPI id. systemd's
-# restore floor stays: never below 5%. Installing only uses sudo for what
-# actually changes (the hook and the rule are root's; the wrapper is yours).
+# restore floor stays: never below 5%.
+#
+# Crashes: systemd-backlight saves only when its unit stops, at a clean
+# shutdown. A hard reset (a GPU hang froze the session on 2026-10-13) skips
+# that, and the next boots restored the level from the last clean shutdown
+# hours before. So the wrapper also records the level in
+# $XDG_STATE_HOME/gmux-backlight/level each time it's set (the brightness keys
+# and the bar's slider both go through omarchy-brightness-display), and a
+# hyprland.start listener in ~/.config/hypr/hyprland.lua (where Omarchy puts
+# personal additions) sends it back at login, or the kernel's level when none
+# was recorded yet. brightnessctl sets it through logind, no root needed.
+#
+# Timing: the gmux resets to its bright default whenever the panel powers
+# back up (the login's first modeset, the wake after a lock blank), a moment
+# after the command that powers it returns. A single resend right away lands
+# too early and one a second later leaves a second of glare, so both the login
+# and the wrapper's `on` resend every 0.1s for a few seconds.
+#
+# Installing only uses sudo for what actually changes (the hook and the rule
+# are root's; the wrapper and the listener are yours).
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -45,6 +63,9 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 PROBE=$HERE/../omarchy/lib/hypr-option.lua
 . "$HERE/../omarchy/lib/omarchy-overrides-lib.sh"
 WRAPPER=$OVERRIDES_DIR/$DISPLAY_COMMAND
+CONF=$HOME/.config/hypr/hyprland.lua
+BEGIN="-- >>> Managed by loadout (t2-gmux-backlight)"
+END="-- <<< Managed by loadout (t2-gmux-backlight)"
 
 hook_text() {
   cat <<'HOOK_EOF'
@@ -85,15 +106,53 @@ resend() {
     brightnessctl -q -d gmux_backlight set "\$level"
 }
 
+# The level as just set, for the login to send back after a crash skipped
+# systemd-backlight's save. Not for on/off: those leave the level alone.
+record() {
+  local device=/sys/class/backlight/gmux_backlight
+  local dir=\${XDG_STATE_HOME:-\$HOME/.local/state}/gmux-backlight level
+  [[ -e \$device/brightness ]] && level=\$(< "\$device/brightness") &&
+    [[ \$level -gt 0 ]] && mkdir -p "\$dir" &&
+    printf '%s\\n' "\$level" > "\$dir/level.tmp" && mv "\$dir/level.tmp" "\$dir/level"
+}
+
 for arg in "\$@"; do
-  if [[ \$arg == "on" ]]; then
+  case \$arg in
+  on)
     resend
-    (sleep 1; resend) >/dev/null 2>&1 &
-    break
-  fi
+    (for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do sleep 0.1; resend; done) >/dev/null 2>&1 &
+    exit \$status
+    ;;
+  off) exit \$status ;;
+  esac
 done
+(( \$# == 0 )) || record
 exit \$status
 WRAPPER_EOF
+}
+
+block() {
+  cat <<'BLOCK_EOF'
+-- >>> Managed by loadout (t2-gmux-backlight)
+-- Send the brightness recorded by the omarchy-brightness-display wrapper (or
+-- the kernel's, before anything was recorded) back to the gmux at login: a
+-- crash skips systemd-backlight's save at shutdown, and the login's first
+-- modeset resets the gmux to its default. Every 0.1s for 3s, to catch that
+-- reset whenever it lands (maintenance/t2/gmux-backlight.sh).
+hl.on("hyprland.start", function()
+  hl.exec_cmd([[level=$(cat "${XDG_STATE_HOME:-$HOME/.local/state}/gmux-backlight/level" 2>/dev/null || cat /sys/class/backlight/gmux_backlight/brightness) || exit 0; i=0; while [ $i -lt 30 ]; do brightnessctl -q -d gmux_backlight set "$level"; sleep 0.1; i=$((i + 1)); done]])
+end)
+-- <<< Managed by loadout (t2-gmux-backlight)
+BLOCK_EOF
+}
+
+current() {
+  [ -f "$CONF" ] || return 0
+  awk -v b="$BEGIN" -v e="$END" '$0 == b { keep = 1 } keep { print } $0 == e { keep = 0 }' "$CONF"
+}
+
+listener_ready() {
+  [ "$(current)" = "$(block)" ]
 }
 
 wrapper_ready() {
@@ -115,7 +174,7 @@ rule_ready() {
 
 case "${1:-install}" in
 check)
-  hook_ready && rule_ready && wrapper_ready
+  hook_ready && rule_ready && wrapper_ready && listener_ready
   ;;
 install)
   if ! hook_ready; then
@@ -134,9 +193,14 @@ install)
   mkdir -p "$OVERRIDES_DIR"
   wrapper_text > "$WRAPPER"
   chmod 755 "$WRAPPER"
+  if ! listener_ready; then
+    rest=$(awk -v b="$BEGIN" -v e="$END" '$0 == b { skip = 1 } !skip { print } $0 == e { skip = 0 }' "$CONF" 2>/dev/null || true)
+    { printf '%s\n\n' "$rest"; block; } > "$CONF"
+  fi
   hook_ready || { echo "$HOOK not in place after install" >&2; exit 1; }
   rule_ready || { echo "udev doesn't tag $DEVICE for $UNIT after install" >&2; exit 1; }
   wrapper_ready || { echo "the session doesn't run $WRAPPER: is omarchy-command-overrides installed?" >&2; exit 1; }
+  listener_ready || { echo "the hyprland.start listener isn't in $CONF after install" >&2; exit 1; }
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac
