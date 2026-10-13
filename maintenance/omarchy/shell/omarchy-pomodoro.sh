@@ -18,6 +18,7 @@ ID=pomodoro-omarchy
 AFTER=omarchy.clock
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC=$HERE/omarchy-pomodoro
+. "$HERE/../lib/plugin-update-hint.sh"
 JSON=$HOME/.config/omarchy/shell.json
 MENU=$HOME/.config/omarchy/extensions/omarchy-menu.jsonc
 BEGIN="  // >>> Managed by loadout (omarchy-pomodoro)"
@@ -88,7 +89,7 @@ install)
     printf '%s\n' "$rest" | awk 'found { print } !found && /^[[:space:]]*\{/ { found = 1 }'
   } > "$MENU.tmp"
   mv "$MENU.tmp" "$MENU"
-  in_place || { echo "the Pomodoro plugin isn't placed, configured and in the menu after install" >&2; exit 1; }
+  in_place || { echo "the Pomodoro plugin isn't placed, configured and in the menu after install" >&2; plugin_update_hint "$ID"; exit 1; }
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac

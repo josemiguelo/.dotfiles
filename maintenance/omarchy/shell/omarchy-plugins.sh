@@ -15,6 +15,7 @@ if [ "${1:-}" = check ]; then MODE=check; shift; fi
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/../lib/shell-ready.sh"
+. "$HERE/../lib/plugin-update-hint.sh"
 shell_ready
 
 # omarchy-plugin-add's own location (it doesn't follow XDG_CONFIG_HOME).
@@ -82,6 +83,15 @@ install)
     fi
   done
   left=$(pending "$@")
-  [ -z "$left" ] || { echo "not installed and enabled: $(echo $left)" >&2; exit 1; }
+  if [ -n "$left" ]; then
+    echo "not installed and enabled: $(echo $left)" >&2
+    # One installed but not enabled may have failed Omarchy's validation
+    # with a version the shell has outgrown.
+    for url in $left; do
+      dir=$(plugin_dir "$url")
+      [ -z "$dir" ] || plugin_update_hint "$(plugin_id "$dir")"
+    done
+    exit 1
+  fi
   ;;
 esac
