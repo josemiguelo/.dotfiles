@@ -4,17 +4,22 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-04T16:17:06.584911478Z",
+  "toolVersion": "2.2.0",
+  "updatedAt": "2026-10-13T21:02:30.025461381Z",
   "programs": {
+    "setup-brew": {
+      "status": "installed",
+      "version": "ready",
+      "reason": null
+    },
     "1password": {
       "status": "installed",
-      "version": "8.12.36",
+      "version": "8.12.38",
       "reason": null
     },
     "1password-cli": {
       "status": "installed",
-      "version": "2.39.0",
+      "version": "2.40.0",
       "reason": null
     },
     "anydesk": {
@@ -24,12 +29,12 @@
     },
     "brave": {
       "status": "installed",
-      "version": "1.96.59",
+      "version": "1.96.61",
       "reason": null
     },
     "code": {
       "status": "installed",
-      "version": "1.139.1",
+      "version": "1.140.0",
       "reason": null
     },
     "antigravity": {
@@ -54,7 +59,7 @@
     },
     "slack": {
       "status": "installed",
-      "version": "4.52.162",
+      "version": "4.52.171",
       "reason": null
     },
     "spotify": {
@@ -72,14 +77,9 @@
       "version": "3.0.23",
       "reason": null
     },
-    "setup-brew": {
+    "voxtype": {
       "status": "installed",
-      "version": "ready",
-      "reason": null
-    },
-    "brew-taps": {
-      "status": "installed",
-      "version": "trusted",
+      "version": "1.1.0",
       "reason": null
     },
     "atuin": {
@@ -207,11 +207,6 @@
       "version": "1.26.0",
       "reason": null
     },
-    "voxtype": {
-      "status": "installed",
-      "version": "1.1.0",
-      "reason": null
-    },
     "wtype": {
       "status": "installed",
       "version": "0.4",
@@ -299,7 +294,7 @@
     },
     "mise": {
       "status": "installed",
-      "version": "2026.9.14",
+      "version": "2026.10.0",
       "reason": null
     },
     "tmux": {
@@ -308,9 +303,9 @@
       "reason": null
     },
     "tpack": {
-      "status": "installed",
-      "version": "2.0.6",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "sh: line 1: /home/josemiguel/.local/bin/tpack: No such file or directory"
     },
     "workmux": {
       "status": "installed",
@@ -340,17 +335,17 @@
       "exitCode": 0
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-02T15:43:01.888794006Z",
       "exitCode": 1
     },
     "dotfiles-ssh-remote": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-09-24T21:49:22.059595241Z",
       "exitCode": 0
     },
     "skills-repo": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-03T05:54:15.188582679Z",
       "exitCode": 0
     },
@@ -404,6 +399,11 @@
       "lastRun": "2026-09-24T22:14:38.797923897Z",
       "exitCode": 0
     },
+    "remove-brew-tmux": {
+      "status": "pending",
+      "lastRun": null,
+      "exitCode": null
+    },
     "omarchy-tmux-theme": {
       "status": "done",
       "lastRun": "2026-10-03T05:33:25.674277069Z",
@@ -440,12 +440,12 @@
       "exitCode": 0
     },
     "omarchy-plugins": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-01T02:03:21.137739988Z",
       "exitCode": 0
     },
     "omarchy-bar-icons": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-02T19:40:30.722861326Z",
       "exitCode": 0
     },
@@ -455,12 +455,12 @@
       "exitCode": 0
     },
     "omarchy-bar-widgets": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-02T15:29:09.081049769Z",
       "exitCode": 0
     },
     "omarchy-keystroke-windows": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-03T05:33:12.040255596Z",
       "exitCode": 0
     },
@@ -470,7 +470,7 @@
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-03T05:32:57.002814379Z",
       "exitCode": 0
     },
@@ -534,8 +534,13 @@
       "lastRun": "2026-09-24T21:47:00.328052260Z",
       "exitCode": 0
     },
-    "omarchy-sshd": {
+    "github-ssh-key": {
       "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "omarchy-sshd": {
+      "status": "pending",
       "lastRun": "2026-09-25T19:21:20.773982458Z",
       "exitCode": 0
     },
@@ -545,7 +550,12 @@
       "exitCode": null
     },
     "t2-fan-curve": {
-      "status": "done",
+      "status": "pending",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-fan-gpu-card": {
+      "status": "pending",
       "lastRun": null,
       "exitCode": null
     },
@@ -555,9 +565,14 @@
       "exitCode": null
     },
     "t2-gmux-backlight": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-09-29T20:28:45.782052542Z",
       "exitCode": 0
+    },
+    "t2-render-gpu": {
+      "status": "pending",
+      "lastRun": null,
+      "exitCode": null
     },
     "omarchy-sudoless-docker": {
       "status": "done",
@@ -617,6 +632,16 @@
       "reason": null
     },
     "chezmoi": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "command-palette": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "fcitx5": {
       "status": "applied",
       "files": [],
       "reason": null
