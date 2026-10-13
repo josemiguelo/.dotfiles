@@ -40,6 +40,7 @@ install_with:
     - setup-brew
     - jetbrains-toolbox
     - ngrok
+    - tpack
   brew:
     - workmux
     - awscli
@@ -49,7 +50,6 @@ install_with:
     - vim-enhanced
     - scrcpy
   brew-cask:
-    - tpack
     - google-cloud-cli
   omarchy-aur:
     - voxtype-tui
@@ -98,6 +98,7 @@ tmux:
   install_with: omarchy
   scripts:
     - tmux-plugins
+    - remove-brew-tmux
     - omarchy-tmux-theme
 keychron:
   scripts:
