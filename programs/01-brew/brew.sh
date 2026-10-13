@@ -7,6 +7,9 @@
 # else as `sh "$LOADOUT_REPO/programs/01-brew/brew.sh" <brew args...>`.
 set -eu
 . "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
+# Homebrew asks before an install that pulls in dependencies; a converge must
+# run unattended.
+export HOMEBREW_NO_ASK=1
 
 for b in "$(command -v brew 2>/dev/null || true)" "$BREW_PREFIX/bin/brew"; do
   if [ -n "$b" ] && [ -x "$b" ]; then
