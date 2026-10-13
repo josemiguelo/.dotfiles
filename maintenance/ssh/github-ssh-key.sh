@@ -10,9 +10,11 @@
 # and deletes any older key with the same title: a previous install of this
 # machine. Keys with other titles are never touched.
 #
-# gh comes from wherever the machine has it: PATH, mise's shims (Omarchy's
-# conf.d/omarchy.toml installs it through mise) or Homebrew's prefix (the gh
-# program, macOS). $HOME is the cwd: from the repo, mise would find the
+# gh comes from wherever the machine has it: mise's shims (Omarchy's
+# conf.d/omarchy.toml installs it through mise), PATH or Homebrew's prefix
+# (the gh program, macOS). The shims go first: Omarchy's ~/.local/bin/gh
+# wrapper runs `mise use -g gh`, which writes gh into the dotfiles'
+# config.toml. $HOME is the cwd: from the repo, mise would find the
 # dotfiles' copy of its config and ask to trust it.
 # The check only asks GitHub over ssh whether the key authenticates.
 # usage: github-ssh-key.sh [check] <key-name>
@@ -24,7 +26,7 @@ KEY=$HOME/.ssh/${1:?usage: $0 [check] <key-name>}
 TITLE=${LOADOUT_MACHINE:-$(hostname -s)}
 . "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
 cd "$HOME"
-export PATH="$PATH:${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$BREW_PREFIX/bin"
+export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$PATH:$BREW_PREFIX/bin"
 
 authenticates() {
   ssh -T -i "$KEY" -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=10 git@github.com 2>&1 |
