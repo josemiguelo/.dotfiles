@@ -100,8 +100,26 @@ esac
 
 # The picker is fed the registry without comments or blank lines.
 run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')
-eq "$(cat "$fix/fzf.in")" "$(grep -vE '^[[:space:]]*(#|$)' "$REGISTRY")" \
+eq "$(cut -f2 "$fix/fzf.in")" "start-dotfiles-change" \
   "picker lists the registry's commands only"
+
+# The picker shows a table: names padded to the longest so the descriptions
+# start in the same column, each column in its own color.
+printf 'short\tdoes a thing\nmuch-longer-name\tother thing\tnvim -c Foo\n' >"$fix/table"
+REGISTRY_FILE="$fix/table" run_palette FAKE_PICK=short < <(printf '\n')
+plain=$(cut -f1 "$fix/fzf.in" | sed $'s/\033\\[[0-9;]*m//g')
+eq "$(printf '%s\n' "$plain" | awk '{ print index($0, "does") ? index($0, "does") : index($0, "other") }' | sort -u | wc -l | tr -d ' ')" "1" \
+  "descriptions start in the same column"
+case "$(head -1 "$fix/fzf.in")" in
+*$'\033[1;34m'short*$'\033[32m'does*) ok "name and description are in different colors" ;;
+*) bad "name and description are in different colors (got [$(head -1 "$fix/fzf.in")])" ;;
+esac
+# What the picker returns says what was picked: the name, and the command line
+# of a line that has one.
+REGISTRY_FILE="$fix/table" run_palette FAKE_PICK=much-longer < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic nvim -c Foo x" "a picked table row runs its command line"
+REGISTRY_FILE="$fix/table" run_palette FAKE_PICK=short < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic short x" "a picked table row without a command line runs its name"
 
 # With no arguments typed, the command runs with none.
 run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')

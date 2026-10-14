@@ -29,9 +29,22 @@ export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 palette_commands_file=${COMMAND_PALETTE_COMMANDS:-${XDG_CONFIG_HOME:-$HOME/.config}/command-palette/commands}
 
-# The registry's commands, one per line, as the picker shows them.
+# The registry's commands as the picker shows them: a table, the names padded to
+# the longest so the descriptions line up, each column in its own color (the
+# terminal's blue and green, so they follow its theme). A line is the display
+# text, then the name and the command line (empty when the line has none), by
+# tabs: the picker shows the first field only, and what it returns says what was
+# picked without parsing the display text.
 palette_list() {
-  grep -vE '^[[:space:]]*(#|$)' "$palette_commands_file"
+  grep -vE '^[[:space:]]*(#|$)' "$palette_commands_file" | awk -F'\t' '
+    { name[NR] = $1; desc[NR] = $2; cmd[NR] = $3; if (length($1) > width) width = length($1) }
+    END {
+      for (i = 1; i <= NR; i++) {
+        pad = sprintf("%" width "s", "")
+        shown = name[i] substr(pad, 1, width - length(name[i]))
+        printf "\033[1;34m%s\033[0m  \033[32m%s\033[0m\t%s\t%s\n", shown, desc[i], name[i], cmd[i]
+      }
+    }'
 }
 
 # Runs one command line with its arguments. TMUX is unset: with it set, tmux-goto
@@ -50,12 +63,10 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   fi
 
   # Esc or Ctrl-C in the picker closes the palette.
-  choice=$(palette_list | fzf --delimiter=$'\t' --with-nth=1,2 --prompt='command> ' --header='enter: pick') || exit 0
-  name=${choice%%$'\t'*}
-  # The command line is the third field when the line has one, else the name.
-  command_line=$name
-  rest=${choice#*$'\t'}
-  [[ $rest == *$'\t'* ]] && command_line=${rest#*$'\t'}
+  choice=$(palette_list | fzf --ansi --delimiter=$'\t' --with-nth=1 --prompt='command> ' --header='enter: pick') || exit 0
+  IFS=$'\t' read -r _ name command_line <<<"$choice"
+  # The command line is the registry's third field when the line has one, else the name.
+  command_line=${command_line:-$name}
 
   # Yes/No question, as gum's confirm. Ctrl-C closes the palette (130); Esc is
   # gum's 'No', so it runs the command with no arguments.
