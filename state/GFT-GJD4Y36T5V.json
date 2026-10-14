@@ -5,142 +5,142 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-06T15:51:02.981482Z",
+  "updatedAt": "2026-10-14T19:48:34.039240Z",
   "programs": {
-    "1password-cli": {
-      "status": "installed",
-      "version": "2.40.0",
-      "reason": null
-    },
-    "jordanbaird-ice": {
-      "status": "installed",
-      "version": "0.11.12",
-      "reason": null
-    },
-    "lunar": {
-      "status": "installed",
-      "version": "6.11.0",
-      "reason": null
-    },
-    "meetingbar": {
-      "status": "installed",
-      "version": "4.11.6",
-      "reason": null
-    },
-    "obs": {
-      "status": "installed",
-      "version": "32.2.2",
-      "reason": null
-    },
-    "scrcpy": {
-      "status": "installed",
-      "version": "4.1",
-      "reason": null
-    },
-    "voxtype": {
-      "status": "installed",
-      "version": "0.7.5",
-      "reason": null
-    },
     "setup-brew": {
       "status": "installed",
       "version": "7.0.8",
       "reason": null
     },
+    "1password-cli": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
+    },
+    "jordanbaird-ice": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 200"
+    },
+    "lunar": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
+    },
+    "meetingbar": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 200"
+    },
+    "obs": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
+    },
+    "scrcpy": {
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
+    },
+    "voxtype": {
+      "status": "missing",
+      "version": null,
+      "reason": "/opt/homebrew/Library/Taps/peteonrails/homebrew-voxtype/Casks/voxtype.rb:17"
+    },
     "atuin": {
-      "status": "installed",
-      "version": "18.23.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "Error: No such file or directory @ dir_s_rmdir - /Users/jochoa/Library/Caches/Homebrew/api/internal/packages.arm64_tahoe.jws.json"
     },
     "awscli": {
-      "status": "installed",
-      "version": "2.37.9",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "azure-cli": {
-      "status": "installed",
-      "version": "2.90.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "bat": {
-      "status": "installed",
-      "version": "0.26.1",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "btop": {
-      "status": "installed",
-      "version": "1.4.7",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "claude": {
       "status": "installed",
-      "version": "2.1.291",
+      "version": "2.1.295",
       "reason": null
     },
     "codex": {
-      "status": "installed",
-      "version": "0.160.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "coreutils": {
-      "status": "installed",
-      "version": "9.12",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "eza": {
-      "status": "installed",
-      "version": "0.23.5",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "fd": {
-      "status": "installed",
-      "version": "10.5.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "gawk": {
-      "status": "installed",
-      "version": "5.4.1",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "gh": {
-      "status": "installed",
-      "version": "2.102.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "git-delta": {
-      "status": "installed",
-      "version": "0.19.2",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "gnu-sed": {
-      "status": "installed",
-      "version": "4.10",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "gum": {
-      "status": "installed",
-      "version": "2.0.2",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "jira-cli": {
-      "status": "installed",
-      "version": "1.7.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "jq": {
-      "status": "installed",
-      "version": "1.8.2",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "lazydocker": {
-      "status": "installed",
-      "version": "0.25.2",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "lazygit": {
-      "status": "installed",
-      "version": "0.65.1",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "ngrok": {
       "status": "installed",
@@ -148,14 +148,14 @@
       "reason": null
     },
     "qemu": {
-      "status": "installed",
-      "version": "11.1.2",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "ripgrep": {
-      "status": "installed",
-      "version": "15.2.0",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "terraform": {
       "status": "installed",
@@ -193,9 +193,9 @@
       "reason": null
     },
     "yq": {
-      "status": "installed",
-      "version": "4.54.1",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "HTTP status: 000"
     },
     "zoxide": {
       "status": "installed",
@@ -260,12 +260,12 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
     },
     "dotfiles-ssh-remote": {
-      "status": "done",
+      "status": "pending",
       "lastRun": null,
       "exitCode": null
     },
@@ -275,7 +275,7 @@
       "exitCode": null
     },
     "skills-repo": {
-      "status": "done",
+      "status": "pending",
       "lastRun": null,
       "exitCode": null
     },
