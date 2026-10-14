@@ -15,6 +15,14 @@
 # instead of the name (which is then just a label); the picker doesn't show it.
 # COMMAND_PALETTE_COMMANDS points at another file.
 
+# macOS: a login shell starts from path_helper's PATH (/etc/paths and paths.d,
+# e.g. /usr/local/bin, where Docker Desktop links docker). kitty's overlay gets
+# only launchd's bare PATH and the `zsh -ic` below is not a login shell, so
+# without this the command would not find docker and the like.
+if [[ -x /usr/libexec/path_helper ]]; then
+  eval "$(/usr/libexec/path_helper -s)"
+fi
+
 . "$HOME/.local/lib/brew-prefix.sh"
 export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 . "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"

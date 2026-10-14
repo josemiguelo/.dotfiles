@@ -48,6 +48,7 @@ if [[ "$*" == *'vared -p'* ]]; then
   printf '%s\n' "$line" >"${@: -1}"
   exit 0
 fi
+printf '%s\n' "$PATH" >"$ZSH_PATH_LOG"
 printf '%s|%s\n' "${TMUX:-unset}" "$*" >>"$ZSH_LOG"
 exit "${FAKE_ZSH_STATUS:-0}"
 EOF
@@ -60,7 +61,7 @@ run_palette() {
   : >"$fix/gum.log"
   out=$(env -i HOME="$fix" PATH="/usr/bin:/bin" XDG_CONFIG_HOME="$fix/.config" \
     COMMAND_PALETTE_COMMANDS="${REGISTRY_FILE:-$REGISTRY}" \
-    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" ZSH_PROMPT_LOG="$fix/prompt.log" \
+    FZF_INPUT="$fix/fzf.in" ZSH_LOG="$fix/zsh.log" ZSH_PROMPT_LOG="$fix/prompt.log" ZSH_PATH_LOG="$fix/path.log" \
     GUM_LOG="$fix/gum.log" TMUX=/fake/tmux,1,0 \
     "$@" bash "$SCRIPT" 2>&1)
   status=$?
@@ -79,6 +80,16 @@ run_palette FAKE_PICK=start-dotfiles-change < <(printf 'hello world\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change hello world" \
   "picked command runs with the typed text as arguments, TMUX unset"
 eq "$status" "0" "successful command: palette exits 0"
+
+# The command's PATH has what a login shell would add on macOS (/usr/local/bin,
+# where docker is linked), though the palette starts from launchd's bare PATH.
+if [[ -x /usr/libexec/path_helper ]]; then
+  run_palette FAKE_PICK=start-dotfiles-change < <(printf 'x\n')
+  case ":$(cat "$fix/path.log"):" in
+  *:/usr/local/bin:*) ok "PATH includes path_helper's entries (/usr/local/bin)" ;;
+  *) bad "PATH includes path_helper's entries (got [$(cat "$fix/path.log")])" ;;
+  esac
+fi
 
 # The argument prompt is zsh's vared (its line editor and key bindings), with
 # the picked name as its prompt.
