@@ -11,7 +11,9 @@
 # line.
 #
 # The registry is one `name<TAB>description` line per command; '#' comments and
-# blank lines are skipped. COMMAND_PALETTE_COMMANDS points at another file.
+# blank lines are skipped. An optional third field, `<TAB>command`, is what runs
+# instead of the name (which is then just a label); the picker doesn't show it.
+# COMMAND_PALETTE_COMMANDS points at another file.
 
 . "$HOME/.local/lib/brew-prefix.sh"
 export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
@@ -24,7 +26,7 @@ palette_list() {
   grep -vE '^[[:space:]]*(#|$)' "$palette_commands_file"
 }
 
-# Runs one command with its arguments. TMUX is unset: with it set, tmux-goto
+# Runs one command line with its arguments. TMUX is unset: with it set, tmux-goto
 # would switch the most recently used client, which can be another kitty tab
 # (see kitty-tmux-attach). Unset here, a session it attaches to is attached.
 palette_run() {
@@ -40,13 +42,17 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   fi
 
   # Esc or Ctrl-C in the picker closes the palette.
-  choice=$(palette_list | fzf --prompt='command> ' --header='enter: pick') || exit 0
+  choice=$(palette_list | fzf --delimiter=$'\t' --with-nth=1,2 --prompt='command> ' --header='enter: pick') || exit 0
   name=${choice%%$'\t'*}
+  # The command line is the third field when the line has one, else the name.
+  command_line=$name
+  rest=${choice#*$'\t'}
+  [[ $rest == *$'\t'* ]] && command_line=${rest#*$'\t'}
 
-  # Two-button question, as gum's confirm. Ctrl-C closes the palette (130); Esc
-  # is gum's 'No', so it runs the command by name.
+  # Yes/No question, as gum's confirm. Ctrl-C closes the palette (130); Esc is
+  # gum's 'No', so it runs the command with no arguments.
   args=
-  gum confirm "$name: type arguments?" --affirmative 'enter arguments' --negative 'run by name'
+  gum confirm 'Enter arguments for this command?'
   case $? in
   0)
     # The arguments are edited with zsh's vared, not bash's readline: `read -e`
@@ -61,7 +67,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   1) ;;
   *) exit 0 ;;
   esac
-  palette_run "$name" "$args"
+  palette_run "$command_line" "$args"
   status=$?
 
   # A failing command leaves its message on screen until a key closes the overlay.
