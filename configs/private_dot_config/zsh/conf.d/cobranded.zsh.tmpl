@@ -1,0 +1,9 @@
+{{ if (includeTemplate "machine" . | fromJson).work }}
+# bootstrap-cobranded-repo [worktree [branch]]: open Neovim on sofi.nvim's
+# :BootstrapCobrandedRepo. The command palette appends the typed text to a
+# command line, but Neovim would take it as file names, so this puts it inside
+# the -c command instead. Whatever is left out, the command asks for.
+bootstrap-cobranded-repo() {
+  nvim -c "BootstrapCobrandedRepo ${(j: :)${(q)@}}"
+}
+{{ end }}

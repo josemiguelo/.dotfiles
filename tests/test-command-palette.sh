@@ -7,7 +7,6 @@
 set -u
 
 SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_command-palette"
-REGISTRY="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_config/command-palette/commands"
 BREW_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/lib/brew-prefix.sh"
 
 fix=$(mktemp -d)
@@ -15,6 +14,10 @@ trap 'rm -rf "$fix"' EXIT
 mkdir -p "$fix/.local/bin" "$fix/.local/lib" "$fix/.config/fzf" "$fix/.config/command-palette"
 cp "$BREW_LIB" "$fix/.local/lib/brew-prefix.sh"
 echo '# theme stub' >"$fix/.config/fzf/theme.sh"
+
+# The registry the cases use (the real one is a template, rendered per machine).
+REGISTRY="$fix/registry"
+printf '# comment\n\nstart-dotfiles-change\tnew try folder\n' >"$REGISTRY"
 
 # Fake fzf: records what it was given, then prints the first line matching
 # $FAKE_PICK (the first line when unset), or fails when FAKE_CANCEL is set.
@@ -26,7 +29,7 @@ grep -m1 -F -- "${FAKE_PICK:-}" "$FZF_INPUT"
 EOF
 
 # Fake gum: logs its command line to $GUM_LOG and exits with $FAKE_GUM_STATUS
-# (0 for the affirmative button, 1 for the negative, 130 for Ctrl-C).
+# (0 for Yes, 1 for No, 130 for Ctrl-C).
 cat >"$fix/.local/bin/gum" <<'EOF'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >"$GUM_LOG"
@@ -94,18 +97,18 @@ run_palette FAKE_PICK=start-dotfiles-change < <(printf '\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change " \
   "empty input runs the command with no arguments"
 
-# After the pick, the question is a two-button gum confirm.
+# After the pick, the question is gum's Yes/No confirm, with its default buttons.
 run_palette FAKE_PICK=start-dotfiles-change < <(printf 'x\n')
 case "$(cat "$fix/gum.log")" in
-*'--affirmative enter arguments --negative run by name'*) ok "arguments question is a confirm with both buttons" ;;
-*) bad "arguments question is a confirm with both buttons (got [$(cat "$fix/gum.log")])" ;;
+'confirm Enter arguments for this command?') ok "arguments question is a plain Yes/No confirm" ;;
+*) bad "arguments question is a plain Yes/No confirm (got [$(cat "$fix/gum.log")])" ;;
 esac
 
-# The negative button: the command runs with no arguments, and no prompt opens.
+# No: the command runs with no arguments, and no prompt opens.
 run_palette FAKE_PICK=start-dotfiles-change FAKE_GUM_STATUS=1 < <(printf 'ignored\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic start-dotfiles-change " \
-  "run by name: command runs with no arguments"
-eq "$(cat "$fix/prompt.log")" "" "run by name: no argument prompt opens"
+  "No: command runs with no arguments"
+eq "$(cat "$fix/prompt.log")" "" "No: no argument prompt opens"
 
 # Ctrl-C at the question (gum exits 130): nothing runs, and the palette exits 0.
 run_palette FAKE_PICK=start-dotfiles-change FAKE_GUM_STATUS=130 < <(printf 'x\n')
@@ -117,6 +120,17 @@ printf '# comment\n\nalpha\tfirst thing\nbeta\tsecond thing\n' >"$fix/custom"
 REGISTRY_FILE="$fix/custom" run_palette FAKE_PICK=beta < <(printf 'x\n')
 eq "$(cat "$fix/zsh.log")" "unset|-ic beta x" \
   "the name before the tab runs, not the description"
+
+# A third field is the command line to run; the name is only a label, and the
+# picker is told to show just the name and description.
+printf 'My Label\tdoes a thing\tnvim -c Foo\n' >"$fix/labelled"
+REGISTRY_FILE="$fix/labelled" run_palette FAKE_PICK=Label < <(printf 'x\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic nvim -c Foo x" \
+  "a third field runs instead of the name"
+case "$(cat "$fix/prompt.log")" in
+*' _ My Label '*) ok "the argument prompt still uses the label" ;;
+*) bad "the argument prompt still uses the label (got [$(cat "$fix/prompt.log")])" ;;
+esac
 
 # Esc in the picker: nothing runs.
 run_palette FAKE_CANCEL=1 < <(printf 'x\n')
