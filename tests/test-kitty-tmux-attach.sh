@@ -44,6 +44,9 @@ eq() { [[ "$1" == "$2" ]] && ok "$3" || bad "$3 (expected [$2], got [$1])"; }
 # kitty @ ls --match state:overlay_parent output, shaped like kitty's
 # (os_windows > tabs > windows > foreground_processes).
 PARENT_JSON='[{"tabs":[{"windows":[{"id":6,"foreground_processes":[{"pid":4242,"cmdline":["tmux","attach"]}]}]}]}]'
+# A client attached through the picker: tmux plus the tmux-goto/tmux-attach
+# scripts that started it, so the window has several foreground pids.
+MULTI_JSON='[{"tabs":[{"windows":[{"id":6,"foreground_processes":[{"pid":4242,"cmdline":["tmux","attach"]},{"pid":4241,"cmdline":["bash","tmux-goto"]},{"pid":4200,"cmdline":["bash","tmux-attach"]}]}]}]}]'
 SHELL_JSON='[{"tabs":[{"windows":[{"id":6,"foreground_processes":[{"pid":111,"cmdline":["zsh"]}]}]}]}]'
 
 echo "parent_pane_path"
@@ -51,6 +54,10 @@ echo "parent_pane_path"
 KITTY_JSON="$PARENT_JSON"
 eq "$(parent_pane_path)" "/Users/x/cobranded" \
   "parent window's tmux client: uses that client's pane, not the other client's"
+
+KITTY_JSON="$MULTI_JSON"
+eq "$(parent_pane_path)" "/Users/x/cobranded" \
+  "several foreground pids (client started by tmux-goto): still finds the client"
 
 KITTY_JSON="$SHELL_JSON"
 eq "$(parent_pane_path)" "" "parent window running no tmux client: empty (caller falls back to PWD)"
