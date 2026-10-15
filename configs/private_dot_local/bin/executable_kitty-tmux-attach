@@ -19,9 +19,11 @@ parent_pane_path() {
   pids=$(kitty @ ls --match state:overlay_parent 2>/dev/null |
     jq -r '.. | objects | .foreground_processes? // [] | .[].pid' 2>/dev/null) || return 0
   [[ -n "$pids" ]] || return 0
+  # One line: macOS awk rejects a newline inside a -v value.
+  pids=$(tr '\n' ' ' <<<"$pids")
 
   tty=$(tmux list-clients -F '#{client_pid} #{client_tty}' 2>/dev/null |
-    awk -v pids="$pids" 'BEGIN { n = split(pids, a, "\n"); for (i = 1; i <= n; i++) want[a[i]] = 1 }
+    awk -v pids="$pids" 'BEGIN { n = split(pids, a, " "); for (i = 1; i <= n; i++) want[a[i]] = 1 }
       ($1 in want) { print $2; exit }')
   [[ -n "$tty" ]] || return 0
 
