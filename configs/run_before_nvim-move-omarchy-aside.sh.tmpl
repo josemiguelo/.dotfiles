@@ -1,3 +1,9 @@
+{{- /* Renders empty (so chezmoi neither runs it nor lists it in `diff`) unless
+~/.config/nvim is still Omarchy's copy, the one case the script acts on. The script
+repeats the check. */ -}}
+{{- $skel := "/etc/skel/.config/nvim/init.lua" -}}
+{{- $check := printf "nvim=${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.lua; [ -f %s ] && [ -f \"$nvim\" ] && cmp -s %s \"$nvim\" && echo yes || true" $skel $skel -}}
+{{- if eq (output "sh" "-c" $check | trim) "yes" -}}
 #!/bin/sh
 # Omarchy ships its own LazyVim config in ~/.config/nvim (copied from
 # /etc/skel). chezmoi only replaces the files it manages, so Omarchy's other
@@ -28,3 +34,4 @@ move_aside() {
 }
 move_aside "$NVIM" "Neovim config"
 [ ! -d "$DATA" ] || move_aside "$DATA" "Neovim plugins"
+{{ end -}}
