@@ -172,6 +172,53 @@ result=$(HOME="$fixture" PATH="$FAKE_PATH" SCRIPT="$SCRIPT" MISE_DATA_DIR="$fixt
   source "$SCRIPT"; print -r -- "$CATALINA_HOME"')
 eq "$result" "/fake/tomcat-9" "finds mise's tomcat installs under \$MISE_DATA_DIR"
 
+### JDK<major>_HOME: each Java version mise installed, for Gradle toolchains ###
+echo "JDK<major>_HOME"
+
+# Runs the plugin with $1 as $HOME ($2 as MISE_DATA_DIR), echoing JDK8/11/17/21_HOME.
+run_jdks() {
+  HOME="$1" PATH="$FAKE_PATH" SCRIPT="$SCRIPT" XDG_CACHE_HOME="" XDG_DATA_HOME="" MISE_DATA_DIR="${2-}" \
+    JAVA_HOME="" CATALINA_HOME="" JDK8_HOME="" JDK11_HOME="" JDK17_HOME="" JDK21_HOME="" zsh -c '
+    source "$SCRIPT"; print -r -- "$JDK8_HOME|$JDK11_HOME|$JDK17_HOME|$JDK21_HOME"'
+}
+
+fixture="$WORK/jdks-none"
+mkdir -p "$fixture/.local/share/mise/installs/java"
+eq "$(run_jdks "$fixture")" "|||" "sets none without a JDK installed"
+
+# As mise lays them out, with this machine's four.
+fixture="$WORK/jdks"
+java_dir="$fixture/.local/share/mise/installs/java"
+mkdir -p "$java_dir/"{temurin-21.0.6+7.0.LTS,temurin-17.0.7+7,temurin-11.0.18+10,zulu-8.78.0.19}
+eq "$(run_jdks "$fixture")" "$java_dir/zulu-8.78.0.19|$java_dir/temurin-11.0.18+10|$java_dir/temurin-17.0.7+7|$java_dir/temurin-21.0.6+7.0.LTS" \
+  "one per major version, whatever the vendor"
+
+# mise's alias links point at a real install, and temurin-latest isn't a version.
+ln -s temurin-17.0.7+7 "$java_dir/temurin-17"
+ln -s temurin-21.0.6+7.0.LTS "$java_dir/temurin-latest"
+mkdir -p "$java_dir/temurin-17.0.20+8"
+eq "$(run_jdks "$fixture" | cut -d'|' -f3)" "$java_dir/temurin-17.0.20+8" \
+  "picks the newest of a version (17.0.20, not the lexicographically-last 17.0.7), skipping alias links"
+ln -s temurin-21.0.6+7.0.LTS "$java_dir/temurin-99"
+result=$(HOME="$fixture" PATH="$FAKE_PATH" SCRIPT="$SCRIPT" XDG_DATA_HOME="" MISE_DATA_DIR="" JDK99_HOME="" zsh -c 'source "$SCRIPT"; print -r -- "$JDK99_HOME"')
+eq "$result" "" "exports nothing for a link, whatever it's named"
+mkdir -p "$java_dir/corretto-17.0.9.8.1"
+eq "$(run_jdks "$fixture" | cut -d'|' -f3)" "$java_dir/temurin-17.0.20+8" "the newest across vendors too"
+
+fixture="$WORK/jdks-old-style"
+mkdir -p "$fixture/.local/share/mise/installs/java/adoptopenjdk-1.8.0_292"
+eq "$(run_jdks "$fixture" | cut -d'|' -f1)" "$fixture/.local/share/mise/installs/java/adoptopenjdk-1.8.0_292" "reads 1.8.0 as Java 8"
+
+fixture="$WORK/jdks-mise-data-dir"
+mkdir -p "$fixture/custom-mise/installs/java/temurin-17.0.7+7"
+eq "$(run_jdks "$fixture" "$fixture/custom-mise" | cut -d'|' -f3)" "$fixture/custom-mise/installs/java/temurin-17.0.7+7" \
+  "finds them under \$MISE_DATA_DIR"
+
+fixture="$WORK/jdks-no-java"
+mkdir -p "$fixture/.local/share/mise/installs/java/temurin-17.0.7+7"
+result=$(HOME="$fixture" PATH="/bin" SCRIPT="$SCRIPT" XDG_DATA_HOME="" MISE_DATA_DIR="" JDK17_HOME="" zsh -c 'source "$SCRIPT"; print -r -- "$JDK17_HOME"')
+eq "$result" "" "sets nothing without java on PATH"
+
 echo
 echo "$pass passed, $fail failed"
 [[ "$fail" -eq 0 ]]
