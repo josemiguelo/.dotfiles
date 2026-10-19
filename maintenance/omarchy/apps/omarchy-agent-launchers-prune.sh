@@ -4,9 +4,9 @@
 # `mise use -g <tool>` on first use. This removes every such launcher except
 # the agents named in the machine's opt-in, the way omarchy-remove-preinstalls
 # decides what is Omarchy's: a regular file (not a symlink — Cursor's own
-# installer links cursor-agent) carrying the `mise use -g` line; hermes is
-# Omarchy's only when omarchy-install-hermes-cli says it owns it. Anything
-# else at those paths is left alone. Omarchy re-provisioning writes them
+# installer links cursor-agent) carrying the `mise use -g` line. Anything
+# else at those paths is left alone (since Omarchy 4.0.5, hermes is Hermes
+# Desktop's own command, not a launcher). Omarchy re-provisioning writes them
 # again, so the check catches a return.
 # usage: omarchy-agent-launchers-prune.sh [check] <agent-to-keep>...
 set -eu
@@ -21,12 +21,7 @@ kept() {
 }
 
 omarchy_launcher() {
-  [ -f "$1" ] && [ ! -L "$1" ] || return 1
-  if [ "$(basename "$1")" = hermes ]; then
-    omarchy-install-hermes-cli --owns >/dev/null 2>&1
-  else
-    grep -q '^mise use -g ' "$1"
-  fi
+  [ -f "$1" ] && [ ! -L "$1" ] && grep -q '^mise use -g ' "$1"
 }
 
 extra() {
