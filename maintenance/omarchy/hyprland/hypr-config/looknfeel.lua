@@ -3,6 +3,8 @@ hl.config({
     gaps_in = 3,
     gaps_out = 4,
     border_size = 5,
+    -- Niri-like side-scrolling instead of Omarchy's dwindle.
+    layout = "scrolling",
   },
 })
 
