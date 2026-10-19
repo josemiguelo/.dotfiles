@@ -153,6 +153,9 @@ eq "$(git -C "$TARGET" rev-parse --is-shallow-repository 2>/dev/null)" true "--d
 echo "usage"
 gclone >/dev/null 2>&1
 eq "$?" 1 "no argument: usage, exit 1"
+usage=$(gclone 2>&1)
+[[ $usage == *'gclone <url>'* && $usage == *'--bare'* && $usage != *'Usage: gum'* ]] \
+  && ok "prints gclone's own usage, not gum's" || bad "usage is gum's help or missing"
 gclone --help >/dev/null 2>&1
 eq "$?" 0 "--help: exit 0"
 gclone notaurl >/dev/null 2>&1
