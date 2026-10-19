@@ -89,6 +89,35 @@ eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under the 
 result=$(LC_ALL=en_US.UTF-8 run_with_home "$fixture")
 eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under en_US.UTF-8 (whose collation sorts sdk first)"
 
+### Linux: ~/Android ###
+echo "Linux ~/Android"
+
+fixture="$WORK/linux"
+mkdir -p "$fixture/Android/Sdk/platform-tools"
+result=$(run_with_home "$fixture")
+android_home="${result%%|*}"
+eq "$android_home" "$fixture/Android/Sdk" "finds ~/Android/Sdk, where Android Studio puts it on Linux"
+contains "$result" "$android_home/platform-tools" "adds its platform-tools to PATH"
+
+fixture="$WORK/linux-lower"
+mkdir -p "$fixture/Android/sdk"
+if ((case_insensitive_fs)); then
+  skip "finds ~/Android/sdk (lowercase): filesystem is case-insensitive"
+else
+  result=$(run_with_home "$fixture")
+  eq "${result%%|*}" "$fixture/Android/sdk" "finds ~/Android/sdk (lowercase)"
+fi
+
+fixture="$WORK/linux-both"
+mkdir -p "$fixture/Android/Sdk" "$fixture/Android/sdk"
+result=$(LC_ALL=en_US.UTF-8 run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Android/Sdk" "picks ~/Android/Sdk over sdk under en_US.UTF-8"
+
+fixture="$WORK/mac-and-linux"
+mkdir -p "$fixture/Library/Android/Sdk" "$fixture/Android/Sdk"
+result=$(run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "prefers ~/Library/Android, so a Mac's choice never changes"
+
 ### ANDROID_SDK_ROOT mirrors ANDROID_HOME ###
 echo "ANDROID_SDK_ROOT"
 
