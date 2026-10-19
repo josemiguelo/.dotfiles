@@ -27,3 +27,21 @@ if [[ -d $_tomcat_installs ]]; then
   unset _catalina_cache
 fi
 unset _tomcat_installs
+
+# Gradle doesn't look in mise's installs for toolchains; ~/.gradle/gradle.properties
+# reads them from JDK<major>_HOME (org.gradle.java.installations.fromEnv): one per
+# Java version mise installed, the newest of each, whatever the vendor. A glob, not
+# `mise ls`, so startup doesn't fork mise; (/) leaves out mise's alias links
+# (temurin-17, zulu-latest). The version follows the vendor (temurin-17.0.7+7,
+# zulu-8.78.0.19); an old-style 1.8.0 is Java 8.
+_jdks=()
+for _jdk in "${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}"/installs/java/*(/N); do
+  _jdk_version=${${_jdk:t}##*-}
+  [[ $_jdk_version == [0-9]* ]] && _jdks+=("$_jdk_version $_jdk")
+done
+# Oldest first, numbers compared as numbers (17.0.20 after 17.0.7), so the newest is exported last.
+for _jdk in ${(on)_jdks}; do
+  _jdk_version=${${_jdk%% *}#1.}
+  export "JDK${_jdk_version%%[^0-9]*}_HOME=${_jdk#* }"
+done
+unset _jdk _jdks _jdk_version

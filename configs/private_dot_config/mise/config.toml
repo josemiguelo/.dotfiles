@@ -9,6 +9,9 @@
 # The first version of each list is the default.
 node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0"]
 # temurin = what asdf-java still lists as adoptopenjdk (same Eclipse builds).
+# A new Java major here (not a new 17.0.x) also goes into Gradle's toolchain
+# list: add JDK<major>_HOME to fromEnv in ~/.gradle/gradle.properties
+# (configs/dot_gradle/gradle.properties); zsh's java plugin exports it by itself.
 java = ["temurin-21.0.6+7.0.LTS", "temurin-17.0.7+7", "temurin-11.0.18+10", "zulu-8.78.0.19"]
 # Prebuilt; mise has no free-threaded (3.14.7t) build.
 python = ["3.14.7", "2.7.18"]
