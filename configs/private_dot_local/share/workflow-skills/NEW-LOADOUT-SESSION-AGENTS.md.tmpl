@@ -130,6 +130,13 @@ in the meantime.
   `all_worktrees/<branch>`) — a Neovim plugin (private), cloned on the work
   machine only.
 {{- end }}
+{{- if $m.omarchy }}
+- **`~/Repos/gh/omacom/omarchy`** (plain clone, https, default branch
+  `quattro`, releases tagged `vX.Y.Z`) — Omarchy's source, read-only: read
+  release diffs, migrations and shell QML here, after `git fetch --tags
+  origin`, with `git show <tag>:<path>` rather than checking tags out. Never
+  make a temporary clone of Omarchy; if this one is missing, clone it here.
+{{- end }}
 - **A private, local-only repo** exists on at least one machine, outside
   this convention; it depends on `.dotfiles` and the skills repo. Leave it
   alone unless the user names it.

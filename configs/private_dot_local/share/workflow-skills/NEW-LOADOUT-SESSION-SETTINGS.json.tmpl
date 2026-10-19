@@ -16,6 +16,9 @@
       "Read(/{{ $h }}/Repos/gh/josemiguelo/sofi.nvim/**)",
       "Edit(/{{ $h }}/Repos/gh/josemiguelo/sofi.nvim/all_worktrees/**)",
 {{- end }}
+{{- if $m.omarchy }}
+      "Read(/{{ $h }}/Repos/gh/omacom/omarchy/**)",
+{{- end }}
       "Bash(cd:*)",
       "Bash(workmux add:*)",
       "Bash(tmux list-windows:*)",
