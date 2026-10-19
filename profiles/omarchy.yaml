@@ -111,7 +111,7 @@ hyprland:
     - omarchy-harpoon
 shell:
   scripts:
-    - omarchy-bar bottom 24 tornikegomareli.spaces
+    - omarchy-bar top 24 tornikegomareli.spaces
     - "omarchy-plugins
      https://github.com/evindor/keystroke.git
      https://github.com/jankeesvw/omarchy-notification-center.git
