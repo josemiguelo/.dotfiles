@@ -2,8 +2,9 @@ scripts:
   # Kitty windows in the scratchpad (SUPER+S) at the opacity the opt-in names
   # ("omarchy-scratchpad-opacity 0.95"), the rest at kitty.conf's
   # background_opacity. Needs dynamic_background_opacity, which kitty.conf
-  # sets on Omarchy machines. The script sources ../lib/ and writes its own
-  # path into Omarchy's theme-set and font-set hooks.
+  # sets on Omarchy machines. The script sources ../lib/ and ../../lib/, and
+  # writes its main checkout's path into Omarchy's theme-set and font-set
+  # hooks (maintenance/lib/main-checkout.sh).
 
   omarchy-scratchpad-opacity:
     description: scratchpad kitty windows less see-through

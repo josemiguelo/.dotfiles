@@ -35,9 +35,12 @@ INSIDE=${1:?usage: $0 [check|reapply] <opacity>}
 CONF=$HOME/.config/hypr/hyprland.lua
 KITTY=$HOME/.config/kitty/kitty.conf
 HERE="$(cd "$(dirname "$0")" && pwd)"
-SELF=$HERE/omarchy-scratchpad-opacity.sh
 PROBE=$HERE/../lib/hypr-option.lua
 . "$HERE/../lib/hypr-live.sh"
+. "$HERE/../../lib/main-checkout.sh"
+# The hooks and the wrapper run this script by its main checkout's path,
+# which outlives a feature worktree this may be installed from.
+SELF=$(main_checkout_path "$HERE/omarchy-scratchpad-opacity.sh")
 . "$HERE/../lib/omarchy-overrides-lib.sh"
 HOOKS="$HOME/.config/omarchy/hooks/theme-set.d/scratchpad-opacity $HOME/.config/omarchy/hooks/font-set.d/scratchpad-opacity"
 TEXT_SIZE=omarchy-display-text-size

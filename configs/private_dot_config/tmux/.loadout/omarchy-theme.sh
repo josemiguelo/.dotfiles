@@ -15,7 +15,12 @@
 set -eu
 
 HOOK=$HOME/.config/omarchy/hooks/theme-set.d/tmux-follows-kitty
-SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+# The hook runs this script by its main checkout's path, which outlives a
+# feature worktree this may be installed from. The lib is found from here,
+# not LOADOUT_REPO: the hook runs this script without it.
+. "$HERE/../../../../maintenance/lib/main-checkout.sh"
+SELF=$(main_checkout_path "$HERE/$(basename "$0")")
 
 hook_body() {
   cat <<HOOK_EOF
@@ -37,7 +42,8 @@ tmux_running() {
 globals_clean() {
   [ "$(tmux show -gv window-style)" = default ] &&
   [ "$(tmux show -gv window-active-style)" = default ] &&
-  [ "$(tmux show -gv cursor-colour)" = none ]
+  # Unset reads as none before tmux 3.8 and as nothing from 3.8 on.
+  case "$(tmux show -gv cursor-colour)" in '' | none) ;; *) return 1 ;; esac
 }
 
 panes_clean() {
