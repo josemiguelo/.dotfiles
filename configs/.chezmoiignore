@@ -18,3 +18,8 @@
 .config/fcitx5
 .config/fcitx5/**
 {{ end }}
+
+# Spotify's launch flags work around a crash under Omarchy's Wayland session.
+{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+.config/spotify-flags.conf
+{{ end }}
