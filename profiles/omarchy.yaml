@@ -142,7 +142,8 @@ shell:
     - "omarchy-bar-widgets
      josemiguelo.workspace-layout left before tornikegomareli.spaces
      josemiguelo.menu-button left before josemiguelo.workspace-layout
-     io.github.sumdahl.media right after omarchy.tray"
+     io.github.sumdahl.media right after omarchy.tray
+     omarchy.power right after omarchy.monitor"
     - omarchy-keystroke-windows
     - omarchy-pomodoro
 omarchy-apps:
