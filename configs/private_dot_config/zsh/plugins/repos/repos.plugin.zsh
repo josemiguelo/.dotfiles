@@ -114,14 +114,37 @@ gclone() {
   fi
 
   if (( $# == 0 )) || [[ $1 == (-h|--help) ]]; then
-    gum style --border rounded --padding "0 1" \
-      "$(gum style --bold 'gclone <url> [--bare] [git clone options]')" \
+    # After --: gum would take a line starting with -- for one of its flags.
+    gum style --border rounded --padding "0 1" -- \
+      "$(gum style --bold -- 'gclone <url> [--bare] [git clone options]')" \
       "" \
-      "Clones into ~/Repos/<host>/<owner>/<repo> and cds into it." \
-      "https and ssh URLs; gh gl bb cb srht, other hosts by name." \
+      "Clones a repo into ~/Repos/<host>/<owner>/<repo> and cds into it." \
+      "  gclone git@github.com:owner/repo.git  ->  ~/Repos/gh/owner/repo" \
       "" \
-      "--bare clones bare and adds a worktree under all_worktrees/<branch>." \
-      "Without it, gum asks whether to clone bare."
+      "$(gum style --bold -- URLs)" \
+      "  https, ssh:// and git@host:owner/repo, cloned exactly as given." \
+      "  Browser URLs work too: …/owner/repo/tree/main/src, …/-/blob/…" \
+      "  Only the last two path segments are kept (GitLab group/sub/repo" \
+      "  lands in gl/sub/repo)." \
+      "  Host folders: github.com gh, gitlab.com gl, bitbucket.org bb," \
+      "  codeberg.org cb, git.sr.ht srht." \
+      "  Any other host keeps its own name, with a warning." \
+      "" \
+      "$(gum style --bold -- Options)" \
+      "  --bare      Clone bare and add a worktree for the default branch" \
+      "              under all_worktrees/<branch> (workmux's layout), then" \
+      "              cd into it. Without --bare, gum asks." \
+      "  -h, --help  Show this help." \
+      "  Anything else goes to git clone: --depth 1, --branch dev, …" \
+      "" \
+      "$(gum style --bold -- 'Already there')" \
+      "  The same repo (any URL form, bare too): offers to cd into it, or" \
+      "  into one of its worktrees. Another repo, or a folder with files" \
+      "  that isn't a repo: an error, and it's left alone." \
+      "" \
+      "$(gum style --bold -- Failures)" \
+      "  git never stops to ask for a password or a host key: the clone" \
+      "  fails and prints git's error, leaving no folders behind."
     return $(( $# == 0 ))
   fi
 
