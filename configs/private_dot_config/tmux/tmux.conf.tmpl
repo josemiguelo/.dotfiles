@@ -157,6 +157,12 @@ set-option -g pane-active-border-style "fg=color4"
 set-option -g display-panes-colour "color8"
 set-option -g display-panes-active-colour "color4"
 
+# Popups. tmux 3.8 defaults these to an opaque theme grey, which hides the
+# terminal's own (transparent) background behind the floating scratchpad.
+# "default" is what 3.7 and earlier already used.
+set-option -g popup-style default
+set-option -g popup-border-style default
+
 {{ if (includeTemplate "machine" . | fromJson).omarchy -}}
 # omarchy-theme-set-tmux writes the omarchy theme's fg/bg/cursor into these on
 # every theme switch, so panes stop matching kitty's palette and go opaque.
