@@ -85,6 +85,9 @@ zsh:
     - default-shell
     - zsh-plugins
     - setup-completions
+brew-glib:
+  scripts:
+    - unlink-brew-glib
 user-environment:
   scripts:
     - user-environment

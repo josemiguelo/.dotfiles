@@ -100,6 +100,9 @@ tmux:
     - tmux-plugins
     - remove-brew-tmux
     - omarchy-tmux-theme
+brew-glib:
+  scripts:
+    - unlink-brew-glib
 keychron:
   scripts:
     - keychron-launcher-access
