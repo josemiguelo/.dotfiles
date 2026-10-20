@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "3.0.0",
-  "updatedAt": "2026-10-20T20:36:31.627750700Z",
+  "updatedAt": "2026-10-20T20:39:33.709531470Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -415,9 +415,9 @@
       "exitCode": 0
     },
     "link-jetbrains-launchers-linux": {
-      "status": "pending",
-      "lastRun": null,
-      "exitCode": null
+      "status": "done",
+      "lastRun": "2026-10-20T20:39:29.526065680Z",
+      "exitCode": 0
     },
     "omarchy-hypr-config": {
       "status": "done",
@@ -480,8 +480,8 @@
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "pending",
-      "lastRun": "2026-10-13T14:23:53.420139608Z",
+      "status": "done",
+      "lastRun": "2026-10-20T20:39:29.646272821Z",
       "exitCode": 0
     },
     "omarchy-vscode": {
@@ -575,13 +575,13 @@
       "exitCode": 0
     },
     "t2-gmux-backlight": {
-      "status": "pending",
-      "lastRun": "2026-10-13T14:27:11.167036872Z",
+      "status": "done",
+      "lastRun": "2026-10-20T20:39:29.735144586Z",
       "exitCode": 0
     },
     "t2-render-gpu": {
-      "status": "pending",
-      "lastRun": "2026-10-13T14:27:11.179784832Z",
+      "status": "done",
+      "lastRun": "2026-10-20T20:39:29.749787008Z",
       "exitCode": 0
     },
     "setup-libvirt": {
