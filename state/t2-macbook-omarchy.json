@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "2.2.0",
-  "updatedAt": "2026-10-20T03:10:40.145911686Z",
+  "updatedAt": "2026-10-20T03:17:04.318055453Z",
   "programs": {
     "setup-brew": {
       "status": "installed",
@@ -455,8 +455,8 @@
       "exitCode": 0
     },
     "omarchy-bar-icons": {
-      "status": "pending",
-      "lastRun": "2026-10-19T17:22:45.337147334Z",
+      "status": "done",
+      "lastRun": "2026-10-20T03:16:56.496283150Z",
       "exitCode": 0
     },
     "omarchy-menu-button": {
