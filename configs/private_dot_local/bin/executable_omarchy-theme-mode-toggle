@@ -1,0 +1,27 @@
+#!/bin/sh
+# Switch Omarchy between the machine's dark and light theme: the light one
+# when the current theme is dark, the dark one otherwise, or the one named
+# (`dark` / `light`). The pair is ~/.config/omarchy/theme-mode.conf
+# (dark=<theme>, light=<theme>), written by loadout's omarchy-theme-mode.
+# Whether a theme is light is omarchy-theme-color's answer, the one
+# omarchy-theme-set-gnome hands GTK and the portal (kitty follows that).
+# usage: omarchy-theme-mode-toggle [dark|light]
+set -eu
+
+CONF=$HOME/.config/omarchy/theme-mode.conf
+
+value() {
+  sed -n "s/^$1=//p" "$CONF" | tail -n1
+}
+
+[ -f "$CONF" ] || { echo "no $CONF: loadout's omarchy-theme-mode writes it" >&2; exit 1; }
+
+case "${1:-}" in
+dark | light) want=$1 ;;
+'') if [ "$(omarchy-theme-color mode)" = light ]; then want=dark; else want=light; fi ;;
+*) echo "usage: $0 [dark|light]" >&2; exit 2 ;;
+esac
+
+theme=$(value "$want")
+[ -n "$theme" ] || { echo "$CONF names no $want theme" >&2; exit 1; }
+exec omarchy-theme-set "$theme"

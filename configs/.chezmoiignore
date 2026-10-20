@@ -19,6 +19,11 @@
 .config/fcitx5/**
 {{ end }}
 
+# Switching between the machine's dark and light Omarchy theme.
+{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+.local/bin/omarchy-theme-mode-toggle
+{{ end }}
+
 # Spotify's launch flags work around a crash under Omarchy's Wayland session.
 {{ if not (includeTemplate "machine" . | fromJson).omarchy }}
 .config/spotify-flags.conf

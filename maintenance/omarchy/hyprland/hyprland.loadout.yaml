@@ -38,3 +38,11 @@ scripts:
     description: 'Hyper+letter app hotkeys (jump, overlay)'
     file: omarchy-harpoon.sh
     check: 'file:omarchy-harpoon.sh check'
+
+  # The machine's dark and light themes, named by the opt-in
+  # ("omarchy-theme-mode tokyo-night catppuccin-latte"), for
+  # omarchy-theme-mode-toggle (~/.local/bin), which Hyper+Enter runs.
+  omarchy-theme-mode:
+    description: 'Hyper+Enter switches between the dark and light theme'
+    file: omarchy-theme-mode.sh
+    check: 'file:omarchy-theme-mode.sh check $@'
