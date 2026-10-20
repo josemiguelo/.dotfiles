@@ -8,7 +8,7 @@ programs:
     install:
 
       # Linux: per-user install from JetBrains' release feed (see the script for
-      # why not the ublue-os cask). Version = the build the script recorded.
+      # why not the ublue-os cask). Version = the build.txt Toolbox ships.
       script:
         command: 'file:install-toolbox.sh install'
         check: 'file:install-toolbox.sh check'

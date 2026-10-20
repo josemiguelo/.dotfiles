@@ -5,22 +5,21 @@
 # the next upgrade ("Permission denied ... /home/<other user>/.config").
 #
 # Lands where Toolbox installs itself, so its own self-updates replace the
-# same files. The version file is what `check` reads; Toolbox's self-update
-# does not bump it, so `loadout outdated` may show an update Toolbox already
-# applied — rerunning this just re-downloads the current release.
+# same files. `check` reads the build.txt JetBrains ships in bin/: a
+# self-update replaces bin/ whole, so a file of our own there would vanish
+# (and loadout would call Toolbox missing), while build.txt stays current.
 # Modes: `check` (prints the installed version) / `install` (default).
 set -eu
 
 TOOLBOX_DIR="$HOME/.local/share/JetBrains/Toolbox"
 BIN_DIR="$TOOLBOX_DIR/bin"
-VERSION_FILE="$BIN_DIR/.loadout-version"
 LINK="$HOME/.local/bin/jetbrains-toolbox"
 DESKTOP="$HOME/.local/share/applications/jetbrains-toolbox.desktop"
 FEED="https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release"
 
 case "${1:-install}" in
   check)
-    [ -x "$BIN_DIR/jetbrains-toolbox" ] && [ -L "$LINK" ] && cat "$VERSION_FILE"
+    [ -x "$BIN_DIR/jetbrains-toolbox" ] && [ -L "$LINK" ] && cat "$BIN_DIR/build.txt"
     exit $?
     ;;
   install) ;;
@@ -41,7 +40,6 @@ curl -fsSL "$url" | tar -xz -C "$TMP"
 mkdir -p "$BIN_DIR" "$HOME/.local/bin" "$(dirname "$DESKTOP")"
 cp -R "$TMP/jetbrains-toolbox-$build/bin/." "$BIN_DIR/"
 ln -sfn "$BIN_DIR/jetbrains-toolbox" "$LINK"
-echo "$build" >"$VERSION_FILE"
 
 # Toolbox rewrites this with its own entry (and icon) on first run.
 [ -f "$DESKTOP" ] || cat >"$DESKTOP" <<DESK
