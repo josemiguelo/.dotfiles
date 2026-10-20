@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "3.0.0",
-  "updatedAt": "2026-10-20T20:39:33.709531470Z",
+  "updatedAt": "2026-10-20T20:59:03.927085856Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -34,7 +34,7 @@
     },
     "awscli": {
       "status": "installed",
-      "version": "2.37.13",
+      "version": "2.38.2",
       "reason": null
     },
     "bat": {
@@ -124,7 +124,7 @@
     },
     "just": {
       "status": "installed",
-      "version": "1.58.0",
+      "version": "1.59.0",
       "reason": null
     },
     "kitty": {
@@ -254,7 +254,7 @@
     },
     "vim": {
       "status": "installed",
-      "version": "9.2.1150",
+      "version": "9.2.1200",
       "reason": null
     },
     "virt-install": {
@@ -289,7 +289,7 @@
     },
     "workmux": {
       "status": "installed",
-      "version": "0.1.275",
+      "version": "0.1.276",
       "reason": null
     },
     "wtype": {
