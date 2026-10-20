@@ -1,0 +1,27 @@
+#!/bin/sh
+# Refuses a commit whose manifests and compiled lock disagree: a pushed .kt
+# change without its loadout.lock.json leaves every other machine refusing
+# to run until someone with a JDK compiles. Only commits that touch the
+# manifests, the build files or what compile writes are checked.
+# Enabled per clone with: git config core.hooksPath .githooks
+set -eu
+
+root=$(git rev-parse --show-toplevel)
+generated='loadout.lock.json configs/.chezmoidata/loadout.json configs/.chezmoitemplates/loadout'
+
+git diff --cached --name-only | grep -qE '\.kts?$|^loadout\.lock\.json$|^configs/\.chezmoi(data|templates)/loadout' || exit 0
+
+command -v loadout >/dev/null 2>&1 || {
+  echo "pre-commit: loadout isn't on PATH, so the lock can't be checked" >&2
+  exit 1
+}
+# Any loadout command refuses a lock older than its sources.
+if ! out=$(loadout --repo "$root" explain 2>&1); then
+  printf 'pre-commit: %s\n' "$(printf '%s\n' "$out" | tail -n 1)" >&2
+  exit 1
+fi
+# shellcheck disable=SC2086 # $generated is a list of paths
+if ! (cd "$root" && git diff --quiet -- $generated); then
+  echo "pre-commit: what loadout compile wrote isn't staged: git add $generated" >&2
+  exit 1
+fi

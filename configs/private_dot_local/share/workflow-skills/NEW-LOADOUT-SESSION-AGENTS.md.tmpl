@@ -1,4 +1,4 @@
-{{- $m := includeTemplate "machine" . | fromJson -}}
+{{- $m := includeTemplate "loadout/machine" . | fromJson -}}
 # Loadout session
 
 This folder is a scratch session opened by `start-dotfiles-change`. You run in the
@@ -108,9 +108,11 @@ in the meantime.
 
 - **`~/.local/share/chezmoi`** (josemiguelo/.dotfiles) — the one config
   repo. `configs/` is chezmoi's source (`.chezmoiroot`); the rest is what
-  `loadout` reads (`LOADOUT_REPO` points here): `loadout.yaml`, `programs/`,
-  `maintenance/`, `profiles/`, `machines/`, `state/`. A tool's loadout
-  fragment sits beside its dotfiles as `.loadout.yaml` + `.loadout/`. The
+  `loadout` reads (`LOADOUT_REPO` points here): Kotlin manifests
+  (`loadout.kt`, `programs/`, `maintenance/`, `machines/`) that
+  `loadout compile` turns into the committed `loadout.lock.json`, and
+  `state/`. A tool's loadout fragment sits beside its dotfiles as
+  `.loadout.kt` + `.loadout/`. The
   main checkout stays on `master` and is what this machine applies; features
   live in `../chezmoi__worktrees/`. This file's source is
   `configs/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,

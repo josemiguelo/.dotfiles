@@ -75,7 +75,7 @@ return {
     end,
   },
 
-  {{ if (includeTemplate "machine" . | fromJson).work }}
+  {{ if (includeTemplate "loadout/machine" . | fromJson).work }}
   {
     "zbirenbaum/copilot.lua",
     cond = false,

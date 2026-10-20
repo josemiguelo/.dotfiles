@@ -28,7 +28,7 @@ require("lazy").setup({
     { import = "features.neovim_core" },
     { import = "features" },
     { import = "features.langs" },
-    {{ if (includeTemplate "machine" . | fromJson).work }}
+    {{ if (includeTemplate "loadout/machine" . | fromJson).work }}
     {
       "sofi.nvim",
       dev = true,

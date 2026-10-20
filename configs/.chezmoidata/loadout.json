@@ -1,0 +1,38 @@
+{
+  "loadout": {
+    "defaults": {
+      "omarchy": false,
+      "zscaler": false,
+      "work": false,
+      "kitty": {
+        "opacity": 0.85
+      }
+    },
+    "machines": {
+      "GFT-GJD4Y36T5V": {
+        "omarchy": false,
+        "zscaler": true,
+        "work": true,
+        "kitty": {
+          "opacity": 0.85
+        }
+      },
+      "omarchy-vm": {
+        "omarchy": true,
+        "zscaler": false,
+        "work": false,
+        "kitty": {
+          "opacity": 0.85
+        }
+      },
+      "t2-macbook-omarchy": {
+        "omarchy": true,
+        "zscaler": false,
+        "work": false,
+        "kitty": {
+          "opacity": 0.85
+        }
+      }
+    }
+  }
+}

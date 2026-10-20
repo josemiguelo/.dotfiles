@@ -67,8 +67,8 @@ fi
 
 # The cask's tap has no other consumer; left tapped-but-untrusted it makes
 # every brew command warn for accounts that never trusted it.
-if sh "$LOADOUT_REPO/programs/01-brew/brew.sh" tap-info ublue-os/tap 2>/dev/null | grep -q Installed; then
-  sh "$LOADOUT_REPO/programs/01-brew/brew.sh" untap ublue-os/tap
+if sh "$LOADOUT_REPO/programs/brew/brew.sh" tap-info ublue-os/tap 2>/dev/null | grep -q Installed; then
+  sh "$LOADOUT_REPO/programs/brew/brew.sh" untap ublue-os/tap
 fi
 
 echo "jetbrains-toolbox $build installed in $BIN_DIR"

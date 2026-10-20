@@ -12,8 +12,8 @@ One command, on a fresh Omarchy, macOS or Fedora install:
 curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 ```
 
-`<machine>` is a file in `machines/` and becomes the hostname (each install
-keeps its own state file, so a reinstall gets a name of its own, e.g.
+`<machine>` names a machine of the repo (`machines/<machine>.loadout.kt`)
+and becomes the hostname (each install keeps its own state file, so a reinstall gets a name of its own, e.g.
 `t2-macbook-omarchy-2`). [`bootstrap.sh`](bootstrap.sh) installs git and
 chezmoi, sets the hostname, applies the dotfiles over https, installs loadout
 and runs `loadout setup-new-machine`; `--dry-run` prints the commands
@@ -25,10 +25,11 @@ On a fresh Omarchy, run `omarchy update` (or at least `sudo pacman -Sy`)
 first: the install leaves pacman without package lists, and installing
 chezmoi fails with "target not found".
 
-A machine new to the repo needs its file first, pushed before the bootstrap
-reads it: `machines/<machine>.yaml` with `extends: [t2-macbook]`, `[omarchy]`,
-`[macos]` or `[fedora]`. `loadout sync` publishes its state afterwards (it
-commits only the state file).
+A machine new to the repo is declared first, compiled and pushed before the
+bootstrap reads it: `machine(hostname = "<machine>") { extends(t2Macbook) }`
+(or `omarchyProfile`, `macos`, `fedora`) in `machines/<machine>.loadout.kt`,
+then `loadout compile` and commit the lock with it. `loadout sync` publishes its state
+afterwards (it commits only the state file).
 
 ## tmux
 

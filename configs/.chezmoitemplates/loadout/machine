@@ -1,0 +1,2 @@
+{{- /* Written by loadout compile; don't edit. This host's settings (.chezmoidata/loadout.json), or the defaults on a host the repo doesn't declare. Use: includeTemplate "loadout/machine" . | fromJson */ -}}
+{{- get .loadout.machines .chezmoi.hostname | default .loadout.defaults | toJson -}}

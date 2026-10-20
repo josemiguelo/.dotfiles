@@ -1,4 +1,4 @@
-{{- $m := includeTemplate "machine" . | fromJson -}}
+{{- $m := includeTemplate "loadout/machine" . | fromJson -}}
 {{- $h := .chezmoi.homeDir -}}
 {
   "permissions": {

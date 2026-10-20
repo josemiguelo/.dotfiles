@@ -23,3 +23,8 @@ private_dot_config/zsh/**/*.zwc.old
 private_dot_config/zsh/dot_zplugins.zsh
 private_dot_config/zsh/~*
 private_dot_config/zsh/dot_zlocal
+
+# The Gradle project that compiles the manifests.
+/build/
+/.gradle/
+/.kotlin/

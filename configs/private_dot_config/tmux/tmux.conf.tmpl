@@ -163,7 +163,7 @@ set-option -g display-panes-active-colour "color4"
 set-option -g popup-style default
 set-option -g popup-border-style default
 
-{{ if (includeTemplate "machine" . | fromJson).omarchy -}}
+{{ if (includeTemplate "loadout/machine" . | fromJson).omarchy -}}
 # omarchy-theme-set-tmux writes the omarchy theme's fg/bg/cursor into these on
 # every theme switch, so panes stop matching kitty's palette and go opaque.
 # Pinned so a reload undoes it; loadout's omarchy-tmux-theme script watches
