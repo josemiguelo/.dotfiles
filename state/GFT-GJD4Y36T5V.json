@@ -5,7 +5,7 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "3.0.0",
-  "updatedAt": "2026-10-20T20:54:20.232920Z",
+  "updatedAt": "2026-10-20T21:02:44.900052Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
