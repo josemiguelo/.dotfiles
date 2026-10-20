@@ -29,6 +29,29 @@ export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
 
 palette_commands_file=${COMMAND_PALETTE_COMMANDS:-${XDG_CONFIG_HOME:-$HOME/.config}/command-palette/commands}
 
+# gum confirm's colors, to match the fzf picker before it. Omarchy exports its
+# theme's GUM_* to every process (gum_env.lua, through Hyprland), each with a
+# solid background that shows as a dark box on kitty's transparent one and
+# doesn't follow the terminal's light or dark theme. These replace them: no
+# background but the selected button's, Tokyo Night's blue0, a step brighter
+# than fzf's bg+ so it stands out on a transparent background. gum's key-hint
+# footer is hidden: its dim grays are fixed in gum and unreadable there.
+palette_confirm_theme() {
+  local appearance
+  appearance=$(command -v appearance-is-dark 2>/dev/null)
+  [ -n "$appearance" ] || appearance="$HOME/.local/bin/appearance-is-dark"
+  export GUM_CONFIRM_PROMPT_BACKGROUND= GUM_CONFIRM_UNSELECTED_BACKGROUND= GUM_CONFIRM_SHOW_HELP=false
+  if [ -x "$appearance" ] && ! "$appearance"; then
+    export GUM_CONFIRM_PROMPT_FOREGROUND='#2e7de9' \
+      GUM_CONFIRM_SELECTED_FOREGROUND='#e1e2e7' GUM_CONFIRM_SELECTED_BACKGROUND='#7890dd' \
+      GUM_CONFIRM_UNSELECTED_FOREGROUND='#6172b0'
+  else
+    export GUM_CONFIRM_PROMPT_FOREGROUND='#7aa2f7' \
+      GUM_CONFIRM_SELECTED_FOREGROUND='#ffffff' GUM_CONFIRM_SELECTED_BACKGROUND='#3d59a1' \
+      GUM_CONFIRM_UNSELECTED_FOREGROUND='#a9b1d6'
+  fi
+}
+
 # The registry's commands as the picker shows them: a table, the names padded to
 # the longest so the descriptions line up, each column in its own color (the
 # terminal's blue and green, so they follow its theme). A line is the display
@@ -71,6 +94,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   # Yes/No question, as gum's confirm. Ctrl-C closes the palette (130); Esc is
   # gum's 'No', so it runs the command with no arguments.
   args=
+  palette_confirm_theme
   gum confirm 'Enter arguments for this command?'
   case $? in
   0)
