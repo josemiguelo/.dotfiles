@@ -5,7 +5,7 @@
   "distro": null,
   "arch": "arm64",
   "toolVersion": "3.0.0",
-  "updatedAt": "2026-10-20T20:52:59.279061Z",
+  "updatedAt": "2026-10-20T20:54:20.232920Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -265,9 +265,9 @@
       "exitCode": 0
     },
     "dotfiles-ssh-remote": {
-      "status": "pending",
-      "lastRun": null,
-      "exitCode": null
+      "status": "done",
+      "lastRun": "2026-10-20T20:54:11.865992Z",
+      "exitCode": 0
     },
     "setup-git": {
       "status": "done",
@@ -275,9 +275,9 @@
       "exitCode": null
     },
     "skills-repo": {
-      "status": "pending",
-      "lastRun": null,
-      "exitCode": null
+      "status": "done",
+      "lastRun": "2026-10-20T20:54:11.996241Z",
+      "exitCode": 0
     },
     "nvim-plugins": {
       "status": "done",
