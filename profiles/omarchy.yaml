@@ -109,6 +109,7 @@ hyprland:
     - omarchy-close-window-key
     - omarchy-google-bindings
     - omarchy-harpoon
+    - omarchy-theme-mode tokyo-night catppuccin-latte
 shell:
   scripts:
     - omarchy-bar top 24 tornikegomareli.spaces
@@ -122,6 +123,7 @@ shell:
     - "omarchy-bar-icons
      josemiguelo.menu-button
      josemiguelo.workspace-layout
+     josemiguelo.theme-mode
      omarchy.monitor
      omarchy.bluetooth
      omarchy.network
@@ -143,7 +145,8 @@ shell:
      josemiguelo.workspace-layout left before tornikegomareli.spaces
      josemiguelo.menu-button left before josemiguelo.workspace-layout
      io.github.sumdahl.media right after omarchy.tray
-     omarchy.power right after omarchy.monitor"
+     omarchy.power right after omarchy.monitor
+     josemiguelo.theme-mode right before omarchy.tray"
     - omarchy-keystroke-windows
     - omarchy-pomodoro
 omarchy-apps:
