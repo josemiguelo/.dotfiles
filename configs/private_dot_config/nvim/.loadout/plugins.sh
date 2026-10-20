@@ -11,10 +11,10 @@
 #   install    make it so: Lazy's own `restore`.  (the script's run)
 #   outdated   is a newer commit available upstream? Lazy's own check, honouring
 #              each plugin's version/tag/commit/branch/pin.
-#              (the outdated.nvim-plugins source)
+#              (for outdated-plugins.sh, the nvim-plugins updates source)
 #   update     move one plugin to what `outdated` reported — Lazy's own update,
 #              so Lazy stays the only writer of the pins.
-#              (the source's per-row upgrade)
+#              (outdated-plugins.sh update <plugin>)
 #
 # `update` moves the pin in the lockfile chezmoi APPLIES, not the one it keeps:
 # chezmoi reports the drift (`chezmoi apply` refuses to overwrite a file changed

@@ -3,13 +3,14 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 #
-# <machine> names machines/<machine>.yaml in this repo and becomes the
+# <machine> names a machine the repo declares (machine("<machine>") in
+# machines.loadout.kt, compiled into loadout.lock.json) and becomes the
 # hostname, so loadout, chezmoi's templates and the state file all agree on
 # it. The order is the point: the hostname before the first apply (templates
 # rendered for an unknown host get the defaults, e.g. omarchy: false), the
 # dotfiles before setup-new-machine (its scripts read the applied configs).
 #
-#   1. machines/<machine>.yaml exists (asked over https, before any change)
+#   1. the lock declares <machine> (asked over https, before any change)
 #   2. git and chezmoi
 #   3. the hostname
 #   4. ~/.local given back to the user where a root-run installer took it
@@ -41,21 +42,24 @@ main() {
   DRY=
   if [ "${1:-}" = --dry-run ]; then DRY=1; shift; fi
   MACHINE=${1:-}
-  [ -n "$MACHINE" ] || die "usage: bootstrap.sh [--dry-run] <machine>  (a file in https://github.com/$GH/tree/master/machines)"
+  [ -n "$MACHINE" ] || die "usage: bootstrap.sh [--dry-run] <machine>  (a machine in https://github.com/$GH/tree/master/machines)"
   OS=$(uname -s)
   OMARCHY=
   command -v omarchy >/dev/null 2>&1 && OMARCHY=1
 
-  say "1. machines/$MACHINE.yaml"
-  if ! curl -fsL -o /dev/null "$RAW/machines/$MACHINE.yaml"; then
+  say "1. machine $MACHINE"
+  # The lock's machines, one per line: the keys of its "machines" object,
+  # which loadout writes pretty-printed, two spaces per level.
+  machines=$(curl -fsSL "$RAW/loadout.lock.json" 2>/dev/null |
+    awk '/^    "machines": [{]/ { m = 1; next } m && /^    [}]/ { exit } m && /^      "[^"]*": [{]/ { sub(/^ *"/, ""); sub(/".*/, ""); print }')
+  if ! printf '%s\n' "$machines" | grep -qx "$MACHINE"; then
     cat >&2 <<EOF
-bootstrap: no machines/$MACHINE.yaml in $GH.
-A machine new to the repo gets a file first, extending its profiles, e.g.
-  # MacBookPro16,1 (T2) running Omarchy.
-  extends: [t2-macbook]
-(profiles/: $(curl -fsSL "https://api.github.com/repos/$GH/contents/profiles" 2>/dev/null |
-      sed -n 's/.*"name": "\(.*\)\.yaml".*/\1/p' | tr '\n' ' '))
-Commit and push it, then run this again.
+bootstrap: $GH declares no machine $MACHINE (it has: $(printf '%s ' $machines)).
+A machine new to the repo is declared first, extending its profiles, in
+machines/$MACHINE.loadout.kt, e.g.
+  /** MacBookPro16,1 (T2) running Omarchy. */
+  val t2MacbookOmarchy = machine("$MACHINE") { extends(t2Macbook) }
+Then loadout compile, commit and push (the lock too), and run this again.
 EOF
     exit 1
   fi
@@ -98,6 +102,9 @@ EOF
 
   say "5. dotfiles"
   run chezmoi init --apply "https://github.com/$GH.git"
+  # The repo's hooks (.githooks/pre-commit refuses manifests committed without
+  # their compiled lock).
+  run git -C "$REPO" config core.hooksPath .githooks
 
   say "6. loadout"
   if [ ! -x "$HOME/.local/bin/loadout" ] && ! command -v loadout >/dev/null 2>&1; then

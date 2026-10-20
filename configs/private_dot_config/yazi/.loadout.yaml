@@ -1,5 +1,0 @@
-programs:
-  # yazi: the terminal file manager. Its dotfiles are this directory.
-
-  yazi:
-    via: [brew, omarchy]

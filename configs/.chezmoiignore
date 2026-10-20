@@ -8,23 +8,23 @@
 
 # The agents Omarchy installs through mise: Omarchy machines only. The whole
 # directory, or chezmoi still creates it (empty) around the ignored file.
-{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/mise/conf.d
 .config/mise/conf.d/**
 {{ end }}
 
 # fcitx5 is Omarchy's input method: its settings are for Omarchy machines only.
-{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/fcitx5
 .config/fcitx5/**
 {{ end }}
 
 # Switching between the machine's dark and light Omarchy theme.
-{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .local/bin/omarchy-theme-mode-toggle
 {{ end }}
 
 # Spotify's launch flags work around a crash under Omarchy's Wayland session.
-{{ if not (includeTemplate "machine" . | fromJson).omarchy }}
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/spotify-flags.conf
 {{ end }}

@@ -1,0 +1,38 @@
+{
+  "loadout": {
+    "defaults": {
+      "omarchy": false,
+      "corpca": false,
+      "work": false,
+      "kitty": {
+        "opacity": 0.85
+      }
+    },
+    "machines": {
+      "work-mac": {
+        "omarchy": false,
+        "corpca": true,
+        "work": true,
+        "kitty": {
+          "opacity": 0.85
+        }
+      },
+      "omarchy-vm": {
+        "omarchy": true,
+        "corpca": false,
+        "work": false,
+        "kitty": {
+          "opacity": 0.85
+        }
+      },
+      "t2-macbook-omarchy": {
+        "omarchy": true,
+        "corpca": false,
+        "work": false,
+        "kitty": {
+          "opacity": 0.85
+        }
+      }
+    }
+  }
+}

@@ -162,7 +162,7 @@
       "version": "0.26.9",
       "reason": null
     },
-    "vim-enhanced": {
+    "vim": {
       "status": "installed",
       "version": "9.2.1150",
       "reason": null
@@ -484,7 +484,7 @@
       "lastRun": "2026-10-13T14:23:53.420139608Z",
       "exitCode": 0
     },
-    "omarchy-default-browser-arch": {
+    "omarchy-default-browser": {
       "status": "done",
       "lastRun": "2026-10-13T14:23:54.215882136Z",
       "exitCode": 0
@@ -554,7 +554,7 @@
       "lastRun": "2026-10-13T14:27:00.828846258Z",
       "exitCode": 0
     },
-    "t2-hid-apple-keyboard-arch": {
+    "t2-hid-apple-keyboard": {
       "status": "done",
       "lastRun": "2026-10-13T14:27:08.761214760Z",
       "exitCode": 0
@@ -599,7 +599,7 @@
       "lastRun": "2026-10-13T16:52:55.884183418Z",
       "exitCode": 0
     },
-    "setup-libvirt-arch": {
+    "setup-libvirt": {
       "status": "done",
       "lastRun": "2026-10-13T14:27:13.165153881Z",
       "exitCode": 0
