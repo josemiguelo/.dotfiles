@@ -4,207 +4,37 @@
   "os": "macos",
   "distro": null,
   "arch": "arm64",
-  "toolVersion": "2.1.0",
-  "updatedAt": "2026-10-14T19:48:34.039240Z",
+  "toolVersion": "3.0.0",
+  "updatedAt": "2026-10-20T20:52:59.279061Z",
   "programs": {
-    "setup-brew": {
-      "status": "installed",
-      "version": "7.0.8",
-      "reason": null
-    },
     "1password-cli": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "jordanbaird-ice": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 200"
-    },
-    "lunar": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "meetingbar": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 200"
-    },
-    "obs": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "scrcpy": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "voxtype": {
-      "status": "missing",
-      "version": null,
-      "reason": "/opt/homebrew/Library/Taps/peteonrails/homebrew-voxtype/Casks/voxtype.rb:17"
+      "status": "installed",
+      "version": "2.40.0",
+      "reason": null
     },
     "atuin": {
-      "status": "missing",
-      "version": null,
-      "reason": "Error: No such file or directory @ dir_s_rmdir - /Users/jochoa/Library/Caches/Homebrew/api/internal/packages.arm64_tahoe.jws.json"
+      "status": "installed",
+      "version": "18.23.0",
+      "reason": null
     },
     "awscli": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
+      "status": "installed",
+      "version": "2.37.9",
+      "reason": null
     },
     "azure-cli": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
+      "status": "installed",
+      "version": "2.90.0",
+      "reason": null
     },
     "bat": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
+      "status": "installed",
+      "version": "0.26.1",
+      "reason": null
     },
     "btop": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "claude": {
       "status": "installed",
-      "version": "2.1.295",
-      "reason": null
-    },
-    "codex": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "coreutils": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "eza": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "fd": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "gawk": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "gh": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "git-delta": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "gnu-sed": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "gum": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "jira-cli": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "jq": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "lazydocker": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "lazygit": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "ngrok": {
-      "status": "installed",
-      "version": "3.22.0",
-      "reason": null
-    },
-    "qemu": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "ripgrep": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "terraform": {
-      "status": "installed",
-      "version": "1.16.4",
-      "reason": null
-    },
-    "trash-cli": {
-      "status": "installed",
-      "version": "0.26.9.29",
-      "reason": null
-    },
-    "tree-sitter-cli": {
-      "status": "installed",
-      "version": "0.27.0",
-      "reason": null
-    },
-    "tree": {
-      "status": "installed",
-      "version": "2.3.2",
-      "reason": null
-    },
-    "try": {
-      "status": "installed",
-      "version": "1.10.1",
-      "reason": null
-    },
-    "unixodbc": {
-      "status": "installed",
-      "version": "2.3.14",
-      "reason": null
-    },
-    "wget": {
-      "status": "installed",
-      "version": "1.25.0",
-      "reason": null
-    },
-    "yq": {
-      "status": "missing",
-      "version": null,
-      "reason": "HTTP status: 000"
-    },
-    "zoxide": {
-      "status": "installed",
-      "version": "0.10.0",
-      "reason": null
-    },
-    "starship": {
-      "status": "installed",
-      "version": "1.26.0",
+      "version": "1.4.7",
       "reason": null
     },
     "chezmoi": {
@@ -212,9 +42,74 @@
       "version": "2.73.0",
       "reason": null
     },
+    "claude": {
+      "status": "installed",
+      "version": "2.1.305",
+      "reason": null
+    },
+    "codex": {
+      "status": "installed",
+      "version": "0.160.0",
+      "reason": null
+    },
+    "coreutils": {
+      "status": "installed",
+      "version": "9.12",
+      "reason": null
+    },
+    "eza": {
+      "status": "installed",
+      "version": "0.23.5",
+      "reason": null
+    },
+    "fd": {
+      "status": "installed",
+      "version": "10.5.0",
+      "reason": null
+    },
     "fzf": {
       "status": "installed",
       "version": "0.74.4",
+      "reason": null
+    },
+    "gawk": {
+      "status": "installed",
+      "version": "5.4.1",
+      "reason": null
+    },
+    "gh": {
+      "status": "installed",
+      "version": "2.102.0",
+      "reason": null
+    },
+    "git-delta": {
+      "status": "installed",
+      "version": "0.19.2",
+      "reason": null
+    },
+    "gnu-sed": {
+      "status": "installed",
+      "version": "4.10",
+      "reason": null
+    },
+    "gum": {
+      "status": "installed",
+      "version": "2.0.2",
+      "reason": null
+    },
+    "jira-cli": {
+      "status": "installed",
+      "version": "1.7.0",
+      "reason": null
+    },
+    "jordanbaird-ice": {
+      "status": "installed",
+      "version": "0.11.12",
+      "reason": null
+    },
+    "jq": {
+      "status": "installed",
+      "version": "1.8.2",
       "reason": null
     },
     "kitty": {
@@ -222,14 +117,74 @@
       "version": "0.49.2",
       "reason": null
     },
+    "lazydocker": {
+      "status": "installed",
+      "version": "0.25.2",
+      "reason": null
+    },
+    "lazygit": {
+      "status": "installed",
+      "version": "0.65.1",
+      "reason": null
+    },
+    "lunar": {
+      "status": "installed",
+      "version": "6.11.0",
+      "reason": null
+    },
+    "meetingbar": {
+      "status": "installed",
+      "version": "4.11.6",
+      "reason": null
+    },
     "mise": {
       "status": "installed",
       "version": "2026.10.1",
       "reason": null
     },
+    "ngrok": {
+      "status": "installed",
+      "version": "3.22.0",
+      "reason": null
+    },
+    "obs": {
+      "status": "installed",
+      "version": "32.2.2",
+      "reason": null
+    },
+    "qemu": {
+      "status": "installed",
+      "version": "11.1.2",
+      "reason": null
+    },
     "raycast": {
       "status": "installed",
       "version": "1.89.1",
+      "reason": null
+    },
+    "ripgrep": {
+      "status": "installed",
+      "version": "15.2.0",
+      "reason": null
+    },
+    "scrcpy": {
+      "status": "installed",
+      "version": "4.1",
+      "reason": null
+    },
+    "setup-brew": {
+      "status": "installed",
+      "version": "7.0.8",
+      "reason": null
+    },
+    "starship": {
+      "status": "installed",
+      "version": "1.26.0",
+      "reason": null
+    },
+    "terraform": {
+      "status": "installed",
+      "version": "1.16.4",
       "reason": null
     },
     "tmux": {
@@ -242,6 +197,41 @@
       "version": "2.0.6",
       "reason": null
     },
+    "trash-cli": {
+      "status": "installed",
+      "version": "0.26.9.29",
+      "reason": null
+    },
+    "tree": {
+      "status": "installed",
+      "version": "2.3.2",
+      "reason": null
+    },
+    "tree-sitter-cli": {
+      "status": "installed",
+      "version": "0.27.0",
+      "reason": null
+    },
+    "try": {
+      "status": "installed",
+      "version": "1.10.1",
+      "reason": null
+    },
+    "unixodbc": {
+      "status": "installed",
+      "version": "2.3.14",
+      "reason": null
+    },
+    "voxtype": {
+      "status": "installed",
+      "version": "0.7.5",
+      "reason": null
+    },
+    "wget": {
+      "status": "installed",
+      "version": "1.25.0",
+      "reason": null
+    },
     "workmux": {
       "status": "installed",
       "version": "0.1.269",
@@ -250,6 +240,16 @@
     "yazi": {
       "status": "installed",
       "version": "26.9.1",
+      "reason": null
+    },
+    "yq": {
+      "status": "installed",
+      "version": "4.54.1",
+      "reason": null
+    },
+    "zoxide": {
+      "status": "installed",
+      "version": "0.10.0",
       "reason": null
     }
   },
@@ -279,6 +279,16 @@
       "lastRun": null,
       "exitCode": null
     },
+    "nvim-plugins": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "download-fonts": {
+      "status": "done",
+      "lastRun": "2026-08-19T01:40:36.140652Z",
+      "exitCode": 0
+    },
     "zsh-plugins": {
       "status": "done",
       "lastRun": "2026-09-15T22:49:57.522470Z",
@@ -304,17 +314,12 @@
       "lastRun": "2026-09-25T14:33:39.719464Z",
       "exitCode": 0
     },
-    "nvim-plugins": {
+    "tmux-plugins": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
     },
-    "download-fonts": {
-      "status": "done",
-      "lastRun": "2026-08-19T01:40:36.140652Z",
-      "exitCode": 0
-    },
-    "tmux-plugins": {
+    "voxtype-setup": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
@@ -327,6 +332,11 @@
       "reason": null
     },
     ".default-npm-packages": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".gradle": {
       "status": "applied",
       "files": [],
       "reason": null
