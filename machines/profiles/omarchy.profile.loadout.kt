@@ -61,5 +61,6 @@ val omarchyProfile = profile(name = "omarchy") {
     run(Webapps.gmail, Webapps.googleCalendar)
 
     run(Overrides.commands, Overrides.keyboardBacklightGuard)
+    run(omarchyScreensaverBirds)
     run(Dictation.setup, Dictation.gpu)
 }
