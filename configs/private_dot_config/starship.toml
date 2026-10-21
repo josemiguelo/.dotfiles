@@ -3,7 +3,7 @@
 
 # Draw a full-width rule between shell prompts instead of a blank line
 add_newline = false
-format = "\n${custom.hr}\n$all"
+format = "\n${custom.hr}\n${custom.path}$all"
 
 command_timeout = 8000
 
@@ -11,3 +11,44 @@ command_timeout = 8000
 when = true
 command = '''W=$(stty size </dev/tty 2>/dev/null | cut -d" " -f2); printf "%*s" "${W:-80}" "" | sed "s/ /─/g"'''
 format = "[$output](bright-black)"
+
+# The whole path from ~ or /, even inside a repo, in place of the directory
+# module (which keeps only the last folders whole), fitted into half the
+# terminal's width: folders are shortened to their first letter from the
+# middle outward, right then left, never the last one
+# (~/Repos/gh/josemiguelo/loadout/a/m/c/s/c/k/loadout/core/diff), and once all
+# are, dropped from the left behind …/ (…/k/l/c/diff).
+[directory]
+disabled = true
+
+[custom.path]
+when = true
+shell = ["sh"]
+command = '''
+W=$(stty size </dev/tty 2>/dev/null | cut -d" " -f2)
+case $PWD in "$HOME") P="~" ;; "$HOME"/*) P="~${PWD#"$HOME"}" ;; *) P=$PWD ;; esac
+awk -v p="$P" -v w="$(( ${W:-80} / 2 ))" '
+  function short(s) { return substr(s, 1, substr(s, 1, 1) == "." ? 2 : 1) }
+  function join(from,   i, out) {
+    out = from > 1 ? "…" : c[0]
+    for (i = from; i <= m; i++) out = out "/" d[i]
+    return out
+  }
+  BEGIN {
+    n = split(p, a, "/"); m = 0; c[0] = a[1]
+    for (i = 2; i <= n; i++) if (a[i] != "") { c[++m] = a[i]; d[m] = a[i] }
+    if (m == 0) { printf "%s", (c[0] == "" ? "/" : c[0]); exit }
+    out = join(1)
+    mid = int((m + 1) / 2)
+    for (k = 0; length(out) > w && k < 2 * m; k++) {
+      i = mid + (k % 2 ? (k + 1) / 2 : -k / 2)
+      if (i < 1 || i >= m) continue
+      d[i] = short(c[i]); out = join(1)
+    }
+    for (j = 2; length(out) > w && j <= m; j++) out = join(j)
+    printf "%s", out
+  }'
+[ -w . ] || printf "🔒"
+'''
+format = "[$output]($style) "
+style = "bold cyan"
