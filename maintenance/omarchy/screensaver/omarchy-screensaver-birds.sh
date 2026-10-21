@@ -1,15 +1,15 @@
 #!/bin/sh
 # Omarchy's screensaver as a flock of birds (github.com/clainstone/cbirds)
-# instead of a random TTE effect from ttfx. In Kitty and Ghostty, small
+# instead of a random TTE effect from ttfx. In Kitty and Ghostty,
 # sprite birds draw Omarchy's logo ($OMARCHY_PATH/logo.svg, with a
 # transparent margin so it takes most of the screen's width), hold it, fly
-# off as a murmuration and draw it again. The logo is painted in bands of the
-# default wallpaper's sunset (Tokyo Night's 0-liftoff: purple, red, orange,
-# yellow), whatever the theme; cbirds keeps up to eight colors of a picture,
-# and a bird keeps its color while it flies. Other terminals have no sprites,
-# so there the branding text (~/.config/omarchy/branding/screensaver.txt)
-# itself takes off letter by letter and lands back, which looks blocky but
-# works in braille.
+# off as a murmuration and draw it again. The logo is painted in the colors
+# of the default wallpaper's sunset (Tokyo Night's 0-liftoff: purple, red,
+# orange, yellow), blended, whatever the theme; cbirds keeps up to eight
+# colors of a picture, and a bird keeps its color while it flies. Other
+# terminals have no sprites, so there the branding text
+# (~/.config/omarchy/branding/screensaver.txt) itself takes off letter by
+# letter and lands back, which looks blocky but works in braille.
 #
 # cbirds holds a picture 30 to 45 seconds before letting go, which on a
 # screensaver reads as frozen, and has no option for it. So cbirds is built
@@ -31,9 +31,10 @@
 # replacement pads the text to the middle of the window first, once the
 # window has its real size. `cbirds --screensaver` quits on any key, click or
 # pointer movement itself; the replacement still quits when the window loses
-# focus, as Omarchy's does. The launcher itself is Omarchy's and still
-# requires ttfx to be installed. The check requires the session to actually
-# run the replacement.
+# focus, as Omarchy's does. Its background is black, as Omarchy's, unless the
+# theme is light (omarchy-theme-color mode), which gets its own background.
+# The launcher itself is Omarchy's and still requires ttfx to be installed.
+# The check requires the session to actually run the replacement.
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -78,7 +79,12 @@ trap exit_screensaver SIGINT SIGTERM SIGHUP SIGQUIT
 # Whatever ends this script, the pointer comes back.
 trap show_cursor EXIT
 
-printf '\033]11;rgb:00/00/00\007'
+# Black behind the flock, as Omarchy's; with a light theme, its background.
+bg=000000
+if [[ \$(omarchy-theme-color mode 2>/dev/null) == light ]]; then
+  bg=\$(omarchy-theme-color background 2>/dev/null) && [[ \$bg =~ ^#[0-9A-Fa-f]{6}\$ ]] && bg=\${bg#\#} || bg=ffffff
+fi
+printf '\033]11;rgb:%s/%s/%s\007' "\${bg:0:2}" "\${bg:2:2}" "\${bg:4:2}"
 
 hyprctl eval 'hl.config({ cursor = { invisible = true } })' &>/dev/null || hyprctl keyword cursor:invisible true &>/dev/null
 
@@ -92,17 +98,18 @@ work=\$(mktemp -d "\${XDG_RUNTIME_DIR:-/tmp}/omarchy-screensaver.XXXXXX")
 
 case \$TERM in
 xterm-kitty | xterm-ghostty)
-  # Small sprite birds drawing the logo, most of the screen wide, in bands of
-  # the default wallpaper's sunset, purple to yellow.
+  # Sprite birds drawing the logo, most of the screen wide, in the default
+  # wallpaper's sunset, purple to yellow: bands, their pixels scattered (no
+  # new colors) so each blends into the next instead of making stripes.
   bands=(xc:'#613388' xc:'#9b3c87' xc:'#c83f58' xc:'#ea585e' xc:'#fc9c5a' xc:'#ffc65c')
   sed 's/#000/#fff/g' "\${OMARCHY_PATH:-/usr/share/omarchy}/logo.svg" | rsvg-convert -w 1200 -o "\$work/mask.png"
   height=\$(magick identify -format %h "\$work/mask.png")
   # The mask's alpha cuts the logo out of the bands; -compose over again
   # before -extent, which composes too.
-  magick -size \$((1200 / \${#bands[@]} + 1))x"\$height" "\${bands[@]}" +append -crop 1200x"\$height"+0+0 +repage \\
+  magick -size \$((1200 / \${#bands[@]} + 1))x"\$height" "\${bands[@]}" +append -crop 1200x"\$height"+0+0 +repage -spread 120 \\
     "\$work/mask.png" -compose CopyOpacity -composite \\
     -compose over -background none -gravity center -extent 1400x875 +repage PNG32:"\$work/logo.png"
-  flock=(--picture "\$work/logo.png" --render kitty --shape bird -n 1800 --size 10 --hold 6)
+  flock=(--picture "\$work/logo.png" --render kitty --shape bird -n 1150 --size 30 --hold 6)
   ;;
 *)
   # The text in the middle of the window: cbirds puts it where it's printed.
