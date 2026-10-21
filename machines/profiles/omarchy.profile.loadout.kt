@@ -22,7 +22,7 @@ val omarchyProfile = profile(name = "omarchy") {
         jetbrainsToolbox.variant(name = "linux"),
         tpack.variant(name = "linux"),
     )
-    install(ngrok)
+    install(ngrok, kotlinLsp)
     via(brew) {
         install(just, vim, scrcpy)
         install(awscli, trashCli, yq)

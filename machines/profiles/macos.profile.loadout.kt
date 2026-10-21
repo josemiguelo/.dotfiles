@@ -23,7 +23,7 @@ val macos = profile(name = "macos") {
     via(brewTapCask) {
         install(tpack, voxtype)
     }
-    install(ngrok, claude)
+    install(ngrok, claude, kotlinLsp)
 
     run(Dotfiles.all)
     run(setupGit, skillsRepo, workmuxSetup, nvimPlugins, downloadFonts)

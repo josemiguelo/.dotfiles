@@ -29,6 +29,14 @@ return {
       },
     },
     config = function()
+      -- Mason can't download kotlin-lsp (mason-registry#17523), so loadout
+      -- installs it here (.loadout/install-kotlin-lsp.sh). A Mason install,
+      -- once its fix lands, still comes first.
+      local kotlin_lsp_dir = vim.env.HOME .. "/.local/share/kotlin-lsp/current"
+      if not vim.env.KOTLIN_LSP_DIR and vim.fn.isdirectory(kotlin_lsp_dir) == 1 then
+        vim.env.KOTLIN_LSP_DIR = kotlin_lsp_dir
+      end
+
       require("kotlin").setup({
         root_markers = {
           "settings.gradle",

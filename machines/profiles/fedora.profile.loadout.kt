@@ -31,7 +31,7 @@ val fedora = profile(name = "fedora") {
         jetbrainsToolbox.variant(name = "linux"),
         tpack.variant(name = "linux"),
     )
-    install(ngrok, claude)
+    install(ngrok, claude, kotlinLsp)
     via(brew) {
         install(yazi, eza, atuin, gitDelta, chezmoi)
         install(yq, awscli, trashCli)
