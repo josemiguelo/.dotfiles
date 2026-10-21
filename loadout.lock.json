@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.1.0",
-  "sources": "3b232cc04c1a05b44ddf249d59fe63903eb3c65416c1ee65730961edd3d88cb3",
+  "sources": "90c6a4a4fcb1fec9110f716447fd015c21997c5d14c2a1775badfce9007e6c8b",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1206,10 +1206,10 @@
         "check": "file:omarchy-activity-monitor-size.sh check \"$@\"",
         "origin": "maintenance/omarchy/hyprland"
       },
-      "omarchy-agent-launchers-prune": {
-        "description": "only the Omarchy agent launchers in use",
-        "file": "omarchy-agent-launchers-prune.sh",
-        "check": "file:omarchy-agent-launchers-prune.sh check \"$@\"",
+      "omarchy-agents-prune": {
+        "description": "only the Omarchy agent launchers and configs in use",
+        "file": "omarchy-agents-prune.sh",
+        "check": "file:omarchy-agents-prune.sh check \"$@\"",
         "origin": "maintenance/omarchy/apps"
       },
       "omarchy-bar": {
@@ -1805,7 +1805,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
-          "omarchy-agent-launchers-prune claude codex gh gemini",
+          "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
           "omarchy-webapp-google-calendar",
@@ -1930,7 +1930,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
-          "omarchy-agent-launchers-prune claude codex gh gemini",
+          "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
           "omarchy-webapp-google-calendar",
