@@ -1,5 +1,6 @@
 // The Omarchy shell: plugins, the bar (position, widgets, icons, the menu
-// button), the Pomodoro timer and Keystroke's Windows extension.
+// button), the Pomodoro timer, Keystroke's Windows extension and how long
+// the session idles before it locks.
 package repo
 
 import loadout.dsl.*
@@ -56,6 +57,14 @@ object OmarchyShell {
     ) {
         managedBy("omarchy-pomodoro.sh")
         runAfter(plugins, barIcons)
+    }
+
+    /** Seconds idle before the session locks and the display goes off: `"1000"`. */
+    val idle = script(
+        name = "omarchy-idle",
+        description = "the session locks after the opt-in's seconds idle",
+    ) {
+        managedBy("omarchy-idle.sh")
     }
 
     val keystrokeWindows = script(

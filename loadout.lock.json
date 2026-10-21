@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.1.0",
-  "sources": "cf35cb652253da3c9b0a7b756cd7be5266501ac6e7ac59fc1ef4bb9b28015df6",
+  "sources": "c69cb579e163523bce767c8a2aa1f11bde2d5b86f7ccf88c253b2e6c603d6e58",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1328,6 +1328,12 @@
         "check": "file:omarchy-hypr-config.sh check \"$@\"",
         "origin": "maintenance/omarchy/hyprland"
       },
+      "omarchy-idle": {
+        "description": "the session locks after the opt-in's seconds idle",
+        "file": "omarchy-idle.sh",
+        "check": "file:omarchy-idle.sh check \"$@\"",
+        "origin": "maintenance/omarchy/shell"
+      },
       "omarchy-keyboard-backlight-guard": {
         "description": "keyboard backlight comes back after sleep",
         "file": "omarchy-keyboard-backlight-guard.sh",
@@ -1835,6 +1841,7 @@
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-screensaver-birds",
+          "omarchy-idle 1000",
           "omarchy-dictation",
           "omarchy-dictation-gpu",
           "setup-ssh id_ed25519",
@@ -1962,6 +1969,7 @@
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-screensaver-birds",
+          "omarchy-idle 1000",
           "omarchy-dictation",
           "omarchy-dictation-gpu",
           "setup-ssh id_ed25519",
