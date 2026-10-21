@@ -52,6 +52,21 @@ object Dotfiles {
         maintainOnly()
     }
 
+    /**
+     * loadout 3.1.0 compiled the manifests into the checkout's build/;
+     * kotlin-lsp indexes it beside the sources and reports every declaration
+     * twice. loadout 3.1.1 builds outside the repo, so a checkout compiled
+     * before it keeps a stale build/ until this removes it.
+     */
+    val oldBuildDir = script(
+        name = "dotfiles-old-build-dir",
+        description = "remove the build folder loadout 3.1.0 left in the chezmoi checkout",
+    ) {
+        run("rm -rf $CHECKOUT/build")
+        check("test ! -d $CHECKOUT/build")
+        transitional()
+    }
+
     /** What every machine runs for its dotfiles checkout: `run(Dotfiles.all)`. */
-    val all = listOf(pull, push, sshRemote)
+    val all = listOf(pull, push, sshRemote, oldBuildDir)
 }
