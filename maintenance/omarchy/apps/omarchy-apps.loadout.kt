@@ -56,11 +56,11 @@ object Omarchy {
         runAfter(lazydocker)
     }
 
-    /** Omarchy's ~/.local/bin agent launchers, pruned to the ones the machine names. */
-    val agentLaunchersPrune = script(
-        name = "omarchy-agent-launchers-prune",
-        description = "only the Omarchy agent launchers in use",
+    /** Omarchy's agent launchers (~/.local/bin) and seeded configs (~/.config), pruned to the agents the machine names. */
+    val agentsPrune = script(
+        name = "omarchy-agents-prune",
+        description = "only the Omarchy agent launchers and configs in use",
     ) {
-        managedBy("omarchy-agent-launchers-prune.sh")
+        managedBy("omarchy-agents-prune.sh")
     }
 }
