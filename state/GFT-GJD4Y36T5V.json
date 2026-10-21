@@ -4,8 +4,8 @@
   "os": "macos",
   "distro": null,
   "arch": "arm64",
-  "toolVersion": "3.0.0",
-  "updatedAt": "2026-10-20T21:02:44.900052Z",
+  "toolVersion": "3.1.0",
+  "updatedAt": "2026-10-21T01:25:58.727656Z",
   "programs": {
     "1password-cli": {
       "status": "installed",
@@ -260,7 +260,7 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-08-30T19:17:01.696908Z",
       "exitCode": 0
     },
