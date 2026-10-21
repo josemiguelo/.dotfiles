@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.1.0",
-  "sources": "c69cb579e163523bce767c8a2aa1f11bde2d5b86f7ccf88c253b2e6c603d6e58",
+  "sources": "8a2b3ade238653b590b0df877f5fe75a4620ef96a81bfd046098f26d6c88eb0f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -538,6 +538,24 @@
           "brew-cask": {}
         },
         "origin": "configs/private_dot_config/kitty"
+      },
+      "kotlin-lsp": {
+        "description": "Kotlin language server for Neovim (kotlin.nvim)",
+        "version": {
+          "command": "file:.loadout/outdated-kotlin-lsp.sh version",
+          "regex": "([0-9]+\\.[0-9][0-9.]*)",
+          "origin": "configs/private_dot_config/nvim"
+        },
+        "install": {
+          "custom": {
+            "command": "file:.loadout/install-kotlin-lsp.sh"
+          }
+        },
+        "outdated": {
+          "command": "file:.loadout/outdated-kotlin-lsp.sh",
+          "upgrade": "file:.loadout/outdated-kotlin-lsp.sh update"
+        },
+        "origin": "configs/private_dot_config/nvim"
       },
       "lazydocker": {
         "install": {
@@ -1684,6 +1702,7 @@
           "jordanbaird-ice": "brew-cask",
           "jq": "brew",
           "kitty": "brew-cask",
+          "kotlin-lsp": "custom",
           "lazydocker": "brew",
           "lazygit": "brew",
           "lunar": "brew-cask",
@@ -1766,6 +1785,7 @@
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",
+          "kotlin-lsp": "custom",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "mise": "omarchy",
@@ -1886,6 +1906,7 @@
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",
+          "kotlin-lsp": "custom",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "libvirt": "omarchy",

@@ -16,3 +16,17 @@ val nvimPlugins = script(
     runAfter(Mise.tools)
     updatesManagedBy(".loadout/outdated-plugins.sh")
 }
+
+// kotlin.nvim's server, from its GitHub release while Mason's download link
+// is dead; kotlin.lua points the plugin at it. Its builds expire weeks after
+// release, so the update check keeps it current.
+val kotlinLsp = program(
+    name = "kotlin-lsp",
+    description = "Kotlin language server for Neovim (kotlin.nvim)",
+) {
+    custom {
+        installedBy(".loadout/install-kotlin-lsp.sh")
+    }
+    version(command = runScript(".loadout/outdated-kotlin-lsp.sh version"))
+    updatesManagedBy(".loadout/outdated-kotlin-lsp.sh")
+}
