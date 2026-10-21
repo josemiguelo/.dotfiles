@@ -13,7 +13,7 @@ val claude = program(
     }
 
     // A fresh shell may not have ~/.local/bin on PATH yet.
-    path("\$HOME/.local/bin")
+    path("$HOME/.local/bin")
     version(command = "claude --version")
 
     // Is the binary behind the latest published release?

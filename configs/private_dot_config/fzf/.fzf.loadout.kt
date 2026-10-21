@@ -6,7 +6,9 @@ import loadout.dsl.*
 val fzf = program(name = "fzf") {
     installVia(
         brew,
-        dnf,
+        dnf {
+            spare(reason = "for a Fedora machine; the fedora profile doesn't install fzf")
+        },
         omarchy,
     )
 }

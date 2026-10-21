@@ -67,8 +67,44 @@ object OmarchyShell {
     }
 }
 
+/**
+ * The bar this repo's Omarchy machines share: its plugins, which icons it
+ * shows and where the widgets sit. A profile calls `omarchyBar()`, so the
+ * settings live beside the scripts that apply them.
+ */
+fun MachineScope.omarchyBar() {
+    run(OmarchyShell.bar, "top", "24", "tornikegomareli.spaces")
+    run(
+        OmarchyShell.plugins,
+        "https://github.com/evindor/keystroke.git",
+        "https://github.com/jankeesvw/omarchy-notification-center.git",
+        "https://github.com/tornikegomareli/omarchy-spaces.git",
+        "https://github.com/binoymanoj/pomodoro-omarchy.git",
+        "https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git",
+        "https://github.com/sumdahl/omarchy-plugin-media.git",
+    )
+    run(
+        OmarchyShell.barIcons,
+        "josemiguelo.menu-button", "josemiguelo.workspace-layout", "josemiguelo.theme-mode",
+        "omarchy.monitor", "omarchy.bluetooth", "omarchy.network", "omarchy.audio",
+        "omarchy.power", "omarchy.agents", "omarchy.system-update", "omarchy.indicators",
+        "omarchy.weather", "omarchy.tray",
+        "jankeesvw.notification-center", "io.github.zeus-deus.voxtype", "io.github.sumdahl.media",
+        "pomodoro-omarchy", "omarchy.clock", "tornikegomareli.spaces",
+    )
+    run(
+        OmarchyShell.barWidgets,
+        widget("josemiguelo.workspace-layout").left.before("tornikegomareli.spaces"),
+        widget("josemiguelo.menu-button").left.before("josemiguelo.workspace-layout"),
+        widget("io.github.sumdahl.media").right.after("omarchy.tray"),
+        widget("omarchy.power").right.after("omarchy.monitor"),
+        widget("josemiguelo.theme-mode").right.before("omarchy.tray"),
+    )
+    run(OmarchyShell.menuButton, OmarchyShell.keystrokeWindows, OmarchyShell.pomodoro)
+}
+
 /** A typed argument for OmarchyShell.barWidgets: `widget("x").left.before("y")` reads as the bar does. */
-class Widget(private val id: String) {
+private class Widget(private val id: String) {
     private var section = ""
     val left get() = apply { section = "left" }
     val right get() = apply { section = "right" }
@@ -76,4 +112,4 @@ class Widget(private val id: String) {
     fun after(neighbour: String) = "$id $section after $neighbour"
 }
 
-fun widget(id: String) = Widget(id)
+private fun widget(id: String) = Widget(id)

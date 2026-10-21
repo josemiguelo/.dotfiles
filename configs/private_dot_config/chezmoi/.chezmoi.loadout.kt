@@ -11,7 +11,7 @@ val chezmoi = program(name = "chezmoi") {
     )
 }
 
-private const val CHECKOUT = "\$HOME/.local/share/chezmoi"
+private const val CHECKOUT = "$HOME/.local/share/chezmoi"
 private const val HTTPS = "https://github.com/josemiguelo/.dotfiles.git"
 private const val SSH = "git@github.com:josemiguelo/.dotfiles.git"
 

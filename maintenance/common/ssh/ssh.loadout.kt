@@ -11,8 +11,8 @@ val setupSsh = script(
     file("setup-ssh.sh")
     // The agent-unit clause is Linux-only; uname short-circuits it on macOS.
     check(
-        "test -f \$HOME/.ssh/\$1",
-        "grep -q 'AddKeysToAgent yes' \$HOME/.ssh/config",
+        "test -f $HOME/.ssh/\$1",
+        "grep -q 'AddKeysToAgent yes' $HOME/.ssh/config",
         "test \"\$(uname -s)\" != Linux || systemctl --user -q is-enabled ssh-agent.socket",
     )
 }

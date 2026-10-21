@@ -9,6 +9,6 @@ val ngrok = program(
     custom {
         installedBy("install-ngrok.sh")
     }
-    path("\$HOME/.local/bin")
+    path("$HOME/.local/bin")
     version(command = "ngrok version")
 }

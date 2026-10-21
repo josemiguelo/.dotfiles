@@ -11,8 +11,10 @@ val t2Macbook = profile(name = "t2-macbook") {
     extends(omarchyProfile)
 
     install(t2fanrd)
-    install(archVirtualization) // omarchy, their only variant
-    install(omarchy, solaar)
+    via(omarchy) {
+        install(archVirtualization)
+        install(solaar)
+    }
 
     sshKey("id_ed25519")
     run(omarchySshd, "josemiguelo")
