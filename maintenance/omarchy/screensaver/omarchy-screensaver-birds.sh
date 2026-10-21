@@ -2,13 +2,12 @@
 # Omarchy's screensaver as a flock of birds (github.com/clainstone/cbirds)
 # instead of a random TTE effect from ttfx. In Kitty and Ghostty, small
 # sprite birds draw Omarchy's logo ($OMARCHY_PATH/logo.svg, with a
-# transparent margin so it sits in the middle third), hold it, fly off as a
-# murmuration and draw it again. The logo is painted in bands of the current
-# theme's colors (its colors.toml: red, orange, yellow, green, cyan, blue,
-# magenta, read at every start, so it follows a theme change), white when the
-# theme names none; cbirds keeps up to eight colors of a picture, and a bird
-# keeps its color while it flies. Other terminals have no sprites, so
-# there the branding text (~/.config/omarchy/branding/screensaver.txt)
+# transparent margin so it takes most of the screen's width), hold it, fly
+# off as a murmuration and draw it again. The logo is painted in bands of the
+# default wallpaper's sunset (Tokyo Night's 0-liftoff: purple, red, orange,
+# yellow), whatever the theme; cbirds keeps up to eight colors of a picture,
+# and a bird keeps its color while it flies. Other terminals have no sprites,
+# so there the branding text (~/.config/omarchy/branding/screensaver.txt)
 # itself takes off letter by letter and lands back, which looks blocky but
 # works in braille.
 #
@@ -93,23 +92,17 @@ work=\$(mktemp -d "\${XDG_RUNTIME_DIR:-/tmp}/omarchy-screensaver.XXXXXX")
 
 case \$TERM in
 xterm-kitty | xterm-ghostty)
-  # Small sprite birds drawing the logo, a third of the screen wide, in bands
-  # of the theme's colors.
-  theme=~/.local/state/omarchy/current/theme/colors.toml
-  bands=()
-  for color in red orange yellow green cyan blue magenta; do
-    hex=\$(sed -n "s/^\$color *= *\"\(#[0-9a-fA-F]\{6\}\)\"/\1/p" "\$theme" 2>/dev/null)
-    [[ -n \$hex ]] && bands+=("xc:\$hex")
-  done
-  ((\${#bands[@]})) || bands=(xc:white)
+  # Small sprite birds drawing the logo, most of the screen wide, in bands of
+  # the default wallpaper's sunset, purple to yellow.
+  bands=(xc:'#613388' xc:'#9b3c87' xc:'#c83f58' xc:'#ea585e' xc:'#fc9c5a' xc:'#ffc65c')
   sed 's/#000/#fff/g' "\${OMARCHY_PATH:-/usr/share/omarchy}/logo.svg" | rsvg-convert -w 1200 -o "\$work/mask.png"
   height=\$(magick identify -format %h "\$work/mask.png")
   # The mask's alpha cuts the logo out of the bands; -compose over again
   # before -extent, which composes too.
   magick -size \$((1200 / \${#bands[@]} + 1))x"\$height" "\${bands[@]}" +append -crop 1200x"\$height"+0+0 +repage \\
     "\$work/mask.png" -compose CopyOpacity -composite \\
-    -compose over -background none -gravity center -extent 2000x800 +repage PNG32:"\$work/logo.png"
-  flock=(--picture "\$work/logo.png" --render kitty --shape bird -n 1500 --size 6 --hold 6)
+    -compose over -background none -gravity center -extent 1400x875 +repage PNG32:"\$work/logo.png"
+  flock=(--picture "\$work/logo.png" --render kitty --shape bird -n 1800 --size 10 --hold 6)
   ;;
 *)
   # The text in the middle of the window: cbirds puts it where it's printed.
