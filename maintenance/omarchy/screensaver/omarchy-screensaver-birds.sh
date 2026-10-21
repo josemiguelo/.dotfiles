@@ -1,15 +1,8 @@
 #!/bin/sh
 # Omarchy's screensaver as a flock of birds (github.com/clainstone/cbirds)
-# instead of a random TTE effect from ttfx. In Kitty and Ghostty,
-# sprite birds draw Omarchy's logo ($OMARCHY_PATH/logo.svg, with a
-# transparent margin so it takes most of the screen's width), hold it, fly
-# off as a murmuration and draw it again. The logo is painted in the colors
-# of the default wallpaper's sunset (Tokyo Night's 0-liftoff: purple, red,
-# orange, yellow), blended, whatever the theme; cbirds keeps up to eight
-# colors of a picture, and a bird keeps its color while it flies. Other
-# terminals have no sprites, so there the branding text
-# (~/.config/omarchy/branding/screensaver.txt) itself takes off letter by
-# letter and lands back, which looks blocky but works in braille.
+# instead of a random TTE effect from ttfx. The screensaver itself is
+# ./omarchy-screensaver (what it draws, and how, is described there); this
+# builds cbirds and puts that file in Omarchy's command's place.
 #
 # cbirds holds a picture 30 to 45 seconds before letting go, which on a
 # screensaver reads as frozen, and has no option for it. So cbirds is built
@@ -25,16 +18,10 @@
 # takes the option.
 #
 # omarchy-launch-screensaver runs `omarchy-screensaver` in a terminal it
-# starts from Hyprland, so a replacement in the directory
-# omarchy-command-overrides puts first on that PATH takes its place. cbirds
-# lays text out as a terminal prints it, from the top-left corner, so the
-# replacement pads the text to the middle of the window first, once the
-# window has its real size. `cbirds --screensaver` quits on any key, click or
-# pointer movement itself; the replacement still quits when the window loses
-# focus, as Omarchy's does. Its background is black, as Omarchy's, unless the
-# theme is light (omarchy-theme-color mode), which gets its own background.
-# The launcher itself is Omarchy's and still requires ttfx to be installed.
-# The check requires the session to actually run the replacement.
+# starts from Hyprland, so a copy of ./omarchy-screensaver in the directory
+# omarchy-command-overrides puts first on that PATH takes its place. The
+# launcher itself is Omarchy's and still requires ttfx to be installed. The
+# check requires the session to actually run the replacement.
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -42,6 +29,7 @@ COMMAND=omarchy-screensaver
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PROBE=$HERE/../lib/hypr-option.lua
 . "$HERE/../lib/omarchy-overrides-lib.sh"
+SOURCE=$HERE/$COMMAND
 WRAPPER=$OVERRIDES_DIR/$COMMAND
 REPO=https://github.com/clainstone/cbirds.git
 CHECKOUT=$HOME/Repos/gh/clainstone/cbirds
@@ -49,89 +37,13 @@ TAG=v1.7.0
 TAG_COMMIT=dc22807b132c9a8ca819413faacf25973ecb376a
 BRANCH=omarchy-hold
 PATCH=$HERE/cbirds-hold.patch
+# The screensaver runs this path; keep the two in step.
 BIN=$HOME/.local/bin/cbirds
 BUILT="cbirds ${TAG#v}+hold"
 
-wrapper_text() {
-  cat <<WRAPPER_EOF
-#!/bin/bash
-# Managed by loadout (omarchy-screensaver-birds): Omarchy's screensaver with
-# the logo flocking away as birds and coming back (cbirds), in place of
-# ttfx's effects.
-
-screensaver_in_focus() {
-  hyprctl activewindow -j | jq -e '.class == "org.omarchy.screensaver"' >/dev/null 2>&1
-}
-
-show_cursor() {
-  hyprctl eval 'hl.config({ cursor = { invisible = false } })' &>/dev/null || hyprctl keyword cursor:invisible false &>/dev/null || true
-}
-
-exit_screensaver() {
-  show_cursor
-  [[ -n \${watcher:-} ]] && kill "\$watcher" 2>/dev/null
-  pkill -x cbirds 2>/dev/null
-  pkill -f '[o]rg.omarchy.screensaver' 2>/dev/null
-  exit 0
-}
-
-trap exit_screensaver SIGINT SIGTERM SIGHUP SIGQUIT
-# Whatever ends this script, the pointer comes back.
-trap show_cursor EXIT
-
-# Black behind the flock, as Omarchy's; with a light theme, its background.
-bg=000000
-if [[ \$(omarchy-theme-color mode 2>/dev/null) == light ]]; then
-  bg=\$(omarchy-theme-color background 2>/dev/null) && [[ \$bg =~ ^#[0-9A-Fa-f]{6}\$ ]] && bg=\${bg#\#} || bg=ffffff
-fi
-printf '\033]11;rgb:%s/%s/%s\007' "\${bg:0:2}" "\${bg:2:2}" "\${bg:4:2}"
-
-hyprctl eval 'hl.config({ cursor = { invisible = true } })' &>/dev/null || hyprctl keyword cursor:invisible true &>/dev/null
-
-# Start once the window has its real size, not the pty's first 80x24.
-deadline=\$((SECONDS + 2))
-while ((SECONDS < deadline)) && [[ \$(stty size 2>/dev/null) == "24 80" ]]; do
-  sleep 0.02
-done
-
-work=\$(mktemp -d "\${XDG_RUNTIME_DIR:-/tmp}/omarchy-screensaver.XXXXXX")
-
-case \$TERM in
-xterm-kitty | xterm-ghostty)
-  # Sprite birds drawing the logo, most of the screen wide, in the default
-  # wallpaper's sunset, purple to yellow: bands, their pixels scattered (no
-  # new colors) so each blends into the next instead of making stripes.
-  bands=(xc:'#613388' xc:'#9b3c87' xc:'#c83f58' xc:'#ea585e' xc:'#fc9c5a' xc:'#ffc65c')
-  sed 's/#000/#fff/g' "\${OMARCHY_PATH:-/usr/share/omarchy}/logo.svg" | rsvg-convert -w 1200 -o "\$work/mask.png"
-  height=\$(magick identify -format %h "\$work/mask.png")
-  # The mask's alpha cuts the logo out of the bands; -compose over again
-  # before -extent, which composes too.
-  magick -size \$((1200 / \${#bands[@]} + 1))x"\$height" "\${bands[@]}" +append -crop 1200x"\$height"+0+0 +repage -spread 120 \\
-    "\$work/mask.png" -compose CopyOpacity -composite \\
-    -compose over -background none -gravity center -extent 1400x875 +repage PNG32:"\$work/logo.png"
-  flock=(--picture "\$work/logo.png" --render kitty --shape bird -n 1150 --size 30 --hold 6)
-  ;;
-*)
-  # The text in the middle of the window: cbirds puts it where it's printed.
-  branding=~/.config/omarchy/branding/screensaver.txt
-  read -r rows cols < <(stty size)
-  width=\$(wc -L < "\$branding")
-  height=\$(wc -l < "\$branding")
-  {
-    for ((i = 0; i < (rows - height) / 2; i++)); do echo; done
-    sed "s/^/\$(printf '%*s' \$((cols > width ? (cols - width) / 2 : 0)) '')/" "\$branding"
-  } > "\$work/text"
-  flock=(--text "\$work/text")
-  ;;
-esac
-
-# Gone from focus, the screensaver goes, as Omarchy's does.
-while screensaver_in_focus; do sleep 1; done && pkill -x cbirds &
-watcher=\$!
-"$BIN" --screensaver "\${flock[@]}"
-rm -rf "\$work"
-exit_screensaver
-WRAPPER_EOF
+die() {
+  echo "$@" >&2
+  exit 1
 }
 
 built() {
@@ -154,14 +66,11 @@ branch_exists() {
 }
 
 installed() {
-  [ -x "$WRAPPER" ] && [ "$(cat "$WRAPPER")" = "$(wrapper_text)" ] && override_active "$COMMAND"
+  [ -x "$WRAPPER" ] && cmp -s "$SOURCE" "$WRAPPER" && override_active "$COMMAND"
 }
 
-case "${1:-install}" in
-check)
-  cloned && patched && built && installed
-  ;;
-install)
+# The checkout, pointing at $REPO, with $TAG fetched and still $TAG_COMMIT.
+clone() {
   if [ ! -d "$CHECKOUT/.git" ]; then
     mkdir -p "$(dirname "$CHECKOUT")"
     git clone --quiet "$REPO" "$CHECKOUT"
@@ -170,32 +79,51 @@ install)
   git -C "$CHECKOUT" rev-parse --verify --quiet "$TAG_COMMIT^{commit}" >/dev/null ||
     git -C "$CHECKOUT" fetch --quiet origin tag "$TAG"
   [ "$(git -C "$CHECKOUT" rev-parse "$TAG^{commit}")" = "$TAG_COMMIT" ] ||
-    { echo "$REPO $TAG isn't $TAG_COMMIT any more" >&2; exit 1; }
-  if ! branch_exists; then
-    # A worktree of its own, so the patch is committed without touching the
-    # checkout's working copy.
-    tmp=$(mktemp -d)
-    trap 'git -C "$CHECKOUT" worktree remove --force "$tmp" 2>/dev/null; rm -rf "$tmp"' EXIT
-    git -C "$CHECKOUT" worktree add --quiet -b "$BRANCH" "$tmp" "$TAG_COMMIT"
-    git -C "$tmp" apply --index "$PATCH"
-    git -C "$tmp" commit --quiet -m "Add --hold SECONDS: how long a sign is held
+    die "$REPO $TAG isn't $TAG_COMMIT any more"
+}
+
+# $BRANCH: the tag with the patch committed on top. In a worktree of its own,
+# so the patch is committed without touching the checkout's working copy.
+create_branch() {
+  tmp=$(mktemp -d)
+  trap 'git -C "$CHECKOUT" worktree remove --force "$tmp" 2>/dev/null; rm -rf "$tmp"' EXIT
+  git -C "$CHECKOUT" worktree add --quiet -b "$BRANCH" "$tmp" "$TAG_COMMIT"
+  git -C "$tmp" apply --index "$PATCH"
+  git -C "$tmp" commit --quiet -m "Add --hold SECONDS: how long a sign is held
 
 Managed by loadout (omarchy-screensaver-birds), from cbirds-hold.patch."
-    git -C "$CHECKOUT" worktree remove "$tmp"
-    trap - EXIT
-  fi
-  patched || { echo "$CHECKOUT's $BRANCH isn't $TAG with cbirds-hold.patch: move it aside (git branch -m $BRANCH …) and install again" >&2; exit 1; }
-  if ! built; then
-    src=$(mktemp -d)
-    trap 'rm -rf "$src"' EXIT
-    git -C "$CHECKOUT" archive "$BRANCH" | tar -x -C "$src"
-    make -s -C "$src" install PREFIX="$HOME/.local"
-    built || { echo "$BIN doesn't say $BUILT after the build" >&2; exit 1; }
-  fi
+  git -C "$CHECKOUT" worktree remove "$tmp"
+  trap - EXIT
+}
+
+# cbirds from the branch's tree into ~/.local/bin.
+build() {
+  src=$(mktemp -d)
+  trap 'rm -rf "$src"' EXIT
+  git -C "$CHECKOUT" archive "$BRANCH" | tar -x -C "$src"
+  make -s -C "$src" install PREFIX="$HOME/.local"
+  rm -rf "$src"
+  trap - EXIT
+  built || die "$BIN doesn't say $BUILT after the build"
+}
+
+install_wrapper() {
   mkdir -p "$OVERRIDES_DIR"
-  wrapper_text > "$WRAPPER"
+  cp "$SOURCE" "$WRAPPER"
   chmod 755 "$WRAPPER"
-  installed || { echo "the session doesn't run $WRAPPER: is omarchy-command-overrides installed?" >&2; exit 1; }
+  installed || die "the session doesn't run $WRAPPER: is omarchy-command-overrides installed?"
+}
+
+case "${1:-install}" in
+check)
+  cloned && patched && built && installed
+  ;;
+install)
+  clone
+  branch_exists || create_branch
+  patched || die "$CHECKOUT's $BRANCH isn't $TAG with cbirds-hold.patch: move it aside (git branch -m $BRANCH …) and install again"
+  built || build
+  install_wrapper
   echo "Try it: omarchy-launch-screensaver force"
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
