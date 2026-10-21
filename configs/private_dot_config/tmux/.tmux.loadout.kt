@@ -27,7 +27,7 @@ val tpack = program(
     // still be the cask's, which remove-brew-tmux takes away after this.
     custom(name = "linux") {
         installedBy(".loadout/install-tpack.sh")
-        version(command = "\$HOME/.local/bin/tpack --version")
+        version(command = "$HOME/.local/bin/tpack --version")
     }
 }
 

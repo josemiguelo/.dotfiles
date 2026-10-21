@@ -7,7 +7,9 @@ val solaar = program(
     description = "Logitech device manager",
 ) {
     installVia(
-        dnf,
+        dnf {
+            spare(reason = "for a Fedora machine; the fedora profile doesn't install solaar")
+        },
         omarchy,
     )
 }

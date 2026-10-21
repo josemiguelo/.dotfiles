@@ -86,6 +86,7 @@ val virtualization = program(
     name = "virtualization",
     description = "virtualization stack (libvirt, qemu, virt-manager)",
 ) {
+    spare(reason = "Fedora's half of setup-libvirt; no machine runs Fedora today")
     installVia(
         dnf {
             managedBy("virtualization.sh")
@@ -107,14 +108,15 @@ val setupLibvirt = script(
     // The source script ran usermod as root ($(whoami) bug); this is the
     // login user, as intended.
     variant(name = "fedora") {
+        spare(reason = "no machine runs Fedora today")
         run(
             "sudo systemctl enable libvirtd",
             "sudo systemctl start libvirtd",
-            "sudo usermod -a -G kvm \"\$USER\"",
+            "sudo usermod -a -G kvm \"$USER\"",
         )
         check(
             "systemctl is-enabled libvirtd >/dev/null 2>&1",
-            "id -nG \"\$USER\" | grep -qw kvm",
+            "id -nG \"$USER\" | grep -qw kvm",
         )
         runAfter(virtualization)
     }

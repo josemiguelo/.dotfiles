@@ -14,9 +14,10 @@ val jetbrainsToolbox = program(
         managedBy("install-toolbox.sh", version = VERSION)
     }
 
-    // macOS: the cask. No machine installs it yet.
     installVia(
-        brewCask,
+        brewCask {
+            spare(reason = "for macOS; no Mac installs it yet")
+        },
     )
 }
 

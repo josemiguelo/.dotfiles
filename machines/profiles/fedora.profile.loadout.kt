@@ -8,14 +8,23 @@ import loadout.dsl.*
  * runs Fedora today; this keeps one ready.
  */
 val fedora = profile(name = "fedora") {
-    install(dnf, setupDnf, dnfPluginsCore, curl, git, gcc, procpsNg, zsh, tmux)
+    spare(reason = "no machine runs Fedora today; this keeps one ready")
+
+    via(dnf) {
+        install(setupDnf, dnfPluginsCore, curl, git, gcc, procpsNg, zsh, tmux)
+        install(just, vim, vlc, anydesk)
+        install(firefox, googleChromeStable)
+    }
     install(fedoraBuildDeps)
-    install(dnf, just, vim, vlc)
-    install(firefox, googleChromeStable) // dnf, their only variant
-    install(dnf, anydesk)
-    install(dnfCopr, kitty, scrcpy)
-    install(dnfRepo, googleCloudCli, code, antigravity, onePassword, slack, teamsForLinux, sublimeText)
-    install(flatpak, flathubRemote, obsidian)
+    via(dnfCopr) {
+        install(kitty, scrcpy)
+    }
+    via(dnfRepo) {
+        install(googleCloudCli, code, antigravity, onePassword, slack, teamsForLinux, sublimeText)
+    }
+    via(flatpak) {
+        install(flathubRemote, obsidian)
+    }
 
     install(
         setupBrew.variant(name = "linux"),
@@ -23,8 +32,13 @@ val fedora = profile(name = "fedora") {
         tpack.variant(name = "linux"),
     )
     install(ngrok, claude)
-    install(brew, yazi, eza, atuin, gitDelta, chezmoi)
-    install(workmux, yq, awscli, trashCli) // brew, their only variant
+    via(brew) {
+        install(yazi, eza, atuin, gitDelta, chezmoi)
+        install(yq, awscli, trashCli)
+    }
+    via(brewTap) {
+        install(workmux)
+    }
 
     run(Dotfiles.all)
     run(setupGit, defaultShell, nvimPlugins, downloadFonts, userEnvironment, unlinkBrewGlib)

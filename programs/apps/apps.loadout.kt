@@ -157,8 +157,10 @@ val spotify = program(
     description = "Spotify music streaming",
 ) {
     installVia(
-        omarchy,
-        brewCask, // Omarchy's own repo carries it
+        omarchy, // Omarchy's own repo carries it
+        brewCask {
+            spare(reason = "for macOS; no Mac installs it yet")
+        },
     )
 }
 

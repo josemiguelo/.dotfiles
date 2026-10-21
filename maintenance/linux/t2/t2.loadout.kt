@@ -54,7 +54,11 @@ object T2 {
     ) {
         needsSudo()
         variant(name = "arch") { managedBy("hid-apple-keyboard-arch.sh") } // Limine (limine-mkinitcpio)
-        variant(name = "fedora") { managedBy("hid-apple-keyboard.sh") } // dracut
+        // dracut
+        variant(name = "fedora") {
+            spare(reason = "no machine runs Fedora today")
+            managedBy("hid-apple-keyboard.sh")
+        }
     }
 
     /** A sleep hook sends the backlight level back on resume; a udev rule puts it under systemd-backlight for reboots. */

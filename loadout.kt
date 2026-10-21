@@ -5,7 +5,7 @@ package repo
 
 import loadout.dsl.*
 
-val loadout = repo(name = "jm's machines", state = "state", configs = "configs", minToolVersion = "3.0.0", data = ::Data)
+val loadout = repo(name = "jm's machines", state = "state", configs = "configs", minToolVersion = "3.1.0", data = ::Data)
 
 /** Every per-machine setting, with its default. Dotfile templates branch on these, not on hostnames. */
 class Data : MachineData() {
