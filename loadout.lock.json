@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.1.0",
-  "sources": "90c6a4a4fcb1fec9110f716447fd015c21997c5d14c2a1775badfce9007e6c8b",
+  "sources": "1fb90820433e990c61c1b62476c1c2c57f51885abf8b416f03977f1225fc3a75",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1619,6 +1619,15 @@
         "sudo": true,
         "origin": "programs/apps"
       },
+      "workmux-setup": {
+        "description": "workmux's status-tracking hooks and skills for the agents here",
+        "file": ".loadout/setup.sh",
+        "check": "file:.loadout/setup.sh check \"$@\"",
+        "after": [
+          "programs.workmux"
+        ],
+        "origin": "configs/private_dot_config/workmux"
+      },
       "zsh-plugins": {
         "description": "antidote and the bundles .zplugins declares",
         "file": ".loadout/plugins.sh",
@@ -1691,6 +1700,7 @@
           "dotfiles-ssh-remote",
           "setup-git",
           "skills-repo",
+          "workmux-setup",
           "nvim-plugins",
           "download-fonts",
           "zsh-plugins",
@@ -1775,6 +1785,7 @@
           "dotfiles-ssh-remote",
           "setup-git",
           "skills-repo",
+          "workmux-setup",
           "default-shell",
           "nvim-plugins",
           "unlink-brew-glib",
@@ -1900,6 +1911,7 @@
           "dotfiles-ssh-remote",
           "setup-git",
           "skills-repo",
+          "workmux-setup",
           "default-shell",
           "nvim-plugins",
           "unlink-brew-glib",

@@ -26,7 +26,7 @@ val macos = profile(name = "macos") {
     install(ngrok, claude)
 
     run(Dotfiles.all)
-    run(setupGit, skillsRepo, nvimPlugins, downloadFonts)
+    run(setupGit, skillsRepo, workmuxSetup, nvimPlugins, downloadFonts)
     run(shellScripts)
     run(Mise.tools, Mise.defaultPackages, Mise.javaMacosIntegration)
     run(tmuxPlugins)

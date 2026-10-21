@@ -36,7 +36,7 @@ val omarchyProfile = profile(name = "omarchy") {
 
     // claude comes from mise here (conf.d/omarchy.toml).
     run(Dotfiles.all)
-    run(setupGit, skillsRepo, defaultShell, nvimPlugins, unlinkBrewGlib, keychronLauncherAccess)
+    run(setupGit, skillsRepo, workmuxSetup, defaultShell, nvimPlugins, unlinkBrewGlib, keychronLauncherAccess)
     run(shellScripts)
     run(Mise.tools, Mise.defaultPackages)
     run(Mise.omarchyDefaultAgent, "claude")
