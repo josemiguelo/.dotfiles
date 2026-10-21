@@ -45,5 +45,5 @@ val fedora = profile(name = "fedora") {
     run(shellScripts)
     run(tmuxPlugins, removeBrewTmux)
     run(linkJetbrainsLaunchers, removeFirefoxFlatpak)
-    run(skillsRepo)
+    run(skillsRepo, workmuxSetup)
 }
