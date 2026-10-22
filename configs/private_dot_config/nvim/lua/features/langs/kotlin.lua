@@ -25,13 +25,16 @@ return {
       "trouble.nvim",
       {
         "mason.nvim",
-        opts = { ensure_installed = { "kotlin-lsp" } },
+        -- kotlin.nvim checks for Mason, but Mason doesn't install kotlin-lsp:
+        -- its download 404s (mason-registry#17523). Once that's fixed, put
+        -- `ensure_installed = { "kotlin-lsp" }` back here and drop loadout's.
+        -- opts = { ensure_installed = { "kotlin-lsp" } },
       },
     },
     config = function()
       -- Mason can't download kotlin-lsp (mason-registry#17523), so loadout
-      -- installs it here (.loadout/install-kotlin-lsp.sh). A Mason install,
-      -- once its fix lands, still comes first.
+      -- installs it here (.loadout/install-kotlin-lsp.sh). kotlin.nvim
+      -- prefers a Mason install when one exists.
       local kotlin_lsp_dir = vim.env.HOME .. "/.local/share/kotlin-lsp/current"
       if not vim.env.KOTLIN_LSP_DIR and vim.fn.isdirectory(kotlin_lsp_dir) == 1 then
         vim.env.KOTLIN_LSP_DIR = kotlin_lsp_dir
