@@ -20,13 +20,6 @@ val bat = program(name = "bat") {
     )
 }
 
-val btop = program(name = "btop") {
-    installVia(
-        brew,
-        omarchy,
-    )
-}
-
 val eza = program(name = "eza") {
     installVia(
         brew,
