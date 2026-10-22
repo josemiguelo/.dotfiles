@@ -1,6 +1,6 @@
 // tmux: the multiplexer, its plugin manager and plugins, and (on Omarchy)
 // keeping kitty's palette across theme switches.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

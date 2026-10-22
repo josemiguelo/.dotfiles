@@ -1,5 +1,5 @@
 // btop: the activity monitor, and what its GPU boxes need to read an AMD card.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

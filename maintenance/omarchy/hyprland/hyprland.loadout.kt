@@ -1,7 +1,7 @@
 // Hyprland on Omarchy: settings, bindings, window sizes and app hotkeys,
 // each written into ~/.config/hypr/ as a managed block. The scripts source
 // ../lib/.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

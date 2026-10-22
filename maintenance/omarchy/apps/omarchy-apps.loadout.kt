@@ -1,12 +1,12 @@
 // Apps set up the Omarchy way. The apps themselves are programs; the
 // scripts source ../lib/.
-package repo
+package loadouts
 
 import loadout.dsl.*
 
 /**
  * Omarchy's own setup of apps the machine installs: `run(Omarchy.brave)`.
- * Inside, `brave` is this setup; the app is `repo.brave`.
+ * Inside, `brave` is this setup; the app is `loadouts.brave`.
  */
 object Omarchy {
     /** Omarchy's installer (Chromium extension entry), started unscaled at login, Ctrl+Shift+Space for Quick Access. */
@@ -15,7 +15,7 @@ object Omarchy {
         description = "1Password via Omarchy's installer, unscaled, Ctrl+Shift+Space Quick Access",
     ) {
         managedBy("omarchy-1password.sh")
-        runAfter(repo.onePassword, onePasswordCli)
+        runAfter(loadouts.onePassword, onePasswordCli)
     }
 
     val brave = script(
@@ -24,7 +24,7 @@ object Omarchy {
     ) {
         managedBy("omarchy-brave.sh")
         needsSudo()
-        runAfter(repo.brave)
+        runAfter(loadouts.brave)
     }
 
     /** The default browser, named by the machine: `run(Omarchy.defaultBrowser, "brave")`. */
@@ -34,7 +34,7 @@ object Omarchy {
     ) {
         file("omarchy-default-browser-arch.sh")
         check("test \"\$(omarchy default browser)\" = \"\$1\"")
-        runAfter(repo.brave, brave)
+        runAfter(loadouts.brave, brave)
     }
 
     /** Omarchy's installer (keyring, no self-update, its theme); overwrites settings.json and opens VS Code once. */

@@ -1,6 +1,6 @@
 // Fedora-only packages: the Development Tools group and the build libraries
 // language-runtime builds need. Mapped by the fedora profile.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

@@ -1,6 +1,6 @@
 // Virtualization: KVM/QEMU with virt-manager, libvirt running for the login
 // user, and ufw letting its default NAT network through.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

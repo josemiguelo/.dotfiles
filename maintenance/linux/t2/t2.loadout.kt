@@ -1,6 +1,6 @@
 // T2 Macs (MacBookPro16,1): fan daemon and curve, the EC clock, the internal
 // keyboard, the screen backlight and the GPU Hyprland renders on.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

@@ -1,6 +1,6 @@
 // chezmoi: the dotfiles manager and its checkout (this repo). loadout
 // applies the dotfiles itself; these scripts watch the checkout's git side.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

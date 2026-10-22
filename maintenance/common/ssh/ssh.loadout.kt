@@ -1,6 +1,6 @@
 // ssh: this machine's key and agent, on any OS. (Omarchy's ssh server is
 // maintenance/omarchy/ssh.)
-package repo
+package loadouts
 
 import loadout.dsl.*
 

@@ -1,6 +1,6 @@
 // Homebrew: brew itself, its mechanisms, and third-party taps. brew.sh,
 // setup-brew.sh and brew-taps.sh sit beside this file.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

@@ -1,6 +1,6 @@
 // zsh: the shell, its plugins and completions, and the login shell. Its
 // dotfiles are this directory plus ~/.zshenv, which points ZDOTDIR here.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

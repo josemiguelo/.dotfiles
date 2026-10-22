@@ -1,7 +1,7 @@
 // The Omarchy shell: plugins, the bar (position, widgets, icons, the menu
 // button), the Pomodoro timer, Keystroke's Windows extension and how long
 // the session idles before it locks.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

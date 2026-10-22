@@ -1,6 +1,6 @@
 // kitty: the terminal, the font its kitty.conf names, and (on Omarchy) kitty
 // as the terminal everything opens.
-package repo
+package loadouts
 
 import loadout.dsl.*
 
