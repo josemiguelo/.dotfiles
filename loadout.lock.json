@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.2.0",
-  "sources": "3b610c3d4dc04a1031e1a9f3816e74163b50f89f9f767422e01dff32f398e99c",
+  "sources": "f9a154cbe96af7886d244876e910dc0d0b042856a6d6d91b07284ab45c43e092",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -249,7 +249,7 @@
           "brew": {},
           "omarchy": {}
         },
-        "origin": "programs/cli"
+        "origin": "configs/private_dot_config/btop"
       },
       "bzip2-devel": {
         "install": {
@@ -726,6 +726,13 @@
           "omarchy": {}
         },
         "origin": "programs/cli"
+      },
+      "rocm-smi-lib": {
+        "description": "ROCm SMI library (btop's AMD GPU stats)",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "configs/private_dot_config/btop"
       },
       "rust": {
         "install": {
@@ -1924,6 +1931,7 @@
           "procps-ng": "omarchy",
           "qemu-desktop": "omarchy",
           "ripgrep": "omarchy",
+          "rocm-smi-lib": "omarchy",
           "scrcpy": "brew",
           "setup-brew": "linux",
           "slack": "omarchy-aur",

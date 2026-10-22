@@ -14,6 +14,7 @@ val t2Macbook = profile(name = "t2-macbook") {
     via(omarchy) {
         install(archVirtualization)
         install(solaar)
+        install(rocmSmiLib) // btop's stats for the Radeon Pro 5300M/5500M
     }
 
     sshKey("id_ed25519")
