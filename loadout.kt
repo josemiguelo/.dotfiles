@@ -1,7 +1,7 @@
 // jm's machines: programs, maintenance scripts, machines and dotfiles in
 // one repo. chezmoi reads configs/ (.chezmoiroot); its templates read each
 // machine's merged data from loadout.lock.json.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

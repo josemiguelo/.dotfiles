@@ -1,6 +1,6 @@
 // Local replacements of Omarchy commands, first on the PATH of everything
 // Hyprland starts. The scripts source ../lib/.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

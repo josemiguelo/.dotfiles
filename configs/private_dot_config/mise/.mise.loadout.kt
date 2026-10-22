@@ -1,6 +1,6 @@
 // mise: the tool-version manager, the tools config.toml pins, the default
 // packages inside them, and what depends on those tools.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

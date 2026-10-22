@@ -1,6 +1,6 @@
 // Base system tools other programs build on (Homebrew's Linux install needs
 // all four). Config-less; a tool that gains a config moves beside it.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

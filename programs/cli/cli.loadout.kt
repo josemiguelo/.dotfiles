@@ -1,6 +1,6 @@
 // Command-line tools with nothing beside them. A tool that gains a script
 // or a config moves to its own folder.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

@@ -1,7 +1,7 @@
 // What several profiles share. Plain lists, not templates: each profile still
 // says which installer moves them. Adding a shell tool is one line here, not
 // one per profile.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

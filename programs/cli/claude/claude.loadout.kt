@@ -1,6 +1,6 @@
 // Claude Code: a self-updating binary from claude.ai/install.sh, not managed
 // by a package manager; and the skills repo its sessions use.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

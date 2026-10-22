@@ -1,6 +1,6 @@
 // Dictation (Omarchy): Voxtype push-to-talk, set up by Omarchy's own
 // installer and moved onto the GPU.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

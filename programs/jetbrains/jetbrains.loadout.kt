@@ -1,6 +1,6 @@
 // JetBrains: the Toolbox app and its launchers on PATH. The IdeaVim config
 // is a single file in ~ (configs/dot_ideavimrc), so this lives here.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

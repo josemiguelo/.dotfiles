@@ -1,6 +1,6 @@
 // nvim: the lazy.nvim plugins lazy-lock.json locks. Neovim itself (nightly)
 // comes from mise's config.toml.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

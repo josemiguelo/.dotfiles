@@ -1,7 +1,7 @@
 // dnf: its config before any dnf install, and the plugins its COPR
 // mechanism needs. Every dnf installer `requires` setup-dnf, so it runs
 // before any dnf install.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

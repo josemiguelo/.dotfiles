@@ -1,4 +1,4 @@
-package repo
+package loadouts
 
 import loadout.dsl.*
 

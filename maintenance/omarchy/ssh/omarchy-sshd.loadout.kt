@@ -1,5 +1,5 @@
 // ssh on Omarchy: the ssh server, set up Omarchy's way.
-package repo
+package loadouts
 
 import loadout.dsl.*
 

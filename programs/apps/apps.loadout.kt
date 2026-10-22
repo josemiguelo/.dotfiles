@@ -1,6 +1,6 @@
 // Desktop apps. Vendor .repo files are in repos/, Fedora install scripts in
 // fedora/.
-package repo
+package loadouts
 
 import loadout.dsl.*
 
