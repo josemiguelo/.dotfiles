@@ -6,7 +6,8 @@ installs, maintains and keeps applied.
 
 ## New machine
 
-One command, on a fresh Omarchy, macOS or Fedora install:
+One command, on a fresh Omarchy, macOS or Fedora install (and on an
+omalauncher phone, below):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
@@ -38,24 +39,40 @@ The Arch that runs inside the omalauncher Android launcher
 launcher's configs (home layout, style, widgets), a minimal zsh
 (`zsh-omalauncher`), mise with java, ruby, claude, codex and try, and widget
 sessions (`start-dotfiles-change`, `widgets:`). It's proot as root, with no
-systemd and no sudo at first; the same one command sets it up, from a launcher
-terminal, and takes its own way through the steps for it (its data says
-`omalauncher`):
+systemd and no sudo at first; the same one command sets it up and takes its
+own way through the steps for it (its data says `omalauncher`).
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- omalauncher-galaxy-a56
-```
+1. **Install the launcher and its Linux** (the optional Linux download the
+   launcher offers), and open a terminal from it.
+2. **Run the bootstrapper** with the phone's machine name:
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- omalauncher-galaxy-a56
+   ```
+   `--dry-run` after `sh -s --` prints its commands without running them.
+   It runs a full `pacman -Syu` (a fresh rootfs may have no package lists),
+   installs git and chezmoi with pacman, writes the name to `/etc/hostname`
+   before the first apply (chezmoi picks the machine by it, and an unknown one
+   gets the desktops' configs; loadout gets it from `LOADOUT_MACHINE`), applies
+   the dotfiles, installs loadout, then `loadout install sudo` (loadout asks
+   for sudo before any plan that runs it, and the rootfs has none) and
+   `loadout setup-new-machine`. Safe to run again: every step skips what's
+   done.
+3. **Log in to GitHub** when gh asks, the one step by hand: Enter opens the
+   Android browser (the launcher's `xdg-open`); type in the one-time code it
+   printed and approve. `github-ssh-key` uploads the phone's new key under
+   its name, replacing the previous install's.
+4. **Open a new terminal**: no reboot; the login shell is zsh now, with
+   `LOADOUT_MACHINE` and `LOADOUT_REPO` set.
+5. **Look at `git status`** in `~/.local/share/chezmoi`: a fresh launcher's
+   own widgets the repo doesn't have are tracked during setup (the launcher's
+   files go phone to repo). Keep or drop them, commit what you keep, then
+   `loadout sync`.
 
-A full `pacman -Syu` first (a fresh rootfs may have no package lists), git
-and chezmoi from pacman, the name in `/etc/hostname` before the first apply
-(chezmoi picks the machine by it, and an unknown one gets the desktops'
-configs; loadout gets it from `LOADOUT_MACHINE`), and `loadout install sudo`
-before `setup-new-machine`, which asks for sudo before any plan that runs it.
-The one step by hand is GitHub's login, in the Android browser (the launcher's
-`xdg-open`). No reboot: open a new terminal (zsh). Values the launcher keeps on
-the Android side (widgets' `persist` and `secret` states) don't come back. A
-fresh launcher's own widgets the repo doesn't have are tracked during setup:
-look at `git status` here, keep or drop them, then `loadout sync`.
+Values the launcher keeps on the Android side (widgets' `persist` and
+`secret` states) don't come back: type the secrets in again. Another phone
+is a machine of its own first, as above: `machine(hostname = "<name>") {
+extends(omalauncherProfile) }` in `machines/<name>.loadout.kt`, compiled
+and pushed before its bootstrap.
 
 ## tmux
 
@@ -65,5 +82,4 @@ Scratch terminals come from [tmux-floating-scratchpad](https://github.com/josemi
 
 - omalauncher: a git "dirty" marker in zsh-omalauncher's prompt, worked out in the background (`git status` costs ~230ms there, the prompt ~1ms).
 - loadout: ask for sudo after the installs that don't need it, so one `setup-new-machine` can install sudo on omalauncher by itself.
-- omalauncher: a face for the empty home page left of the others (`page: -2`), still to be decided.
 
