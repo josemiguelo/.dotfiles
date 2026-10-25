@@ -36,28 +36,26 @@ afterwards (it commits only the state file).
 The Arch that runs inside the omalauncher Android launcher
 (`omalauncher-galaxy-a56`, profile `omalauncher`) gets only its own: the
 launcher's configs (home layout, style, widgets), a minimal zsh
-(`zsh-omalauncher`), and mise with java, ruby, claude, codex and try. It's
-proot as root, with no systemd and no sudo at first, so `bootstrap.sh` doesn't
-fit it; in a launcher terminal:
+(`zsh-omalauncher`), mise with java, ruby, claude, codex and try, and widget
+sessions (`start-dotfiles-change`, `widgets:`). It's proot as root, with no
+systemd and no sudo at first; the same one command sets it up, from a launcher
+terminal, and takes its own way through the steps for it (its data says
+`omalauncher`):
 
 ```bash
-pacman -Qu   # nothing pending, or pacman -Syu first: never a partial upgrade
-cp -p /etc/hostname /etc/hostname.pre-loadout; echo omalauncher-galaxy-a56 > /etc/hostname
-pacman -S --needed --noconfirm git chezmoi
-chezmoi init --apply https://github.com/josemiguelo/.dotfiles.git
-git -C ~/.local/share/chezmoi config core.hooksPath .githooks
-curl -fsSL https://raw.githubusercontent.com/josemiguelo/loadout/master/install.sh | sh
-export PATH=$HOME/.local/bin:$PATH
-loadout --repo ~/.local/share/chezmoi --machine omalauncher-galaxy-a56 install sudo --yes
-loadout --repo ~/.local/share/chezmoi --machine omalauncher-galaxy-a56 setup-new-machine --yes
-loadout --repo ~/.local/share/chezmoi --machine omalauncher-galaxy-a56 sync
+curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- omalauncher-galaxy-a56
 ```
 
-The hostname goes first: chezmoi picks the machine by `/etc/hostname`, and an
-unknown one gets the desktops' configs. sudo goes before the rest because
-loadout asks for it before any plan that runs it. gh's login opens the Android
-browser (the launcher's `xdg-open`); new shells are zsh, with `LOADOUT_MACHINE`
-and `LOADOUT_REPO` set.
+A full `pacman -Syu` first (a fresh rootfs may have no package lists), git
+and chezmoi from pacman, the name in `/etc/hostname` before the first apply
+(chezmoi picks the machine by it, and an unknown one gets the desktops'
+configs; loadout gets it from `LOADOUT_MACHINE`), and `loadout install sudo`
+before `setup-new-machine`, which asks for sudo before any plan that runs it.
+The one step by hand is GitHub's login, in the Android browser (the launcher's
+`xdg-open`). No reboot: open a new terminal (zsh). Values the launcher keeps on
+the Android side (widgets' `persist` and `secret` states) don't come back. A
+fresh launcher's own widgets the repo doesn't have are tracked during setup:
+look at `git status` here, keep or drop them, then `loadout sync`.
 
 ## tmux
 
