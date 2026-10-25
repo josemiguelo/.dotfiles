@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "machine": "omalauncher-galaxy-a56",
+  "os": "linux",
+  "distro": "archarm",
+  "arch": "aarch64",
+  "toolVersion": "3.2.1",
+  "updatedAt": "2026-10-25T01:42:09.081076445Z",
+  "programs": {
+    "bat": {
+      "status": "installed",
+      "version": "0.26.1",
+      "reason": null
+    },
+    "chezmoi": {
+      "status": "installed",
+      "version": "2.73.3",
+      "reason": null
+    },
+    "eza": {
+      "status": "installed",
+      "version": "0.23.5",
+      "reason": null
+    },
+    "fzf": {
+      "status": "installed",
+      "version": "0.74.5",
+      "reason": null
+    },
+    "gh": {
+      "status": "installed",
+      "version": "2.102.1",
+      "reason": null
+    },
+    "git": {
+      "status": "installed",
+      "version": "2.56.0",
+      "reason": null
+    },
+    "git-delta": {
+      "status": "installed",
+      "version": "0.20.1",
+      "reason": null
+    },
+    "loadout": {
+      "status": "installed",
+      "version": "3.2.1",
+      "reason": null
+    },
+    "mise": {
+      "status": "installed",
+      "version": "2026.10.17",
+      "reason": null
+    },
+    "pacman-contrib": {
+      "status": "installed",
+      "version": "1.13.1",
+      "reason": null
+    },
+    "sudo": {
+      "status": "installed",
+      "version": "1.9.17p2",
+      "reason": null
+    },
+    "trash-cli": {
+      "status": "installed",
+      "version": "0.24.5.26",
+      "reason": null
+    },
+    "wl-clipboard": {
+      "status": "installed",
+      "version": "2.3.0",
+      "reason": null
+    },
+    "zoxide": {
+      "status": "installed",
+      "version": "0.10.0",
+      "reason": null
+    },
+    "zsh": {
+      "status": "installed",
+      "version": "5.9.2",
+      "reason": null
+    },
+    "zsh-autosuggestions": {
+      "status": "installed",
+      "version": "0.7.1",
+      "reason": null
+    },
+    "zsh-syntax-highlighting": {
+      "status": "installed",
+      "version": "0.8.0",
+      "reason": null
+    }
+  },
+  "scripts": {
+    "machine-name": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "fakeroot-shim": {
+      "status": "done",
+      "lastRun": "2026-10-24T23:50:53.683651562Z",
+      "exitCode": 0
+    },
+    "omalauncher-tracked": {
+      "status": "done",
+      "lastRun": "2026-10-25T01:42:06.747115507Z",
+      "exitCode": 0
+    },
+    "omalauncher-requires": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "bare-repos": {
+      "status": "done",
+      "lastRun": "2026-10-25T01:19:14.735273164Z",
+      "exitCode": 0
+    },
+    "skills-repo": {
+      "status": "done",
+      "lastRun": "2026-10-25T01:19:17.237548984Z",
+      "exitCode": 0
+    },
+    "setup-ssh": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "github-ssh-key": {
+      "status": "done",
+      "lastRun": "2026-10-25T00:35:21.593221054Z",
+      "exitCode": 0
+    },
+    "dotfiles-pull": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "dotfiles-push": {
+      "status": "pending",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "dotfiles-ssh-remote": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "dotfiles-old-build-dir": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "setup-git": {
+      "status": "done",
+      "lastRun": "2026-10-25T00:35:22.096404335Z",
+      "exitCode": 0
+    },
+    "mise-tools": {
+      "status": "done",
+      "lastRun": "2026-10-25T00:15:59.919453164Z",
+      "exitCode": 0
+    },
+    "default-shell": {
+      "status": "done",
+      "lastRun": "2026-10-25T00:20:33.464543085Z",
+      "exitCode": 0
+    }
+  },
+  "configs": {
+    ".claude": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".codex": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".local": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    ".zshenv": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "mise": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "omalauncher": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "zsh-omalauncher": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    }
+  }
+}
