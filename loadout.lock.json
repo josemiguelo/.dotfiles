@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "toolVersion": "3.2.0",
-  "sources": "9ae1a397c40f19437e048ace616c1a183051427760653ed5288b1ea0b67eed34",
+  "toolVersion": "3.2.1",
+  "sources": "09577528a57b76012e6b8e8b3242d6f1ba6139eea8a1cf6ab76249f58171b360",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -151,7 +151,10 @@
         "check": "pacman -Q {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "checkupdates --nocolor | awk '$3 == \"->\" {print $1, $4}'",
-        "upgrade": "sudo pacman -Syu --noconfirm"
+        "upgrade": "sudo pacman -Syu --noconfirm",
+        "requires": [
+          "sudo"
+        ]
       }
     },
     "programs": {
@@ -231,7 +234,8 @@
       "bat": {
         "install": {
           "brew": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "programs/cli"
       },
@@ -260,7 +264,8 @@
       "chezmoi": {
         "install": {
           "brew": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "configs/private_dot_config/chezmoi"
       },
@@ -364,7 +369,8 @@
       "eza": {
         "install": {
           "brew": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "programs/cli"
       },
@@ -406,7 +412,8 @@
         "install": {
           "brew": {},
           "dnf": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "configs/private_dot_config/fzf"
       },
@@ -432,21 +439,26 @@
       "gh": {
         "description": "GitHub CLI",
         "install": {
-          "brew": {}
+          "brew": {},
+          "pacman": {
+            "pkg": "github-cli"
+          }
         },
         "origin": "programs/cli"
       },
       "git": {
         "install": {
           "dnf": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "programs"
       },
       "git-delta": {
         "install": {
           "brew": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "programs/cli"
       },
@@ -602,6 +614,26 @@
         },
         "origin": "programs"
       },
+      "loadout": {
+        "description": "loadout, which reads this repo",
+        "version": {
+          "command": "loadout --version",
+          "regex": "([0-9]+\\.[0-9][0-9.]*)",
+          "origin": "programs/cli",
+          "path": [
+            "$HOME/.local/bin"
+          ]
+        },
+        "install": {
+          "custom": {
+            "command": "curl -fsSL https://raw.githubusercontent.com/josemiguelo/loadout/master/install.sh | sh"
+          }
+        },
+        "path": [
+          "$HOME/.local/bin"
+        ],
+        "origin": "programs/cli"
+      },
       "lunar": {
         "description": "Lunar -- external display brightness/contrast control",
         "install": {
@@ -622,7 +654,12 @@
           "omarchy": {
             "pkg": "mise-bin"
           },
-          "brew": {}
+          "brew": {},
+          "mise-run": {
+            "command": "curl -fsSL https://mise.run | sh",
+            "check": "$HOME/.local/bin/mise --version",
+            "regex": "([0-9]+\\.[0-9][0-9.]*)"
+          }
         },
         "origin": "configs/private_dot_config/mise"
       },
@@ -674,6 +711,12 @@
           "dnf": {}
         },
         "origin": "programs"
+      },
+      "pacman-contrib": {
+        "install": {
+          "pacman": {}
+        },
+        "origin": "programs/cli"
       },
       "patch": {
         "install": {
@@ -852,6 +895,17 @@
         },
         "origin": "programs/apps"
       },
+      "sudo": {
+        "install": {
+          "custom": {
+            "command": "file:install-sudo.sh",
+            "check": "sudo -V",
+            "regex": "Sudo version ([0-9][0-9.p]*)",
+            "sudo": false
+          }
+        },
+        "origin": "programs/sudo"
+      },
       "swtpm": {
         "description": "TPM emulator for guests",
         "install": {
@@ -923,7 +977,8 @@
       },
       "trash-cli": {
         "install": {
-          "brew": {}
+          "brew": {},
+          "pacman": {}
         },
         "origin": "programs/cli"
       },
@@ -1036,6 +1091,12 @@
         },
         "origin": "programs/cli"
       },
+      "wl-clipboard": {
+        "install": {
+          "pacman": {}
+        },
+        "origin": "programs/cli"
+      },
       "workmux": {
         "description": "git worktrees + tmux windows for parallel agent sessions",
         "depends-on": [
@@ -1095,19 +1156,42 @@
       "zoxide": {
         "install": {
           "brew": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "programs/cli"
       },
       "zsh": {
         "install": {
           "dnf": {},
-          "omarchy": {}
+          "omarchy": {},
+          "pacman": {}
         },
         "origin": "configs/private_dot_config/zsh"
+      },
+      "zsh-autosuggestions": {
+        "install": {
+          "pacman": {}
+        },
+        "origin": "configs/private_dot_config/zsh-omalauncher"
+      },
+      "zsh-syntax-highlighting": {
+        "install": {
+          "pacman": {}
+        },
+        "origin": "configs/private_dot_config/zsh-omalauncher"
       }
     },
     "scripts": {
+      "bare-repos": {
+        "description": "josemiguelo's repos as bare clones in ~/Repos/gh/josemiguelo",
+        "file": "bare-repos.sh",
+        "check": "file:bare-repos.sh check \"$@\"",
+        "after": [
+          "programs.git"
+        ],
+        "origin": "maintenance/common/repos"
+      },
       "default-shell": {
         "description": "login shell set to zsh",
         "file": ".loadout/default-shell.sh",
@@ -1157,6 +1241,12 @@
         "check": "file:download-fonts.sh check \"$@\"",
         "origin": "maintenance/common/fonts"
       },
+      "fakeroot-shim": {
+        "description": "a fakeroot that runs under proot, for checkupdates",
+        "run": "install -m 755 fakeroot /usr/local/bin/fakeroot",
+        "check": "cmp -s fakeroot /usr/local/bin/fakeroot",
+        "origin": "maintenance/omalauncher/fakeroot"
+      },
       "github-ssh-key": {
         "description": "this machine's ssh key on GitHub",
         "file": "github-ssh-key.sh",
@@ -1194,6 +1284,12 @@
         ],
         "origin": "programs/jetbrains"
       },
+      "machine-name": {
+        "description": "the machine's name in /etc/hostname and LOADOUT_MACHINE",
+        "file": "machine-name.sh",
+        "check": "file:machine-name.sh check \"$@\"",
+        "origin": "maintenance/omalauncher/machine-name"
+      },
       "mise-default-packages": {
         "description": "default npm/gem packages in every mise node/ruby version",
         "file": ".loadout/default-packages.sh",
@@ -1220,6 +1316,26 @@
           "scripts.mise-tools"
         ],
         "origin": "configs/private_dot_config/nvim"
+      },
+      "omalauncher-requires": {
+        "description": "every package the launcher's widgets declare",
+        "file": ".loadout/requires.sh",
+        "check": "file:.loadout/requires.sh check \"$@\"",
+        "after": [
+          "programs.sudo",
+          "scripts.omalauncher-tracked"
+        ],
+        "sudo": true,
+        "origin": "configs/private_dot_config/private_omalauncher"
+      },
+      "omalauncher-tracked": {
+        "description": "the launcher's files on this phone, as they are, in the repo",
+        "file": ".loadout/tracked.sh",
+        "check": "file:.loadout/tracked.sh check \"$@\"",
+        "after": [
+          "programs.chezmoi"
+        ],
+        "origin": "configs/private_dot_config/private_omalauncher"
       },
       "omarchy-1password": {
         "description": "1Password via Omarchy's installer, unscaled, Ctrl+Shift+Space Quick Access",
@@ -1548,7 +1664,7 @@
       "setup-ssh": {
         "description": "machine ssh key and agent auto-add config",
         "file": "setup-ssh.sh",
-        "check": "test -f $HOME/.ssh/$1 && grep -q 'AddKeysToAgent yes' $HOME/.ssh/config && { test \"$(uname -s)\" != Linux || systemctl --user -q is-enabled ssh-agent.socket; }",
+        "check": "test -f $HOME/.ssh/$1 && grep -q 'AddKeysToAgent yes' $HOME/.ssh/config && { test \"$(uname -s)\" != Linux || test ! -d /run/systemd/system || systemctl --user -q is-enabled ssh-agent.socket; }",
         "origin": "maintenance/common/ssh"
       },
       "skills-repo": {
@@ -1766,6 +1882,57 @@
           "omarchy": false,
           "corpca": true,
           "work": true,
+          "omalauncher": false,
+          "kitty": {
+            "opacity": 0.85
+          }
+        }
+      },
+      "omalauncher-galaxy-a56": {
+        "extends": [
+          "omalauncher"
+        ],
+        "pm": {
+          "bat": "pacman",
+          "chezmoi": "pacman",
+          "eza": "pacman",
+          "fzf": "pacman",
+          "gh": "pacman",
+          "git": "pacman",
+          "git-delta": "pacman",
+          "loadout": "custom",
+          "mise": "mise-run",
+          "pacman-contrib": "pacman",
+          "sudo": "custom",
+          "trash-cli": "pacman",
+          "wl-clipboard": "pacman",
+          "zoxide": "pacman",
+          "zsh": "pacman",
+          "zsh-autosuggestions": "pacman",
+          "zsh-syntax-highlighting": "pacman"
+        },
+        "scripts": [
+          "machine-name",
+          "fakeroot-shim",
+          "omalauncher-tracked",
+          "omalauncher-requires",
+          "bare-repos loadout loadout.wiki",
+          "skills-repo",
+          "setup-ssh id_ed25519",
+          "github-ssh-key id_ed25519",
+          "dotfiles-pull",
+          "dotfiles-push",
+          "dotfiles-ssh-remote",
+          "dotfiles-old-build-dir",
+          "setup-git",
+          "mise-tools",
+          "default-shell"
+        ],
+        "data": {
+          "omarchy": false,
+          "corpca": false,
+          "work": false,
+          "omalauncher": true,
           "kitty": {
             "opacity": 0.85
           }
@@ -1886,6 +2053,7 @@
           "omarchy": true,
           "corpca": false,
           "work": false,
+          "omalauncher": false,
           "kitty": {
             "opacity": 0.85
           }
@@ -2034,6 +2202,7 @@
           "omarchy": true,
           "corpca": false,
           "work": false,
+          "omalauncher": false,
           "kitty": {
             "opacity": 0.85
           }
@@ -2086,6 +2255,7 @@
       "omarchy": false,
       "corpca": false,
       "work": false,
+      "omalauncher": false,
       "kitty": {
         "opacity": 0.85
       }

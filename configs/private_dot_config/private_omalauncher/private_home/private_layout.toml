@@ -1,0 +1,16 @@
+# Home's pages, left to right: a face, or tiles on a grid of `columns` columns (home.columns in
+# ../style/style.toml sets the grid). Moving things on the phone rewrites this file, and home
+# follows edits to it. A tile is { widget = "file.owl" }, { app = "…" } or { folder = "name", apps = [...] },
+# at x, y (cells from the top left) and w, h wide and tall; without x and y it takes the first free spot.
+# A widget file left out stays where it is, and a new one goes by its own page:, order: and size:;
+# an app left out comes off home. An app is a package, "pkg/activity" (with "@profile" for a work
+# profile's), "linux:<desktop id>" or "owl:<file>".
+# What couldn't be read is in errors.txt next to this file.
+version = 1
+columns = 6
+
+[[page]]
+face = "market-face-simonschubert-control.owl"
+
+[[page]]
+face = "00-sysmon.owl"

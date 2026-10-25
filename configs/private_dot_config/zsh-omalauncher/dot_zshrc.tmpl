@@ -1,0 +1,135 @@
+# zsh for omalauncher's Arch, where proot makes every program started cost
+# ~10ms: nothing starts at startup (once the caches exist) or at a prompt.
+# No plugin manager (the plugins are Arch packages), mise through its shims
+# (.zshenv), and a prompt in plain zsh (starship costs ~200ms a prompt here).
+# The desktops' zsh is ../zsh; the snippets both use are included from it
+# when chezmoi renders this file.
+# Profile startup with: ZSH_PROFILE=1 zsh -i -c exit
+[[ -n "$ZSH_PROFILE" ]] && zmodload zsh/zprof
+
+# Init snippets from slow tools, cached and regenerated only when the tool
+# is newer than the cache (as ../zsh/.zshrc does).
+typeset -g __zcache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/init"
+zcache() {
+  local name=$1; shift
+  local bin=${commands[$1]:-$1}
+  [[ -x $bin ]] || return 0
+  local file=$__zcache_dir/$name.zsh
+  if [[ ! -s $file || $bin -nt $file ]]; then
+    [[ -d $__zcache_dir ]] || mkdir -p $__zcache_dir
+    "$@" >| $file || { command rm -f $file; return 1; }
+  fi
+  source $file
+}
+
+# history
+HISTFILE="$HOME/.local/state/zsh_history"
+HISTSIZE=50000
+SAVEHIST=10000
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
+setopt extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space hist_verify share_history
+setopt auto_cd auto_pushd pushd_ignore_dups interactive_comments
+
+bindkey -e
+
+# completion (~35ms), run after the first prompt with the plugins below: the
+# dump is checked (compinit's security scan and a fresh dump) once a day, and
+# read as it is otherwise, compiled (zcompile, a builtin)
+autoload -Uz compinit
+_zshrc_compinit() {
+  setopt local_options extended_glob
+  local dump=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump
+  [[ -d ${dump:h} ]] || mkdir -p ${dump:h}
+  if [[ -n $dump(#qN.mh+24) || ! -s $dump ]]; then
+    compinit -d $dump
+  else
+    compinit -C -d $dump
+  fi
+  [[ $dump.zwc -nt $dump ]] || zcompile $dump
+}
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+zcache zoxide zoxide init zsh
+
+# fzf's Ctrl+R, Ctrl+T and Alt+C, with the desktops' palette
+[[ -r /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+{{ include "private_dot_config/fzf/theme.sh" }}
+
+# ─── shared with the desktops' zsh (../zsh/conf.d) ───
+{{ include "private_dot_config/zsh/conf.d/alias.sh" }}
+{{ include "private_dot_config/zsh/conf.d/bat.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/eza.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/ff.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/git.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/nvim.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/try.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/loadout.zsh" }}
+{{ include "private_dot_config/zsh/conf.d/private.zsh" }}
+
+# functions/ (start-dotfiles-change), each loaded on its first call
+fpath=($ZDOTDIR/functions $fpath)
+autoload -Uz $ZDOTDIR/functions/*(N:t)
+
+# ─── prompt: the folder, the git branch, and ❯ (red after a failure) ───
+# The branch is read from .git/HEAD, never from git (51ms here): a worktree's
+# .git file points at its HEAD, and a detached HEAD shows its short hash.
+_prompt_git_branch() {
+  psvar[1]=
+  local dir=$PWD head line
+  while :; do
+    if [[ -d $dir/.git ]]; then
+      head=$dir/.git/HEAD
+      break
+    elif [[ -f $dir/.git ]]; then
+      read -r line <$dir/.git
+      [[ $line == gitdir:* ]] || return
+      line=${line#gitdir: }
+      [[ $line == /* ]] || line=$dir/$line
+      head=$line/HEAD
+      break
+    fi
+    [[ $dir == / ]] && return
+    dir=${dir:h}
+  done
+  [[ -r $head ]] || return
+  read -r line <$head
+  if [[ $line == 'ref: refs/heads/'* ]]; then
+    psvar[1]=${line#ref: refs/heads/}
+  else
+    psvar[1]=${line[1,7]}
+  fi
+}
+precmd_functions+=(_prompt_git_branch)
+PROMPT='%F{blue}%~%f%(1V. %F{magenta}%1v%f.)
+%(?.%F{green}.%F{red})❯%f '
+
+# Completion and the plugins (~80ms together) after the first prompt is
+# drawn: zle runs a handler for an fd once it's idle, and /dev/null is
+# readable at once, so nothing is started for it. zoxide's init ran before
+# compinit, so its completion is registered here. Syntax highlighting goes
+# last (it wraps the widgets); autosuggestions start by hand, since their
+# own start hook is the precmd that already ran.
+_zshrc_plugins() {
+  local fd=$1 p=/usr/share/zsh/plugins
+  zle -F $fd
+  exec {fd}<&-
+  _zshrc_compinit
+  (( $+functions[__zoxide_z_complete] )) && compdef __zoxide_z_complete z
+  if [[ -r $p/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source $p/zsh-autosuggestions/zsh-autosuggestions.zsh
+    _zsh_autosuggest_start
+  fi
+  [[ -r $p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] &&
+    source $p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+}
+if [[ -o zle ]]; then
+  exec {_zshrc_plugins_fd}</dev/null
+  zle -F $_zshrc_plugins_fd _zshrc_plugins
+fi
+
+# This file, compiled for the next shell (zsh reads a newer .zshrc.zwc).
+[[ $ZDOTDIR/.zshrc.zwc -nt $ZDOTDIR/.zshrc ]] || zcompile $ZDOTDIR/.zshrc
+
+# An if, not &&: the first prompt's ❯ reads this file's last status.
+if [[ -n "$ZSH_PROFILE" ]]; then zprof; fi

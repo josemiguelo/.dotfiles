@@ -1,0 +1,11 @@
+# omalauncher's Arch, every zsh (scripts too). loadout's machine is the
+# hostname chezmoi reads from /etc/hostname: gethostname says "localhost"
+# under proot, so loadout gets it from here (the machine-name script keeps
+# /etc/hostname, and bash's copy of these, in step).
+export LOADOUT_MACHINE={{ .chezmoi.hostname }}
+export LOADOUT_REPO=~/.local/share/chezmoi
+
+# mise's tools through its shims, ahead of the system's: no `mise activate`,
+# whose prompt hook costs ~270ms here.
+typeset -U path
+path=($HOME/.local/bin ${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims $path)

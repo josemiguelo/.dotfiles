@@ -9,11 +9,12 @@ val setupSsh = script(
     description = "machine ssh key and agent auto-add config",
 ) {
     file("setup-ssh.sh")
-    // The agent-unit clause is Linux-only; uname short-circuits it on macOS.
+    // The agent-unit clause is for Linux with systemd; uname short-circuits it
+    // on macOS, and /run/systemd/system where systemd isn't running (omalauncher's proot).
     check(
         "test -f $HOME/.ssh/\$1",
         "grep -q 'AddKeysToAgent yes' $HOME/.ssh/config",
-        "test \"\$(uname -s)\" != Linux || systemctl --user -q is-enabled ssh-agent.socket",
+        "test \"\$(uname -s)\" != Linux || test ! -d /run/systemd/system || systemctl --user -q is-enabled ssh-agent.socket",
     )
 }
 

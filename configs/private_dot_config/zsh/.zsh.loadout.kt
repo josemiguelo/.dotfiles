@@ -9,6 +9,7 @@ val zsh = program(name = "zsh") {
     installVia(
         dnf,
         omarchy,
+        pacman,
     )
 }
 

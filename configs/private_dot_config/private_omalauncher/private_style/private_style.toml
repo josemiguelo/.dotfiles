@@ -1,0 +1,21 @@
+# The launcher's style. The Style menu writes it too; settings left out have
+# their default, and defaults.toml next to this file lists them all.
+# Changes show on the phone within a second; errors.txt says what was ignored.
+
+version = 1
+
+[home]
+recent-apps = false
+
+[widgets]
+frost = true
+
+[icons]
+monochrome = true
+
+[status-bar]
+shown = false
+framed = true
+
+[navigation-bar]
+framed = true

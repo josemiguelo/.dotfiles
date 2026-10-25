@@ -35,7 +35,8 @@ fi
 # The agent itself. The dotfiles point SSH_AUTH_SOCK at the socket of
 # openssh's ssh-agent.socket user unit, which Fedora installs but never
 # enables for a new account — without this, ssh-add fails with "Error
-# connecting to agent". (macOS runs its own agent via launchd.)
-if [ "$(uname -s)" = "Linux" ] && ! systemctl --user -q is-enabled ssh-agent.socket 2>/dev/null; then
+# connecting to agent". (macOS runs its own agent via launchd; without
+# systemd, as in omalauncher's proot, there's no unit to enable.)
+if [ "$(uname -s)" = "Linux" ] && [ -d /run/systemd/system ] && ! systemctl --user -q is-enabled ssh-agent.socket 2>/dev/null; then
   systemctl --user enable --now ssh-agent.socket
 fi

@@ -19,12 +19,24 @@
 {{- if $m.omarchy }}
       "Read(/{{ $h }}/Repos/gh/omacom/omarchy/**)",
 {{- end }}
+{{- if $m.omalauncher }}
+      "Read(/{{ $h }}/.config/omalauncher/**)",
+      "Edit(/{{ $h }}/.config/omalauncher/**)",
+{{- end }}
       "Bash(cd:*)",
+{{- if $m.omalauncher }}
+      "Bash(git worktree add:*)",
+      "Bash(owl-check:*)",
+      "Bash(loadout status:*)",
+      "Bash(loadout run omalauncher-tracked)",
+      "Bash(loadout run omalauncher-requires)",
+{{- else }}
       "Bash(workmux add:*)",
       "Bash(tmux list-windows:*)",
       "Bash(tmux select-window:*)",
       "Bash(tmux new-window:*)",
       "Bash(tmux-server-cwd)",
+{{- end }}
       "Bash(rm -rf {{ $h }}/Work/tries/*)",
       "Bash(chezmoi apply:*)",
 {{- if $m.omarchy }}
@@ -33,4 +45,19 @@
       "Bash(git push:*)"
     ]
   }
+{{- if $m.omalauncher }},
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.local/share/chezmoi/configs/private_dot_config/private_omalauncher/.loadout/tracked.sh\" hook"
+          }
+        ]
+      }
+    ]
+  }
+{{- end }}
 }

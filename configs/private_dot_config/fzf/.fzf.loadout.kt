@@ -10,5 +10,6 @@ val fzf = program(name = "fzf") {
             spare(reason = "for a Fedora machine; the fedora profile doesn't install fzf")
         },
         omarchy,
+        pacman,
     )
 }

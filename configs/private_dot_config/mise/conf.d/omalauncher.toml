@@ -1,0 +1,12 @@
+# omalauncher's Arch: only these, none of config.toml's languages (that file
+# stays off this machine, .chezmoiignore). mise reaches the shell through the
+# shims the launcher puts on PATH, never `mise activate` (its hook costs
+# ~270ms a prompt there). The launcher's own ~/.config/mise/config.toml pins
+# claude and codex too; mise merges the two.
+[tools]
+java = "temurin-21.0.6+7.0.LTS"
+ruby = "3.4.10"
+claude = "latest"
+codex = "latest"
+# try, on mise's ruby (the zsh config's try.zsh wraps it).
+"gem:try-cli" = "latest"

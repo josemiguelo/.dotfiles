@@ -4,7 +4,7 @@ package loadouts
 
 import loadout.dsl.*
 
-// ─── Everyday shell tools: brew on macOS, Omarchy's packages on Omarchy ───
+// ─── Everyday shell tools: brew on macOS, Omarchy's packages on Omarchy, pacman on omalauncher ───
 
 val atuin = program(name = "atuin") {
     installVia(
@@ -17,6 +17,7 @@ val bat = program(name = "bat") {
     installVia(
         brew,
         omarchy,
+        pacman,
     )
 }
 
@@ -24,6 +25,7 @@ val eza = program(name = "eza") {
     installVia(
         brew,
         omarchy,
+        pacman,
     )
 }
 
@@ -38,6 +40,7 @@ val gitDelta = program(name = "git-delta") {
     installVia(
         brew,
         omarchy,
+        pacman,
     )
 }
 
@@ -73,6 +76,7 @@ val zoxide = program(name = "zoxide") {
     installVia(
         brew,
         omarchy,
+        pacman,
     )
 }
 
@@ -109,15 +113,6 @@ val azureCli = program(
     )
 }
 
-val gh = program(
-    name = "gh",
-    description = "GitHub CLI",
-) {
-    installVia(
-        brew,
-    )
-}
-
 val jiraCli = program(
     name = "jira-cli",
     description = "Jira CLI",
@@ -134,12 +129,6 @@ val jq = program(name = "jq") {
 }
 
 val qemu = program(name = "qemu") {
-    installVia(
-        brew,
-    )
-}
-
-val trashCli = program(name = "trash-cli") {
     installVia(
         brew,
     )
@@ -247,4 +236,52 @@ val terraform = program(
     installVia(
         tap(tap = "hashicorp/tap"),
     )
+}
+
+val gh = program(
+    name = "gh",
+    description = "GitHub CLI",
+) {
+    installVia(
+        brew,
+        pacman(pkg = "github-cli"),
+    )
+}
+
+// ─── omalauncher's Arch: pacman (brew elsewhere) ───
+
+val trashCli = program(name = "trash-cli") {
+    installVia(
+        brew,
+        pacman,
+    )
+}
+
+/** wl-copy/wl-paste on the launcher's Wayland display, which hands copies to Android's clipboard (gh's one-time code, for one). */
+val wlClipboard = program(name = "wl-clipboard") {
+    installVia(
+        pacman,
+    )
+}
+
+/** checkupdates, the pacman installer's outdated oracle: without it `loadout outdated` finds nothing there. */
+val pacmanContrib = program(name = "pacman-contrib") {
+    installVia(
+        pacman,
+    )
+}
+
+// ─── loadout itself ───
+
+/** Its release, into ~/.local; `loadout sync` and `self-upgrade` keep it current. */
+val loadoutCli = program(
+    name = "loadout",
+    description = "loadout, which reads this repo",
+) {
+    custom {
+        command = "curl -fsSL https://raw.githubusercontent.com/josemiguelo/loadout/master/install.sh | sh"
+    }
+
+    path("$HOME/.local/bin")
+    version(command = "loadout --version")
 }

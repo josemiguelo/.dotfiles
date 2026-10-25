@@ -28,3 +28,48 @@
 {{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/spotify-flags.conf
 {{ end }}
+
+# omalauncher's Arch gets only its own: the launcher's configs, its zsh
+# (zsh-omalauncher, which ~/.zshenv points at there), its mise tools
+# (conf.d/omalauncher.toml, not config.toml's languages) and the agents'
+# global instructions pointing at this repo. The desktops' configs (zsh,
+# nvim, kitty, ...) are for desktops, and theirs stay out of it.
+{{ if (includeTemplate "loadout/machine" . | fromJson).omalauncher }}
+*
+.*
+!.zshenv
+!.claude
+!.claude/CLAUDE.md
+!.codex
+!.codex/AGENTS.md
+!.config
+.config/*
+!.config/omalauncher
+!.config/omalauncher/**
+!.config/zsh-omalauncher
+!.config/zsh-omalauncher/**
+!.config/mise
+.config/mise/*
+!.config/mise/conf.d
+.config/mise/conf.d/*
+!.config/mise/conf.d/omalauncher.toml
+!.local
+.local/*
+!.local/share
+.local/share/*
+!.local/share/workflow-skills
+!.local/share/workflow-skills/**
+!.local/bin
+.local/bin/*
+!.local/bin/dotfiles-worktree-check
+{{ else }}
+.config/omalauncher
+.config/omalauncher/**
+.config/zsh-omalauncher
+.config/zsh-omalauncher/**
+.config/mise/conf.d/omalauncher.toml
+.claude
+.claude/**
+.codex
+.codex/**
+{{ end }}

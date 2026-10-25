@@ -13,6 +13,13 @@ val mise = program(
         omarchy(pkg = "mise-bin"),
         brew,
     )
+
+    // omalauncher's Arch: mise's own installer, into ~/.local/bin, where the
+    // launcher's install put it; `mise self-update` moves it.
+    custom(name = "mise-run") {
+        command = "curl -fsSL https://mise.run | sh"
+        version(command = "$HOME/.local/bin/mise --version")
+    }
 }
 
 /** What mise installs inside itself, and what builds on it: `run(Mise.tools)`. */

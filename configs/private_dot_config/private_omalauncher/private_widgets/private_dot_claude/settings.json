@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.local/share/chezmoi/configs/private_dot_config/private_omalauncher/.loadout/tracked.sh\" hook"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(owl-check:*)",
+      "Bash(chezmoi add:*)",
+      "Bash(chezmoi re-add:*)",
+      "Bash(chezmoi status:*)",
+      "Bash(chezmoi diff:*)",
+      "Bash(loadout status:*)",
+      "Bash(loadout run omalauncher-tracked)",
+      "Bash(loadout run omalauncher-requires)"
+    ]
+  }
+}

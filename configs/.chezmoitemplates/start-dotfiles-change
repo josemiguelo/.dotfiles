@@ -1,3 +1,64 @@
+{{- /* start-dotfiles-change, for zsh/functions and zsh-omalauncher/functions: omalauncher runs claude in the terminal (no tmux there), every other machine in a tmux session. */ -}}
+{{- $m := includeTemplate "loadout/machine" . | fromJson -}}
+{{- if $m.omalauncher -}}
+#!/bin/zsh
+# start-dotfiles-change [-p prompt] [query]: a try folder whose claude works on the
+# loadout repos and this phone's launcher. Copies in, from
+# ~/.local/share/workflow-skills (rendered per machine by chezmoi),
+# NEW-LOADOUT-SESSION-AGENTS.md as AGENTS.md (Claude Code reads it at every
+# start there, so it applies from the first message) and
+# NEW-LOADOUT-SESSION-SETTINGS.json as .claude/settings.local.json (read and
+# edit access to those repos, granted before claude starts: a session can't
+# grant itself permissions). Then runs claude in this terminal, in that
+# folder: omalauncher has no tmux. Copies, not links: a try folder is
+# self-contained. Run again on the same folder, claude continues that
+# folder's last conversation. -p is claude's first message. A finished
+# session leaves .claude/finished, and the folder goes once claude exits.
+#
+# The helpers below are defined on each call (the function's file is
+# autoloaded by name only); the _start_dotfiles_change_ prefix keeps them out of the way.
+
+# AGENTS.md and the session's settings in the current folder. What's
+# already there is left as it is.
+_start_dotfiles_change_prepare() {
+  local src=$HOME/.local/share/workflow-skills
+  local f
+  for f in NEW-LOADOUT-SESSION-AGENTS.md NEW-LOADOUT-SESSION-SETTINGS.json; do
+    if [[ ! -f $src/$f ]]; then
+      print -u2 "start-dotfiles-change: $src/$f not found -- run chezmoi apply (or loadout apply .local)"
+      return 1
+    fi
+  done
+  mkdir -p .claude
+  [[ -e AGENTS.md ]] || cp $src/NEW-LOADOUT-SESSION-AGENTS.md AGENTS.md
+  [[ -e .claude/settings.local.json ]] || cp $src/NEW-LOADOUT-SESSION-SETTINGS.json .claude/settings.local.json
+}
+
+# _start_dotfiles_change_run [prompt]: claude in the current folder, a new
+# conversation the first time and that folder's last one after
+# (.claude/started marks it). Removes the folder after claude exits when the
+# session finished it (.claude/finished, the last step of finishing a
+# feature), only inside try's ~/Work/tries.
+_start_dotfiles_change_run() {
+  local prompt=$1 dir=$PWD
+  local -a args
+  [[ -e .claude/started ]] && args=(--continue)
+  [[ -n $prompt ]] && args+=($prompt)
+  : >| .claude/started
+  claude $args
+  if [[ -e $dir/.claude/finished && $dir == $HOME/Work/tries/?* ]]; then
+    cd ~ && rm -rf -- $dir && print "start-dotfiles-change: removed $dir"
+  fi
+}
+
+emulate -L zsh
+local -a prompt_opt
+zparseopts -D -E -F -- p:=prompt_opt || return
+local prompt=${${prompt_opt[-1]}#-p}
+try "$@" || return
+_start_dotfiles_change_prepare || return
+_start_dotfiles_change_run $prompt
+{{ else -}}
 #!/bin/zsh
 # start-dotfiles-change [-p prompt] [query]: a try folder whose claude works on the
 # loadout repos. Copies in, from ~/.local/share/workflow-skills (rendered per
@@ -100,3 +161,4 @@ elif [[ -n $prompt ]]; then
   _start_dotfiles_change_send $name $prompt
 fi
 _start_dotfiles_change_go $name
+{{ end -}}

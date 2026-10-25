@@ -15,6 +15,7 @@ val git = program(name = "git") {
     installVia(
         dnf,
         omarchy,
+        pacman,
     )
 }
 

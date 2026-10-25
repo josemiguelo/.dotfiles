@@ -1,0 +1,9 @@
+#!/bin/sh
+# fakeroot for omalauncher's proot, installed as /usr/local/bin/fakeroot by
+# the fakeroot-shim script. The real one talks to its faked daemon over SysV
+# IPC, which Android kernels don't have; proot already reports every file as
+# root's, so running the command as it is loses nothing. checkupdates (the
+# pacman installer's outdated oracle) is what needs it.
+[ "${1:-}" = -v ] && exec echo "fakeroot (proot shim)"
+[ "${1:-}" = -- ] && shift
+FAKEROOTKEY=proot exec "$@"

@@ -1,0 +1,6 @@
+{{ if (includeTemplate "loadout/machine" . | fromJson).omalauncher -}}
+export ZDOTDIR=~/.config/zsh-omalauncher
+{{ else -}}
+export ZDOTDIR=~/.config/zsh
+{{ end -}}
+[[ -f $ZDOTDIR/.zshenv ]] && . $ZDOTDIR/.zshenv

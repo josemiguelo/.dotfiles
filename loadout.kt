@@ -18,6 +18,9 @@ class Data : MachineData() {
     /** The work machine: work-only tools in, personal ones (e.g. Copilot) out. */
     var work by flag(false)
 
+    /** Arch inside the omalauncher Android launcher: only the launcher's configs deploy, and no desktop's reach it. */
+    var omalauncher by flag(false)
+
     val kitty by table(::Kitty)
 
     class Kitty : MachineData() {
@@ -37,3 +40,4 @@ val dnfCopr = Builtin.dnfCopr
 val flatpak = Builtin.flatpak
 val omarchy = Builtin.omarchy
 val omarchyAur = Builtin.omarchyAur
+val pacman = Builtin.pacman

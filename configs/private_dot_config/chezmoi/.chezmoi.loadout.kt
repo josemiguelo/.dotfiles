@@ -8,6 +8,7 @@ val chezmoi = program(name = "chezmoi") {
     installVia(
         brew,
         omarchy,
+        pacman,
     )
 }
 

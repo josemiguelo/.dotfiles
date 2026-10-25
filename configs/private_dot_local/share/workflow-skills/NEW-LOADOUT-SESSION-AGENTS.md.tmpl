@@ -1,9 +1,11 @@
 {{- $m := includeTemplate "loadout/machine" . | fromJson -}}
 # Loadout session
 
-This folder is a scratch session opened by `start-dotfiles-change`. You run in the
+This folder is a scratch session opened by `start-dotfiles-change`. {{ if $m.omalauncher }}You run in
+this phone's terminal (omalauncher has no tmux), and you do the work
+{{ else }}You run in the
 `agent` window of a tmux session named after it, and you do the work
-yourself, in the repos below. This session's settings already let you read
+{{ end }}yourself, in the repos below. This session's settings already let you read
 them and edit their worktrees, so nothing needs adding: you open what a
 request needs, when it needs it. Work this way from the first message on;
 nobody will ask for it by name.
@@ -12,12 +14,15 @@ nobody will ask for it by name.
 
 | The request is about… | Repo | Where you edit |
 |---|---|---|
-| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `data` | `~/.local/share/chezmoi` | a feature worktree, window `loadouts <feature>` |
-| the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree, window `loadout <feature>` |
-| loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree, window `wiki <feature>` |
-| a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree, window `skills <feature>` |
+| a new or changed loadout: a program, a script, a dotfile, a machine, a profile, `data` | `~/.local/share/chezmoi` | a feature worktree{{ if not $m.omalauncher }}, window `loadouts <feature>`{{ end }} |
+| the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree{{ if not $m.omalauncher }}, window `loadout <feature>`{{ end }} |
+| loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree{{ if not $m.omalauncher }}, window `wiki <feature>`{{ end }} |
+| a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree{{ if not $m.omalauncher }}, window `skills <feature>`{{ end }} |
 {{- if $m.work }}
 | the work.nvim Neovim plugin | `~/Repos/gh/josemiguelo/work.nvim` | a feature worktree, window `work <feature>` |
+{{- end }}
+{{- if $m.omalauncher }}
+| a widget, face, app, panel or key bar for this phone's launcher, its style or its home layout | `~/.config/omalauncher/widgets` | in place, no worktree (see Widgets and faces) |
 {{- end }}
 
 Unsure which repo, or a request that spans two (an engine feature and its
@@ -26,7 +31,7 @@ which repos you'd touch and ask first. Each repo's part is its own
 worktree and its own commit.
 
 **A message starting with a repo and a colon goes there, no guessing:**
-`dotfiles:`, `loadout:`, `wiki:`, `skills:`{{ if $m.work }}, `work:`{{ end }}. The
+`dotfiles:`, `loadout:`, `wiki:`, `skills:`{{ if $m.work }}, `work:`{{ end }}{{ if $m.omalauncher }}, `widgets:`{{ end }}. The
 rest of the message is the task. `loadout:` is always the app; a new or
 changed loadout is `dotfiles:`.
 
@@ -36,6 +41,26 @@ changed loadout is `dotfiles:`.
    it for the rest of the session: it decides how features are made, tested
    and committed (in `.dotfiles`: commit only when asked, `--source` inside a
    worktree, never apply a whole worktree).
+{{ if $m.omalauncher -}}
+2. **A feature worktree**, with plain git: this phone has no workmux.
+   ```bash
+   git -C ~/.local/share/chezmoi worktree add ~/.local/share/chezmoi__worktrees/<feature> -b <feature>
+   ```
+   Name the feature short and say why the change is being made, e.g.
+   `kitty-dashboard-key`, `finish-feature-rule`. That name is the branch and
+   the worktree folder. Every repo's part of one feature uses the same name.
+   The dotfiles' worktrees go beside the source, never inside it: anything
+   inside `~/.local/share/chezmoi` is a chezmoi source entry. The others are
+   bare repos, and theirs go in `all_worktrees/<feature>`, from their default
+   branch:
+   ```bash
+   git -C ~/Repos/gh/josemiguelo/<repo> worktree add all_worktrees/<feature> -b <feature> <default>
+   ```
+   The default branch is `master` for `loadout` and `wiki` (`loadout.wiki`),
+   `main` for `skills`. `widgets:` requests get no worktree.
+3. **Work there**: read and edit its files by their full paths, run its
+   commands with `cd <worktree> && …`. Say which worktree you used.
+{{ else -}}
 2. **A feature worktree**, by the repo's own workmux config, without
    workmux's windows or agent (you are the agent):
    ```bash
@@ -69,12 +94,36 @@ changed loadout is `dotfiles:`.
 4. **Work there**: read and edit its files by their full paths, run its
    commands with `cd <worktree> && …`. Say which worktree and window you
    used. Merging and removing a worktree follow the repo's `AGENTS.md`.
-
+{{ end }}
 ## Finishing a feature
 
 When the user asks you to finish a feature, do this for every repo and
 worktree the feature touched in this session, in this order:
 
+{{ if $m.omalauncher -}}
+1. **Commit** everything in the worktree, in the repo's commit style and with
+   its `AGENTS.md`'s rules. Launcher changes (`widgets:`) are in the dotfiles'
+   main checkout already, on `master`: commit them there first, as their own
+   commit, or the merge below can't move `master`. If anything is still
+   uncommitted, warn the user and stop.
+2. **Merge** into the repo's default branch (`master`, or `main` for `skills`),
+   following the repo's `AGENTS.md`: rebase the feature onto it
+   (`git -C <worktree> rebase <default>`), then fast-forward it from the main
+   checkout (the default branch's worktree, for the bare repos) with
+   `git merge --ff-only <feature>`. In `.dotfiles`, then `chezmoi diff` and
+   `chezmoi apply` from the main checkout. If the worktree isn't merged, warn
+   the user and stop.
+3. **Push** the default branch and the feature branch. If anything is still
+   unpushed, warn the user and stop.
+4. **Clean up**, only once every touched worktree has passed steps 1 to 3:
+   for a dotfiles worktree, first `dotfiles-worktree-check <worktree>` (what
+   workmux's `pre_remove` runs on the desktops: files only the worktree
+   manages that exist in `$HOME`), and if it lists any, ask the user before
+   going on; then `git worktree remove <worktree>` and `git branch -d
+   <feature>` in each repo. Last, `touch .claude/finished` in this session's
+   folder and tell the user to quit claude (`/exit`): start-dotfiles-change
+   removes the folder once claude exits.
+{{ else -}}
 1. **Check the tmux server's folder**: run `tmux-server-cwd`. A server keeps
    the folder it was started from for life, and once that folder is deleted
    tmux ignores `-c` and opens every new pane there. If it prints a path
@@ -98,11 +147,35 @@ worktree the feature touched in this session, in this order:
    session's folder and kill the tmux session this agent runs in, in one
    command and in that order (`rm -rf <folder> && tmux kill-session -t
    <session>`): killing the session ends this agent, so nothing after it runs.
-
+{{ end }}
 If any worktree fails a step, warn the user with the full list of what is
 blocking (uncommitted, unpushed, unmerged), and remove nothing: the user may
 still need those worktrees to fix it. Say which repos already merged or pushed
 in the meantime.
+{{- if $m.omalauncher }}
+
+## Widgets and faces
+
+`widgets:` requests are this phone's launcher: the files in
+`~/.config/omalauncher/widgets` (widgets, faces, apps, panels, the key bar),
+its style (`../style/style.toml`) and its home (`../home/layout.toml`).
+
+- **Before the first edit**, read that folder's `README.md` (the OWL
+  language, with `docs/` beside it; `examples/` has more to learn from) and
+  its `AGENTS.md` (this phone's rules, which come before the launcher's own).
+- **In place, no worktree**: they live on the phone, and saving one tracks it
+  in the dotfiles' main checkout by itself (this session's hook runs
+  `omalauncher-tracked`, as the widgets folder's own settings do).
+- **After each save**, `owl-check <file>`: it prints the errors and the path
+  of a PNG drawn with live data. Look at it to check the layout.
+- **A new face** takes the empty page left of the leftmost one: faces sit
+  left of page 1 at `page: 0`, `-1`, `-2`, … and `../home/layout.toml` lists
+  the pages left to right.
+- **Its packages** go in its `requires { pacman: [...] }`, installed with
+  `loadout run omalauncher-requires`, never `pacman -S` by hand.
+- **Committing** follows the dotfiles' `AGENTS.md`: only when the user asks,
+  in the main checkout, on `master`.
+{{- end }}
 
 ## The repos
 
@@ -138,6 +211,11 @@ in the meantime.
   release diffs, migrations and shell QML here, after `git fetch --tags
   origin`, with `git show <tag>:<path>` rather than checking tags out. Never
   make a temporary clone of Omarchy; if this one is missing, clone it here.
+{{- end }}
+{{- if $m.omalauncher }}
+- **`~/.config/omalauncher/widgets`** — this phone's launcher files, in place
+  (see Widgets and faces). `loadout`, `wiki` and `skills` are cloned here by
+  the dotfiles' `bare-repos` and `skills-repo` scripts.
 {{- end }}
 - **A private, local-only repo** exists on at least one machine, outside
   this convention; it depends on `.dotfiles` and the skills repo. Leave it
