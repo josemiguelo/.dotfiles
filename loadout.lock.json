@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.2.1",
-  "sources": "c374df63f998bee372214749d5f5bf78ceff485bca7dbc90a9085a765bacb694",
+  "sources": "a85f3b1074b9a5355d44df4fc8f9baffd3fc3c96e9eec2d871f626d53c8fa5cd",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1319,6 +1319,15 @@
         ],
         "origin": "configs/private_dot_config/nvim"
       },
+      "omalauncher-layout": {
+        "description": "home as layout.toml says, once the widgets it names are there",
+        "file": ".loadout/layout.sh",
+        "check": "file:.loadout/layout.sh check \"$@\"",
+        "after": [
+          "programs.chezmoi"
+        ],
+        "origin": "configs/private_dot_config/private_omalauncher"
+      },
       "omalauncher-requires": {
         "description": "every package the launcher's widgets declare",
         "file": ".loadout/requires.sh",
@@ -1918,6 +1927,7 @@
           "fakeroot-shim",
           "omalauncher-tracked",
           "omalauncher-requires",
+          "omalauncher-layout",
           "bare-repos loadout loadout.wiki",
           "skills-repo",
           "setup-ssh id_ed25519",

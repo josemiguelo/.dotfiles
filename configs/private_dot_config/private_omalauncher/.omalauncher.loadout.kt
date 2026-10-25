@@ -13,6 +13,15 @@ val omalauncherTracked = script(
     runAfter(chezmoi)
 }
 
+/** Home read again when the launcher left out widgets it read layout.toml too early to see (a new install's apply). */
+val omalauncherLayout = script(
+    name = "omalauncher-layout",
+    description = "home as layout.toml says, once the widgets it names are there",
+) {
+    managedBy(".loadout/layout.sh")
+    runAfter(chezmoi)
+}
+
 /** What the widgets' `requires { pacman: [...] }` declare: the files are the record, nothing else lists them. */
 val omalauncherRequires = script(
     name = "omalauncher-requires",

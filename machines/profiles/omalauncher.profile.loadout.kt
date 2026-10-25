@@ -21,7 +21,7 @@ val omalauncherProfile = profile(name = "omalauncher") {
     }
 
     run(machineName, fakerootShim)
-    run(omalauncherTracked, omalauncherRequires)
+    run(omalauncherTracked, omalauncherRequires, omalauncherLayout)
     run(bareRepos, "loadout", "loadout.wiki")
     run(skillsRepo)
     sshKey("id_ed25519")
