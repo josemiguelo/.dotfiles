@@ -17,7 +17,11 @@ val sudo = program(name = "sudo") {
     custom {
         installedBy("install-sudo.sh")
         needsSudo(false)
-        version(command = "sudo -V", regex = """Sudo version ([0-9][0-9.p]*)""")
+        // pacman's version, read the same way from its check and from
+        // checkupdates (the pacman installer's oracle, which a custom variant
+        // doesn't get), which prints it only when sudo is behind.
+        version(command = "pacman -Q sudo", regex = """^sudo ([0-9][0-9.p]*[0-9])""")
+        outdated = "checkupdates --nocolor | awk '\$1 == \"sudo\" {print \"sudo\", \$4}'"
     }
 }
 

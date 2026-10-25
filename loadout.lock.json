@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.2.1",
-  "sources": "09577528a57b76012e6b8e8b3242d6f1ba6139eea8a1cf6ab76249f58171b360",
+  "sources": "c374df63f998bee372214749d5f5bf78ceff485bca7dbc90a9085a765bacb694",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -658,7 +658,8 @@
           "mise-run": {
             "command": "curl -fsSL https://mise.run | sh",
             "check": "$HOME/.local/bin/mise --version",
-            "regex": "([0-9]+\\.[0-9][0-9.]*)"
+            "regex": "([0-9]+\\.[0-9][0-9.]*)",
+            "outdated": "file:.loadout/outdated-mise.sh"
           }
         },
         "origin": "configs/private_dot_config/mise"
@@ -899,8 +900,9 @@
         "install": {
           "custom": {
             "command": "file:install-sudo.sh",
-            "check": "sudo -V",
-            "regex": "Sudo version ([0-9][0-9.p]*)",
+            "check": "pacman -Q sudo",
+            "regex": "^sudo ([0-9][0-9.p]*[0-9])",
+            "outdated": "checkupdates --nocolor | awk '$1 == \"sudo\" {print \"sudo\", $4}'",
             "sudo": false
           }
         },

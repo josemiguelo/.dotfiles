@@ -16,9 +16,12 @@ val mise = program(
 
     // omalauncher's Arch: mise's own installer, into ~/.local/bin, where the
     // launcher's install put it; `mise self-update` moves it.
+    // Its oracle is this variant's alone: a program-level one would replace
+    // the installers' (Omarchy's pacman, brew) for every machine.
     custom(name = "mise-run") {
         command = "curl -fsSL https://mise.run | sh"
         version(command = "$HOME/.local/bin/mise --version")
+        outdated = runScript(".loadout/outdated-mise.sh")
     }
 }
 
