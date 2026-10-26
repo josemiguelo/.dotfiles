@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.2.1",
-  "sources": "a85f3b1074b9a5355d44df4fc8f9baffd3fc3c96e9eec2d871f626d53c8fa5cd",
+  "sources": "a0630b2de05cf1f33bfadb2ac494845fdd187a8811d8f6d00a695306dc66dd10",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1319,6 +1319,25 @@
         ],
         "origin": "configs/private_dot_config/nvim"
       },
+      "obsidian-headless-sqlite": {
+        "description": "better-sqlite3's prebuilt binding for mise's obsidian-headless",
+        "file": "headless-sqlite.sh",
+        "check": "file:headless-sqlite.sh check \"$@\"",
+        "after": [
+          "scripts.mise-tools"
+        ],
+        "origin": "maintenance/common/obsidian"
+      },
+      "obsidian-sync": {
+        "description": "an Obsidian Sync vault in a local folder, through ob",
+        "file": "sync.sh",
+        "check": "file:sync.sh check \"$@\"",
+        "after": [
+          "scripts.mise-tools",
+          "scripts.obsidian-headless-sqlite"
+        ],
+        "origin": "maintenance/common/obsidian"
+      },
       "omalauncher-layout": {
         "description": "home as layout.toml says, once the widgets it names are there",
         "file": ".loadout/layout.sh",
@@ -1938,6 +1957,8 @@
           "dotfiles-old-build-dir",
           "setup-git",
           "mise-tools",
+          "obsidian-headless-sqlite",
+          "obsidian-sync jm ~/Obsidian/vault pull-only",
           "default-shell"
         ],
         "data": {
