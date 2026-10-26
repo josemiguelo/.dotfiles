@@ -1,0 +1,8 @@
+# omalauncher: the drawer's Terminal (the launcher's foot.desktop) brings an
+# open terminal back; this one, with Terminal=true, opens a new one each tap.
+[Desktop Entry]
+Type=Application
+Name=New Terminal
+Exec=zsh
+Terminal=true
+Icon=foot

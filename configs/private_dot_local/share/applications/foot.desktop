@@ -1,0 +1,8 @@
+# omalauncher: the launcher's own Terminal entry, hidden. It brings an open
+# terminal back instead of opening another; New Terminal
+# (new-terminal.desktop) takes its place. The launcher leaves an entry it
+# seeded alone once it's been changed.
+[Desktop Entry]
+Type=Application
+Name=Terminal
+NoDisplay=true
