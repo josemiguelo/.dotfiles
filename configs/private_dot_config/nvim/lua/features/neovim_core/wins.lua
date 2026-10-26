@@ -37,9 +37,13 @@ LazyVim.on_very_lazy(function()
       vim.bo[event.buf].buflisted = false
       vim.o.eventignore = eventignore
       vim.schedule(function()
+        -- deleting a buffer closes every window showing it, and fugitive keeps one
+        -- status buffer per repo: a :G window would take the git tab's with it
         local action_close = function()
           vim.cmd("close")
-          pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+          if #vim.fn.win_findbuf(event.buf) == 0 then
+            pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+          end
         end
         local keymap_options = { buffer = event.buf, silent = true, desc = "Quit buffer" }
         vim.keymap.set("n", "q", action_close, keymap_options)
