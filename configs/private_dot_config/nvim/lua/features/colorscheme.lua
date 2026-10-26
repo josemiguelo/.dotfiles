@@ -1,5 +1,4 @@
 local reload_plugins = function()
-  require("features.winbar")[1].config()
   require("features.tabbar")[2].config()
   require("features.blink_cursor")[1].config()
 end
@@ -68,6 +67,11 @@ return {
         extend(hl, "CursorLineNr", { fg = light and c.cyan or c.purple })
 
         extend(hl, "FlashLabel", { bg = c.magenta2, fg = contrast_fg(c.magenta2), bold = true })
+
+        -- util/winbar.lua: the buffer's path, on a highlight band in dark mode
+        local winbar_bg = not light and c.bg_highlight or nil
+        hl.WinbarPath = { fg = c.blue, bg = winbar_bg, bold = true }
+        hl.WinbarModified = { fg = c.red, bg = winbar_bg, bold = true, italic = true }
 
         if light then
           extend(hl, "Comment", { fg = "#7380ba", italic = true })

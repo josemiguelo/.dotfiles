@@ -20,7 +20,6 @@
   "gitsigns.nvim": { "branch": "main", "commit": "8d79f2410c76e62b92e51c28c82e28c1c5a3daeb" },
   "grug-far.nvim": { "branch": "main", "commit": "11595bf747edc270bce2069d1020502ad4ae56cf" },
   "haunt.nvim": { "branch": "main", "commit": "c973175dda88236ecda342fd3654b5dc4f6b7764" },
-  "incline.nvim": { "branch": "main", "commit": "debd628e9395f7a9da57bdc31ce75ca6b40a880b" },
   "java-deps.nvim": { "branch": "fix-error-opening-picker", "commit": "8cedea095cd7d39b62bc77d1dcbd973d8ad87685" },
   "kotlin.nvim": { "branch": "main", "commit": "bc8ed5523db7e0ec2c00e26a17858e4c54d86072" },
   "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
