@@ -54,6 +54,7 @@ val omarchyProfile = profile(name = "omarchy") {
     // Apps the Omarchy way
     run(Omarchy.onePassword, Omarchy.vscode, Omarchy.brave)
     run(Omarchy.defaultBrowser, "brave")
+    run(surfingkeys)
     run(Omarchy.agentsPrune, "claude", "codex", "gh", "gemini")
 
     // Web apps: Google's in HEY's place

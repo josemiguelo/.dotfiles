@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "toolVersion": "3.2.1",
-  "sources": "a0630b2de05cf1f33bfadb2ac494845fdd187a8811d8f6d00a695306dc66dd10",
+  "toolVersion": "3.2.0",
+  "sources": "7412d0d832ff927418645d4aa2f908dc5a0cd6521f324a2a1f6826efc78794ce",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1712,6 +1712,15 @@
         ],
         "origin": "maintenance/linux/solaar"
       },
+      "surfingkeys": {
+        "description": "Surfingkeys in Brave, reading ~/.config/surfingkeys/surfingkeys.js",
+        "file": ".loadout/surfingkeys.sh",
+        "check": "file:.loadout/surfingkeys.sh check \"$@\"",
+        "after": [
+          "programs.brave"
+        ],
+        "origin": "configs/private_dot_config/surfingkeys"
+      },
       "t2-boot-clock": {
         "description": "keep the EC hardware clock set (T2 Mac)",
         "file": "boot-clock.sh",
@@ -2069,6 +2078,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
+          "surfingkeys",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
@@ -2201,6 +2211,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
+          "surfingkeys",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
