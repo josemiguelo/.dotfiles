@@ -19,6 +19,9 @@ local function open_fugitive()
     return
   end
   vim.cmd("tab split | tabmove 0 | Gedit :")
+  -- what :G marks its window with: fugitive's <CR> then opens files in another
+  -- window rather than over the status, splitting one off below when it's alone
+  vim.w.fugitive_status = vim.fn.FugitiveGitDir()
   require("tabby.feature.tab_name").set(0, "git")
 end
 
