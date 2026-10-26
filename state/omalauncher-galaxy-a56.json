@@ -5,7 +5,7 @@
   "distro": "archarm",
   "arch": "aarch64",
   "toolVersion": "3.2.1",
-  "updatedAt": "2026-10-26T01:07:53.821535124Z",
+  "updatedAt": "2026-10-26T01:40:23.971153791Z",
   "programs": {
     "bat": {
       "status": "installed",
@@ -106,7 +106,7 @@
     },
     "omalauncher-tracked": {
       "status": "done",
-      "lastRun": "2026-10-26T00:56:30.021769030Z",
+      "lastRun": "2026-10-26T01:40:20.949839728Z",
       "exitCode": 0
     },
     "omalauncher-requires": {
