@@ -1,0 +1,122 @@
+widget "vault tasks" {
+  page: 1
+  size: 6x4
+  minSize: 3x2
+
+  meta { owl: 13; description: "Tasks of every status from the Obsidian vault Obsidian Headless (ob) syncs here, in the Tasks plugin's format, read only: a tap opens TaskForge."; version: "1.2" }
+
+  requires { pacman: ["jq"] }
+
+  // The vault is the first one `ob sync-setup` linked; TaskForge's own
+  // settings notes, whose tasks are examples, stay out. It syncs only as it
+  // comes back into view: the list is read every minute while it's on screen,
+  // and a gap of more than 75 s since the last read means it was away (another
+  // app, page, or the screen off), which the launcher has no event for. Never
+  // while it's off screen, to save battery. Read only: tasks are ticked in
+  // TaskForge, which a tap opens, so the phone's vault, which TaskForge reads,
+  // is the one that changes. Every status shows, by the symbols TaskForge lists
+  // for this vault in its generated agents.md (its defaults without one); done
+  // and cancelled ones only for a week after they closed, newest first.
+  source v = cmd("""
+    export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+    c=~/.cache/vault-tasks
+    mkdir -p "$c"
+    vault=$(cat "$c/vault" 2>/dev/null)
+    if [ ! -d "$vault" ]; then
+      vault=
+      for p in $(ob sync-list-local 2>/dev/null | grep -oE '(/|~/)[^ "'\'',]+'); do
+        p=${p/#\~/$HOME}
+        if [ -d "$p" ]; then vault=$p; echo "$p" > "$c/vault"; break; fi
+      done
+    fi
+    if [ -z "$vault" ]; then echo '{"linked": false}'; exit 0; fi
+    last=$(stat -c %Y "$c/seen" 2>/dev/null || echo 0)
+    touch "$c/seen"
+    if [ ! -f "$c/synced" ] || [ $(( $(date +%s) - last )) -gt 75 ]; then
+      timeout 90 ob sync --path "$vault" > "$c/sync.log" 2>&1 && touch "$c/synced"
+    fi
+    cd "$vault"
+    statuses=$(grep -m1 '^Status checkboxes:' TaskForge/Settings/agents.md 2>/dev/null)
+    grep -rIn --include='*.md' --exclude-dir=.obsidian --exclude-dir=.trash -E '^\s*[-*] \[.\] ' . 2>/dev/null | head -1000 |
+      jq -R -s -c --arg vault "$vault" --argjson synced "$(stat -c %Y "$c/synced" 2>/dev/null || echo null)" \
+        --arg statuses "${statuses:-'`[ ]` todo · `[x]` done · `[-]` cancelled · `[/]` in progress'}" --arg since "$(date -d '-7 days' +%F)" '
+        def date(m): [.raw | capture(m + " *(?<d>[0-9]{4}-[0-9]{2}-[0-9]{2})")][0].d // null;
+        ($statuses | [match("`\\[(.)\\]` ([a-z]+( [a-z]+)?)"; "g") | {key: .captures[0].string, value: .captures[1].string}] | from_entries) as $names
+        | {"in progress": [0, "◐"], ready: [1, "▸"], todo: [2, "•"], planned: [3, "→"], blocked: [4, "⊘"],
+           "on hold": [5, "‖"], deferred: [6, "↷"], someday: [7, "?"], done: [8, "✓"], cancelled: [8, "✕"]} as $kinds
+        | {linked: true, vault: $vault, synced: $synced, tasks: (split("\n") | map(select(length > 0)
+          | capture("^\\./(?<file>.+?):(?<line>[0-9]+):(?<raw>.*)$")
+          | select(.file | startswith("TaskForge/Settings/") | not)
+          | (.raw | capture("^\\s*[-*] \\[(?<c>.)\\]").c) as $c
+          | ($names[$c] // (if $c == " " then "todo" else "unknown [\($c)]" end)) as $status
+          | . + {
+              status: $status,
+              rank: ($kinds[$status][0] // 2),
+              icon: ($kinds[$status][1] // $c),
+              closed: ($status == "done" or $status == "cancelled"),
+              closedOn: (date("✅") // date("❌")),
+              line: (.line | tonumber),
+              due: date("📅"), scheduled: date("⏳"), start: date("🛫"),
+              recurring: (.raw | test("🔁")),
+              priority: (if .raw | test("🔺") then 0 elif .raw | test("⏫") then 1 elif .raw | test("🔼") then 2
+                         elif .raw | test("🔽") then 4 elif .raw | test("⏬") then 5 else 3 end),
+              text: (.raw | sub("^\\s*[-*] \\[.\\] "; "")
+                | gsub("(📅|⏳|🛫|➕|✅|❌) *[0-9]{4}-[0-9]{2}-[0-9]{2}"; "")
+                | gsub("🔁[^📅⏳🛫➕⏫🔼🔽🔺⏬]*"; "")
+                | gsub("[⏫🔼🔽🔺⏬]"; "")
+                | gsub(" \\^[A-Za-z0-9-]+\\s*$"; "")
+                | gsub("\\s+"; " ") | ltrimstr(" ") | rtrimstr(" "))
+            } | select(.text != "" and (.closed | not) or (.closedOn // "") >= $since)))}'
+  """) every 1m json timeout 120s
+
+  source now = clock every 1m
+
+  let today = fmtTime(now, "yyyy-MM-dd")
+  let active = (v.tasks ?? []).filter(t => !t.closed).sortBy(t => "${t.rank} ${t.scheduled ?? t.due ?? "9999-99-99"} ${t.priority}")
+  let closed = (v.tasks ?? []).filter(t => t.closed).sortBy(t => t.closedOn).reverse()
+  let tasks = active + closed
+
+  onTap: url("taskforge:///")
+
+  Column {
+    gap: 6
+    fill: true
+    Row {
+      Text { text: "tasks"; style: muted; weight: 1 }
+      Text { text: "${len(active)} open"; style: small; color: accent }
+      Text { text: len(closed) > 0 ? "${len(closed)} closed this week" : ""; style: small; color: muted }
+      Text { text: v.synced == null ? "" : "synced ${fmtAgo(v.synced, now)}"; style: small; color: muted }
+    }
+    if v != null && !v.linked {
+      Text { text: "No vault linked. Run `ob login`, then `ob sync-setup --vault <name> --path ~/Obsidian/<name>`."; style: small; color: muted }
+    } else if v != null && len(tasks) == 0 {
+      Text { text: "no tasks"; style: small; color: muted }
+    }
+    Column {
+      gap: 6
+      weight: 1
+      scroll: true
+      lazy: true
+      for t in tasks key "${t.file}:${t.line}" {
+        let when = t.closed ? null : t.scheduled ?? t.due
+        let hot = !t.closed && t.priority <= 1
+        Row {
+          align: top
+          onTap: url("taskforge:///note?path=${enc(t.file)}")
+          Text { text: t.icon; width: 16; align: center; color: t.closed ? muted : hot ? orange : t.status == "todo" ? muted : accent }
+          Column {
+            gap: 0
+            weight: 1
+            Text { text: t.text; style: small; maxLines: 2; color: t.closed ? muted : hot ? orange : foreground }
+            Text {
+              text: "${t.status == "todo" ? "" : t.closed && t.closedOn != null ? "${t.status} ${t.closedOn} · " : "${t.status} · "}${t.recurring ? "↻ " : ""}${when == null ? "" : when < today ? "overdue ${when} · " : when == today ? "today · " : "${when} · "}${replace(t.file, ".md", "")}"
+              fontSize: 10
+              maxLines: 1
+              color: when != null && when < today ? red : muted
+            }
+          }
+        }
+      }
+    }
+  }
+}

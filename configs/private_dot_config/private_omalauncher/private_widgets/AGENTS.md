@@ -9,7 +9,11 @@ these win.
 - **Your edits are tracked by themselves.** Saving a launcher file (a
   top-level `*.owl` here, `../style/style.toml`, `../home/layout.toml`) adds
   it to the dotfiles: in Claude Code a hook does it on every Write or Edit;
-  elsewhere run `loadout run omalauncher-tracked`. A file deleted here is
+  elsewhere run `loadout run --force omalauncher-tracked` (it skips itself
+  once it has run, hence `--force`). The hook only sees Claude's own Write
+  and Edit, so after any hand edit or another tool's edit, run it, then check
+  with `sh ~/.local/share/chezmoi/configs/private_dot_config/private_omalauncher/.loadout/tracked.sh check`:
+  no output and exit 0 means nothing is missing. A file deleted here is
   forgotten there the same way. `examples/` and the launcher's dot files
   (`.stock-*`, `.preview/`, ...) are the launcher's, never tracked.
 - **A widget's packages go in its `requires { pacman: [...] }`**, and nowhere

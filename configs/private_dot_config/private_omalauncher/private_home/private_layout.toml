@@ -10,7 +10,15 @@ version = 1
 columns = 6
 
 [[page]]
-face = "market-face-simonschubert-control.owl"
+tiles = [
+  { widget = "market-nicomaure-speedtest.owl", x = 0, y = 0, w = 6, h = 3 },
+  { widget = "market-rwdpena-wifi-radar.owl", x = 0, y = 3, w = 6, h = 4 },
+  { app = "linux:new-terminal", x = 0, y = 7 },
+  { app = "com.brave.browser", x = 0, y = 10 },
+]
 
 [[page]]
-face = "00-sysmon.owl"
+tiles = [
+  { widget = "market-simonschubert-github-trending.owl", x = 0, y = 0, w = 6, h = 4 },
+  { widget = "30-vault-tasks.owl", x = 0, y = 4, w = 6, h = 4 },
+]

@@ -14,7 +14,6 @@ frost = true
 monochrome = true
 
 [status-bar]
-shown = false
 framed = true
 
 [navigation-bar]
