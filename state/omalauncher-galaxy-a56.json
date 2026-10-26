@@ -5,7 +5,7 @@
   "distro": "archarm",
   "arch": "aarch64",
   "toolVersion": "3.2.1",
-  "updatedAt": "2026-10-26T01:00:56.862947663Z",
+  "updatedAt": "2026-10-26T01:07:53.821535124Z",
   "programs": {
     "bat": {
       "status": "installed",
@@ -96,7 +96,7 @@
   "scripts": {
     "machine-name": {
       "status": "pending",
-      "lastRun": "2026-10-25T03:28:38.758377205Z",
+      "lastRun": "2026-10-26T01:07:14.999158600Z",
       "exitCode": 0
     },
     "fakeroot-shim": {
