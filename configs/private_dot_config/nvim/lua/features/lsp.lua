@@ -6,4 +6,12 @@ vim.api.nvim_create_user_command("LspInfo", function()
   vim.cmd("silent checkhealth vim.lsp")
 end, { desc = "Get all the information about all LSP attached" })
 
-return {}
+return {
+  {
+    -- noice draws K's hover and the signature help, borderless by default
+    "folke/noice.nvim",
+    opts = {
+      presets = { lsp_doc_border = true },
+    },
+  },
+}
