@@ -43,9 +43,9 @@ return {
       })
 
       -- commit buffers (Gclog, Flogsplitcommit) open with each file's diff folded
-      -- to one line of +/- counts, like the status window; the git syntax already
-      -- marks each file as a fold, but init.lua's global foldmethod and foldtext
-      -- hide it (fugitive only sets its foldtext over the default one). The status
+      -- to one line, its status letter and path, like the status window
+      -- (util/git_foldtext.lua); the git syntax already marks each file as a fold,
+      -- but init.lua's global foldmethod and foldtext hide it. The status
       -- window's keys work on them: = toggles, > opens, < closes, ]m [m ]/ [/ close
       -- the file they leave, and ( ) step over a closed file as one item rather than
       -- opening it (fugitive's own ]c [c open the one they reach)
@@ -92,8 +92,10 @@ return {
         pattern = "git",
         callback = function(ev)
           vim.opt_local.foldmethod = "syntax"
-          vim.opt_local.foldtext = "fugitive#Foldtext()"
+          vim.opt_local.foldtext = "v:lua.require'util.git_foldtext'.foldtext()"
           vim.opt_local.foldlevel = 0
+          -- no closed-fold icon beside the line number: the letter marks the file
+          vim.opt_local.fillchars = vim.tbl_extend("force", vim.opt.fillchars:get(), { foldclose = " " })
           local function map(lhs, rhs, desc)
             vim.keymap.set("n", lhs, rhs, { buffer = ev.buf, silent = true, desc = "Fugitive: " .. desc })
           end
@@ -126,13 +128,18 @@ return {
 
       -- the hunk-header emphasis (FugitiveHunkHeader/Context, colorscheme.lua) only
       -- applies in the status window: commit, blame and flog diffs share diffLine
-      -- and diffSubname, so map them per window rather than globally
-      local hunk_map = "diffLine:FugitiveHunkHeader,diffSubname:FugitiveHunkContext"
+      -- and diffSubname, so map them per window rather than globally. Commit
+      -- buffers drop Folded's band, so a closed file reads like a status line
+      local winhighlights = {
+        fugitive = "diffLine:FugitiveHunkHeader,diffSubname:FugitiveHunkContext",
+        git = "Folded:Normal",
+      }
       vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
         callback = function(ev)
-          if vim.bo[ev.buf].filetype == "fugitive" then
-            vim.wo.winhighlight = hunk_map
-          elseif vim.wo.winhighlight == hunk_map then
+          local winhighlight = winhighlights[vim.bo[ev.buf].filetype]
+          if winhighlight then
+            vim.wo.winhighlight = winhighlight
+          elseif vim.tbl_contains(vim.tbl_values(winhighlights), vim.wo.winhighlight) then
             vim.wo.winhighlight = ""
           end
         end,

@@ -123,6 +123,9 @@ return {
         for _, group in ipairs({ "fugitiveUnstagedSection", "fugitiveStagedSection" }) do
           extend(hl, group, vim.tbl_extend("force", emphasis, { fg = c.purple }))
         end
+        -- commit buffers' folded files use it (util/git_foldtext.lua) before any
+        -- status window has loaded fugitive's syntax, which links it the same way
+        hl.fugitiveStagedModifier = hl.fugitiveStagedModifier or { link = "Typedef" }
 
         -- flog's graph groups default-link to generic syntax colors; follow git's
         -- --decorate conventions to match fugitive. flogDiff* already links to diff*.
