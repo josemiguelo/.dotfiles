@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "3.2.0",
-  "updatedAt": "2026-10-22T13:57:44.823513020Z",
+  "toolVersion": "3.2.1",
+  "updatedAt": "2026-10-27T13:56:57.791249955Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -34,7 +34,7 @@
     },
     "awscli": {
       "status": "installed",
-      "version": "2.38.2",
+      "version": "2.38.6",
       "reason": null
     },
     "bat": {
@@ -299,7 +299,7 @@
     },
     "workmux": {
       "status": "installed",
-      "version": "0.1.276",
+      "version": "0.1.277",
       "reason": null
     },
     "wtype": {
@@ -340,9 +340,9 @@
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
+      "status": "pending",
+      "lastRun": "2026-10-27T13:56:44.341985062Z",
+      "exitCode": 1
     },
     "dotfiles-ssh-remote": {
       "status": "done",
@@ -366,7 +366,7 @@
     },
     "workmux-setup": {
       "status": "done",
-      "lastRun": "2026-10-21T01:51:45.129331396Z",
+      "lastRun": "2026-10-27T13:56:50.290670363Z",
       "exitCode": 0
     },
     "default-shell": {
@@ -436,7 +436,7 @@
     },
     "link-jetbrains-launchers-linux": {
       "status": "done",
-      "lastRun": "2026-10-20T20:39:29.526065680Z",
+      "lastRun": "2026-10-27T13:56:44.366848674Z",
       "exitCode": 0
     },
     "omarchy-hypr-config": {
@@ -519,6 +519,16 @@
       "lastRun": "2026-10-13T14:23:54.215882136Z",
       "exitCode": 0
     },
+    "surfingkeys": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "surfingkeys-split-view": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
     "omarchy-agents-prune": {
       "status": "done",
       "lastRun": "2026-10-21T01:41:39.460257175Z",
@@ -581,7 +591,7 @@
     },
     "omarchy-sshd": {
       "status": "done",
-      "lastRun": "2026-10-13T14:27:00.828846258Z",
+      "lastRun": "2026-10-27T13:56:48.230336720Z",
       "exitCode": 0
     },
     "t2-hid-apple-keyboard": {
@@ -727,6 +737,11 @@
       "reason": null
     },
     "starship.toml": {
+      "status": "applied",
+      "files": [],
+      "reason": null
+    },
+    "surfingkeys": {
       "status": "applied",
       "files": [],
       "reason": null
