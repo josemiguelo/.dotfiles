@@ -12,7 +12,7 @@
       "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/**)",
       "Read(/{{ $h }}/Repos/gh/josemiguelo/skills/**)",
       "Edit(/{{ $h }}/Repos/gh/josemiguelo/skills/all_worktrees/**)",
-{{- /* One machine's own rules, one per line (the work laptop's overlay links them here), in no public repo. */}}
+{{- /* One machine's own rules, one per line (the work laptop's child repo deploys them here), in no public repo. */}}
 {{- $allow := joinPath $h ".config/loadout-session/allow" }}
 {{- if stat $allow }}
 {{- range include $allow | splitList "\n" }}

@@ -4,6 +4,7 @@ import loadout.dsl.*
 
 /** Every macOS machine. macOS ships zsh as the login shell, so zsh is neither installed nor switched to. */
 val macos = profile(name = "macos") {
+    spare(reason = "the work laptop extends it, from a private child repo of this one")
     install(setupBrew.variant(name = "macos"))
     via(brew) {
         install(everydayCli)

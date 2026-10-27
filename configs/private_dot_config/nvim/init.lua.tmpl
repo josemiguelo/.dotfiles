@@ -28,8 +28,8 @@ require("lazy").setup({
     { import = "features.neovim_core" },
     { import = "features" },
     { import = "features.langs" },
-    -- What only one machine has: the work laptop's private overlay
-    -- (work-overlay) links its specs into lua/overlay.
+    -- What only one machine has: the work laptop's private child repo
+    -- deploys its specs into lua/overlay.
     {
       import = "overlay",
       enabled = (vim.uv or vim.loop).fs_stat(vim.fn.stdpath("config") .. "/lua/overlay") ~= nil,

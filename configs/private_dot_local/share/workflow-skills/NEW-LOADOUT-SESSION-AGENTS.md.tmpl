@@ -1,5 +1,5 @@
 {{- $m := includeTemplate "loadout/machine" . | fromJson -}}
-{{- /* One machine's own repos (the work laptop's overlay links them here), in no public repo. */ -}}
+{{- /* One machine's own repos (the work laptop's child repo deploys them here), in no public repo. */ -}}
 {{- $extra := joinPath .chezmoi.homeDir ".config/loadout-session/AGENTS.md" -}}
 # Loadout session
 

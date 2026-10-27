@@ -14,8 +14,8 @@
 # blank lines are skipped. An optional third field, `<TAB>command`, is what runs
 # instead of the name (which is then just a label); the picker doesn't show it.
 # COMMAND_PALETTE_COMMANDS points at another file. `<registry>.local`, in no
-# repo, adds one machine's own commands (the work laptop's overlay links its
-# there).
+# repo, adds one machine's own commands (the work laptop's child repo deploys
+# its there).
 
 # macOS: a login shell starts from path_helper's PATH (/etc/paths and paths.d,
 # e.g. /usr/local/bin, where Docker Desktop links docker). kitty's overlay gets

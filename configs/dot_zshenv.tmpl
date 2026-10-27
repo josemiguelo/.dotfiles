@@ -1,7 +1,9 @@
-# A machine whose hostname isn't its name in the repo (the work laptop keeps
-# the one its IT gave it) names itself here; loadout and the templates'
-# loadout/machine partial both read LOADOUT_MACHINE. The file is in no repo.
+# A machine whose hostname isn't its name (the work laptop keeps the one its
+# IT gave it) names itself here, and a machine whose repo is a private child
+# of this one (loadout's contract 18) names that repo; loadout and the
+# templates' loadout/machine partial read both. Neither file is in any repo.
 [[ -r ~/.config/loadout/machine ]] && export LOADOUT_MACHINE=$(<~/.config/loadout/machine)
+[[ -r ~/.config/loadout/repo ]] && export LOADOUT_REPO=$(<~/.config/loadout/repo)
 {{ if (includeTemplate "loadout/machine" . | fromJson).omalauncher -}}
 export ZDOTDIR=~/.config/zsh-omalauncher
 {{ else -}}

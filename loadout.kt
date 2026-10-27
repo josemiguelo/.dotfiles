@@ -12,7 +12,7 @@ class Data : MachineData() {
     /** An Omarchy machine (Linuxbrew reaches the shell from the zsh config). */
     var omarchy by flag(false)
 
-    /** The work machine: work-only tools in, personal ones (e.g. Copilot) out; the rest comes from its private overlay (work-overlay). */
+    /** The work machine: work-only tools in, personal ones (e.g. Copilot) out; the rest comes from its private child repo. */
     var work by flag(false)
 
     /** Arch inside the omalauncher Android launcher: only the launcher's configs deploy, and no desktop's reach it. */

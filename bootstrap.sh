@@ -28,13 +28,18 @@
 # LOADOUT_MACHINE), no ownership to give back, and sudo installed before
 # setup-new-machine, which asks for it before any plan that runs it.
 #
-# A machine whose data says work keeps the hostname its IT gave it: its name
-# goes in ~/.config/loadout/machine instead (~/.zshenv exports it as
-# LOADOUT_MACHINE, which loadout and the templates read before the hostname).
+# A machine of a private child repo of this one (loadout's contract 18: the
+# work laptop's, which builds on these dotfiles) takes --child <ssh url>: the
+# child declares it, so this repo's lock isn't asked; its hostname stays the
+# one its IT gave it, the name going in ~/.config/loadout/machine and the
+# child's checkout in ~/.config/loadout/repo (~/.zshenv exports both); the
+# child is cloned over ssh before the first apply (this repo's templates read
+# its machine through LOADOUT_REPO), so the machine's ssh key must already be
+# on GitHub; and loadout sets up the child, which runs this repo's recipes.
 #
 # Safe to run again: every step skips what's done. --dry-run prints the
 # commands without running them.
-# usage: bootstrap.sh [--dry-run] <machine>
+# usage: bootstrap.sh [--dry-run] <machine> [--child <ssh url>]
 set -eu
 
 GH=josemiguelo/.dotfiles
@@ -53,12 +58,17 @@ main() {
   DRY=
   if [ "${1:-}" = --dry-run ]; then DRY=1; shift; fi
   MACHINE=${1:-}
-  [ -n "$MACHINE" ] || die "usage: bootstrap.sh [--dry-run] <machine>  (a machine in https://github.com/$GH/tree/master/machines)"
+  [ -n "$MACHINE" ] || die "usage: bootstrap.sh [--dry-run] <machine> [--child <ssh url>]  (a machine in https://github.com/$GH/tree/master/machines)"
+  CHILD=
+  if [ "${2:-}" = --child ]; then CHILD=${3:-}; [ -n "$CHILD" ] || die "--child needs the child repo's ssh url"; fi
   OS=$(uname -s)
   OMARCHY=
   command -v omarchy >/dev/null 2>&1 && OMARCHY=1
 
   say "1. machine $MACHINE"
+  if [ -n "$CHILD" ]; then
+    echo "  declared by the child repo $CHILD"
+  else
   # The lock's machines, one per line: the keys of its "machines" object,
   # which loadout writes pretty-printed, two spaces per level.
   machines=$(curl -fsSL "$RAW/loadout.lock.json" 2>/dev/null |
@@ -74,9 +84,8 @@ Then loadout compile, commit and push (the lock too), and run this again.
 EOF
     exit 1
   fi
-  # Its omalauncher and work flags, from its table in the templates' data
-  # (written by loadout compile, pretty-printed like the lock: four spaces
-  # deeper).
+  # Its omalauncher flag, from its table in the templates' data (written by
+  # loadout compile, pretty-printed like the lock: four spaces deeper).
   DATA=$(curl -fsSL "$RAW/configs/.chezmoidata/loadout.json" 2>/dev/null || true)
   flag() {
     printf '%s\n' "$DATA" |
@@ -85,8 +94,7 @@ EOF
   }
   OMALAUNCHER=
   flag omalauncher && OMALAUNCHER=1
-  WORK=
-  flag work && WORK=1
+  fi
 
   say "2. git and chezmoi"
   if [ -n "$OMALAUNCHER" ]; then
@@ -113,7 +121,7 @@ EOF
   PATH=$HOME/.local/bin:$PATH
 
   say "3. hostname"
-  if [ -n "$WORK" ]; then
+  if [ -n "$CHILD" ]; then
     # Its IT's hostname stays; the name is loadout's alone.
     NAMEFILE=$HOME/.config/loadout/machine
     if [ "$(cat "$NAMEFILE" 2>/dev/null)" != "$MACHINE" ]; then
@@ -157,6 +165,25 @@ EOF
   fi
 
   say "5. dotfiles"
+  LREPO=$REPO
+  if [ -n "$CHILD" ]; then
+    # Bare, with its default branch's worktree, as bare-repos clones; its
+    # folder drops a leading dot (.dotfiles-work lands in dotfiles-work).
+    name=$(basename "$CHILD" .git)
+    dir=$HOME/Repos/gh/josemiguelo/${name#.}
+    if [ ! -d "$dir" ]; then
+      ssh -T -o BatchMode=yes -o ConnectTimeout=10 git@github.com 2>&1 | grep -q "successfully authenticated" || [ -n "$DRY" ] ||
+        die "the child repo is private: put this machine's ssh key on GitHub first (ssh-keygen -t ed25519, then gh ssh-key add ~/.ssh/id_ed25519.pub), then run this again"
+      run git clone --quiet --bare "$CHILD" "$dir"
+      run git -C "$dir" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+      run git -C "$dir" fetch --quiet origin
+    fi
+    branch=$(git -C "$dir" symbolic-ref --quiet --short HEAD 2>/dev/null || echo main)
+    [ -d "$dir/all_worktrees/$branch" ] || run git -C "$dir" worktree add --quiet "$dir/all_worktrees/$branch" "$branch"
+    LREPO=$dir/all_worktrees/$branch
+    run sh -c 'printf "%s\n" "$1" >"$2"' sh "$LREPO" "$HOME/.config/loadout/repo"
+    export LOADOUT_REPO="$LREPO"
+  fi
   run chezmoi init --apply "https://github.com/$GH.git"
   # The repo's hooks (.githooks/pre-commit refuses manifests committed without
   # their compiled lock).
@@ -174,9 +201,13 @@ EOF
     # Its rootfs ships without sudo, which pacman's installer runs.
     run env LOADOUT_REPO="$REPO" loadout --repo "$REPO" --machine "$MACHINE" install sudo --yes
   fi
-  run env LOADOUT_REPO="$REPO" \
+  if [ -n "$CHILD" ]; then
+    # The child's own dotfiles; this repo's are applied above.
+    run env LOADOUT_REPO="$LREPO" loadout --repo "$LREPO" --machine "$MACHINE" apply
+  fi
+  run env LOADOUT_REPO="$LREPO" \
     MISE_IGNORED_CONFIG_PATHS="$REPO:$HOME/.local/share/chezmoi__worktrees" \
-    loadout --repo "$REPO" --machine "$MACHINE" setup-new-machine --yes
+    loadout --repo "$LREPO" --machine "$MACHINE" setup-new-machine --yes
 
   say "done: $MACHINE"
   if [ -n "$OMALAUNCHER" ]; then

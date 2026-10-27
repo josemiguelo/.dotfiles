@@ -22,7 +22,7 @@ trap cleanup EXIT
 
 export HOME="$WORK/home"
 # The hostname cases first: the name only comes from it while this is unset.
-unset LOADOUT_MACHINE
+unset LOADOUT_MACHINE LOADOUT_REPO
 export XDG_CONFIG_HOME="$HOME/.config" XDG_CACHE_HOME="$HOME/.cache" XDG_DATA_HOME="$HOME/.local/share"
 [[ "$HOME" == "$WORK"/* ]] || { echo "HOME is not inside the fixture" >&2; exit 1; }
 
@@ -70,6 +70,16 @@ eq "$(LOADOUT_MACHINE=named value '"color"')" '"green"' "its table wins over the
 eq "$(LOADOUT_MACHINE=named cz cat "$HOME/.probe")" "off" "a template sees its value"
 eq "$(LOADOUT_MACHINE= value '"color"')" '"red"' "empty, the hostname names it"
 eq "$(LOADOUT_MACHINE=undeclared value '"color"')" '"blue"' "a name the repo doesn't declare gets the defaults"
+
+echo "a child repo's machine (LOADOUT_REPO names the child, whose lock declares it)"
+CHILD="$WORK/child"
+mkdir -p "$CHILD"
+printf '{"format": 1, "toolVersion": "3.3.0", "sources": "x", "manifest": {"machines": {"work-mac": {"data": {"flag": false, "color": "purple"}}}}}\n' > "$CHILD/loadout.lock.json"
+eq "$(LOADOUT_MACHINE=work-mac LOADOUT_REPO="$CHILD" value '"color"')" '"purple"' "its table comes from the child's lock"
+eq "$(LOADOUT_MACHINE=work-mac LOADOUT_REPO="$CHILD" cz cat "$HOME/.probe")" "off" "a template sees its value"
+eq "$(LOADOUT_MACHINE=named LOADOUT_REPO="$CHILD" value '"color"')" '"green"' "this repo's own machine still wins"
+eq "$(LOADOUT_MACHINE=other LOADOUT_REPO="$CHILD" value '"color"')" '"blue"' "a name neither declares gets the defaults"
+eq "$(LOADOUT_MACHINE=work-mac LOADOUT_REPO="$WORK/nowhere" value '"color"')" '"blue"' "a LOADOUT_REPO with no lock gets the defaults"
 
 echo
 echo "$pass passed, $fail failed"

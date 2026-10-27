@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.3.0",
-  "sources": "2a18a9060cad376e6e6b75d28441adbf31d837d625bb61b2b74c5562b3d3e964",
+  "sources": "0b6206de9049e07336e4e9026854fcddf9255b41e5e9f03ab0544e8108202468",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1835,15 +1835,6 @@
         "sudo": true,
         "origin": "programs/apps"
       },
-      "work-overlay": {
-        "description": "the work machine's private overlay",
-        "file": "work-overlay.sh",
-        "check": "file:work-overlay.sh check \"$@\"",
-        "after": [
-          "programs.git"
-        ],
-        "origin": "maintenance/common/work-overlay"
-      },
       "workmux-setup": {
         "description": "workmux's status-tracking hooks and skills for the agents here",
         "file": ".loadout/setup.sh",
@@ -2182,90 +2173,6 @@
         "data": {
           "omarchy": true,
           "work": false,
-          "omalauncher": false,
-          "kitty": {
-            "opacity": 0.85
-          }
-        }
-      },
-      "work-mac": {
-        "extends": [
-          "macos"
-        ],
-        "pm": {
-          "1password-cli": "brew-cask",
-          "atuin": "brew",
-          "awscli": "brew",
-          "azure-cli": "brew",
-          "bat": "brew",
-          "btop": "brew",
-          "chezmoi": "brew",
-          "claude": "custom",
-          "codex": "brew-cask",
-          "coreutils": "brew",
-          "eza": "brew",
-          "fd": "brew",
-          "fzf": "brew",
-          "gawk": "brew",
-          "gh": "brew",
-          "git-delta": "brew",
-          "gnu-sed": "brew",
-          "gum": "brew",
-          "jira-cli": "brew",
-          "jordanbaird-ice": "brew-cask",
-          "jq": "brew",
-          "kitty": "brew-cask",
-          "kotlin-lsp": "custom",
-          "lazydocker": "brew",
-          "lazygit": "brew",
-          "lunar": "brew-cask",
-          "meetingbar": "brew-cask",
-          "mise": "brew",
-          "ngrok": "custom",
-          "obs": "brew-cask",
-          "qemu": "brew",
-          "raycast": "brew-cask",
-          "ripgrep": "brew",
-          "scrcpy": "brew",
-          "setup-brew": "macos",
-          "starship": "brew",
-          "terraform": "brew-tap",
-          "tmux": "brew",
-          "tpack": "brew-tap-cask",
-          "trash-cli": "brew",
-          "tree": "brew",
-          "tree-sitter-cli": "brew",
-          "try": "brew",
-          "unixodbc": "brew",
-          "voxtype": "brew-tap-cask",
-          "wget": "brew",
-          "workmux": "brew-tap",
-          "yazi": "brew",
-          "yq": "brew",
-          "zoxide": "brew"
-        },
-        "scripts": [
-          "dotfiles-pull",
-          "dotfiles-push",
-          "dotfiles-ssh-remote",
-          "dotfiles-old-build-dir",
-          "setup-git",
-          "skills-repo",
-          "workmux-setup",
-          "nvim-plugins",
-          "download-fonts",
-          "zsh-plugins",
-          "setup-completions",
-          "mise-tools",
-          "mise-default-packages",
-          "java-macos-integration",
-          "tmux-plugins",
-          "voxtype-setup",
-          "work-overlay .dotfiles-work"
-        ],
-        "data": {
-          "omarchy": false,
-          "work": true,
           "omalauncher": false,
           "kitty": {
             "opacity": 0.85

@@ -32,14 +32,6 @@
         "kitty": {
           "opacity": 0.85
         }
-      },
-      "work-mac": {
-        "omarchy": false,
-        "work": true,
-        "omalauncher": false,
-        "kitty": {
-          "opacity": 0.85
-        }
       }
     }
   }
