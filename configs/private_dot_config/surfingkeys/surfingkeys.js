@@ -1,88 +1,109 @@
 const { mapkey, Hints } = api;
 
 // --------------------------------------------------------------------------
-// 1. COMPLETE SURFINGKEYS UI THEME (AUTO DARK / LIGHT FOR POPUPS, TABS, OMNIBAR)
+// 1. THEME: TOKYO NIGHT IN DARK MODE, TOKYO NIGHT DAY IN LIGHT
 // --------------------------------------------------------------------------
-const surfingkeysTheme = `
-  /* --- LIGHT THEME DEFAULTS --- */
-  :root {
-    --sk-bg: #ffffff;
-    --sk-header-bg: #f3f4f6;
-    --sk-fg: #1f2937;
-    --sk-border: #e5e7eb;
-    --sk-hint-bg: #facc15;
-    --sk-hint-fg: #000000;
-    --sk-btn-bg: #ef4444;
-    --sk-btn-fg: #ffffff;
-    --sk-item-active: #e5e7eb;
+// Follows Brave's appearance through prefers-color-scheme. Surfingkeys' own UI
+// (omnibar, help, status bar, tab picker) is an iframe that only settings.theme
+// styles; link hints are a shadow root in the page that only Hints.style
+// styles. Both run their CSS through DOMPurify, which escapes `>`, so no
+// child combinators here.
+const palette = `
+  :root, :host {
+    --sk-bg: #e1e2e7;
+    --sk-bg-alt: #d5d6db;
+    --sk-fg: #3760bf;
+    --sk-muted: #848cb5;
+    --sk-border: #a8aecb;
+    --sk-selected: #c4c8da;
+    --sk-accent: #2e7de9;
+    --sk-match: #f52a65;
+    --sk-folder: #9854f1;
+    --sk-hint-bg: #8c6c3e;
+    --sk-hint-fg: #e1e2e7;
   }
-
-  /* --- DARK THEME OVERRIDES --- */
   @media (prefers-color-scheme: dark) {
-    :root {
-      --sk-bg: #181825;
-      --sk-header-bg: #1e1e2e;
-      --sk-fg: #cdd6f4;
-      --sk-border: #313244;
-      --sk-hint-bg: #f9e2af;
-      --sk-hint-fg: #11111b;
-      --sk-btn-bg: #f38ba8;
-      --sk-btn-fg: #11111b;
-      --sk-item-active: #313244;
+    :root, :host {
+      --sk-bg: #1a1b26;
+      --sk-bg-alt: #16161e;
+      --sk-fg: #c0caf5;
+      --sk-muted: #565f89;
+      --sk-border: #3b4261;
+      --sk-selected: #292e42;
+      --sk-accent: #7aa2f7;
+      --sk-match: #ff9e64;
+      --sk-folder: #bb9af7;
+      --sk-hint-bg: #e0af68;
+      --sk-hint-fg: #1a1b26;
     }
-  }
-
-  /* Global Surfingkeys Popups & Panels */
-  .sk_theme, #sk_omnibar, #sk_status, #sk_banner, #sk_tabs, #sk_keystroke {
-    background-color: var(--sk-bg) !important;
-    color: var(--sk-fg) !important;
-    border-color: var(--sk-border) !important;
-  }
-
-  /* Omnibar Input & Command Line (Triggered by :) */
-  #sk_omnibar .prompt, #sk_omnibar .separator {
-    color: var(--sk-fg) !important;
-  }
-  #sk_omnibar input {
-    background-color: var(--sk-bg) !important;
-    color: var(--sk-fg) !important;
-  }
-  #sk_omnibarResult li {
-    background-color: var(--sk-bg) !important;
-    color: var(--sk-fg) !important;
-  }
-  #sk_omnibarResult li.focused {
-    background-color: var(--sk-item-active) !important;
-  }
-
-  /* Tab Preview Overlay (Triggered by t) */
-  #sk_tabs .sk_tab {
-    background-color: var(--sk-header-bg) !important;
-    color: var(--sk-fg) !important;
-    border: 1px solid var(--sk-border) !important;
-  }
-  #sk_tabs .sk_tab_title {
-    color: var(--sk-fg) !important;
-  }
-  #sk_tabs .sk_tab_url {
-    color: var(--sk-hint-bg) !important;
-  }
-  #sk_tabs div.sk_tab_hint {
-    background-color: var(--sk-hint-bg) !important;
-    color: var(--sk-hint-fg) !important;
-  }
-
-  /* Link Hints (Triggered by f / gs) */
-  #sk_hints .begin {
-    color: var(--sk-hint-fg) !important;
-    background: var(--sk-hint-bg) !important;
-    border: 1px solid var(--sk-border) !important;
-    font-weight: bold !important;
   }
 `;
 
-// Apply theme dynamically to Surfingkeys system UI
-api.Hints.style(surfingkeysTheme);
+settings.theme = `
+  ${palette}
+  .sk_theme {
+    background: var(--sk-bg);
+    color: var(--sk-fg);
+    font-family: system-ui, sans-serif;
+  }
+  .sk_theme input { color: var(--sk-fg); }
+  .sk_theme .url, .sk_theme .annotation { color: var(--sk-muted); }
+  .sk_theme kbd {
+    background: var(--sk-selected);
+    color: var(--sk-fg);
+    border-color: var(--sk-border);
+    box-shadow: none;
+  }
+  .sk_theme .frame { background: color-mix(in srgb, var(--sk-accent) 40%, transparent); }
+  .sk_theme .omnibar_highlight { color: var(--sk-match); }
+  .sk_theme .omnibar_folder { color: var(--sk-folder); }
+  .sk_theme .omnibar_timestamp { color: var(--sk-muted); }
+  .sk_theme .omnibar_visitcount { color: var(--sk-accent); }
+  .sk_theme .prompt, .sk_theme .resultPage { color: var(--sk-muted); }
+  .sk_theme .feature_name { color: var(--sk-accent); }
+  .sk_theme .separator { color: var(--sk-border); }
+  .sk_theme #sk_omnibarSearchResult ul li:nth-child(odd) { background: var(--sk-bg-alt); }
+  .sk_theme #sk_omnibarSearchResult ul li.focused { background: var(--sk-selected); }
+  .sk_theme #sk_omnibarSearchResult ul li.window.focused { border-color: var(--sk-accent); }
+  #sk_omnibar, #sk_status, #sk_banner, #sk_popup, #sk_usage, #sk_editor {
+    border-color: var(--sk-border);
+  }
+  #sk_banner { background: var(--sk-bg); color: var(--sk-fg); }
+  #sk_keystroke { background: var(--sk-bg-alt); color: var(--sk-fg); }
+  div.sk_tab {
+    background: var(--sk-bg);
+    border: 1px solid var(--sk-border);
+  }
+  div.sk_tab_title { color: var(--sk-fg); }
+  div.sk_tab_url { color: var(--sk-muted); }
+  div.sk_tab_hint {
+    background: var(--sk-hint-bg);
+    color: var(--sk-hint-fg);
+    border-color: var(--sk-hint-bg);
+  }
+`;
+
+// Hints.style wraps CSS that doesn't start with `div` in `div{…}`.
+Hints.style(`
+  div {
+    background: var(--sk-hint-bg);
+    color: var(--sk-hint-fg);
+    border: 1px solid var(--sk-hint-bg);
+    box-shadow: none;
+  }
+  div.begin { color: var(--sk-muted); }
+  ${palette}
+`);
+Hints.style(`
+  div {
+    background: var(--sk-selected);
+    color: var(--sk-fg);
+    border: 1px solid var(--sk-border);
+    box-shadow: none;
+  }
+  div.begin { color: var(--sk-accent); }
+  ${palette}
+`, "text");
 
 // --------------------------------------------------------------------------
 // 2. SIDE PREVIEW PANEL WITH MATCHING THEME
@@ -127,7 +148,7 @@ mapkey('gs', 'Toggle or open link in side overlay panel', function() {
 
         shadow.innerHTML = `
             <style>
-                ${surfingkeysTheme}
+                ${palette}
 
                 :host {
                     display: flex;
