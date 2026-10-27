@@ -21,6 +21,8 @@ cleanup() {
 trap cleanup EXIT
 
 export HOME="$WORK/home"
+# The hostname cases first: the name only comes from it while this is unset.
+unset LOADOUT_MACHINE
 export XDG_CONFIG_HOME="$HOME/.config" XDG_CACHE_HOME="$HOME/.cache" XDG_DATA_HOME="$HOME/.local/share"
 [[ "$HOME" == "$WORK"/* ]] || { echo "HOME is not inside the fixture" >&2; exit 1; }
 
@@ -61,6 +63,13 @@ eq "$(value '"flag"')" "false" "its false comes through"
 eq "$(value '"color"')" '"red"' "its string comes through"
 eq "$(value '"term"')" '{"blur":1,"opacity":0.5}' "its tables come through"
 eq "$(cz cat "$HOME/.probe")" "off" "a template sees the machine's value"
+
+echo "a machine named by LOADOUT_MACHINE (its hostname isn't its name)"
+data "{\"$HOST\": {\"flag\": true, \"color\": \"red\"}, \"named\": {\"flag\": false, \"color\": \"green\"}}"
+eq "$(LOADOUT_MACHINE=named value '"color"')" '"green"' "its table wins over the hostname's"
+eq "$(LOADOUT_MACHINE=named cz cat "$HOME/.probe")" "off" "a template sees its value"
+eq "$(LOADOUT_MACHINE= value '"color"')" '"red"' "empty, the hostname names it"
+eq "$(LOADOUT_MACHINE=undeclared value '"color"')" '"blue"' "a name the repo doesn't declare gets the defaults"
 
 echo
 echo "$pass passed, $fail failed"

@@ -28,7 +28,7 @@ tmux() {
   display-message)
     # called as: display-message -p -c <tty> '#{pane_current_path}'
     case "$4" in
-    /dev/ttys009) echo /Users/x/work ;;
+    /dev/ttys009) echo /Users/x/project ;;
     /dev/ttys005) echo /Users/x/tries ;;
     esac
     ;;
@@ -52,11 +52,11 @@ SHELL_JSON='[{"tabs":[{"windows":[{"id":6,"foreground_processes":[{"pid":111,"cm
 echo "parent_pane_path"
 
 KITTY_JSON="$PARENT_JSON"
-eq "$(parent_pane_path)" "/Users/x/work" \
+eq "$(parent_pane_path)" "/Users/x/project" \
   "parent window's tmux client: uses that client's pane, not the other client's"
 
 KITTY_JSON="$MULTI_JSON"
-eq "$(parent_pane_path)" "/Users/x/work" \
+eq "$(parent_pane_path)" "/Users/x/project" \
   "several foreground pids (client started by tmux-goto): still finds the client"
 
 KITTY_JSON="$SHELL_JSON"

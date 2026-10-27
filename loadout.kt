@@ -5,17 +5,14 @@ package loadouts
 
 import loadout.dsl.*
 
-val loadout = repo(name = "jm's machines", state = "state", configs = "configs", minToolVersion = "3.2.0", data = ::Data)
+val loadout = repo(name = "jm's machines", state = "state", configs = "configs", minToolVersion = "3.3.0", data = ::Data)
 
 /** Every per-machine setting, with its default. Dotfile templates branch on these, not on hostnames. */
 class Data : MachineData() {
     /** An Omarchy machine (Linuxbrew reaches the shell from the zsh config). */
     var omarchy by flag(false)
 
-    /** Behind CorpCA's TLS inspection: tools trust its root CA when readable. */
-    var corpca by flag(false)
-
-    /** The work machine: work-only tools in, personal ones (e.g. Copilot) out. */
+    /** The work machine: work-only tools in, personal ones (e.g. Copilot) out; the rest comes from its private overlay (work-overlay). */
     var work by flag(false)
 
     /** Arch inside the omalauncher Android launcher: only the launcher's configs deploy, and no desktop's reach it. */

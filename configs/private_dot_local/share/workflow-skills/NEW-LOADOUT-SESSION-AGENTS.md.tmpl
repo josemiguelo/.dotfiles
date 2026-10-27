@@ -1,4 +1,6 @@
 {{- $m := includeTemplate "loadout/machine" . | fromJson -}}
+{{- /* One machine's own repos (the work laptop's overlay links them here), in no public repo. */ -}}
+{{- $extra := joinPath .chezmoi.homeDir ".config/loadout-session/AGENTS.md" -}}
 # Loadout session
 
 This folder is a scratch session opened by `start-dotfiles-change`. {{ if $m.omalauncher }}You run in
@@ -18,9 +20,6 @@ nobody will ask for it by name.
 | the loadout app itself: engine, CLI, home screen, its tests or release | `~/Repos/gh/josemiguelo/loadout` | a feature worktree{{ if not $m.omalauncher }}, window `loadout <feature>`{{ end }} |
 | loadout's user docs | `~/Repos/gh/josemiguelo/loadout.wiki` | a feature worktree{{ if not $m.omalauncher }}, window `wiki <feature>`{{ end }} |
 | a general-purpose agent skill | `~/Repos/gh/josemiguelo/skills` | a feature worktree{{ if not $m.omalauncher }}, window `skills <feature>`{{ end }} |
-{{- if $m.work }}
-| the work.nvim Neovim plugin | `~/Repos/gh/josemiguelo/work.nvim` | a feature worktree, window `work <feature>` |
-{{- end }}
 {{- if $m.omalauncher }}
 | a widget, face, app, panel or key bar for this phone's launcher, its style or its home layout | `~/.config/omalauncher/widgets` | in place, no worktree (see Widgets and faces) |
 {{- end }}
@@ -31,9 +30,11 @@ which repos you'd touch and ask first. Each repo's part is its own
 worktree and its own commit.
 
 **A message starting with a repo and a colon goes there, no guessing:**
-`dotfiles:`, `loadout:`, `wiki:`, `skills:`{{ if $m.work }}, `work:`{{ end }}{{ if $m.omalauncher }}, `widgets:`{{ end }}. The
+`dotfiles:`, `loadout:`, `wiki:`, `skills:`{{ if $m.omalauncher }}, `widgets:`{{ end }}. The
 rest of the message is the task. `loadout:` is always the app; a new or
-changed loadout is `dotfiles:`.
+changed loadout is `dotfiles:`.{{ if stat $extra }} This machine has repos
+of its own too, with their own prefixes: see "This machine's repos" at the
+end.{{ end }}
 
 ## Starting work in a repo
 
@@ -75,10 +76,7 @@ changed loadout is `dotfiles:`.
    `all_worktrees/<feature>`.
    For `loadout`, `~/Repos/gh/josemiguelo/loadout/all_worktrees/master`.
    For `wiki`, `~/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/master`.
-   For `skills`, `~/Repos/gh/josemiguelo/skills/all_worktrees/main`
-{{ if $m.work }}
-   For `work`, `~/Repos/gh/josemiguelo/work.nvim/all_worktrees/master`
-{{ end }}.
+   For `skills`, `~/Repos/gh/josemiguelo/skills/all_worktrees/main`.
 3. **A window for the user**, a shell in that folder, in this session,
    running `nvim -c G` (fugitive's git status) so they can follow the
    changes; quitting nvim leaves the shell. Its
@@ -200,11 +198,6 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
 - **`~/Repos/gh/josemiguelo/skills`** (bare + worktree) — general-purpose
   agent skills, linked into `~/.claude/skills/<name>` on every machine by
   `.dotfiles`' `skills-repo` script.
-{{- if $m.work }}
-- **`~/Repos/gh/josemiguelo/work.nvim`** (bare + worktree,
-  `all_worktrees/<branch>`) — a Neovim plugin (private), cloned on the work
-  machine only.
-{{- end }}
 {{- if $m.omarchy }}
 - **`~/Repos/gh/omacom/omarchy`** (plain clone, https, default branch
   `quattro`, releases tagged `vX.Y.Z`) — Omarchy's source, read-only: read
@@ -220,3 +213,7 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
 - **A private, local-only repo** exists on at least one machine, outside
   this convention; it depends on `.dotfiles` and the skills repo. Leave it
   alone unless the user names it.
+{{- if stat $extra }}
+
+{{ include $extra | trim }}
+{{- end }}

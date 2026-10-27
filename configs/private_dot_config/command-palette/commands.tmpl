@@ -4,6 +4,3 @@
 # carry a third tab-separated field, the command line to run instead of the
 # name, for an entry whose name is only a label.
 start-dotfiles-change	Arguments: the folder query, or -p 'first message'
-{{ if (includeTemplate "loadout/machine" . | fromJson).work -}}
-Bootstrap new Work Repo	Arguments: worktree and branch, both optional	bootstrap-work-repo
-{{ end -}}

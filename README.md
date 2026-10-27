@@ -15,7 +15,9 @@ curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootst
 
 `<machine>` names a machine of the repo (`machines/<machine>.loadout.kt`)
 and becomes the hostname (each install keeps its own state file, so a reinstall gets a name of its own, e.g.
-`t2-macbook-omarchy-2`). [`bootstrap.sh`](bootstrap.sh) installs git and
+`t2-macbook-omarchy-2`). A work machine keeps the hostname its IT gave it:
+its name goes in `~/.config/loadout/machine` instead, which `~/.zshenv`
+exports as `LOADOUT_MACHINE`. [`bootstrap.sh`](bootstrap.sh) installs git and
 chezmoi, sets the hostname, applies the dotfiles over https, installs loadout
 and runs `loadout setup-new-machine`; `--dry-run` prints the commands
 instead. What it asks for: the sudo password, a passphrase for this machine's

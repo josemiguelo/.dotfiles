@@ -28,21 +28,12 @@ require("lazy").setup({
     { import = "features.neovim_core" },
     { import = "features" },
     { import = "features.langs" },
-    {{ if (includeTemplate "loadout/machine" . | fromJson).work }}
+    -- What only one machine has: the work laptop's private overlay
+    -- (work-overlay) links its specs into lua/overlay.
     {
-      "work.nvim",
-      dev = true,
-      opts = {},
-      dependencies = {
-        "nvim-neotest/nvim-nio",
-        "folke/snacks.nvim",
-        {
-          "stevearc/overseer.nvim",
-          tag = "v1.6.0",
-        }
-      },
+      import = "overlay",
+      enabled = (vim.uv or vim.loop).fs_stat(vim.fn.stdpath("config") .. "/lua/overlay") ~= nil,
     },
-    {{ end }}
   },
 	ui = {
 	  border = "bold",
@@ -50,10 +41,6 @@ require("lazy").setup({
   dev = {
     ---@type string | fun(plugin: LazyPlugin): string
     path = function(plugin)
-      -- The bare repo's root has no code; work.nvim lives in its master worktree.
-      if plugin.name == "work.nvim" then
-        return "~/Repos/gh/josemiguelo/work.nvim/all_worktrees/master"
-      end
       return "~/Repos/gh/josemiguelo/" .. plugin.name
     end,
     ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub

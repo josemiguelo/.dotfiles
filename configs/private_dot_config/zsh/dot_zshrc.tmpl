@@ -74,7 +74,7 @@ zcache starship starship init zsh --print-full-init
 [[ -n "$ZSH_PROFILE" ]] && zprof
 
 # Publish whether this pane's shell is idle at a prompt, for automation that
-# types into a pane (work.nvim's task runner, say) to wait on. Each pane gets
+# types into a pane (a Neovim plugin's task runner, say) to wait on. Each pane gets
 # a file named by $TMUX_PANE holding "idle" from the first prompt on, and
 # "busy" while a command runs. A `tmux wait-for` latch was tried first, but
 # it is consumed by one waiter and never fires again, so a later send would

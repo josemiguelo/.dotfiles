@@ -28,6 +28,10 @@
 # LOADOUT_MACHINE), no ownership to give back, and sudo installed before
 # setup-new-machine, which asks for it before any plan that runs it.
 #
+# A machine whose data says work keeps the hostname its IT gave it: its name
+# goes in ~/.config/loadout/machine instead (~/.zshenv exports it as
+# LOADOUT_MACHINE, which loadout and the templates read before the hostname).
+#
 # Safe to run again: every step skips what's done. --dry-run prints the
 # commands without running them.
 # usage: bootstrap.sh [--dry-run] <machine>
@@ -70,14 +74,19 @@ Then loadout compile, commit and push (the lock too), and run this again.
 EOF
     exit 1
   fi
-  # Its omalauncher flag, from its table in the templates' data (written by
-  # loadout compile, pretty-printed like the lock: four spaces deeper).
+  # Its omalauncher and work flags, from its table in the templates' data
+  # (written by loadout compile, pretty-printed like the lock: four spaces
+  # deeper).
+  DATA=$(curl -fsSL "$RAW/configs/.chezmoidata/loadout.json" 2>/dev/null || true)
+  flag() {
+    printf '%s\n' "$DATA" |
+      awk -v key="      \"$MACHINE\": {" -v want="        \"$1\": true" '$0 == key { m = 1; next } m && /^      [}]/ { exit } m && index($0, want) == 1 { print; exit }' |
+      grep -q .
+  }
   OMALAUNCHER=
-  if curl -fsSL "$RAW/configs/.chezmoidata/loadout.json" 2>/dev/null |
-    awk -v key="      \"$MACHINE\": {" '$0 == key { m = 1; next } m && /^      [}]/ { exit } m && /^        "omalauncher": true/ { print; exit }' |
-    grep -q .; then
-    OMALAUNCHER=1
-  fi
+  flag omalauncher && OMALAUNCHER=1
+  WORK=
+  flag work && WORK=1
 
   say "2. git and chezmoi"
   if [ -n "$OMALAUNCHER" ]; then
@@ -104,7 +113,18 @@ EOF
   PATH=$HOME/.local/bin:$PATH
 
   say "3. hostname"
-  if [ -n "$OMALAUNCHER" ]; then
+  if [ -n "$WORK" ]; then
+    # Its IT's hostname stays; the name is loadout's alone.
+    NAMEFILE=$HOME/.config/loadout/machine
+    if [ "$(cat "$NAMEFILE" 2>/dev/null)" != "$MACHINE" ]; then
+      run mkdir -p "$(dirname "$NAMEFILE")"
+      run sh -c 'printf "%s\n" "$1" >"$2"' sh "$MACHINE" "$NAMEFILE"
+    else
+      echo "  already $MACHINE (in $NAMEFILE)"
+    fi
+    # chezmoi's first apply runs before any zsh reads that file.
+    export LOADOUT_MACHINE="$MACHINE"
+  elif [ -n "$OMALAUNCHER" ]; then
     # Where chezmoi reads it; the first one is kept beside it.
     if [ "$(cat /etc/hostname 2>/dev/null)" != "$MACHINE" ]; then
       if [ -e /etc/hostname ] && [ ! -e /etc/hostname.pre-loadout ]; then

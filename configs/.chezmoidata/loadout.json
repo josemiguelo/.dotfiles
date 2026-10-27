@@ -2,7 +2,6 @@
   "loadout": {
     "defaults": {
       "omarchy": false,
-      "corpca": false,
       "work": false,
       "omalauncher": false,
       "kitty": {
@@ -10,18 +9,8 @@
       }
     },
     "machines": {
-      "work-mac": {
-        "omarchy": false,
-        "corpca": true,
-        "work": true,
-        "omalauncher": false,
-        "kitty": {
-          "opacity": 0.85
-        }
-      },
       "omalauncher-galaxy-a56": {
         "omarchy": false,
-        "corpca": false,
         "work": false,
         "omalauncher": true,
         "kitty": {
@@ -30,7 +19,6 @@
       },
       "omarchy-vm": {
         "omarchy": true,
-        "corpca": false,
         "work": false,
         "omalauncher": false,
         "kitty": {
@@ -39,8 +27,15 @@
       },
       "t2-macbook-omarchy": {
         "omarchy": true,
-        "corpca": false,
         "work": false,
+        "omalauncher": false,
+        "kitty": {
+          "opacity": 0.85
+        }
+      },
+      "work-mac": {
+        "omarchy": false,
+        "work": true,
         "omalauncher": false,
         "kitty": {
           "opacity": 0.85

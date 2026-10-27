@@ -12,9 +12,15 @@
       "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/**)",
       "Read(/{{ $h }}/Repos/gh/josemiguelo/skills/**)",
       "Edit(/{{ $h }}/Repos/gh/josemiguelo/skills/all_worktrees/**)",
-{{- if $m.work }}
-      "Read(/{{ $h }}/Repos/gh/josemiguelo/work.nvim/**)",
-      "Edit(/{{ $h }}/Repos/gh/josemiguelo/work.nvim/all_worktrees/**)",
+{{- /* One machine's own rules, one per line (the work laptop's overlay links them here), in no public repo. */}}
+{{- $allow := joinPath $h ".config/loadout-session/allow" }}
+{{- if stat $allow }}
+{{- range include $allow | splitList "\n" }}
+{{- $rule := trim . }}
+{{- if and $rule (not (hasPrefix "#" $rule)) }}
+      {{ $rule | toJson }},
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if $m.omarchy }}
       "Read(/{{ $h }}/Repos/gh/omacom/omarchy/**)",

@@ -4,14 +4,17 @@
 # its default branch checked out in all_worktrees/<branch>, the layout
 # `gclone --bare` (repos.plugin.zsh) makes by hand and skills-repo.sh keeps
 # for skills. Public repos: fetched over https, so a fresh machine clones them
-# before GitHub knows its ssh key, and pushed over ssh. An existing clone only
-# gets both urls set; nothing else in it is touched.
-# usage: bare-repos.sh [check] <repo>...
+# before GitHub knows its ssh key, and pushed over ssh. With --ssh (private
+# repos, which https can't fetch without credentials) they're fetched over ssh
+# too. An existing clone only gets both urls set; nothing else in it is touched.
+# usage: bare-repos.sh [check] [--ssh] <repo>...
 set -eu
 
 MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
-[ "$#" -gt 0 ] || { echo "usage: $0 [check] <repo>..." >&2; exit 2; }
+SSH=
+if [ "${1:-}" = --ssh ]; then SSH=1; shift; fi
+[ "$#" -gt 0 ] || { echo "usage: $0 [check] [--ssh] <repo>..." >&2; exit 2; }
 
 # `git clone --bare` leaves remote.origin.fetch unset, so a later fetch would
 # fetch nothing; it's set here as gclone --bare does.
@@ -45,8 +48,9 @@ worktree_ok() {
 rc=0
 for repo in "$@"; do
   dir="$HOME/Repos/gh/josemiguelo/$repo"
-  url="https://github.com/josemiguelo/$repo.git"
   push="git@github.com:josemiguelo/$repo.git"
+  url="https://github.com/josemiguelo/$repo.git"
+  [ -z "$SSH" ] || url=$push
   if [ "$MODE" = check ]; then
     { [ -d "$dir" ] && remotes_ok && worktree_ok; } || { echo "missing: $repo"; rc=1; }
   elif [ ! -d "$dir" ]; then
@@ -54,7 +58,7 @@ for repo in "$@"; do
     mkdir -p "$(dirname "$dir")"
     clone || rc=1
   else
-    remotes_ok || { set_remotes; echo "bare-repos: $repo fetches over https, pushes over ssh"; }
+    remotes_ok || { set_remotes; echo "bare-repos: $repo fetches from $url, pushes over ssh"; }
     worktree_ok || { echo "bare-repos: $dir has no worktree for its default branch" >&2; rc=1; }
   fi
 done
