@@ -6,7 +6,9 @@
 # for skills. Public repos: fetched over https, so a fresh machine clones them
 # before GitHub knows its ssh key, and pushed over ssh. With --ssh (private
 # repos, which https can't fetch without credentials) they're fetched over ssh
-# too. An existing clone only gets both urls set; nothing else in it is touched.
+# too. A leading dot is dropped from the folder's name (.dotfiles-work lands in
+# dotfiles-work), so no clone is hidden. An existing clone only gets both urls
+# set; nothing else in it is touched.
 # usage: bare-repos.sh [check] [--ssh] <repo>...
 set -eu
 
@@ -47,7 +49,7 @@ worktree_ok() {
 
 rc=0
 for repo in "$@"; do
-  dir="$HOME/Repos/gh/josemiguelo/$repo"
+  dir="$HOME/Repos/gh/josemiguelo/${repo#.}"
   push="git@github.com:josemiguelo/$repo.git"
   url="https://github.com/josemiguelo/$repo.git"
   [ -z "$SSH" ] || url=$push

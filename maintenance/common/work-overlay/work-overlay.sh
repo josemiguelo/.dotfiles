@@ -12,7 +12,8 @@ set -eu
 MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
 REPO=${1:?usage: $0 [check] <repo>}
-DIR=$HOME/Repos/gh/josemiguelo/$REPO
+# Where bare-repos clones it: its name without a leading dot.
+DIR=$HOME/Repos/gh/josemiguelo/${REPO#.}
 BARE="$LOADOUT_REPO/maintenance/common/repos/bare-repos.sh"
 
 if [ "$MODE" = check ]; then
