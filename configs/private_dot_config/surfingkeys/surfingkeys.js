@@ -1,4 +1,4 @@
-const { mapkey, Hints } = api;
+const { mapkey, Hints, Normal } = api;
 
 // --------------------------------------------------------------------------
 // 1. THEME: TOKYO NIGHT IN DARK MODE, TOKYO NIGHT DAY IN LIGHT
@@ -91,7 +91,6 @@ Hints.style(`
     border: 1px solid var(--sk-hint-bg);
     box-shadow: none;
   }
-  div.begin { color: var(--sk-muted); }
   ${palette}
 `);
 Hints.style(`
@@ -108,6 +107,21 @@ Hints.style(`
 // --------------------------------------------------------------------------
 // 2. SIDE PREVIEW PANEL WITH MATCHING THEME
 // --------------------------------------------------------------------------
+// This config runs in every frame, the preview's own iframe included, and a
+// preview from another site can't be scripted from the page. So the top page
+// owns the panel and the frames talk by postMessage: the preview asks the top
+// page to close it, other frames ask it to open a link, and the top page asks
+// the preview to scroll.
+const PREVIEW_NAME = 'surfingkeys-preview';
+const isTop = window === window.top;
+const isPreview = window.name === PREVIEW_NAME && window.parent === window.top;
+const PREVIEW_SCROLLS = ['pageDown', 'pageUp'];
+
+function previewIframe() {
+    let container = document.getElementById('surfingkeys-overlay-container');
+    return container && container.shadowRoot.getElementById('preview-iframe');
+}
+
 function removePreviewPanel() {
     let container = document.getElementById('surfingkeys-overlay-container');
     if (container) {
@@ -116,111 +130,138 @@ function removePreviewPanel() {
     }
 }
 
-mapkey('gs', 'Toggle or open link in side overlay panel', function() {
-    let existingContainer = document.getElementById('surfingkeys-overlay-container');
-    
-    if (existingContainer) {
+function openPreviewPanel(url) {
+    removePreviewPanel();
+
+    let container = document.createElement('div');
+    container.id = 'surfingkeys-overlay-container';
+    container.style.cssText = `
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 40vw;
+        height: 100vh;
+        z-index: 2147483647;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+    `;
+
+    container.attachShadow({ mode: 'open' }).innerHTML = `
+        <style>
+            ${palette}
+
+            :host {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                width: 100%;
+                background: var(--sk-bg);
+            }
+            .frame-container {
+                position: relative;
+                flex: 1;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background: var(--sk-bg);
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+                background: var(--sk-bg);
+            }
+        </style>
+        <div class="frame-container">
+            <iframe id="preview-iframe"></iframe>
+        </div>
+    `;
+
+    document.body.appendChild(container);
+
+    let iframe = previewIframe();
+    iframe.name = PREVIEW_NAME;
+    iframe.src = url;
+
+    window.focus();
+}
+
+function closePreview() {
+    if (isTop) {
         removePreviewPanel();
+    } else if (isPreview) {
+        window.parent.postMessage({ skPreview: 'close' }, '*');
+    }
+}
+
+function isWebUrl(url) {
+    return typeof url === 'string' && /^https?:/i.test(url);
+}
+
+function pickPreviewLink() {
+    Hints.create('a[href]', function(element) {
+        // An SVG link's href isn't a string.
+        if (!element || !isWebUrl(element.href)) return;
+        if (isTop) {
+            openPreviewPanel(element.href);
+        } else {
+            window.top.postMessage({ skPreview: 'open', url: element.href }, '*');
+        }
+    });
+}
+
+function scrollPreview(type) {
+    if (isPreview) {
+        Normal.scroll(type);
         return;
     }
+    let iframe = previewIframe();
+    if (iframe) {
+        iframe.contentWindow.postMessage({ skPreview: 'scroll', type: type }, '*');
+    }
+}
 
-    Hints.create('a[href]', function(element) {
-        if (!element || !element.href) return;
-        
-        let url = element.href;
-        let container = document.createElement('div');
-        container.id = 'surfingkeys-overlay-container';
-        container.style.cssText = `
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 40vw;
-            height: 100vh;
-            z-index: 2147483647;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            font-family: system-ui, -apple-system, sans-serif;
-            transition: transform 0.2s ease-in-out;
-        `;
+window.addEventListener('message', function(e) {
+    let message = e.data;
+    if (!message || typeof message !== 'object') return;
 
-        const shadow = container.attachShadow({ mode: 'open' });
-
-        shadow.innerHTML = `
-            <style>
-                ${palette}
-
-                :host {
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
-                    width: 100%;
-                    background: var(--sk-bg);
-                }
-                .frame-container {
-                    position: relative;
-                    flex: 1;
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-                    background: var(--sk-bg);
-                }
-                iframe {
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                    background: var(--sk-bg);
-                }
-            </style>
-            <div class="frame-container">
-                <iframe id="preview-iframe"></iframe>
-            </div>
-        `;
-
-        document.body.appendChild(container);
-        
-        const shadowRoot = container.shadowRoot;
-        const iframe = shadowRoot.getElementById('preview-iframe');
-
-        iframe.src = url;
-
-        window.focus();
-    });
+    if (isTop && message.skPreview === 'close') {
+        let iframe = previewIframe();
+        if (iframe && e.source === iframe.contentWindow) removePreviewPanel();
+    } else if (isTop && message.skPreview === 'open' && isWebUrl(message.url)) {
+        openPreviewPanel(message.url);
+    } else if (isPreview && message.skPreview === 'scroll' && e.source === window.parent &&
+               PREVIEW_SCROLLS.includes(message.type)) {
+        Normal.scroll(message.type);
+    }
 });
 
-mapkey('gS', 'Close side overlay', removePreviewPanel);
-
-// Scroll iframe remotely strictly with Ctrl+j and Ctrl+k
-mapkey('<Ctrl-j>', 'Scroll side preview down', function() {
-    let container = document.getElementById('surfingkeys-overlay-container');
-    if (container && container.shadowRoot) {
-        let iframe = container.shadowRoot.getElementById('preview-iframe');
-        if (iframe) {
-            try {
-                iframe.contentWindow.scrollBy({ top: 250, behavior: 'smooth' });
-            } catch (e) {
-                iframe.focus();
-            }
-        }
+mapkey('gs', 'Toggle or open link in side overlay panel', function() {
+    if (isPreview || (isTop && previewIframe())) {
+        closePreview();
+    } else {
+        pickPreviewLink();
     }
+});
+
+mapkey('gS', 'Close side overlay', closePreview);
+
+mapkey('<Ctrl-j>', 'Scroll side preview down', function() {
+    scrollPreview('pageDown');
 });
 
 mapkey('<Ctrl-k>', 'Scroll side preview up', function() {
-    let container = document.getElementById('surfingkeys-overlay-container');
-    if (container && container.shadowRoot) {
-        let iframe = container.shadowRoot.getElementById('preview-iframe');
-        if (iframe) {
-            try {
-                iframe.contentWindow.scrollBy({ top: -250, behavior: 'smooth' });
-            } catch (e) {
-                iframe.focus();
-            }
-        }
-    }
+    scrollPreview('pageUp');
 });
 
+function isEditable(element) {
+    return element && (element.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(element.tagName));
+}
+
+// Escape closes the preview, unless it's leaving a text field.
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        removePreviewPanel();
+    if (e.key === 'Escape' && !isEditable(document.activeElement)) {
+        closePreview();
     }
 }, true);
