@@ -18,7 +18,15 @@ val t2Macbook = profile(name = "t2-macbook") {
     }
 
     sshKey("id_ed25519")
-    run(omarchySshd, "josemiguelo")
+    // The GitHub keys (by title) that get a shell here.
+    run(
+        omarchySshd,
+        "t2-macbook-omarchy",
+        "t2-macbook-omarchy-2",
+        "omarchy-vm",
+        "omalauncher-galaxy-a56",
+        "work-mac",
+    )
 
     run(T2.hidAppleKeyboard.variant(name = "arch"))
     run(T2.fanCurve, T2.fanGpuCard, T2.bootClock, T2.gmuxBacklight, T2.renderGpu)

@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "toolVersion": "3.2.0",
-  "sources": "dc01b5471a0632f06df5e1c37d29242f51be2a14f99dfdb9b0f7ac7085464ab8",
+  "toolVersion": "3.2.1",
+  "sources": "f15c59f5c741c38c6f07e2c3a2be803c63f71168edf1070dfd75e75c16aa863e",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1578,9 +1578,12 @@
         "origin": "maintenance/omarchy/screensaver"
       },
       "omarchy-sshd": {
-        "description": "sshd with key-only logins for the GitHub user's keys",
+        "description": "sshd with key-only logins for the trusted GitHub keys",
         "file": "omarchy-sshd.sh",
         "check": "file:omarchy-sshd.sh check \"$@\"",
+        "after": [
+          "scripts.github-ssh-key"
+        ],
         "sudo": true,
         "origin": "maintenance/omarchy/ssh"
       },
@@ -2235,7 +2238,7 @@
           "omarchy-dictation-gpu",
           "setup-ssh id_ed25519",
           "github-ssh-key id_ed25519",
-          "omarchy-sshd josemiguelo",
+          "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm omalauncher-galaxy-a56 work-mac",
           "t2-hid-apple-keyboard",
           "t2-fan-curve",
           "t2-fan-gpu-card",

@@ -18,7 +18,7 @@ val setupSsh = script(
     )
 }
 
-/** The key on GitHub, titled with the machine's name. Logs gh in through the browser when needed: the one manual step, last. */
+/** The key on GitHub, titled with the machine's name. Logs gh in through the browser when needed: the one browser step, last. */
 val githubSshKey = script(
     name = "github-ssh-key",
     description = "this machine's ssh key on GitHub",
