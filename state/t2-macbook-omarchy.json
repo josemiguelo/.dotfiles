@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "3.2.1",
-  "updatedAt": "2026-10-27T13:56:57.791249955Z",
+  "toolVersion": "3.3.0",
+  "updatedAt": "2026-10-27T22:20:41.121893950Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -500,7 +500,7 @@
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-20T20:39:29.646272821Z",
       "exitCode": 0
     },
@@ -591,7 +591,7 @@
     },
     "omarchy-sshd": {
       "status": "done",
-      "lastRun": "2026-10-27T13:56:48.230336720Z",
+      "lastRun": "2026-10-27T22:15:19.267504925Z",
       "exitCode": 0
     },
     "t2-hid-apple-keyboard": {
