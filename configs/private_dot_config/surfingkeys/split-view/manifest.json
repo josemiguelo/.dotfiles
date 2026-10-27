@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Split view keys",
+  "version": "1.0",
+  "description": "Brave's split view from the keyboard: Surfingkeys picks a link, this opens it beside the tab or closes the other side.",
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "run_at": "document_start"
+    }
+  ]
+}

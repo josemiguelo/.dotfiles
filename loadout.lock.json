@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.2.0",
-  "sources": "7412d0d832ff927418645d4aa2f908dc5a0cd6521f324a2a1f6826efc78794ce",
+  "sources": "dc01b5471a0632f06df5e1c37d29242f51be2a14f99dfdb9b0f7ac7085464ab8",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1721,6 +1721,15 @@
         ],
         "origin": "configs/private_dot_config/surfingkeys"
       },
+      "surfingkeys-split-view": {
+        "description": "Brave loads the Split view keys extension behind Surfingkeys' gs",
+        "file": ".loadout/split-view.sh",
+        "check": "file:.loadout/split-view.sh check \"$@\"",
+        "after": [
+          "scripts.omarchy-brave"
+        ],
+        "origin": "configs/private_dot_config/surfingkeys"
+      },
       "t2-boot-clock": {
         "description": "keep the EC hardware clock set (T2 Mac)",
         "file": "boot-clock.sh",
@@ -2079,6 +2088,7 @@
           "omarchy-brave",
           "omarchy-default-browser brave",
           "surfingkeys",
+          "surfingkeys-split-view",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
@@ -2212,6 +2222,7 @@
           "omarchy-brave",
           "omarchy-default-browser brave",
           "surfingkeys",
+          "surfingkeys-split-view",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
