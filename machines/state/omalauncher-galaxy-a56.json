@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "archarm",
   "arch": "aarch64",
-  "toolVersion": "3.2.1",
-  "updatedAt": "2026-10-26T01:40:23.971153791Z",
+  "toolVersion": "3.3.0",
+  "updatedAt": "2026-10-28T15:39:56.585674643Z",
   "programs": {
     "bat": {
       "status": "installed",
@@ -44,7 +44,7 @@
     },
     "loadout": {
       "status": "installed",
-      "version": "3.2.1",
+      "version": "3.3.0",
       "reason": null
     },
     "mise": {
@@ -160,7 +160,7 @@
       "exitCode": null
     },
     "setup-git": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-25T03:28:40.788477752Z",
       "exitCode": 0
     },
@@ -175,7 +175,7 @@
       "exitCode": null
     },
     "obsidian-sync": {
-      "status": "done",
+      "status": "pending",
       "lastRun": null,
       "exitCode": null
     },
