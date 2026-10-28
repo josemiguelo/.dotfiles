@@ -17,6 +17,58 @@ local custom_vertical_layout = {
   },
 }
 
+-- A grep row is the path, then the matched text. The path gets a share of the
+-- list's width (the rest is the text's), so a narrow window still shows the
+-- match: snacks gives the path whatever the text leaves, down to a fixed
+-- `min_width`, so give it the same share always and let that floor go (see the
+-- source).
+local grep_path_share = 0.6
+local grep_path_min = 40 -- narrower clips the file name itself
+
+-- Colors: the whole path reads like the file name, and the matched text is
+-- dimmed (the colorscheme's dirname color) except the match itself, so what
+-- was searched for stands out. The line's own syntax colors go.
+local function grep_format(item, picker)
+  local ret = Snacks.picker.format.file(item, picker)
+  local win = picker.list and picker.list.win and picker.list.win.win
+  local width = win and vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_width(win) or vim.o.columns
+  local cap = math.max(math.floor(width * grep_path_share), grep_path_min)
+
+  local rest = {} ---@type snacks.picker.Highlight[]
+  local matches = {} ---@type snacks.picker.Highlight[]
+  for _, part in ipairs(ret) do
+    if part.resolve then
+      local resolve = part.resolve
+      part.resolve = function()
+        local path = resolve(cap)
+        local base = path[#path]
+        for _, dir in ipairs(path) do
+          if dir[2] == "SnacksPickerDir" then
+            dir[2] = base[2]
+          end
+        end
+        return path
+      end
+    end
+    if part[1] == nil and part.hl_group == "SnacksPickerMatch" then
+      part.priority = 5000 -- over the dimmed text's default 4096
+      matches[#matches + 1] = part
+    elseif part[1] ~= nil or part.virt_text then
+      if item.line and part[1] == item.line then
+        part[2] = "SnacksPickerDir"
+      end
+      rest[#rest + 1] = part
+    end -- else: the line's syntax highlight
+  end
+  vim.list_extend(rest, matches)
+  return rest
+end
+
+local grep_source = vim.tbl_extend("force", custom_vertical_layout, {
+  format = grep_format,
+  formatters = { file = { min_width = 1 } },
+})
+
 -- From a float, `wincmd` goes to the previous window whatever the direction,
 -- so vim-tmux-navigator never sees the explorer list at nvim's edge. Navigate
 -- from the explorer's sidebar split (its layout root) instead.
@@ -86,12 +138,9 @@ return {
     "folke/snacks.nvim",
     opts = {
       picker = {
-        formatters = {
-          file = { truncate = 999 },
-        },
         sources = {
           smart = custom_vertical_layout,
-          grep = custom_vertical_layout,
+          grep = grep_source,
           explorer = custom_explorer_layout,
           files = custom_vertical_layout,
           buffers = custom_vertical_layout,
