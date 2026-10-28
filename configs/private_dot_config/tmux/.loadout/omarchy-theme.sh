@@ -19,7 +19,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 # The hook runs this script by its main checkout's path, which outlives a
 # feature worktree this may be installed from. The lib is found from here,
 # not LOADOUT_REPO: the hook runs this script without it.
-. "$HERE/../../../../maintenance/lib/main-checkout.sh"
+. "$HERE/../../../../lib/main-checkout.sh"
 SELF=$(main_checkout_path "$HERE/$(basename "$0")")
 
 hook_body() {

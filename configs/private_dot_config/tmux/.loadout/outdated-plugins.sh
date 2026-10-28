@@ -16,7 +16,7 @@ CONF="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 # tpack clones under XDG_DATA_HOME (~/.local/share/tmux/plugins); older
 # setups kept them next to tmux.conf. Walk both.
 CLONES="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/plugins"
-GCB="$LOADOUT_REPO/maintenance/lib/git-clones-behind.sh"
+GCB="$LOADOUT_REPO/lib/git-clones-behind.sh"
 # tpack names the clone <repo>-<12-hex-hash>; the row is named <repo>.
 export GCB_NAME='basename "$dir" | sed "s/-[0-9a-f]\{12\}$//"'
 

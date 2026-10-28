@@ -1,10 +1,10 @@
 #!/bin/sh
-# Tests maintenance/lib/main-checkout.sh against a real repo and a real
+# Tests lib/main-checkout.sh against a real repo and a real
 # worktree of it, both inside a fresh mktemp directory. Run:
 # tests/test-main-checkout.sh
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-. "$ROOT/maintenance/lib/main-checkout.sh"
+. "$ROOT/lib/main-checkout.sh"
 
 WORK=$(mktemp -d) || exit 1
 WORK=$(cd "$WORK" && pwd -P)

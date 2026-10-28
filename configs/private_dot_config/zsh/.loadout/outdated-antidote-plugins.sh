@@ -14,7 +14,7 @@ set -eu
 ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
 BUNDLES="$ZDOTDIR/.zplugins"
 ANTIDOTE="${XDG_DATA_HOME:-$HOME/.local/share}/mattmc3/antidote"
-GCB="$LOADOUT_REPO/maintenance/lib/git-clones-behind.sh"
+GCB="$LOADOUT_REPO/lib/git-clones-behind.sh"
 # name = owner/repo, the last two path segments of the clone dir
 export GCB_NAME='printf "%s/%s" "$(basename "$(dirname "$dir")")" "$(basename "$dir")"'
 

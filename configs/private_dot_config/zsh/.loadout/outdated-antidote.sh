@@ -7,5 +7,5 @@ set -eu
 # with XDG_DATA_HOME set, a hardcoded ~/.local/share looked where antidote
 # was never installed, and this oracle goes silent rather than saying so.
 GCB_NAME='echo antidote' \
-  exec sh "$LOADOUT_REPO/maintenance/lib/git-clones-behind.sh" "$@" \
+  exec sh "$LOADOUT_REPO/lib/git-clones-behind.sh" "$@" \
     "${XDG_DATA_HOME:-$HOME/.local/share}/mattmc3/antidote"

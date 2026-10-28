@@ -200,11 +200,13 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
   `loadout` reads{{ if stat (joinPath .chezmoi.homeDir ".config/loadout/repo") }}
   through this machine's child repo (`LOADOUT_REPO` points at the child, see
   "This machine's repos"){{ else }} (`LOADOUT_REPO` points here){{ end }}:
-  Kotlin manifests (`loadout.kt`, `programs/`, `maintenance/`, `machines/`)
+  Kotlin manifests (`loadout.kt`, `configs/`, `system/`, `machines/`)
   that `loadout --repo <worktree> compile` turns into the committed
   `loadout.lock.json`, and `state/`. In a worktree, every loadout command
-  takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits beside its dotfiles as
-  `.loadout.kt` + `.loadout/`. The
+  takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits where the tool lands in `configs/`, as
+  `.<tool>.loadout.kt` + `.loadout/` (beside its dotfiles, or behind a dot
+  when it has none: `private_dot_config/.ripgrep.loadout.kt`); what belongs to
+  no app (dnf, pacman, base packages, hardware) is in `system/`. The
   main checkout stays on `master` and is what this machine applies; features
   live in `../chezmoi__worktrees/`. This file's source is
   `configs/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,

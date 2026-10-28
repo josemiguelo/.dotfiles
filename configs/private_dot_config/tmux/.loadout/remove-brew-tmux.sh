@@ -8,7 +8,7 @@
 # Modes: `check` / `install` (default).
 set -eu
 
-brew() { sh "$LOADOUT_REPO/programs/brew/brew.sh" "$@"; }
+brew() { sh "$LOADOUT_REPO/configs/private_dot_config/.homebrew/.loadout/brew.sh" "$@"; }
 
 # Without brew there's nothing to remove.
 . "$LOADOUT_REPO/configs/private_dot_local/lib/brew-prefix.sh"
