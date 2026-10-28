@@ -13,8 +13,17 @@ columns = 6
 tiles = [
   { widget = "market-simonschubert-today.owl", x = 0, y = 0, w = 6, h = 3 },
   { widget = "30-vault-tasks.owl", x = 0, y = 3, w = 6, h = 4 },
-  { app = "com.brave.browser", x = 0, y = 10 },
+  { app = "com.whatsapp/.Main", x = 0, y = 7 },
+  { app = "com.samsung.android.dialer/.DialtactsActivity", x = 1, y = 7 },
+  { app = "com.google.android.gm/.ConversationListActivityGmail", x = 2, y = 7 },
+  { app = "com.ubercab/.presidio.app.core.root.RootActivity", x = 3, y = 7 },
+  { app = "com.brave.browser/com.google.android.apps.chrome.Main", x = 0, y = 8 },
+  { app = "com.android.vending/.AssetBrowserActivity", x = 0, y = 10 },
   { app = "linux:new-terminal", x = 1, y = 10 },
+  { app = "com.spotify.music/.MainActivity", x = 2, y = 10 },
+  { app = "com.azhard.taskforge/.MainActivity", x = 3, y = 10 },
+  { app = "com.discord/.main.MainDefault", x = 4, y = 10 },
+  { app = "com.google.android.apps.photos/.home.HomeActivity", x = 5, y = 10 },
 ]
 
 [[page]]
