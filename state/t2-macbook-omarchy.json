@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "3.3.0",
-  "updatedAt": "2026-10-27T22:20:41.121893950Z",
+  "updatedAt": "2026-10-28T02:17:58.458064150Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -456,17 +456,17 @@
     },
     "omarchy-harpoon": {
       "status": "done",
-      "lastRun": "2026-10-13T14:22:54.813460798Z",
+      "lastRun": "2026-10-28T02:13:43.572064700Z",
       "exitCode": 0
     },
     "omarchy-theme-mode": {
       "status": "done",
-      "lastRun": null,
-      "exitCode": null
+      "lastRun": "2026-10-28T02:13:44.280262330Z",
+      "exitCode": 0
     },
     "omarchy-bar": {
       "status": "done",
-      "lastRun": "2026-10-13T14:23:16.971903590Z",
+      "lastRun": "2026-10-28T02:13:42.688372953Z",
       "exitCode": 0
     },
     "omarchy-plugins": {
@@ -491,17 +491,17 @@
     },
     "omarchy-keystroke-windows": {
       "status": "done",
-      "lastRun": "2026-10-13T14:23:49.179127142Z",
+      "lastRun": "2026-10-28T02:13:43.697406455Z",
       "exitCode": 0
     },
     "omarchy-pomodoro": {
       "status": "done",
-      "lastRun": "2026-10-13T14:23:53.165271889Z",
+      "lastRun": "2026-10-28T02:13:44.002486523Z",
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "pending",
-      "lastRun": "2026-10-20T20:39:29.646272821Z",
+      "status": "done",
+      "lastRun": "2026-10-28T02:13:42.302133844Z",
       "exitCode": 0
     },
     "omarchy-vscode": {
@@ -616,12 +616,12 @@
     },
     "t2-gmux-backlight": {
       "status": "done",
-      "lastRun": "2026-10-20T20:39:29.735144586Z",
+      "lastRun": "2026-10-28T02:17:54.669140164Z",
       "exitCode": 0
     },
     "t2-render-gpu": {
       "status": "done",
-      "lastRun": "2026-10-20T20:39:29.749787008Z",
+      "lastRun": "2026-10-28T02:13:44.300143647Z",
       "exitCode": 0
     },
     "setup-libvirt": {
@@ -646,7 +646,7 @@
     },
     "omarchy-scratchpad-opacity": {
       "status": "done",
-      "lastRun": "2026-10-13T16:52:55.884183418Z",
+      "lastRun": "2026-10-28T02:13:44.152537918Z",
       "exitCode": 0
     },
     "solaar-no-autostart": {
