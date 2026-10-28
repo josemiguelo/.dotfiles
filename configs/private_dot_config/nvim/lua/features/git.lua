@@ -11,6 +11,8 @@ local function open_fugitive()
     if on_its_tab then
       vim.cmd("G")
     end
+    -- a status opened some other way (:G, nvim -c G) sits in an unnamed tab
+    require("tabby.feature.tab_name").set(0, "git")
     return
   end
   -- :G outside a repository is an echoerr (a Lua error from a mapping); say so instead.
