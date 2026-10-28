@@ -1,6 +1,0 @@
-# loadout 3 reads loadout.lock.json, compiled from the Kotlin manifests.
-# This file is only here so a machine still on loadout 2 (which reads YAML)
-# says "upgrade" instead of failing to find its manifest. Delete it once
-# every machine runs loadout 3.
-meta:
-  min-tool-version: '3.0.0'

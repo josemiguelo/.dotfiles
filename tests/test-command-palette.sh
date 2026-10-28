@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Tests configs/private_dot_local/bin/executable_command-palette end to end: the
+# Tests loadouts/private_dot_local/bin/executable_command-palette end to end: the
 # registry is read, the picked command gets the typed text as its arguments, TMUX
 # is unset before zsh runs it, and a failure is held on screen. fzf and zsh are
 # fakes on a throwaway $HOME's PATH, so no real picker or tmux session opens.
 # Run: tests/test-command-palette.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_command-palette"
-BREW_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/lib/brew-prefix.sh"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/loadouts/private_dot_local/bin/executable_command-palette"
+BREW_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/loadouts/private_dot_local/lib/brew-prefix.sh"
 
 fix=$(mktemp -d)
 trap 'rm -rf "$fix"' EXIT

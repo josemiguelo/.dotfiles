@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Tests configs/private_dot_local/bin/executable_tmux-workmux-open: which
+# Tests loadouts/private_dot_local/bin/executable_tmux-workmux-open: which
 # arguments reach `workmux open`. `workmux` and `tmux` are shadowed by fakes on
 # PATH that log their arguments, so nothing real is opened or attached. Each
 # case runs the script as a fresh process, from a chosen cwd, inside tmux or
 # outside it. Run: tests/test-tmux-workmux-open.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_tmux-workmux-open"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/loadouts/private_dot_local/bin/executable_tmux-workmux-open"
 # pwd -P: git reports the real path, and on macOS /var is a link to /private/var.
 WORK="$(cd "$(mktemp -d)" && pwd -P)"
 trap 'rm -rf -- "${WORK:?}"' EXIT

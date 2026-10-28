@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Tests configs/private_dot_local/bin/executable_kitty-tmux-attach's choice of
+# Tests loadouts/private_dot_local/bin/executable_kitty-tmux-attach's choice of
 # start directory: the pane of the tmux client that runs in the kitty window the
 # overlay was opened from, not whichever client tmux considers current. kitty
 # and tmux are shadowed with functions, so this never touches real windows or
 # sessions. Run: tests/test-kitty-tmux-attach.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_local/bin/executable_kitty-tmux-attach"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/loadouts/private_dot_local/bin/executable_kitty-tmux-attach"
 
 # Sourcing stops before the exec at the bottom of the script (its BASH_SOURCE guard).
 source "$SCRIPT"

@@ -1,0 +1,69 @@
+{{- $m := includeTemplate "loadout/machine" . | fromJson -}}
+{{- $h := .chezmoi.homeDir -}}
+{
+  "permissions": {
+    "allow": [
+      "Read(/{{ $h }}/.local/share/chezmoi/**)",
+      "Read(/{{ $h }}/.local/share/chezmoi__worktrees/**)",
+      "Edit(/{{ $h }}/.local/share/chezmoi__worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/loadout/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout/all_worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/loadout.wiki/all_worktrees/**)",
+      "Read(/{{ $h }}/Repos/gh/josemiguelo/skills/**)",
+      "Edit(/{{ $h }}/Repos/gh/josemiguelo/skills/all_worktrees/**)",
+{{- /* One machine's own rules, one per line (the work laptop's child repo deploys them here), in no public repo. */}}
+{{- $allow := joinPath $h ".config/loadout-session/allow" }}
+{{- if stat $allow }}
+{{- range include $allow | splitList "\n" }}
+{{- $rule := trim . }}
+{{- if and $rule (not (hasPrefix "#" $rule)) }}
+      {{ $rule | toJson }},
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $m.omarchy }}
+      "Read(/{{ $h }}/Repos/gh/omacom/omarchy/**)",
+{{- end }}
+{{- if $m.omalauncher }}
+      "Read(/{{ $h }}/.config/omalauncher/**)",
+      "Edit(/{{ $h }}/.config/omalauncher/**)",
+{{- end }}
+      "Bash(cd:*)",
+{{- if $m.omalauncher }}
+      "Bash(git worktree add:*)",
+      "Bash(owl-check:*)",
+      "Bash(loadout status:*)",
+      "Bash(loadout run omalauncher-tracked)",
+      "Bash(loadout run omalauncher-requires)",
+{{- else }}
+      "Bash(workmux add:*)",
+      "Bash(tmux list-windows:*)",
+      "Bash(tmux select-window:*)",
+      "Bash(tmux new-window:*)",
+      "Bash(tmux-server-cwd)",
+{{- end }}
+      "Bash(rm -rf {{ $h }}/Work/tries/*)",
+      "Bash(chezmoi apply:*)",
+{{- if $m.omarchy }}
+      "Bash(omarchy plugin update:*)",
+{{- end }}
+      "Bash(git push:*)"
+    ]
+  }
+{{- if $m.omalauncher }},
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.local/share/chezmoi/loadouts/private_dot_config/private_omalauncher/.loadout/tracked.sh\" hook"
+          }
+        ]
+      }
+    ]
+  }
+{{- end }}
+}

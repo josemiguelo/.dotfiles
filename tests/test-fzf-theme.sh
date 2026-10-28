@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests configs/private_dot_config/fzf/theme.sh: which palette it picks for
+# Tests loadouts/private_dot_config/fzf/theme.sh: which palette it picks for
 # each place appearance-is-dark can be. The bug this guards: kitty's overlay has
 # no ~/.local/bin on PATH, so the lookup missed the script and the picker
 # silently used the dark palette. Each case runs in a fresh bash with a
@@ -7,7 +7,7 @@
 # tests/test-fzf-theme.sh
 set -u
 
-SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/configs/private_dot_config/fzf/theme.sh"
+SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/loadouts/private_dot_config/fzf/theme.sh"
 WORK="$(mktemp -d)"
 trap 'rm -rf -- "${WORK:?}"' EXIT
 

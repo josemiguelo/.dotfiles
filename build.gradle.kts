@@ -7,13 +7,14 @@ plugins {
 
 // The manifest files, in compile order (loadout's glob rules: dot-files
 // match only when the glob spells the dot, and ** never enters a dot
-// folder, hence the second configs glob for the config-less tools' ones).
+// folder, hence the second loadouts glob for the config-less tools' ones,
+// and the third for what lands outside $HOME, in .etc/<concern>/).
 loadout {
     sources(
         "loadout.kt",
-        "system/**/*.loadout.kt",
-        "configs/**/.*.loadout.kt",
-        "configs/**/.*/.*.loadout.kt",
+        "loadouts/**/.*.loadout.kt",
+        "loadouts/**/.*/.*.loadout.kt",
+        "loadouts/.etc/*/.*.loadout.kt",
         "machines/**/*.loadout.kt",
     )
 }

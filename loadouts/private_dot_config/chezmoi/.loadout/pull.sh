@@ -1,0 +1,45 @@
+#!/bin/sh
+# Dotfiles REMOTE freshness: is the local chezmoi source behind its origin?
+# Catches "edited dotfiles on machine A, machine B is stale". The check
+# fetches at most every 6h (throttled on FETCH_HEAD's mtime) and fails soft
+# offline, so `status` can afford it; converge is a pull only — applying the
+# pulled target state is loadout's (`sync`, `apply`).
+# Modes: `check` / `install` (default).
+set -eu
+# chezmoi is a brew program: only an interactive zsh has brew on PATH, and
+# the converge runs from whatever shell the desktop opened (bash, first).
+. "$LOADOUT_REPO/loadouts/private_dot_local/lib/brew-prefix.sh"
+export PATH="$HOME/.local/bin:$BREW_PREFIX/bin:$PATH"
+
+MODE="${1:-install}"
+case "$MODE" in
+check | install) ;;
+*) echo "usage: $0 [check|install]" >&2; exit 2 ;;
+esac
+
+# chezmoi owns the source location; don't hardcode it. The source path is
+# .chezmoiroot's folder, so the repo is the git top level above it.
+SOURCE=$(git -C "$(chezmoi source-path 2>/dev/null || echo /nonexistent)" rev-parse --show-toplevel 2>/dev/null || true)
+[ -n "$SOURCE" ] || { echo "missing: dotfiles not initialized"; exit 1; }
+
+fetch_throttled() {
+  if [ -z "$(find "$SOURCE/.git/FETCH_HEAD" -mmin -360 2>/dev/null)" ]; then
+    git -C "$SOURCE" fetch -q 2>/dev/null || true # offline: keep last-known refs
+  fi
+}
+
+if [ "$MODE" = "check" ]; then
+  fetch_throttled
+  behind=$(git -C "$SOURCE" rev-list --count 'HEAD..@{u}' 2>/dev/null || echo 0)
+  if [ "$behind" -gt 0 ]; then
+    echo "missing: dotfiles source is $behind commit(s) behind origin"
+    exit 1
+  fi
+  exit 0
+fi
+
+# --ff-only: a diverged source (local commits) fails visibly instead of
+# merging silently — resolve deliberately in the source dir.
+chezmoi git -- fetch -q
+chezmoi git -- pull -q --ff-only
+echo "dotfiles source up to date with origin"

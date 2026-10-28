@@ -7,9 +7,9 @@
 set -eu
 
 root=$(git rev-parse --show-toplevel)
-generated='loadout.lock.json configs/.chezmoidata/loadout.json configs/.chezmoitemplates/loadout'
+generated='loadout.lock.json loadouts/.chezmoidata/loadout.json loadouts/.chezmoitemplates/loadout'
 
-git diff --cached --name-only | grep -qE '\.kts?$|^loadout\.lock\.json$|^configs/\.chezmoi(data|templates)/loadout' || exit 0
+git diff --cached --name-only | grep -qE '\.kts?$|^loadout\.lock\.json$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0
 
 command -v loadout >/dev/null 2>&1 || {
   echo "pre-commit: loadout isn't on PATH, so the lock can't be checked" >&2

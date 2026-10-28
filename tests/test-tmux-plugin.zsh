@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Tests the tmux function in configs/private_dot_config/zsh/plugins/tmux/
+# Tests the tmux function in loadouts/private_dot_config/zsh/plugins/tmux/
 # tmux.plugin.zsh together with the scripts it relies on, tmux-ensure-server
 # and tmux-server-cwd. Uses the real tmux binary, but on servers of its own:
 # TMUX_TMPDIR points every socket into a throwaway directory (kept short:
@@ -8,8 +8,8 @@
 # bootstrap starts is rooted there. Run: tests/test-tmux-plugin.zsh
 
 SCRIPT_DIR="${0:A:h}/.."
-PLUGIN="$SCRIPT_DIR/configs/private_dot_config/zsh/plugins/tmux/tmux.plugin.zsh"
-BIN="$SCRIPT_DIR/configs/private_dot_local/bin"
+PLUGIN="$SCRIPT_DIR/loadouts/private_dot_config/zsh/plugins/tmux/tmux.plugin.zsh"
+BIN="$SCRIPT_DIR/loadouts/private_dot_local/bin"
 WORK="$(mktemp -d)"
 export TMUX_TMPDIR="$(mktemp -d /tmp/tpt.XXXX)"
 unset TMUX

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests loadout's configs/.chezmoitemplates/loadout/machine partial under the
+# Tests loadout's loadouts/.chezmoitemplates/loadout/machine partial under the
 # real chezmoi, against a throwaway source: a copy of the partial (as
 # `loadout compile` writes it) under a fixture .chezmoiroot, and a fixture
 # .chezmoidata/loadout.json. Merging (defaults, profiles, the machine) is
@@ -27,12 +27,12 @@ export XDG_CONFIG_HOME="$HOME/.config" XDG_CACHE_HOME="$HOME/.cache" XDG_DATA_HO
 [[ "$HOME" == "$WORK"/* ]] || { echo "HOME is not inside the fixture" >&2; exit 1; }
 
 SRC="$WORK/src"
-mkdir -p "$HOME" "$SRC/configs/.chezmoitemplates/loadout" "$SRC/configs/.chezmoidata"
-printf 'configs\n' > "$SRC/.chezmoiroot"
-cp "$REPO/configs/.chezmoitemplates/loadout/machine" "$SRC/configs/.chezmoitemplates/loadout/" ||
+mkdir -p "$HOME" "$SRC/loadouts/.chezmoitemplates/loadout" "$SRC/loadouts/.chezmoidata"
+printf 'loadouts\n' > "$SRC/.chezmoiroot"
+cp "$REPO/loadouts/.chezmoitemplates/loadout/machine" "$SRC/loadouts/.chezmoitemplates/loadout/" ||
   { echo "no loadout/machine partial: run loadout compile first" >&2; exit 1; }
 # A real template using the partial, the way the dotfiles do.
-printf '{{ if (includeTemplate "loadout/machine" . | fromJson).flag }}on{{ else }}off{{ end }}\n' > "$SRC/configs/dot_probe.tmpl"
+printf '{{ if (includeTemplate "loadout/machine" . | fromJson).flag }}on{{ else }}off{{ end }}\n' > "$SRC/loadouts/dot_probe.tmpl"
 
 cz() { chezmoi --source "$SRC" --destination "$HOME" --persistent-state "$WORK/state.boltdb" "$@"; }
 HOST="$(cz execute-template '{{ .chezmoi.hostname }}')"
@@ -43,7 +43,7 @@ value() { cz execute-template "{{ index (includeTemplate \"loadout/machine\" . |
 # The data as loadout compile writes it: the defaults, and each machine's
 # merged table. $1 = machines object.
 data() {
-  printf '{"loadout": {"defaults": {"flag": true, "color": "blue", "tags": ["a", "b"], "term": {"opacity": 0.85, "blur": 1}}, "machines": %s}}\n' "$1" > "$SRC/configs/.chezmoidata/loadout.json"
+  printf '{"loadout": {"defaults": {"flag": true, "color": "blue", "tags": ["a", "b"], "term": {"opacity": 0.85, "blur": 1}}, "machines": %s}}\n' "$1" > "$SRC/loadouts/.chezmoidata/loadout.json"
 }
 
 pass=0

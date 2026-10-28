@@ -86,7 +86,7 @@ EOF
   fi
   # Its omalauncher flag, from its table in the templates' data (written by
   # loadout compile, pretty-printed like the lock: four spaces deeper).
-  DATA=$(curl -fsSL "$RAW/configs/.chezmoidata/loadout.json" 2>/dev/null || true)
+  DATA=$(curl -fsSL "$RAW/loadouts/.chezmoidata/loadout.json" 2>/dev/null || true)
   flag() {
     printf '%s\n' "$DATA" |
       awk -v key="      \"$MACHINE\": {" -v want="        \"$1\": true" '$0 == key { m = 1; next } m && /^      [}]/ { exit } m && index($0, want) == 1 { print; exit }' |
