@@ -5,7 +5,7 @@
   "distro": "archarm",
   "arch": "aarch64",
   "toolVersion": "3.3.0",
-  "updatedAt": "2026-10-28T15:39:56.585674643Z",
+  "updatedAt": "2026-10-28T15:43:42.536112768Z",
   "programs": {
     "bat": {
       "status": "installed",
@@ -95,8 +95,8 @@
   },
   "scripts": {
     "machine-name": {
-      "status": "pending",
-      "lastRun": "2026-10-26T01:07:14.999158600Z",
+      "status": "done",
+      "lastRun": "2026-10-28T15:41:48.804377377Z",
       "exitCode": 0
     },
     "fakeroot-shim": {
@@ -160,8 +160,8 @@
       "exitCode": null
     },
     "setup-git": {
-      "status": "pending",
-      "lastRun": "2026-10-25T03:28:40.788477752Z",
+      "status": "done",
+      "lastRun": "2026-10-28T15:41:49.201226127Z",
       "exitCode": 0
     },
     "mise-tools": {
