@@ -10,7 +10,7 @@ val omarchyProfile = profile(name = "omarchy") {
         install(curl, git, gcc, procpsNg, zsh, chezmoi, mise, kitty, tmux)
         install(everydayCli)
         install(voxtype, code, sublimeText, obsidian, spotify, vlc, onePassword, onePasswordCli)
-        install(ttfFiracodeNerd, wtype, zenity)
+        install(ttfFiracodeNerd, wtype, zenity, ghostscript)
     }
     via(omarchyAur) {
         install(antigravity, slack, teamsForLinux, anydesk)

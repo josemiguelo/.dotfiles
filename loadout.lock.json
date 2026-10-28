@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "toolVersion": "3.3.1",
-  "sources": "6e8da892314bccf7ce61ad4b374637986c7a0d126326db009bb7efdbee52bbdb",
+  "toolVersion": "3.3.2",
+  "sources": "3f7038fccbfc8e57546b4f00e7e2809ab4c723aba92134902255bbf320120b34",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -443,6 +443,13 @@
           "pacman": {
             "pkg": "github-cli"
           }
+        },
+        "origin": "loadouts/private_dot_config"
+      },
+      "ghostscript": {
+        "install": {
+          "brew": {},
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -1928,6 +1935,7 @@
           "fd": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
+          "ghostscript": "omarchy",
           "git": "omarchy",
           "git-delta": "omarchy",
           "google-cloud-cli": "brew-cask",
@@ -2052,6 +2060,7 @@
           "fd": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
+          "ghostscript": "omarchy",
           "git": "omarchy",
           "git-delta": "omarchy",
           "google-cloud-cli": "brew-cask",

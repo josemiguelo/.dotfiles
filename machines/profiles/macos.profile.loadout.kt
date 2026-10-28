@@ -11,7 +11,7 @@ val macos = profile(name = "macos") {
         install(scrcpy, chezmoi, mise, tmux)
         install(
             awscli, trashCli, yq, azureCli, coreutils, gawk,
-            gh, gnuSed, jiraCli, jq, qemu, tree, unixodbc, wget, tryCli,
+            gh, ghostscript, gnuSed, jiraCli, jq, qemu, tree, unixodbc, wget, tryCli,
         )
     }
     via(brewTap) {
