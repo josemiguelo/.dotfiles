@@ -32,7 +32,9 @@ A machine new to the repo is declared first, compiled and pushed before the
 bootstrap reads it: `machine(hostname = "<machine>") { extends(t2Macbook) }`
 (or `omarchyProfile`, `macos`, `fedora`) in `machines/<machine>.loadout.kt`,
 then `loadout compile` and commit the lock with it. `loadout sync` publishes its state
-afterwards (it commits only the state file).
+afterwards (it commits only the state file). To ssh into the T2 laptop from it,
+add its name to the key titles `omarchySshd` trusts in
+`machines/profiles/t2-macbook.profile.loadout.kt`: the T2 lets in no other key.
 
 ### omalauncher (an Android phone)
 

@@ -23,6 +23,24 @@ nobody will ask for it by name.
 {{- if $m.omalauncher }}
 | a widget, face, app, panel or key bar for this phone's launcher, its style or its home layout | `~/.config/omalauncher/widgets` | in place, no worktree (see Widgets and faces) |
 {{- end }}
+{{- if stat (joinPath .chezmoi.homeDir ".config/loadout/repo") }}
+
+**This machine's loadout is a child repo of `.dotfiles`** (`LOADOUT_REPO`
+points at it; see "This machine's repos" at the end). Its machine file, what
+it installs and runs, and anything that names the work live in the child, not
+in `.dotfiles`, which is public. A loadout change here goes to one of them, or
+both:
+
+- **`.dotfiles`**: what any machine could use and names nothing private: a
+  program or script declared generically, a profile, a `Data` key, a hook a
+  child's file plugs into.
+- **The child**: this machine's own. Adding a program to this laptop is an
+  edit of the child's machine file, even when the program is `.dotfiles`'.
+- **Both**: a new hook and the file that uses it, a new `Data` key and the
+  machine that sets it. Two worktrees and two commits, `.dotfiles` first: the
+  child compiles against `.dotfiles`' main checkout, so its part compiles
+  after `.dotfiles`' part has merged.
+{{- end }}
 
 Unsure which repo, or a request that spans two (an engine feature and its
 wiki page, a feature and the `min-tool-version` bump in `.dotfiles`): say
@@ -179,10 +197,13 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
 
 - **`~/.local/share/chezmoi`** (josemiguelo/.dotfiles) — the one config
   repo. `configs/` is chezmoi's source (`.chezmoiroot`); the rest is what
-  `loadout` reads (`LOADOUT_REPO` points here): Kotlin manifests
-  (`loadout.kt`, `programs/`, `maintenance/`, `machines/`) that
-  `loadout compile` turns into the committed `loadout.lock.json`, and
-  `state/`. A tool's loadout fragment sits beside its dotfiles as
+  `loadout` reads{{ if stat (joinPath .chezmoi.homeDir ".config/loadout/repo") }}
+  through this machine's child repo (`LOADOUT_REPO` points at the child, see
+  "This machine's repos"){{ else }} (`LOADOUT_REPO` points here){{ end }}:
+  Kotlin manifests (`loadout.kt`, `programs/`, `maintenance/`, `machines/`)
+  that `loadout --repo <worktree> compile` turns into the committed
+  `loadout.lock.json`, and `state/`. In a worktree, every loadout command
+  takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits beside its dotfiles as
   `.loadout.kt` + `.loadout/`. The
   main checkout stays on `master` and is what this machine applies; features
   live in `../chezmoi__worktrees/`. This file's source is

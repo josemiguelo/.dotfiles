@@ -178,6 +178,8 @@ EOF
       run git -C "$dir" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
       run git -C "$dir" fetch --quiet origin
     fi
+    # Its hooks, as this repo's (a commit whose lock is stale is refused).
+    run git -C "$dir" config core.hooksPath .githooks
     branch=$(git -C "$dir" symbolic-ref --quiet --short HEAD 2>/dev/null || echo main)
     [ -d "$dir/all_worktrees/$branch" ] || run git -C "$dir" worktree add --quiet "$dir/all_worktrees/$branch" "$branch"
     LREPO=$dir/all_worktrees/$branch
