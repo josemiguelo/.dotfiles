@@ -113,6 +113,57 @@ local custom_explorer_layout = {
   },
 }
 
+-- Repos whose files and grep show hidden files: in the dotfiles half the
+-- files are under dot entries (loadout's `.<tool>.loadout.kt` and `.loadout/`,
+-- `.etc/`, `.chezmoitemplates/`), which they'd skip. A repo's worktrees count
+-- as the repo. .git stays out and .gitignore still applies; elsewhere hidden
+-- files stay hidden. <a-h> in the picker flips it.
+local show_hidden_repos = {
+  "~/.local/share/chezmoi",
+}
+
+-- The main checkout of the repo `dir` is in (a worktree's, for a worktree),
+-- or nil outside one.
+local function main_checkout(dir)
+  local root = vim.fs.root(dir, ".git")
+  if not root then
+    return nil
+  end
+  local git = root .. "/.git"
+  if vim.fn.isdirectory(git) == 1 then
+    return root
+  end
+  -- A worktree's .git is a file: "gitdir: <main>/.git/worktrees/<name>".
+  local line = (vim.fn.readfile(git, "", 1))[1] or ""
+  return line:match("^gitdir: (.*)/%.git/worktrees/[^/]+$") or root
+end
+
+local function shows_hidden(dir)
+  local repo = main_checkout(dir)
+  if not repo then
+    return false
+  end
+  repo = vim.fs.normalize(repo)
+  for _, path in ipairs(show_hidden_repos) do
+    if vim.fs.normalize(path) == repo then
+      return true
+    end
+  end
+  return false
+end
+
+local function pick(source, opts)
+  opts = opts or {}
+  return function()
+    local o = vim.deepcopy(opts)
+    local dir = o.root == false and vim.fn.getcwd() or LazyVim.root()
+    if o.hidden == nil and shows_hidden(dir) then
+      o.hidden = true
+    end
+    LazyVim.pick(source, o)()
+  end
+end
+
 return {
   {
     "folke/snacks.nvim",
@@ -122,16 +173,16 @@ return {
     },
     -- stylua: ignore
     keys = {
-      { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-      { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader>fF", pick("files"), desc = "Find Files (Root Dir)" },
+      { "<leader>ff", pick("files", { root = false }), desc = "Find Files (cwd)" },
 
       { "<leader>fR", LazyVim.pick("oldfiles"), desc = "Recent" },
       { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
 
-      { "<leader>sG", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
-      { "<leader>sg", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
+      { "<leader>sG", pick("live_grep"), desc = "Grep (Root Dir)" },
+      { "<leader>sg", pick("live_grep", { root = false }), desc = "Grep (cwd)" },
 
-      { "<leader><space>", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader><space>", pick("files", { root = false }), desc = "Find Files (cwd)" },
     },
   },
   {
