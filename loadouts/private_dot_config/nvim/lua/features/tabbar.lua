@@ -66,7 +66,6 @@ return {
       end)
 
       local map = vim.keymap.set
-      local remap = require("util.keymaps").remap
 
       map("n", "<leader><tab>r", ":TabRename ", { desc = "Rename tab" })
       map("n", "<leader><tab>e", "<cmd>tab split<cr>", { desc = "Edit current in new Tab" })
@@ -92,9 +91,6 @@ return {
           })
           :map("<leader>wm")
           :map("<leader>uZ")
-
-        remap("n", "<S-l>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-        remap("n", "<S-h>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
       end)
     end,
   },

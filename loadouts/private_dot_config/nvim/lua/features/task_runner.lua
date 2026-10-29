@@ -27,8 +27,6 @@ return {
         ["p"] = "TogglePreview",
         ["<C-l>"] = false,
         ["<C-h>"] = false,
-        ["L"] = false,
-        ["H"] = false,
         ["["] = "DecreaseAllDetail",
         ["]"] = "IncreaseAllDetail",
         ["{"] = "PrevTask",
