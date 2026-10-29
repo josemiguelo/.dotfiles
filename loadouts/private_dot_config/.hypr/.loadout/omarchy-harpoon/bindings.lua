@@ -8,4 +8,5 @@ harpoon.bind(hyper .. "B", { name = "Browser", class = "^brave%-browser$", launc
 harpoon.bind(hyper .. "O", { name = "Obsidian", class = "^md%.obsidian%.Obsidian$", launch = o.launch("obsidian"), mode = "jump" })
 harpoon.bind(hyper .. "M", { name = "Spotify", class = "^[Ss]potify$", launch = "omarchy-launch-spotify", mode = "overlay" })
 harpoon.bind(hyper .. "C", { name = "Claude", class = "^brave%-claude%.ai__%-Default$", launch = "omarchy-launch-webapp https://claude.ai/", mode = "overlay" })
+harpoon.bind(hyper .. "W", { name = "WhatsApp", class = "^brave%-web%.whatsapp%.com__%-Default$", launch = "omarchy-launch-webapp https://web.whatsapp.com/", mode = "overlay" })
 harpoon.bind(hyper .. "P", { name = "1Password", class = { "^com%.onepassword%.OnePassword$", "^1[Pp]assword$" }, launch = "omarchy-launch-1password", mode = "overlay" })
