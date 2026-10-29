@@ -13,7 +13,7 @@ val fedora = profile(name = "fedora") {
     via(dnf) {
         install(setupDnf, dnfPluginsCore, curl, git, gcc, procpsNg, zsh, tmux)
         install(just, vim, vlc, anydesk)
-        install(firefox, googleChromeStable)
+        install(firefox, googleChromeStable, flatpakPackage)
     }
     install(fedoraBuildDeps)
     via(dnfCopr) {

@@ -1,11 +1,11 @@
 {
   "format": 1,
-  "toolVersion": "3.3.1",
-  "sources": "981e185ced0a943ee6d804d847d1c2deb9c1874bb9b5ad770e45aa80f9254b01",
+  "toolVersion": "3.4.0",
+  "sources": "ba3f352d611d81bf5377b1f0f4f491274ed51f45433060f6f0b33044361ef570",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "3.3.1"
+      "min-tool-version": "3.4.0"
     },
     "layout": {
       "state": "machines/state",
@@ -27,50 +27,52 @@
         "upgrade": "sudo apt-get upgrade -y"
       },
       "brew": {
-        "install": "file:.loadout/brew.sh install {pkg}",
-        "check": "file:.loadout/brew.sh list --versions {pkg}",
+        "probe": "brew",
+        "install": "HOMEBREW_NO_ASK=1 brew install {pkg}",
+        "check": "brew list --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
-        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
-        "upgrade": "file:.loadout/brew.sh upgrade",
+        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
+        "upgrade": "brew upgrade",
         "requires": [
           "setup-brew"
-        ],
-        "origin": "loadouts/private_dot_config/.homebrew"
+        ]
       },
       "brew-cask": {
-        "install": "file:.loadout/brew.sh install --cask {pkg}",
-        "check": "file:.loadout/brew.sh list --cask --versions {pkg}",
+        "probe": "brew",
+        "install": "HOMEBREW_NO_ASK=1 brew install --cask {pkg}",
+        "check": "brew list --cask --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
-        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
-        "upgrade": "file:.loadout/brew.sh upgrade --cask",
+        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
+        "upgrade": "brew upgrade --cask",
         "requires": [
           "setup-brew"
-        ],
-        "origin": "loadouts/private_dot_config/.homebrew"
+        ]
       },
       "brew-tap": {
+        "probe": "brew",
         "params": [
           "tap"
         ],
         "install": "file:.loadout/brew-taps.sh install {tap} {tap}/{pkg}",
-        "check": "file:.loadout/brew.sh list --versions {pkg}",
+        "check": "brew list --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
-        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
-        "upgrade": "file:.loadout/brew.sh upgrade",
+        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
+        "upgrade": "brew upgrade",
         "requires": [
           "setup-brew"
         ],
         "origin": "loadouts/private_dot_config/.homebrew"
       },
       "brew-tap-cask": {
+        "probe": "brew",
         "params": [
           "tap"
         ],
         "install": "file:.loadout/brew-taps.sh install {tap} {tap}/{pkg} --cask",
-        "check": "file:.loadout/brew.sh list --cask --versions {pkg}",
+        "check": "brew list --cask --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
-        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
-        "upgrade": "file:.loadout/brew.sh upgrade --cask",
+        "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
+        "upgrade": "brew upgrade --cask",
         "requires": [
           "setup-brew"
         ],
@@ -124,6 +126,7 @@
         "outdated-all": "flatpak --user remote-ls --updates --cached --columns=application,version flathub | awk '{print $1, \"Version:\", $2}'",
         "upgrade": "flatpak --user update -y",
         "requires": [
+          "flatpak",
           "flathub-remote"
         ]
       },
@@ -403,7 +406,30 @@
           "flatpak": {
             "command": "flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
             "check": "flatpak --user remotes --columns=name | grep -x flathub",
-            "present": true
+            "present": true,
+            "depends-on": [
+              "flatpak"
+            ]
+          }
+        },
+        "origin": "loadouts/private_dot_local/share"
+      },
+      "flatpak": {
+        "description": "flatpak app runtime",
+        "install": {
+          "dnf": {
+            "provides": [
+              {
+                "binary": "flatpak"
+              }
+            ]
+          },
+          "omarchy": {
+            "provides": [
+              {
+                "binary": "flatpak"
+              }
+            ]
           }
         },
         "origin": "loadouts/private_dot_local/share"
@@ -816,13 +842,25 @@
               "git",
               "gcc",
               "procps-ng"
+            ],
+            "provides": [
+              {
+                "binary": "brew",
+                "at": "/home/linuxbrew/.linuxbrew/bin"
+              }
             ]
           },
           "macos": {
             "command": "NONINTERACTIVE=1 /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
             "check": "file:.loadout/brew.sh --version",
             "regex": "Homebrew ([0-9][0-9.]*)",
-            "sudo": true
+            "sudo": true,
+            "provides": [
+              {
+                "binary": "brew",
+                "at": "/opt/homebrew/bin"
+              }
+            ]
           }
         },
         "origin": "loadouts/private_dot_config/.homebrew"
@@ -885,6 +923,15 @@
         "install": {
           "brew": {},
           "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
+      },
+      "stremio": {
+        "description": "Stremio media center",
+        "install": {
+          "flatpak": {
+            "pkg": "com.stremio.Stremio"
+          }
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -1921,6 +1968,8 @@
           "curl": "omarchy",
           "eza": "omarchy",
           "fd": "omarchy",
+          "flathub-remote": "flatpak",
+          "flatpak": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
           "ghostscript": "omarchy",
@@ -1944,6 +1993,7 @@
           "slack": "omarchy-aur",
           "spotify": "omarchy",
           "starship": "omarchy",
+          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
@@ -2045,6 +2095,8 @@
           "edk2-ovmf": "omarchy",
           "eza": "omarchy",
           "fd": "omarchy",
+          "flathub-remote": "flatpak",
+          "flatpak": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
           "ghostscript": "omarchy",
@@ -2072,6 +2124,7 @@
           "solaar": "omarchy",
           "spotify": "omarchy",
           "starship": "omarchy",
+          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
           "t2fanrd": "omarchy",
@@ -2209,6 +2262,8 @@
     },
     "builtinInstallers": [
       "apt",
+      "brew",
+      "brew-cask",
       "dnf",
       "dnf-copr",
       "dnf-repo",

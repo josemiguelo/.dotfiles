@@ -1,5 +1,5 @@
-// Homebrew: brew itself, its mechanisms, and third-party taps. brew.sh,
-// setup-brew.sh and brew-taps.sh are in .loadout/.
+// Homebrew: brew itself, and third-party taps. brew.sh, setup-brew.sh and
+// brew-taps.sh are in .loadout/. brew and brew-cask are loadout's own.
 package loadouts
 
 import loadout.dsl.*
@@ -7,7 +7,9 @@ import loadout.dsl.*
 // Homebrew must exist and be writable by the login user before anything
 // installs with brew. Homebrew is single-owner: a prefix installed by another
 // account fails every `brew install`, so the Linux script reclaims it. PATH
-// is not touched here: brew reaches interactive shells via the zsh plugin.
+// is not touched here: brew reaches interactive shells via the zsh plugin,
+// and loadout's brew commands via `provides(at = …)`, which restates
+// brew-prefix.sh's prefix (loadout can't source it): change both together.
 val setupBrew = program(
     name = "setup-brew",
     description = "Homebrew installed and owned by the login user",
@@ -18,6 +20,7 @@ val setupBrew = program(
         managedBy(".loadout/setup-brew.sh")
         needsSudo()
         dependsOn(curl, git, gcc, procpsNg)
+        provides("brew", at = "/home/linuxbrew/.linuxbrew/bin")
     }
 
     // macOS: the official installer into /opt/homebrew. It asks for sudo
@@ -26,45 +29,33 @@ val setupBrew = program(
         command = "NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
         needsSudo()
         version(command = runScript(".loadout/brew.sh --version"), regex = """Homebrew ([0-9][0-9.]*)""")
+        provides("brew", at = "/opt/homebrew/bin")
     }
 }
 
-// The brew mechanisms replace the built-ins of the same name so brew is
-// reached by absolute path (brew.sh): on a fresh machine programs converge
-// before any shell has run `brew shellenv`. The rest matches the built-in.
 private const val OUTDATED_AWK = """awk '{n=${'$'}1; sub(/.*[/]/, "", n); v=${'$'}NF; gsub(/[()]/, "", v); print n, v}'"""
-
-val brew = installer(name = "brew") {
-    install = runScript(".loadout/brew.sh install {pkg}")
-    upgrade = runScript(".loadout/brew.sh upgrade")
-    check = runScript(".loadout/brew.sh list --versions {pkg}")
-    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --verbose | $OUTDATED_AWK"
-}
-
-val brewCask = installer(name = "brew-cask") {
-    install = runScript(".loadout/brew.sh install --cask {pkg}")
-    upgrade = runScript(".loadout/brew.sh upgrade --cask")
-    check = runScript(".loadout/brew.sh list --cask --versions {pkg}")
-    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --cask --verbose | $OUTDATED_AWK"
-}
 
 // A formula or cask from a third-party tap: tapped and trusted (trust is
 // per user), then installed by its full path, `<tap>/<pkg>`. pkg stays the
-// bare name, which is what `brew list` and the outdated oracle report.
+// bare name, which is what `brew list` and the outdated oracle report. The
+// rest is the built-ins', brew found the same way (setup-brew's `provides`),
+// so `loadout upgrade` runs one `brew upgrade` for brew and brew-tap.
 val brewTap = installer(name = "brew-tap") {
     params("tap")
+    probe = "brew"
     install = runScript(".loadout/brew-taps.sh install {tap} {tap}/{pkg}")
-    upgrade = runScript(".loadout/brew.sh upgrade")
-    check = runScript(".loadout/brew.sh list --versions {pkg}")
-    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --verbose | $OUTDATED_AWK"
+    upgrade = "brew upgrade"
+    check = "brew list --versions {pkg}"
+    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose | $OUTDATED_AWK"
 }
 
 val brewTapCask = installer(name = "brew-tap-cask") {
     params("tap")
+    probe = "brew"
     install = runScript(".loadout/brew-taps.sh install {tap} {tap}/{pkg} --cask")
-    upgrade = runScript(".loadout/brew.sh upgrade --cask")
-    check = runScript(".loadout/brew.sh list --cask --versions {pkg}")
-    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 sh .loadout/brew.sh outdated --cask --verbose | $OUTDATED_AWK"
+    upgrade = "brew upgrade --cask"
+    check = "brew list --cask --versions {pkg}"
+    outdatedAll = "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --cask --verbose | $OUTDATED_AWK"
 }
 
 /** A formula from [tap]: `installVia(tap(tap = "hashicorp/tap"))`. */

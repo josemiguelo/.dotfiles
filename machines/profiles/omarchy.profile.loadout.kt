@@ -11,6 +11,10 @@ val omarchyProfile = profile(name = "omarchy") {
         install(everydayCli)
         install(voxtype, code, sublimeText, obsidian, spotify, vlc, onePassword, onePasswordCli)
         install(ttfFiracodeNerd, wtype, zenity, ghostscript)
+        install(flatpakPackage)
+    }
+    via(flatpak) {
+        install(flathubRemote, stremio)
     }
     via(omarchyAur) {
         install(antigravity, slack, teamsForLinux, anydesk)

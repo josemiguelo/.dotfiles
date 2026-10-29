@@ -5,7 +5,7 @@ package loadouts
 
 import loadout.dsl.*
 
-val loadout = repo(name = "jm's machines", state = "machines/state", configs = "loadouts", minToolVersion = "3.3.1", data = ::Data)
+val loadout = repo(name = "jm's machines", state = "machines/state", configs = "loadouts", minToolVersion = "3.4.0", data = ::Data)
 
 /** Every per-machine setting, with its default. Dotfile templates branch on these, not on hostnames. */
 class Data : MachineData() {
@@ -29,8 +29,9 @@ class Data : MachineData() {
 /** The repo's one-liner, so machine files say `data { work = true }`. */
 fun MachineScope.data(block: Data.() -> Unit) = data(::Data, block)
 
-// The built-in installers this repo uses, as names every file sees. brew and
-// brew-cask are the repo's own (loadouts/private_dot_config/.homebrew), replacing the built-ins.
+// The built-in installers this repo uses, as names every file sees.
+val brew = Builtin.brew
+val brewCask = Builtin.brewCask
 val dnf = Builtin.dnf
 val dnfRepo = Builtin.dnfRepo
 val dnfCopr = Builtin.dnfCopr
