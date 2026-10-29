@@ -5,7 +5,7 @@
   "distro": "archarm",
   "arch": "aarch64",
   "toolVersion": "3.3.1",
-  "updatedAt": "2026-10-28T16:04:54.223309930Z",
+  "updatedAt": "2026-10-29T00:18:24.651749402Z",
   "programs": {
     "bat": {
       "status": "installed",
