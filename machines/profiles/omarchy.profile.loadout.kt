@@ -62,7 +62,6 @@ val omarchyProfile = profile(name = "omarchy") {
     run(Webapps.gmail, Webapps.googleCalendar)
 
     run(Overrides.commands, Overrides.keyboardBacklightGuard)
-    run(omarchyScreensaverBirds)
     // The screensaver gets ~14 minutes (it starts at 150s) before the lock.
     run(OmarchyShell.idle, "1000")
     run(Dictation.setup, Dictation.gpu)

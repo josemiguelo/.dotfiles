@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "3.3.0",
-  "updatedAt": "2026-10-28T15:11:29.719195942Z",
+  "toolVersion": "3.3.1",
+  "updatedAt": "2026-10-29T15:36:39.114690261Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -335,12 +335,12 @@
   },
   "scripts": {
     "dotfiles-pull": {
-      "status": "done",
+      "status": "pending",
       "lastRun": null,
       "exitCode": null
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -430,7 +430,7 @@
       "exitCode": 0
     },
     "omarchy-tmux-theme": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-13T16:52:49.964724569Z",
       "exitCode": 0
     },
@@ -455,17 +455,17 @@
       "exitCode": 0
     },
     "omarchy-harpoon": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:43.572064700Z",
       "exitCode": 0
     },
     "omarchy-theme-mode": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:44.280262330Z",
       "exitCode": 0
     },
     "omarchy-bar": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:42.688372953Z",
       "exitCode": 0
     },
@@ -490,17 +490,17 @@
       "exitCode": 0
     },
     "omarchy-keystroke-windows": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:43.697406455Z",
       "exitCode": 0
     },
     "omarchy-pomodoro": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:44.002486523Z",
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:42.302133844Z",
       "exitCode": 0
     },
@@ -559,11 +559,6 @@
       "lastRun": "2026-10-13T14:24:01.906156608Z",
       "exitCode": 0
     },
-    "omarchy-screensaver-birds": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
-    },
     "omarchy-idle": {
       "status": "done",
       "lastRun": null,
@@ -615,12 +610,12 @@
       "exitCode": 0
     },
     "t2-gmux-backlight": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:17:54.669140164Z",
       "exitCode": 0
     },
     "t2-render-gpu": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:44.300143647Z",
       "exitCode": 0
     },
@@ -645,7 +640,7 @@
       "exitCode": 0
     },
     "omarchy-scratchpad-opacity": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-28T02:13:44.152537918Z",
       "exitCode": 0
     },

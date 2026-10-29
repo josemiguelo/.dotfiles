@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "toolVersion": "3.3.2",
-  "sources": "3f7038fccbfc8e57546b4f00e7e2809ab4c723aba92134902255bbf320120b34",
+  "toolVersion": "3.3.1",
+  "sources": "981e185ced0a943ee6d804d847d1c2deb9c1874bb9b5ad770e45aa80f9254b01",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1572,18 +1572,6 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
-      "omarchy-screensaver-birds": {
-        "description": "screensaver text flocks away as birds and lands back",
-        "file": ".loadout/omarchy-screensaver-birds.sh",
-        "check": "file:.loadout/omarchy-screensaver-birds.sh check \"$@\"",
-        "after": [
-          "programs.gcc",
-          "programs.git",
-          "scripts.setup-git",
-          "scripts.omarchy-command-overrides"
-        ],
-        "origin": "loadouts/private_dot_config/.omarchy"
-      },
       "omarchy-sshd": {
         "description": "sshd with key-only logins for the trusted GitHub keys",
         "file": ".loadout/omarchy-sshd.sh",
@@ -2021,7 +2009,6 @@
           "omarchy-webapp-google-calendar",
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
-          "omarchy-screensaver-birds",
           "omarchy-idle 1000",
           "omarchy-dictation",
           "omarchy-dictation-gpu",
@@ -2155,7 +2142,6 @@
           "omarchy-webapp-google-calendar",
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
-          "omarchy-screensaver-birds",
           "omarchy-idle 1000",
           "omarchy-dictation",
           "omarchy-dictation-gpu",

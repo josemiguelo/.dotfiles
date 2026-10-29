@@ -14,3 +14,6 @@
 .config/nvim/lua/features/langs/lisp.lua
 .config/zsh/functions/start-loadout
 .local/bin/kitty-workmux-dashboard
+.local/bin/cbirds
+.local/share/omarchy-overrides/bin/omarchy-screensaver
+Repos/gh/clainstone

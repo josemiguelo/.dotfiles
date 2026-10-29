@@ -1,4 +1,4 @@
-// gcc: the C compiler builds need (Homebrew's Linux install, the screensaver).
+// gcc: the C compiler builds need (Homebrew's Linux install).
 package loadouts
 
 import loadout.dsl.*
