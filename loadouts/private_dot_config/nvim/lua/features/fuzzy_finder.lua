@@ -81,6 +81,9 @@ local function tmux_navigate(direction)
 end
 
 local custom_explorer_layout = {
+  -- Hidden and ignored files always show (H and I still flip them).
+  hidden = true,
+  ignored = true,
   layout = {
     layout = {
       width = 50,
