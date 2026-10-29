@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "3.4.0",
-  "sources": "ba3f352d611d81bf5377b1f0f4f491274ed51f45433060f6f0b33044361ef570",
+  "sources": "c7f0ff84dac596c8a985ab8d8c7f14586a35c6d2381437efe3155bf2625b91ba",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1663,6 +1663,12 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "omarchy-webapp-claude": {
+        "description": "Claude web app, on Hyper+C",
+        "file": ".loadout/omarchy-webapp-claude.sh",
+        "check": "file:.loadout/omarchy-webapp-claude.sh check \"$@\"",
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
       "omarchy-webapp-gmail": {
         "description": "Gmail web app, the default for email links",
         "file": ".loadout/omarchy-webapp-gmail.sh",
@@ -2057,6 +2063,7 @@
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
           "omarchy-webapp-google-calendar",
+          "omarchy-webapp-claude",
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-idle 1000",
@@ -2193,6 +2200,7 @@
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
           "omarchy-webapp-google-calendar",
+          "omarchy-webapp-claude",
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-idle 1000",

@@ -63,7 +63,7 @@ val omarchyProfile = profile(name = "omarchy") {
 
     // Web apps: Google's in HEY's place
     run(Webapps.remove, "Basecamp", "HEY")
-    run(Webapps.gmail, Webapps.googleCalendar)
+    run(Webapps.gmail, Webapps.googleCalendar, Webapps.claude)
 
     run(Overrides.commands, Overrides.keyboardBacklightGuard)
     // The screensaver gets ~14 minutes (it starts at 150s) before the lock.

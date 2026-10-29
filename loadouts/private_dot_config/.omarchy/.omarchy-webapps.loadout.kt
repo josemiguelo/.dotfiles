@@ -26,4 +26,11 @@ object Webapps {
     ) {
         managedBy(".loadout/omarchy-webapp-google-calendar.sh")
     }
+
+    val claude = script(
+        name = "omarchy-webapp-claude",
+        description = "Claude web app, on Hyper+C",
+    ) {
+        managedBy(".loadout/omarchy-webapp-claude.sh")
+    }
 }
