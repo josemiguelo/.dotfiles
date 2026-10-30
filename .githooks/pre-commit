@@ -1,15 +1,15 @@
 #!/bin/sh
-# Refuses a commit whose manifests and compiled lock disagree: a pushed .kt
+# Refuses a commit whose manifests and compiled lock disagree: a pushed .hcl
 # change without its loadout.lock.json leaves every other machine refusing
-# to run until someone with a JDK compiles. Only commits that touch the
-# manifests, the build files or what compile writes are checked.
+# to run until someone compiles. Only commits that touch the manifests or
+# what compile writes are checked.
 # Enabled per clone with: git config core.hooksPath .githooks
 set -eu
 
 root=$(git rev-parse --show-toplevel)
 generated='loadout.lock.json loadouts/.chezmoidata/loadout.json loadouts/.chezmoitemplates/loadout'
 
-git diff --cached --name-only | grep -qE '\.kts?$|^loadout\.lock\.json$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0
+git diff --cached --name-only | grep -qE '\.hcl$|^loadout\.lock\.json$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0
 
 command -v loadout >/dev/null 2>&1 || {
   echo "pre-commit: loadout isn't on PATH, so the lock can't be checked" >&2

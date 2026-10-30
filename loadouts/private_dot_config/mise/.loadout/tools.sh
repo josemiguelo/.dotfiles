@@ -12,7 +12,10 @@ cd "$HOME"
 
 case "${1:-install}" in
 check)
-  missing=$(mise ls --missing 2>/dev/null | awk '{ print $1 "@" $2 }')
+  # Captured first: a mise error (an untrusted or broken config) prints
+  # nothing, which would read as "nothing missing". Its message stays on stderr.
+  out=$(mise ls --missing) || { echo "mise ls --missing failed" >&2; exit 1; }
+  missing=$(printf '%s\n' "$out" | awk 'NF { print $1 "@" $2 }')
   [ -z "$missing" ] && exit 0
   for m in $missing; do echo "missing: $m"; done
   exit 1

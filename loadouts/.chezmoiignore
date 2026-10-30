@@ -29,6 +29,11 @@
 .config/spotify-flags.conf
 {{ end }}
 
+# Raycast is a macOS app: its script commands land only on macOS.
+{{ if ne .chezmoi.os "darwin" }}
+.config/raycast
+{{ end }}
+
 # omalauncher's Arch gets only its own: the launcher's configs, its zsh
 # (zsh-omalauncher, which ~/.zshenv points at there), its mise tools
 # (conf.d/omalauncher.toml, not config.toml's languages), its drawer's

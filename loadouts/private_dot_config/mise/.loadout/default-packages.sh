@@ -20,18 +20,30 @@ STATUS=0
 # The installed versions the global config pins for a tool; missing ones are
 # mise-tools' business, not this script's.
 versions_of() {
-  mise ls --global "$1" 2>/dev/null | awk '$3 != "(missing)" { print $2 }'
+  _out=$(mise ls --global "$1") || return 1
+  printf '%s\n' "$_out" | awk '$3 != "(missing)" && NF { print $2 }'
 }
+
+# Listed once, up front: mise failing would otherwise list no versions, and
+# a check over no versions passes.
+NODE_VERSIONS=
+RUBY_VERSIONS=
+if [ -f "$HOME/.default-npm-packages" ]; then
+  NODE_VERSIONS=$(versions_of node) || { echo "mise could not list node's versions" >&2; exit 1; }
+fi
+if [ -f "$HOME/.default-gems" ]; then
+  RUBY_VERSIONS=$(versions_of ruby) || { echo "mise could not list ruby's versions" >&2; exit 1; }
+fi
 
 PROBES=$(mktemp -d)
 trap 'rm -rf "$PROBES"' EXIT
 if [ -f "$HOME/.default-npm-packages" ]; then
-  for v in $(versions_of node); do
+  for v in $NODE_VERSIONS; do
     mise exec "node@$v" -- npm ls -g --depth=0 --parseable >"$PROBES/node-$v" 2>/dev/null &
   done
 fi
 if [ -f "$HOME/.default-gems" ]; then
-  for v in $(versions_of ruby); do
+  for v in $RUBY_VERSIONS; do
     mise exec "ruby@$v" -- gem list --no-versions >"$PROBES/ruby-$v" 2>/dev/null &
   done
 fi
@@ -39,7 +51,7 @@ wait
 
 # node versions x ~/.default-npm-packages
 if [ -f "$HOME/.default-npm-packages" ]; then
-  for v in $(versions_of node); do
+  for v in $NODE_VERSIONS; do
     while read -r pkg _; do
       [ -n "$pkg" ] || continue
       case "$pkg" in \#*) continue ;; esac
@@ -58,7 +70,7 @@ fi
 
 # ruby versions x ~/.default-gems
 if [ -f "$HOME/.default-gems" ]; then
-  for v in $(versions_of ruby); do
+  for v in $RUBY_VERSIONS; do
     while read -r pkg _; do
       [ -n "$pkg" ] || continue
       case "$pkg" in \#*) continue ;; esac

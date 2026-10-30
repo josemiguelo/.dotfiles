@@ -1,5 +1,5 @@
 #!/bin/sh
-# claude's own outdated check (../.claude.loadout.kt): is the claude
+# claude's own outdated check (../.claude.loadout.hcl): is the claude
 # binary behind the latest published Claude Code release? claude.ai/install.sh
 # installs it as a plain self-updating binary, so no package manager knows
 # about it. `claude update` does the upgrade in place, so no re-install needed.

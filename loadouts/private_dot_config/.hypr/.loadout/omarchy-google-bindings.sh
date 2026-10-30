@@ -17,6 +17,13 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 PROBE=$HERE/../../.omarchy/.loadout/lib/hypr-option.lua
 . "$HERE/../../.omarchy/.loadout/lib/hypr-live.sh"
 
+BEGIN="-- >>> Managed by loadout (omarchy-google-bindings)"
+END="-- <<< Managed by loadout (omarchy-google-bindings)"
+# The block an earlier version appended, unmarked at its end: from its
+# comment through its last bind. Install replaces it like its own.
+LEGACY="-- Managed by loadout (omarchy-google-bindings)"
+LEGACY_LAST='o.bind("SUPER + SHIFT + C"'
+
 MAIL=https://mail.google.com/
 COMPOSE='https://mail.google.com/mail/?view=cm&fs=1'
 CALENDAR=https://calendar.google.com/
@@ -24,6 +31,47 @@ CALENDAR=https://calendar.google.com/
 # What o.bind makes of { webapp = url }.
 webapp() {
   echo "omarchy-launch-webapp '$1'"
+}
+
+# The block: each key unbound from HEY, then bound to Google.
+block() {
+  echo "$BEGIN"
+  echo "-- Gmail and Google Calendar in HEY's place"
+  echo "-- (loadouts/private_dot_config/.hypr/.loadout/omarchy-google-bindings.sh)."
+  echo 'hl.unbind("SUPER + SHIFT + E")'
+  echo "o.bind(\"SUPER + SHIFT + E\", \"Gmail\", { webapp = \"$MAIL\" })"
+  echo 'hl.unbind("SUPER + SHIFT + ALT + E")'
+  echo "o.bind(\"SUPER + SHIFT + ALT + E\", \"New Gmail message\", { webapp = \"$COMPOSE\" })"
+  echo 'hl.unbind("SUPER + SHIFT + C")'
+  echo "o.bind(\"SUPER + SHIFT + C\", \"Google Calendar\", { webapp = \"$CALENDAR\" })"
+  echo "$END"
+}
+
+# CONF without any block of ours (marked, or the old unmarked one), then the
+# current block; written whole through a temp file, so it's never half there.
+write_block() {
+  mkdir -p "$(dirname "$CONF")"
+  tmp=$(mktemp "$CONF.XXXXXX")
+  {
+    if [ -f "$CONF" ]; then
+      # Blank lines are held until a kept line follows, so the ones left at
+      # the end (before an old block) don't pile up rewrite after rewrite.
+      # The old block also ends at its first line that isn't a comment, an
+      # unbind or a bind (kept): one edited by hand never swallows the rest.
+      awk -v b="$BEGIN" -v e="$END" -v l="$LEGACY" -v ll="$LEGACY_LAST" '
+        $0 == b { skip = 1 } index($0, l) == 1 { skip = 2 }
+        skip == 2 && $0 !~ /^(--|hl\.|o\.)/ { skip = 0 }
+        !skip && /^[[:space:]]*$/ { blanks = blanks "\n"; next }
+        !skip { printf "%s%s\n", blanks, $0; blanks = "" }
+        skip == 1 && $0 == e { skip = 0 }
+        skip == 2 && index($0, ll) == 1 { skip = 0 }' "$CONF"
+    fi
+    echo
+    block
+  } >"$tmp"
+  # mktemp makes it 0600; the file keeps its own mode (0644 when new).
+  if [ -f "$CONF" ]; then chmod --reference="$CONF" "$tmp"; else chmod 644 "$tmp"; fi
+  mv "$tmp" "$CONF"
 }
 
 # Every key runs exactly the one command; fails (the probe says why) when the
@@ -40,21 +88,9 @@ check)
   ;;
 install)
   lua "$PROBE" "bind:SUPER + SHIFT + E" >/dev/null || exit 1
-  # Once: if the block is there and still loses, adding it again won't win.
-  if ! bound && ! grep -qs 'Managed by loadout (omarchy-google-bindings)' "$CONF"; then
-    mkdir -p "$(dirname "$CONF")"
-    cat >> "$CONF" <<LUA
-
--- Managed by loadout (omarchy-google-bindings): Gmail and Google Calendar
--- in HEY's place (loadouts/private_dot_config/.hypr/.loadout/omarchy-google-bindings.sh).
-hl.unbind("SUPER + SHIFT + E")
-o.bind("SUPER + SHIFT + E", "Gmail", { webapp = "$MAIL" })
-hl.unbind("SUPER + SHIFT + ALT + E")
-o.bind("SUPER + SHIFT + ALT + E", "New Gmail message", { webapp = "$COMPOSE" })
-hl.unbind("SUPER + SHIFT + C")
-o.bind("SUPER + SHIFT + C", "Google Calendar", { webapp = "$CALENDAR" })
-LUA
-  fi
+  # Rewritten whenever a key is off: an edited URL replaces the block, not
+  # a second one after it.
+  bound || write_block
   bound || { echo "the email/calendar keys still don't open Google after $CONF: something loaded later binds them" >&2; exit 1; }
   sig=$(live_instance)
   if [ -n "$sig" ]; then

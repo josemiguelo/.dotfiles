@@ -1,21 +1,21 @@
 {
   "format": 1,
-  "toolVersion": "3.4.0",
-  "sources": "c7f0ff84dac596c8a985ab8d8c7f14586a35c6d2381437efe3155bf2625b91ba",
+  "toolVersion": "4.0.0",
+  "sources": "f7ed4e07a6df5e916cddb6a3a6a6dfce18a4a2687e2700a8858e342383db6ab8",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "3.4.0"
+      "min-tool-version": "4.0.0"
     },
     "layout": {
       "state": "machines/state",
       "configs": "loadouts",
       "sources": [
-        "loadout.kt",
-        "loadouts/**/.*.loadout.kt",
-        "loadouts/**/.*/.*.loadout.kt",
-        "loadouts/.etc/*/.*.loadout.kt",
-        "machines/**/*.loadout.kt"
+        "loadout.hcl",
+        "loadouts/**/.*.loadout.hcl",
+        "loadouts/**/.*/.*.loadout.hcl",
+        "loadouts/.etc/*/.*.loadout.hcl",
+        "machines/**/*.loadout.hcl"
       ]
     },
     "installers": {
@@ -137,7 +137,10 @@
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "checkupdates --nocolor | awk '$3 == \"->\" {print $1, $4}'",
         "upgrade": "omarchy update -y",
-        "sudo": true
+        "sudo": true,
+        "requires": [
+          "omarchy-package-lists"
+        ]
       },
       "omarchy-aur": {
         "probe": "omarchy",
@@ -146,7 +149,10 @@
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "yay -Qua 2>/dev/null | awk '$3 == \"->\" {print $1, $4}'",
         "upgrade": "omarchy update -y",
-        "sudo": true
+        "sudo": true,
+        "requires": [
+          "omarchy-package-lists"
+        ]
       },
       "pacman": {
         "probe": "pacman",
@@ -342,7 +348,7 @@
         "install": {
           "dnf": {
             "command": "sudo dnf group install -y development-tools",
-            "check": "dnf group list --installed 2>/dev/null | grep '^development-tools '",
+            "check": "x=$(dnf group list --installed 2>/dev/null) && printf '%s\\n' \"$x\" | grep -q '^development-tools '",
             "present": true
           }
         },
@@ -405,11 +411,8 @@
         "install": {
           "flatpak": {
             "command": "flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
-            "check": "flatpak --user remotes --columns=name | grep -x flathub",
-            "present": true,
-            "depends-on": [
-              "flatpak"
-            ]
+            "check": "x=$(flatpak --user remotes --columns=name) && printf '%s\\n' \"$x\" | grep -qx flathub",
+            "present": true
           }
         },
         "origin": "loadouts/private_dot_local/share"
@@ -740,6 +743,18 @@
         },
         "origin": "loadouts/private_dot_config/.obsidian"
       },
+      "omarchy-package-lists": {
+        "description": "pacman's package lists, synced by omarchy update",
+        "install": {
+          "custom": {
+            "command": "omarchy update -y",
+            "check": "test -s /var/lib/pacman/sync/core.db && test -s /var/lib/pacman/sync/extra.db",
+            "present": true,
+            "sudo": true
+          }
+        },
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
       "openssl-devel": {
         "install": {
           "dnf": {}
@@ -952,12 +967,9 @@
       },
       "sudo": {
         "install": {
-          "custom": {
+          "pacman": {
             "command": "file:.loadout/install-sudo.sh",
-            "check": "pacman -Q sudo",
-            "regex": "^sudo ([0-9][0-9.p]*[0-9])",
-            "outdated": "checkupdates --nocolor | awk '$1 == \"sudo\" {print \"sudo\", $4}'",
-            "sudo": false
+            "regex": "([0-9][0-9.p]*[0-9])"
           }
         },
         "origin": "loadouts/.etc/pacman"
@@ -1107,7 +1119,8 @@
           "dnf": {
             "command": "file:.loadout/virtualization.sh install",
             "check": "file:.loadout/virtualization.sh check",
-            "present": true
+            "present": true,
+            "sudo": true
           }
         },
         "origin": "loadouts/private_dot_config/.libvirt"
@@ -1257,12 +1270,6 @@
         ],
         "sudo": true,
         "origin": "loadouts/private_dot_config/zsh"
-      },
-      "dotfiles-old-build-dir": {
-        "description": "remove the build folder loadout 3.1.0 left in the chezmoi checkout",
-        "run": "rm -rf $HOME/.local/share/chezmoi/build",
-        "check": "test ! -d $HOME/.local/share/chezmoi/build",
-        "origin": "loadouts/private_dot_config/chezmoi"
       },
       "dotfiles-pull": {
         "description": "pull dotfiles source when behind its origin",
@@ -1429,6 +1436,7 @@
           "programs.1password",
           "programs.1password-cli"
         ],
+        "sudo": true,
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-activity-monitor-size": {
@@ -1572,7 +1580,6 @@
         "after": [
           "scripts.omarchy-command-overrides"
         ],
-        "sudo": true,
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-keystroke-windows": {
@@ -1745,7 +1752,7 @@
       "setup-ssh": {
         "description": "machine ssh key and agent auto-add config",
         "file": ".loadout/setup-ssh.sh",
-        "check": "test -f $HOME/.ssh/$1 && grep -q 'AddKeysToAgent yes' $HOME/.ssh/config && { test \"$(uname -s)\" != Linux || test ! -d /run/systemd/system || systemctl --user -q is-enabled ssh-agent.socket; }",
+        "check": "test -f $HOME/.ssh/$1 && grep -q 'AddKeysToAgent yes' $HOME/.ssh/config && ssh-keygen -F github.com -f $HOME/.ssh/known_hosts >/dev/null && { test \"$(uname -s)\" != Linux || test ! -d /run/systemd/system || systemctl --user -q is-enabled ssh-agent.socket; }",
         "origin": "loadouts/.ssh"
       },
       "skills-repo": {
@@ -1918,7 +1925,7 @@
           "loadout": "custom",
           "mise": "mise-run",
           "pacman-contrib": "pacman",
-          "sudo": "custom",
+          "sudo": "pacman",
           "trash-cli": "pacman",
           "wl-clipboard": "pacman",
           "zoxide": "pacman",
@@ -1939,7 +1946,6 @@
           "dotfiles-pull",
           "dotfiles-push",
           "dotfiles-ssh-remote",
-          "dotfiles-old-build-dir",
           "setup-git",
           "mise-tools",
           "obsidian-headless-sqlite",
@@ -1992,6 +1998,7 @@
           "mise": "omarchy",
           "ngrok": "custom",
           "obsidian": "omarchy",
+          "omarchy-package-lists": "custom",
           "procps-ng": "omarchy",
           "ripgrep": "omarchy",
           "scrcpy": "brew",
@@ -2023,7 +2030,6 @@
           "dotfiles-pull",
           "dotfiles-push",
           "dotfiles-ssh-remote",
-          "dotfiles-old-build-dir",
           "setup-git",
           "skills-repo",
           "workmux-setup",
@@ -2121,6 +2127,7 @@
           "mise": "omarchy",
           "ngrok": "custom",
           "obsidian": "omarchy",
+          "omarchy-package-lists": "custom",
           "procps-ng": "omarchy",
           "qemu-desktop": "omarchy",
           "ripgrep": "omarchy",
@@ -2160,7 +2167,6 @@
           "dotfiles-pull",
           "dotfiles-push",
           "dotfiles-ssh-remote",
-          "dotfiles-old-build-dir",
           "setup-git",
           "skills-repo",
           "workmux-setup",

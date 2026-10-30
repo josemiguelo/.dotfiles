@@ -32,18 +32,18 @@ in `.dotfiles`, which is public. A loadout change here goes to one of them, or
 both:
 
 - **`.dotfiles`**: what any machine could use and names nothing private: a
-  program or script declared generically, a profile, a `Data` key, a hook a
+  program or script declared generically, a profile, a `data` key, a hook a
   child's file plugs into.
 - **The child**: this machine's own. Adding a program to this laptop is an
   edit of the child's machine file, even when the program is `.dotfiles`'.
-- **Both**: a new hook and the file that uses it, a new `Data` key and the
+- **Both**: a new hook and the file that uses it, a new `data` key and the
   machine that sets it. Two worktrees and two commits, `.dotfiles` first: the
   child compiles against `.dotfiles`' main checkout, so its part compiles
   after `.dotfiles`' part has merged.
 {{- end }}
 
 Unsure which repo, or a request that spans two (an engine feature and its
-wiki page, a feature and the `min-tool-version` bump in `.dotfiles`): say
+wiki page, a feature and the `min_tool_version` bump in `.dotfiles`): say
 which repos you'd touch and ask first. Each repo's part is its own
 worktree and its own commit.
 
@@ -200,12 +200,12 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
   `loadout` reads{{ if stat (joinPath .chezmoi.homeDir ".config/loadout/repo") }}
   through this machine's child repo (`LOADOUT_REPO` points at the child, see
   "This machine's repos"){{ else }} (`LOADOUT_REPO` points here){{ end }}:
-  Kotlin manifests (`loadout.kt`, `loadouts/`, `machines/`)
+  HCL manifests (`loadout.hcl`, `loadouts/`, `machines/`)
   that `loadout --repo <worktree> compile` turns into the committed
   `loadout.lock.json`, and `machines/state/`. In a worktree, every loadout command
   takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits where the tool lands in `loadouts/`, as
-  `.<tool>.loadout.kt` + `.loadout/` (beside its dotfiles, or behind a dot
-  when it has none: `private_dot_config/.ripgrep.loadout.kt`); what lands
+  `.<tool>.loadout.hcl` + `.loadout/` (beside its dotfiles, or behind a dot
+  when it has none: `private_dot_config/.ripgrep.loadout.hcl`); what lands
   outside `$HOME` (dnf, pacman, hardware) is in `.etc/<concern>/`
   (`.etc/dnf/`, `.etc/t2/`). The
   main checkout stays on `master` and is what this machine applies; features
@@ -213,8 +213,8 @@ its style (`../style/style.toml`) and its home (`../home/layout.toml`).
   `loadouts/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,
   rendered per machine.
 - **`~/Repos/gh/josemiguelo/loadout`** (bare + worktree,
-  `all_worktrees/<branch>`) — the `loadout` CLI (Kotlin/Native). A feature
-  here often needs a `min-tool-version` bump in `.dotfiles` and a wiki
+  `all_worktrees/<branch>`) — the `loadout` CLI (Go). A feature
+  here often needs a `min_tool_version` bump in `.dotfiles` and a wiki
   update: separate repos, separate commits.
 - **`~/Repos/gh/josemiguelo/loadout.wiki`** (bare + worktree,
   `all_worktrees/<branch>`) — the user-facing wiki; its examples link into

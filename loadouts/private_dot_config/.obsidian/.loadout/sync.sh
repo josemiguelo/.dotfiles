@@ -1,7 +1,7 @@
 #!/bin/sh
 # An Obsidian Sync vault in a local folder through Obsidian Headless (`ob`,
 # from mise), set up as the machine names it:
-# `run(Obsidian.sync, "<vault>", "<path>", "<mode>")`. The mode is
+# `args(script.obsidian-sync, "<vault>", "<path>", "<mode>")`. The mode is
 # `bidirectional`, `pull-only` or `mirror-remote`; the rest stays ob's
 # defaults (merge on conflict; images, audio, PDFs and videos besides notes;
 # no app settings). Logging in, and the vault's encryption password if it has
@@ -13,7 +13,12 @@ MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
 [ "$#" -eq 3 ] || { echo "usage: $0 [check] <vault> <path> <mode>" >&2; exit 2; }
 vault=$1
-dir=$(eval echo "$2") # a ~ in the machine's path
+# A leading ~ in the machine's path is $HOME; nothing else in it is expanded.
+case "$2" in
+"~") dir=$HOME ;;
+"~/"*) dir=$HOME/${2#"~/"} ;;
+*) dir=$2 ;;
+esac
 mode=$3
 command -v ob >/dev/null 2>&1 || { echo "ob not found (mise's npm:obsidian-headless)" >&2; exit 1; }
 

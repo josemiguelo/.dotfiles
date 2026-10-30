@@ -14,7 +14,7 @@ JSON=$HOME/.config/omarchy/shell.json
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib/shell-ready.sh"
 . "$HERE/lib/plugin-update-hint.sh"
-shell_ready
+shell_ready "${1:-install}"
 
 enabled() {
   omarchy plugin list --json 2>/dev/null |
@@ -46,7 +46,8 @@ install)
     tmp=$(mktemp "$JSON.XXXXXX")
     jq --arg id "$KEYSTROKE" '
       .bar.layout |= map_values(map(select(.id != $id)))
-      | .plugins = ((.plugins // []) | if any(.[]; .id == $id) then . else . + [{ id: $id }] end)' "$JSON" > "$tmp"
+      | .plugins = ((.plugins // []) | if any(.[]; .id == $id) then . else . + [{ id: $id }] end)' "$JSON" > "$tmp" ||
+      { rm -f "$tmp"; exit 1; }
     mv "$tmp" "$JSON"
   fi
   in_place || { echo "Keystroke is still on the bar after install" >&2; plugin_update_hint "$KEYSTROKE"; exit 1; }

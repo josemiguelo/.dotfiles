@@ -12,6 +12,6 @@ codex = "latest"
 "gem:try-cli" = "latest"
 # Obsidian Sync's headless client (`ob`), on mise's node: keeps the vault the
 # phone's Android apps use in a folder Linux reads too. The vault is set up by
-# loadout's obsidian-sync (maintenance/common/obsidian).
+# loadout's obsidian-sync (loadouts/private_dot_config/.obsidian/).
 node = "26.8.2"
 "npm:obsidian-headless" = "latest"

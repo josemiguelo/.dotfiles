@@ -15,6 +15,8 @@ set -eu
 
 # omarchy-sudo-docker --configured succeeds when Docker would still need sudo.
 configured() {
+  # Missing, its 127 would read as configured through the `!`.
+  command -v omarchy-sudo-docker >/dev/null 2>&1 || { echo "omarchy-sudo-docker not found" >&2; return 1; }
   ! omarchy-sudo-docker --configured
 }
 

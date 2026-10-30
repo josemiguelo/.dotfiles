@@ -23,6 +23,7 @@ install) ;;
 esac
 
 TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
 cd "$TEMP_DIR"
 
 curl -fsSL -o "$TEMP_DIR/FiraCode.zip" \

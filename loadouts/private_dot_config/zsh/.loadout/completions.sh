@@ -24,7 +24,11 @@ each() {
 check_one() { test -f "$DIR/_$1"; }
 install_one() {
   if [ ! -f "$DIR/_$1" ]; then
-    curl -fsSL "$2" -o "$DIR/_$1"
+    # Into place only once whole: a broken-off download left at the final
+    # name would pass the check forever. The partial is a dotfile: zsh reads
+    # every _* file here as a completion.
+    curl -fsSL "$2" -o "$DIR/.$1.part" && mv "$DIR/.$1.part" "$DIR/_$1" ||
+      { rm -f "$DIR/.$1.part"; return 1; }
   fi
 }
 

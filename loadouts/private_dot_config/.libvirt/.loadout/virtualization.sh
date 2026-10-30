@@ -9,7 +9,6 @@ PKGS="virt-manager virt-install libvirt-daemon libvirt-daemon-kvm libvirt-daemon
 case "${1:-install}" in
   check)
     rpm -q $PKGS >/dev/null
-    rpm -q libvirt-daemon
     ;;
   install)
     sudo dnf group install -y virtualization

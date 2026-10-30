@@ -17,3 +17,5 @@
 .local/bin/cbirds
 .local/share/omarchy-overrides/bin/omarchy-screensaver
 Repos/gh/clainstone
+.config/zsh/functions/hello
+.config/zsh/functions/is_apt_package_installed

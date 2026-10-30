@@ -117,7 +117,7 @@ local custom_explorer_layout = {
 }
 
 -- Repos whose files and grep show hidden files: in the dotfiles half the
--- files are under dot entries (loadout's `.<tool>.loadout.kt` and `.loadout/`,
+-- files are under dot entries (loadout's `.<tool>.loadout.hcl` and `.loadout/`,
 -- `.etc/`, `.chezmoitemplates/`), which they'd skip. A repo's worktrees count
 -- as the repo. .git stays out and .gitignore still applies; elsewhere hidden
 -- files stay hidden. <a-h> in the picker flips it.

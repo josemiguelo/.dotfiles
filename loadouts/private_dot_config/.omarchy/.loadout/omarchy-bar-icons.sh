@@ -22,7 +22,7 @@ TOOL=$CHECKOUT/bin/omarchy-bar-icons
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib/shell-ready.sh"
 . "$HERE/lib/plugin-update-hint.sh"
-shell_ready
+shell_ready "${1:-install}"
 
 remotes_ok() {
   [ "$(git -C "$CHECKOUT" config --get remote.origin.url)" = "$REPO" ] &&

@@ -24,6 +24,14 @@ set -eu
 # mise's shims, for the neovim the mise config pins (nightly) when this runs
 # outside a shell that activated mise.
 export PATH="$HOME/.local/bin:${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$PATH"
+# brew's bin too, for macOS: its coreutils brings the `timeout` below, and a
+# fresh machine's shell hasn't run `brew shellenv` yet.
+. "$LOADOUT_REPO/loadouts/private_dot_local/lib/brew-prefix.sh"
+export PATH="$PATH:$BREW_PREFIX/bin"
+
+# The cap on a hung nvim: GNU's timeout (gtimeout under some prefixes);
+# without either, nvim runs uncapped rather than read as "did not answer".
+CAP=$(command -v timeout || command -v gtimeout || true)
 
 LOCK="${XDG_CONFIG_HOME:-$HOME/.config}/nvim/lazy-lock.json"
 LUA="$(cd "$(dirname "$0")" && pwd)/plugins.lua"
@@ -49,7 +57,7 @@ ask() {
   out=$(mktemp)
   [ "$1" = update ] || save_lock
   LOADOUT_NVIM_OUT="$out" LOADOUT_NVIM_MODE="$1" LOADOUT_NVIM_ITEM="${2:-}" LOADOUT_NVIM_LOCK="$SAVED" \
-    timeout 120 nvim --headless -n \
+    ${CAP:+"$CAP" 120} nvim --headless -n \
     -c "luafile $LUA" -c 'qa!' </dev/null >/dev/null 2>&1 || true
   [ "$1" = update ] || put_lock_back
   if grep -qx '__LOADOUT_NVIM_OK__' "$out" 2>/dev/null; then

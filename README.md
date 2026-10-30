@@ -13,7 +13,7 @@ omalauncher phone, below):
 curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 ```
 
-`<machine>` names a machine of the repo (`machines/<machine>.loadout.kt`)
+`<machine>` names a machine of the repo (`machines/<machine>.loadout.hcl`)
 and becomes the hostname (each install keeps its own state file, so a reinstall gets a name of its own, e.g.
 `t2-macbook-omarchy-2`). The work laptop is a private child repo's machine
 (loadout's contract 18): `bootstrap.sh <machine> --child <ssh url>` keeps its
@@ -29,19 +29,19 @@ first: the install leaves pacman without package lists, and installing
 chezmoi fails with "target not found".
 
 A machine new to the repo is declared first, compiled and pushed before the
-bootstrap reads it: `machine(hostname = "<machine>") { extends(t2Macbook) }`
-(or `omarchyProfile`, `macos`, `fedora`) in `machines/<machine>.loadout.kt`,
+bootstrap reads it: `machine "<machine>" { extends = [profile.t2-macbook] }`
+(or `profile.omarchy`, `profile.macos`, `profile.fedora`) in `machines/<machine>.loadout.hcl`,
 then `loadout compile` and commit the lock with it. `loadout sync` publishes its state
 afterwards (it commits only the state file). To ssh into the T2 laptop from it,
-add its name to the key titles `omarchySshd` trusts in
-`machines/profiles/t2-macbook.profile.loadout.kt`: the T2 lets in no other key.
+add its name to the key titles `omarchy-sshd` trusts in
+`machines/profiles/t2-macbook.profile.loadout.hcl`: the T2 lets in no other key.
 
 ### omalauncher (an Android phone)
 
 The Arch that runs inside the omalauncher Android launcher
 (`omalauncher-galaxy-a56`, profile `omalauncher`) gets only its own: the
 launcher's configs (home layout, style, widgets), a minimal zsh
-(`zsh-omalauncher`), mise with java, ruby, claude, codex and try, and widget
+(`zsh-omalauncher`), mise with java, ruby, node, claude, codex, try and obsidian-headless, and widget
 sessions (`start-dotfiles-change`, `widgets:`). It's proot as root, with no
 systemd and no sudo at first; the same one command sets it up and takes its
 own way through the steps for it (its data says `omalauncher`).
@@ -74,8 +74,8 @@ own way through the steps for it (its data says `omalauncher`).
 
 Values the launcher keeps on the Android side (widgets' `persist` and
 `secret` states) don't come back: type the secrets in again. Another phone
-is a machine of its own first, as above: `machine(hostname = "<name>") {
-extends(omalauncherProfile) }` in `machines/<name>.loadout.kt`, compiled
+is a machine of its own first, as above: `machine "<name>" {
+extends = [profile.omalauncher] }` in `machines/<name>.loadout.hcl`, compiled
 and pushed before its bootstrap.
 
 ## tmux

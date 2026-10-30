@@ -10,6 +10,11 @@
 # Modes: `check` / `install` (default).
 set -eu
 
+# brew's bin: workmux comes from a brew tap, and a new machine's shell
+# hasn't run `brew shellenv` yet.
+. "$LOADOUT_REPO/loadouts/private_dot_local/lib/brew-prefix.sh"
+export PATH="$BREW_PREFIX/bin:$PATH"
+
 SKILLS="merge rebase worktree coordinator open-pr workmux"
 STAMP=${XDG_STATE_HOME:-$HOME/.local/state}/workmux-setup/version
 
@@ -71,5 +76,9 @@ case "${1:-install}" in
     mkdir -p "$(dirname "$STAMP")"
     workmux --version >"$STAMP"
     missing >&2 || { echo "workmux setup left these out" >&2; exit 1; }
+    ;;
+  *)
+    echo "usage: $0 [check|install]" >&2
+    exit 2
     ;;
 esac

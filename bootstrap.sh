@@ -3,8 +3,8 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 #
-# <machine> names a machine the repo declares (machine("<machine>") in
-# machines.loadout.kt, compiled into loadout.lock.json) and becomes the
+# <machine> names a machine the repo declares (machine "<machine>" in
+# machines/<machine>.loadout.hcl, compiled into loadout.lock.json) and becomes the
 # hostname, so loadout, chezmoi's templates and the state file all agree on
 # it. The order is the point: the hostname before the first apply (templates
 # rendered for an unknown host get the defaults, e.g. omarchy: false), the
@@ -49,6 +49,19 @@ LOADOUT_INSTALL=https://raw.githubusercontent.com/josemiguelo/loadout/master/ins
 
 say() { printf '\033[1m==> %s\033[0m\n' "$*"; }
 die() { printf 'bootstrap: %s\n' "$*" >&2; exit 1; }
+# fetch_run <url> [args…]: the installer script at url, downloaded whole
+# first and then run with args. A failed download stops here with curl's
+# error; piped or substituted, it would run an empty script that succeeds.
+fetch_run() {
+  _fr=$(mktemp)
+  curl -fsSL "$1" -o "$_fr" || { rm -f "$_fr"; die "couldn't download $1"; }
+  shift
+  _rc=0
+  sh "$_fr" "$@" || _rc=$?
+  rm -f "$_fr"
+  return "$_rc"
+}
+
 run() {
   printf '  + %s\n' "$*"
   [ -n "$DRY" ] || "$@"
@@ -64,6 +77,8 @@ main() {
   OS=$(uname -s)
   OMARCHY=
   command -v omarchy >/dev/null 2>&1 && OMARCHY=1
+  # Set below from this repo's lock; a child repo's machine is never the phone.
+  OMALAUNCHER=
 
   say "1. machine $MACHINE"
   if [ -n "$CHILD" ]; then
@@ -77,9 +92,9 @@ main() {
     cat >&2 <<EOF
 bootstrap: $GH declares no machine $MACHINE (it has: $(printf '%s ' $machines)).
 A machine new to the repo is declared first, extending its profiles, in
-machines/$MACHINE.loadout.kt, e.g.
-  /** MacBookPro16,1 (T2) running Omarchy. */
-  val t2MacbookOmarchy = machine("$MACHINE") { extends(t2Macbook) }
+machines/$MACHINE.loadout.hcl, e.g.
+  # MacBookPro16,1 (T2) running Omarchy.
+  machine "$MACHINE" { extends = [profile.t2-macbook] }
 Then loadout compile, commit and push (the lock too), and run this again.
 EOF
     exit 1
@@ -92,7 +107,6 @@ EOF
       awk -v key="      \"$MACHINE\": {" -v want="        \"$1\": true" '$0 == key { m = 1; next } m && /^      [}]/ { exit } m && index($0, want) == 1 { print; exit }' |
       grep -q .
   }
-  OMALAUNCHER=
   flag omalauncher && OMALAUNCHER=1
   fi
 
@@ -101,6 +115,11 @@ EOF
     # Its rootfs may come without package lists, and installing against lists
     # newer than the system is a partial upgrade: a full sync first.
     run pacman -Syu --noconfirm
+  elif [ -n "$OMARCHY" ] && [ ! -s /var/lib/pacman/sync/core.db ]; then
+    # Omarchy 4's offline ISO leaves pacman without its online package
+    # lists, so `omarchy pkg add` finds nothing; its pacman hook refuses a
+    # direct -Syu, and `omarchy update -y` syncs them unattended.
+    run omarchy update -y
   fi
   command -v git >/dev/null 2>&1 && { command -v chezmoi >/dev/null 2>&1 || [ -x "$HOME/.local/bin/chezmoi" ]; } &&
     echo "  present"
@@ -115,7 +134,7 @@ EOF
   if ! command -v chezmoi >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/chezmoi" ]; then
     if [ -n "$OMARCHY" ]; then run omarchy pkg add chezmoi
     elif [ -n "$OMALAUNCHER" ]; then run pacman -S --needed --noconfirm chezmoi
-    else run sh -c "$(curl -fsSL https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+    else run fetch_run https://get.chezmoi.io -b "$HOME/.local/bin"
     fi
   fi
   PATH=$HOME/.local/bin:$PATH
@@ -193,7 +212,7 @@ EOF
 
   say "6. loadout"
   if [ ! -x "$HOME/.local/bin/loadout" ] && ! command -v loadout >/dev/null 2>&1; then
-    run sh -c "curl -fsSL $LOADOUT_INSTALL | sh"
+    run fetch_run "$LOADOUT_INSTALL"
   else
     echo "  installed"
   fi

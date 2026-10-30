@@ -18,13 +18,13 @@ Darwin-x86_64) FILE="ngrok-v3-stable-darwin-amd64.zip" ;;
 esac
 
 mkdir -p "$BIN_DIR"
+# Downloaded whole first, failing on an HTTP error (-f): an error page never
+# reaches tar or unzip. Equinox publishes no checksums for these files.
+TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT
+curl -fsSL -o "$TMP/$FILE" "$BASE/$FILE"
 case "$FILE" in
-*.tgz) curl -sSL "$BASE/$FILE" | tar -xz -C "$BIN_DIR" ngrok ;;
-*.zip)
-  TMP=$(mktemp -d)
-  curl -sSL -o "$TMP/ngrok.zip" "$BASE/$FILE"
-  unzip -o "$TMP/ngrok.zip" ngrok -d "$BIN_DIR"
-  rm -rf "$TMP"
-  ;;
+*.tgz) tar -xzf "$TMP/$FILE" -C "$BIN_DIR" ngrok ;;
+*.zip) unzip -o "$TMP/$FILE" ngrok -d "$BIN_DIR" ;;
 esac
 chmod +x "$BIN_DIR/ngrok"

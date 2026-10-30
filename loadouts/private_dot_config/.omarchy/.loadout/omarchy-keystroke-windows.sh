@@ -77,7 +77,8 @@ install)
   mkdir -p "$(dirname "$SETTINGS")"
   if [ -f "$SETTINGS" ]; then base=$(cat "$SETTINGS"); else base='{"version":1}'; fi
   tmp=$(mktemp "$SETTINGS.XXXXXX")
-  printf '%s' "$base" | jq '.version //= 1 | .providers.windows.enabled = true' > "$tmp"
+  printf '%s' "$base" | jq '.version //= 1 | .providers.windows.enabled = true' > "$tmp" ||
+    { rm -f "$tmp"; exit 1; }
   mv "$tmp" "$SETTINGS"
   touch "$CONF"
   rest=$(awk -v b="$BEGIN" -v e="$END" '$0 == b { skip = 1 } !skip { print } $0 == e { skip = 0 }' "$CONF")

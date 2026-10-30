@@ -35,7 +35,8 @@ install)
     [ -s "$JSON" ] || from=$DEFAULTS
     mkdir -p "$(dirname "$JSON")"
     tmp=$(mktemp "$JSON.XXXXXX")
-    jq --argjson lock "$LOCK" '.version = 1 | .idle = ((.idle // {}) + { lock: $lock })' "$from" > "$tmp"
+    jq --argjson lock "$LOCK" '.version = 1 | .idle = ((.idle // {}) + { lock: $lock })' "$from" > "$tmp" ||
+      { rm -f "$tmp"; exit 1; }
     mv "$tmp" "$JSON"
     shell_ready && omarchy-shell shell reloadConfig >/dev/null 2>&1 || true
   fi

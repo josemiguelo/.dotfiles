@@ -68,12 +68,26 @@ skill_names() {
   find "$wt" -mindepth 1 -maxdepth 1 -type d ! -name '.git' -exec basename {} \;
 }
 
+# Links in SKILLS_DIR into the worktree whose skill is gone from it (removed
+# or renamed in the repo), one per line. Only links into this repo's
+# worktree: Omarchy's links and the folders other tools write are never ours.
+stale_links() {
+  wt=$1
+  for link in "$SKILLS_DIR"/*; do
+    [ -L "$link" ] || continue
+    case "$(readlink "$link")" in
+    "$wt"/*) [ -e "$link" ] || printf '%s\n' "$link" ;;
+    esac
+  done
+}
+
 check_all() {
   [ -d "$REPO" ] || return 1
   remotes_ok || return 1
   wt=$(worktree_path)
   [ -n "$wt" ] || return 1
 
+  [ -z "$(stale_links "$wt")" ] || return 1
   names=$(skill_names)
   [ -z "$names" ] && return 0
   while IFS= read -r name; do
@@ -101,6 +115,10 @@ install_all() {
   fi
 
   mkdir -p "$SKILLS_DIR"
+  stale_links "$wt" | while IFS= read -r link; do
+    rm "$link"
+    echo "skills-repo: unlinked ${link##*/} (gone from the repo)"
+  done
   names=$(skill_names)
   [ -z "$names" ] && return 0
   while IFS= read -r name; do

@@ -37,7 +37,10 @@ check() {
   [ -f "$BUNDLES" ] || { echo ".zplugins not found" >&2; exit 1; }
   # Without antidote there's nothing to ask about its bundles.
   [ -d "$ANTIDOTE/.git" ] || { echo "missing: antidote itself ($ANTIDOTE)"; exit 1; }
-  missing=$(bundle_paths | awk '$2 == "-" { print $1 }')
+  # Captured first: zsh or antidote failing prints nothing, which would
+  # read as "no bundle missing".
+  paths=$(bundle_paths) || { echo "antidote could not list its bundles" >&2; exit 1; }
+  missing=$(printf '%s\n' "$paths" | awk '$2 == "-" { print $1 }')
   [ -z "$missing" ] && exit 0
   for repo in $missing; do echo "missing bundle: $repo"; done
   exit 1

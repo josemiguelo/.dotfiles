@@ -16,7 +16,7 @@ if [ "${1:-}" = check ]; then MODE=check; shift; fi
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib/shell-ready.sh"
 . "$HERE/lib/plugin-update-hint.sh"
-shell_ready
+shell_ready "$MODE"
 
 # omarchy-plugin-add's own location (it doesn't follow XDG_CONFIG_HOME).
 PLUGINS=$HOME/.config/omarchy/plugins

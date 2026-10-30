@@ -14,6 +14,9 @@ ssh_agent_up() {
     export SSH_AUTH_SOCK="$_sa_sock"
   else
     eval "$(ssh-agent -s)" >/dev/null
+    # Stopped when the script exits: nothing else reaches it (each script
+    # loads the key into its own), and checks run on every status.
+    trap 'ssh-agent -k >/dev/null 2>&1' EXIT
   fi
 }
 

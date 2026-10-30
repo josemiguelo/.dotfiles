@@ -37,7 +37,7 @@ STOCK=omarchy.workspaces
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib/shell-ready.sh"
 . "$HERE/lib/plugin-update-hint.sh"
-shell_ready
+shell_ready "$MODE"
 WIDGET_SETTINGS=$HERE/omarchy-bar/settings/$WIDGET.json
 JSON=$HOME/.config/omarchy/shell.json
 TOML=$HOME/.config/omarchy/shell.toml

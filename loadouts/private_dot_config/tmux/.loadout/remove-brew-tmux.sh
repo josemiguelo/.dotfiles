@@ -12,7 +12,8 @@ brew() { sh "$LOADOUT_REPO/loadouts/private_dot_config/.homebrew/.loadout/brew.s
 
 # Without brew there's nothing to remove.
 . "$LOADOUT_REPO/loadouts/private_dot_local/lib/brew-prefix.sh"
-command -v brew >/dev/null 2>&1 || [ -x "$BREW_PREFIX/bin/brew" ] || exit 0
+# (Not `command -v brew`: the brew() above always answers it.)
+[ -x "$BREW_PREFIX/bin/brew" ] || exit 0
 
 FORMULAE="tmux git"
 
