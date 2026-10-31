@@ -3,6 +3,7 @@
 
 program "spotify" {
   description = "Spotify music streaming"
-  install_via = [omarchy]  # Omarchy's own repo carries it
+  # Omarchy's own repo carries it.
+  via "omarchy" {}
   via "brew-cask" { spare = "for macOS; no Mac installs it yet" }
 }

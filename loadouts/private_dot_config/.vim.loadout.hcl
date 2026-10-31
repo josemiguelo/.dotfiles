@@ -2,5 +2,5 @@
 # formula is vim.
 program "vim" {
   via "dnf" { pkg = "vim-enhanced" }
-  install_via = [brew]
+  via "brew" {}
 }
