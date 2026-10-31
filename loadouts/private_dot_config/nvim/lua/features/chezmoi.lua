@@ -123,6 +123,18 @@ local sources = vim.env.HOME .. "/.local/share/chezmoi/loadouts/"
 
 return {
   {
+    -- The extra gives chezmoi.vim the checkout as the source dir, but
+    -- .chezmoiroot makes it loadouts/, so chezmoi.vim's special paths
+    -- (.chezmoitemplates/, .chezmoiscripts/, .chezmoiremove, …) never
+    -- matched: an extensionless template like loadout/machine got no
+    -- filetype. This init replaces the extra's (lazy.nvim keeps one).
+    "alker0/chezmoi.vim",
+    init = function()
+      vim.g["chezmoi#use_tmp_buffer"] = 1
+      vim.g["chezmoi#source_dir_path"] = sources:sub(1, -2)
+    end,
+  },
+  {
     "xvzc/chezmoi.nvim",
     keys = {
       { "<leader>sz", pick_chezmoi, desc = "Chezmoi" },
