@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.0.0",
-  "updatedAt": "2026-10-30T16:52:03.357572196Z",
+  "updatedAt": "2026-10-31T00:44:55.170439795Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -180,6 +180,11 @@
     "obsidian": {
       "status": "installed",
       "version": "1.14.4",
+      "reason": null
+    },
+    "omarchy-package-lists": {
+      "status": "installed",
+      "version": null,
       "reason": null
     },
     "procps-ng": {
@@ -367,11 +372,6 @@
     "dotfiles-ssh-remote": {
       "status": "done",
       "lastRun": "2026-10-13T14:14:42.702925664Z",
-      "exitCode": 0
-    },
-    "dotfiles-old-build-dir": {
-      "status": "done",
-      "lastRun": "2026-10-30T03:40:52.256073083Z",
       "exitCode": 0
     },
     "setup-git": {
@@ -611,7 +611,7 @@
     },
     "omarchy-sshd": {
       "status": "done",
-      "lastRun": "2026-10-27T22:15:19.267504925Z",
+      "lastRun": "2026-10-31T00:43:51.463323489Z",
       "exitCode": 0
     },
     "t2-hid-apple-keyboard": {
@@ -697,10 +697,8 @@
       "reason": null
     },
     ".local": {
-      "status": "drifted",
-      "files": [
-        ".local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md"
-      ],
+      "status": "applied",
+      "files": [],
       "reason": null
     },
     ".zshenv": {
@@ -744,13 +742,6 @@
       "reason": null
     },
     "nvim": {
-      "status": "drifted",
-      "files": [
-        ".config/nvim/lua/features/fuzzy_finder.lua"
-      ],
-      "reason": null
-    },
-    "raycast": {
       "status": "applied",
       "files": [],
       "reason": null
