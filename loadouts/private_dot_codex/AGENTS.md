@@ -9,5 +9,5 @@ before the launcher's own instructions where they differ:
   ~/.config/omalauncher/widgets/AGENTS.md. A widget's packages go in its
   `requires`, installed with `loadout run omalauncher-requires`, not `pacman -S`.
 - Anything else you install or set up becomes a loadout program, script or
-  config: read ~/.local/share/chezmoi/AGENTS.md (its "omalauncher" section) first.
+  config: read ~/.local/share/chezmoi/docs/omalauncher.md first.
 - Never commit or push the dotfiles unless the user asks, in that turn.
