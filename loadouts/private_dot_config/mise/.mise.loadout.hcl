@@ -6,7 +6,7 @@ program "mise" {
 
   # On Omarchy, Omarchy's own mise-bin, ahead of Arch's extra/mise.
   via "omarchy" { pkg = "mise-bin" }
-  install_via = [brew]
+  via "brew" {}
 
   # omalauncher's Arch: mise's own installer, into ~/.local/bin, where the
   # launcher's install put it; `mise self-update` moves it.

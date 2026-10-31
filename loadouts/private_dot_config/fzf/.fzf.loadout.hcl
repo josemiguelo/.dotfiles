@@ -7,5 +7,6 @@ program "fzf" {
     spare = "for a Fedora machine; the fedora profile doesn't install fzf"
   }
 
-  install_via = [omarchy, pacman]
+  via "omarchy" {}
+  via "pacman" {}
 }

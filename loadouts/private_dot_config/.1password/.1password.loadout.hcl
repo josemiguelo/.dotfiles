@@ -9,7 +9,7 @@ program "1password" {
   }
 
   # Omarchy's [omarchy] repo; omarchy-1password finishes the setup.
-  install_via = [omarchy]
+  via "omarchy" {}
 }
 
 program "1password-cli" {

@@ -7,11 +7,9 @@
 program "kitty" {
   description = "kitty terminal emulator"
 
-  via "dnf-copr" {
-    params = { copr = "solopasha/kitty" }
-  }
-
-  install_via = [omarchy, brew-cask]
+  via "dnf-copr" { params = { copr = "solopasha/kitty" } }
+  via "omarchy" {}
+  via "brew-cask" {}
 }
 
 # The family kitty.conf names (FiraCode Nerd Font Mono) on Linux.

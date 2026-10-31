@@ -20,5 +20,6 @@ script "obsidian-sync" {
 program "obsidian" {
   description = "Obsidian notes"
   via "flatpak" { pkg = "md.obsidian.Obsidian" }
-  install_via = [omarchy]  # Omarchy preinstalls Arch's package and its launch flags
+  # Omarchy preinstalls Arch's package and its launch flags.
+  via "omarchy" {}
 }

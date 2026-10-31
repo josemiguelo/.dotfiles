@@ -5,7 +5,7 @@ program "solaar" {
     spare = "for a Fedora machine; the fedora profile doesn't install solaar"
   }
 
-  install_via = [omarchy]
+  via "omarchy" {}
 }
 
 # Launched when wanted, not at every login.
