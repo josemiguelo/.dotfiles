@@ -1,11 +1,11 @@
 {
   "format": 1,
-  "toolVersion": "4.0.0",
-  "sources": "f7ed4e07a6df5e916cddb6a3a6a6dfce18a4a2687e2700a8858e342383db6ab8",
+  "toolVersion": "4.1.0",
+  "sources": "f374f5012f84b2dd8082c621b652ee08f4419b1871097fcb7c6b08ba6a4ce1f7",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "4.0.0"
+      "min-tool-version": "4.1.0"
     },
     "layout": {
       "state": "machines/state",
