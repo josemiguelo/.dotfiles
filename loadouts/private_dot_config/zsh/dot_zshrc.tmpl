@@ -68,6 +68,18 @@ SAVEHIST=10000
 
 zcache zoxide zoxide init zsh
 
+# zi opens fzf through `zoxide query -i`, not fzf's widgets, so conf.d/fzf.zsh's
+# re-pick of the palette doesn't reach it; re-pick it here. This wraps zoxide's
+# function, which only exists once zoxide init has run, after conf.d. It runs
+# in this shell, so plain fzf calls after a zi get the new palette too.
+if (( $+functions[__zoxide_zi] && $+functions[fzf-theme] )); then
+  functions[_zoxide_zi_orig]=$functions[__zoxide_zi]
+  __zoxide_zi() {
+    fzf-theme
+    _zoxide_zi_orig "$@"
+  }
+fi
+
 # --print-full-init is what `starship init zsh` ends up evaluating anyway
 zcache starship starship init zsh --print-full-init
 
