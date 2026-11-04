@@ -1,13 +1,35 @@
 local get_window_by_ft = require("util.windows").get_window_by_ft
 
+-- the tab's windows other than floats (notifications, pickers)
+local function split_count(tab)
+  return #vim.tbl_filter(function(win)
+    return vim.api.nvim_win_get_config(win).relative == ""
+  end, vim.api.nvim_tabpage_list_wins(tab))
+end
+
 -- fugitive lives alone in the first tab, named "git": go to it from another tab,
 -- refresh it from its own, or open it there. The new tab splits off the current
 -- buffer so fugitive finds that buffer's repo, which the status then replaces.
 local function open_fugitive()
   local fugitive_win = get_window_by_ft("fugitive")
   if fugitive_win then
-    local on_its_tab = vim.api.nvim_win_get_tabpage(fugitive_win) == vim.api.nvim_get_current_tabpage()
+    local tab = vim.api.nvim_win_get_tabpage(fugitive_win)
+    local on_its_tab = tab == vim.api.nvim_get_current_tabpage()
     vim.api.nvim_set_current_win(fugitive_win)
+    if vim.api.nvim_tabpage_get_number(tab) == 1 then
+      -- the first tab is fugitive's: a file opened beside the status (<CR>,
+      -- gO) closes, its buffer stays loaded
+      if split_count(tab) > 1 then
+        vim.cmd("only")
+      end
+    else
+      -- a status opened some other way (:G, nvim -c G) beside other windows
+      -- leaves them in their tab, and takes a tab of its own to the front
+      if split_count(tab) > 1 then
+        vim.cmd("wincmd T")
+      end
+      vim.cmd("tabmove 0")
+    end
     if on_its_tab then
       vim.cmd("G")
     end
