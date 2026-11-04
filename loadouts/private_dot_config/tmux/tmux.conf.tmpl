@@ -10,6 +10,10 @@ set -g default-terminal "tmux-256color"
 set -as terminal-features ",xterm-kitty:RGB"
 set -as terminal-features ",xterm-kitty:undercurl"
 set -as terminal-features ",xterm-kitty:extkeys"
+# tmux doesn't detect kitty's synchronized updates. Without this its repaints
+# reach kitty unbracketed, and cursor_trail animates the half-drawn frames as a
+# ghost cursor on other lines.
+set -as terminal-features ",xterm-kitty:sync"
 set -as terminal-overrides ",xterm*:Tc" # true color
 set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
 set -as terminal-overrides ',*:Setrgb=\E[48;2;%p1%d;%p2%d;%p3%dm'
