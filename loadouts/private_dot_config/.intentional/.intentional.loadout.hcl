@@ -11,6 +11,8 @@ program "intentional" {
 
   custom {
     managed_by = ".loadout/intentional.sh"
+    # Its check prints "intentional <version>" once everything is in place.
+    regex = "intentional ([0-9][0-9.]*)"
   }
 
   path               = ["$HOME/.local/bin"]
