@@ -3,9 +3,8 @@
 # (a systemd user service) and its Brave extension. Its groups live in
 # ~/.config/intentional/groups.json, kept out of this repo.
 
-# Built and installed from an Intentional checkout by the repo's own
-# desktop/install.sh, which knows every piece (binary, unit, extension,
-# native-messaging manifest, the brave-flags.conf line); this only finds it.
+# The latest GitHub release, installed by the install.sh it carries; no
+# checkout, JDK or Kotlin/Native needed. The daemon links libcrypt.so.1.
 program "intentional" {
   description = "Intentional's desktop guard: app and site budgets (Hyprland + Brave)"
   depends_on  = [program.libxcrypt-compat, program.brave]
@@ -14,6 +13,7 @@ program "intentional" {
     managed_by = ".loadout/intentional.sh"
   }
 
-  path    = ["$HOME/.local/bin"]
-  version = "intentional --version"
+  path               = ["$HOME/.local/bin"]
+  version            = "intentional --version"
+  updates_managed_by = ".loadout/outdated-intentional.sh"
 }
