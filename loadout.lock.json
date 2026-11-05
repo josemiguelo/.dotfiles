@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "6b8d418d9165f6331e6c2e1964b9d39a846a62b40762a28324b6883d23858b32",
+  "sources": "35248ac9f2890e3b595f8770981db279ac066950f1f6bc58794f5a0989c6b92f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -634,9 +634,10 @@
       },
       "libxcrypt-compat": {
         "install": {
-          "dnf": {}
+          "dnf": {},
+          "omarchy": {}
         },
-        "origin": "loadouts/.etc/dnf"
+        "origin": "loadouts/private_dot_config"
       },
       "libyaml-devel": {
         "install": {
@@ -1995,6 +1996,7 @@
           "kotlin-lsp": "custom",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
+          "libxcrypt-compat": "omarchy",
           "mise": "omarchy",
           "ngrok": "custom",
           "obsidian": "omarchy",
@@ -2124,6 +2126,7 @@
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "libvirt": "omarchy",
+          "libxcrypt-compat": "omarchy",
           "mise": "omarchy",
           "ngrok": "custom",
           "obsidian": "omarchy",

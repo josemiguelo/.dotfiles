@@ -86,10 +86,6 @@ program "perl-FindBin" {
   install_via = [dnf]
 }
 
-program "libxcrypt-compat" {
-  install_via = [dnf]
-}
-
 # A virtual provide on modern Fedora: the dnf variant with its own check.
 program "zlib-devel" {
   via "dnf" { version = "rpm -q --whatprovides zlib-devel" }

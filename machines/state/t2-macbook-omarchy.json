@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-10-31T23:38:11.673701369Z",
+  "updatedAt": "2026-11-05T16:06:52.485766883Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -165,6 +165,11 @@
     "libvirt": {
       "status": "installed",
       "version": "12.8.0",
+      "reason": null
+    },
+    "libxcrypt-compat": {
+      "status": "installed",
+      "version": "4.5.2",
       "reason": null
     },
     "mise": {
@@ -521,7 +526,7 @@
     },
     "omarchy-1password": {
       "status": "done",
-      "lastRun": "2026-10-28T02:13:42.302133844Z",
+      "lastRun": "2026-11-05T16:06:41.907918646Z",
       "exitCode": 0
     },
     "omarchy-vscode": {
@@ -561,7 +566,7 @@
     },
     "omarchy-webapp-gmail": {
       "status": "done",
-      "lastRun": "2026-10-13T14:24:00.615669095Z",
+      "lastRun": "2026-11-05T16:06:47.721029113Z",
       "exitCode": 0
     },
     "omarchy-webapp-google-calendar": {
