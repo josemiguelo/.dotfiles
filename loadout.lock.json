@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "35248ac9f2890e3b595f8770981db279ac066950f1f6bc58794f5a0989c6b92f",
+  "sources": "ed682306e2d59c66d8ab0d8b07a10913599e2213b702ef79a3fb06b6753e5428",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -534,6 +534,32 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
+      },
+      "intentional": {
+        "description": "Intentional's desktop guard: app and site budgets (Hyprland + Brave)",
+        "depends-on": [
+          "libxcrypt-compat",
+          "brave"
+        ],
+        "version": {
+          "command": "intentional --version",
+          "regex": "([0-9]+\\.[0-9][0-9.]*)",
+          "origin": "loadouts/private_dot_config/.intentional",
+          "path": [
+            "$HOME/.local/bin"
+          ]
+        },
+        "install": {
+          "custom": {
+            "command": "file:.loadout/intentional.sh install",
+            "check": "file:.loadout/intentional.sh check",
+            "present": true
+          }
+        },
+        "path": [
+          "$HOME/.local/bin"
+        ],
+        "origin": "loadouts/private_dot_config/.intentional"
       },
       "jetbrains-toolbox": {
         "description": "JetBrains Toolbox",
@@ -1990,6 +2016,7 @@
           "git-delta": "omarchy",
           "google-cloud-cli": "brew-cask",
           "gum": "omarchy",
+          "intentional": "custom",
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",
@@ -2119,6 +2146,7 @@
           "git-delta": "omarchy",
           "google-cloud-cli": "brew-cask",
           "gum": "omarchy",
+          "intentional": "custom",
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",

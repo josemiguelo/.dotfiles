@@ -32,6 +32,7 @@ profile "omarchy" {
     variant(program.tpack, "linux"),
     program.ngrok,
     program.kotlin-lsp,
+    program.intentional,
   ]
   via "brew" {
     install = [
