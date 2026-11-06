@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-06T03:24:29.403179923Z",
+  "updatedAt": "2026-11-06T15:39:38.782779072Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -470,9 +470,9 @@
       "exitCode": 0
     },
     "omarchy-hypr-config": {
-      "status": "done",
-      "lastRun": "2026-10-13T14:22:52.458179861Z",
-      "exitCode": 0
+      "status": "pending",
+      "lastRun": "2026-11-06T15:39:35.065489521Z",
+      "exitCode": 1
     },
     "omarchy-close-window-key": {
       "status": "done",
