@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-06T15:39:38.782779072Z",
+  "updatedAt": "2026-11-06T15:55:18.991308319Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -435,7 +435,7 @@
       "exitCode": 0
     },
     "mise-default-packages": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
       "exitCode": 0
     },
@@ -470,7 +470,7 @@
       "exitCode": 0
     },
     "omarchy-hypr-config": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-11-06T15:39:35.065489521Z",
       "exitCode": 1
     },
@@ -523,6 +523,11 @@
       "status": "done",
       "lastRun": "2026-10-28T02:13:44.002486523Z",
       "exitCode": 0
+    },
+    "omarchy-workspace-layout-menu": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
     },
     "omarchy-1password": {
       "status": "done",
