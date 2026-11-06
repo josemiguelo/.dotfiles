@@ -10,26 +10,28 @@ script "omarchy-plugins" {
   updates_managed_by = ".loadout/outdated-plugins.sh"
 }
 
-# Position, thickness, optionally the icon size and a widget replacing the
-# workspace numbers: "top", "24", "17", "<widget-id>".
+# The bar itself, one key=value per argument: "position=top", "size=24",
+# optionally "background=glassy", "icon-size=17" and "off=<stock-widget-id>"
+# (repeats).
 script "omarchy-bar" {
-  description = "Omarchy bar position, thickness, icon size, workspace widget and its settings"
+  description = "Omarchy bar position, background, thickness, icon size and stock widgets turned off"
   managed_by  = ".loadout/omarchy-bar.sh"
   run_after   = [script.omarchy-plugins]
 }
 
 # This repo's own bar widgets (.loadout/omarchy-bar/plugins/<id>), one id
-# per argument; it also removes what omarchy-bar-icons installed before
-# Omarchy 4.5.
+# per argument.
 script "omarchy-bar-own-widgets" {
   description = "This repo's own bar widgets, installed and enabled"
   managed_by  = ".loadout/omarchy-bar-own-widgets.sh"
   run_after   = [script.omarchy-plugins]
 }
 
-# Where widgets sit: one argument per widget, "<id> <section>
-# <before|after> <neighbour-id>" (see widget()); a widget off the bar is put
-# on it.
+# Where widgets sit and their settings (.loadout/omarchy-bar/settings/<id>.json):
+# one argument per widget, "<id> <section> <before|after> <neighbour-id>" or
+# "<id> <section> at <index>" (see widget()); a widget off the bar is put on
+# it. They're placed in order, so a neighbour is a widget already in that
+# section on a stock bar, or one placed by an earlier line.
 script "omarchy-bar-widgets" {
   description = "Bar widgets' places and settings"
   managed_by  = ".loadout/omarchy-bar-widgets.sh"
@@ -55,19 +57,21 @@ script "omarchy-keystroke-windows" {
 }
 
 # One omarchy-bar-widgets argument: widget("x", "left", "before", "y")
-# reads as the bar does.
+# reads as the bar does; widget("x", "center", "at", "0") places it by index.
 function "widget" {
   params = [id, section, where, neighbour]
   result = "${id} ${section} ${where} ${neighbour}"
 }
 
-# The bar this repo's Omarchy machines share: its plugins, which widgets it
-# shows and where the widgets sit. A profile runs `omarchy_bar()`, so the
+# The bar this repo's Omarchy machines share, as what differs from a fresh
+# Omarchy install: its plugins, which widgets it shows, where the widgets sit
+# and the settings that aren't stock. A stock widget at its stock place and
+# settings is left out. A profile runs `omarchy_bar()`, so the
 # settings live beside the scripts that apply them.
 function "omarchy_bar" {
   params = []
   result = [
-    args(script.omarchy-bar, "top", "24", "17", "tornikegomareli.spaces"),
+    args(script.omarchy-bar, "position=top", "size=24", "background=glassy", "off=omarchy.workspaces"),
     args(script.omarchy-plugins,
       "https://github.com/evindor/keystroke.git",
       "https://github.com/tornikegomareli/omarchy-spaces.git",
@@ -77,13 +81,17 @@ function "omarchy_bar" {
     ),
     args(script.omarchy-bar-own-widgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode"),
     args(script.omarchy-bar-widgets,
-      widget("josemiguelo.workspace-layout", "left", "before", "tornikegomareli.spaces"),
-      widget("evindor.keystroke", "left", "before", "josemiguelo.workspace-layout"),
+      widget("evindor.keystroke", "left", "at", "0"),
+      widget("josemiguelo.workspace-layout", "left", "after", "evindor.keystroke"),
+      widget("tornikegomareli.spaces", "left", "after", "josemiguelo.workspace-layout"),
       widget("pomodoro-omarchy", "centerEnd", "before", "omarchy.weather"),
       widget("omarchy.elsewhen", "centerEnd", "before", "pomodoro-omarchy"),
       widget("io.github.sumdahl.media", "right", "after", "omarchy.tray"),
+      widget("io.github.zeus-deus.voxtype", "right", "after", "io.github.sumdahl.media"),
       widget("omarchy.power", "right", "after", "omarchy.monitor"),
       widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),
+      widget("omarchy.keyboard-layout", "right", "before", "josemiguelo.theme-mode"),
+      widget("omarchy.clock", "center", "at", "0"),
     ),
     script.omarchy-keystroke-windows,
     script.omarchy-pomodoro,

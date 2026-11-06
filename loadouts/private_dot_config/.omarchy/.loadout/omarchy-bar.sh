@@ -1,53 +1,61 @@
 #!/bin/sh
-# The Omarchy bar's position, thickness and, optionally, its icon size and
-# the widget that replaces the stock workspace numbers, from the machine's
-# opt-in ("omarchy-bar bottom 30 17 tornikegomareli.spaces").
+# The Omarchy bar itself, from the machine's opt-in, as what differs from a
+# fresh install: its position and thickness, and optionally its background,
+# its icon size and the stock widgets turned off, one key=value per argument
+# ("omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces";
+# off= repeats). Where widgets sit and their settings are
+# omarchy-bar-widgets'.
 #
-# The position is Omarchy's own setting (~/.config/omarchy/shell.json,
-# bar.position), set with `omarchy bar position`. The thickness is
-# size-horizontal (top and bottom bars; size-vertical for left and right
-# ones; Omarchy's default is 26) at font base-size 12, scaled with the font
-# like Omarchy's; it lives in a block in ~/.config/omarchy/shell.toml, the
-# machine-level file whose keys win over the theme's and which the shell
-# reloads live. The icon size (Omarchy 4.5 on) is icon-size, the size every
-# bar icon is drawn at, glyph or SVG (Omarchy's default is 12), with
+# The position and the background (opaque, glassy or none; Omarchy's default
+# is opaque) are Omarchy's own settings (~/.config/omarchy/shell.json,
+# bar.position and bar.background), set with `omarchy bar position` and
+# `omarchy bar background`; a background the opt-in leaves out is left as it
+# is. A glassy bar is see-through and Hyprland blurs what's behind it, while
+# the bar-glassy toggle (~/.local/state/omarchy/toggles/hypr/bar-glassy.lua,
+# a copy of Omarchy's default/hypr/toggles/bar-glassy.lua) is in place:
+# `omarchy bar background` puts it there for glassy and removes it otherwise,
+# so the check asks for both. The thickness is size-horizontal (top and bottom bars; size-vertical for
+# left and right ones; Omarchy's default is 26) at font base-size 12, scaled
+# with the font like Omarchy's; it lives in a block in
+# ~/.config/omarchy/shell.toml, the machine-level file whose keys win over the
+# theme's and which the shell reloads live. The icon size is icon-size, the
+# size every bar icon is drawn at, glyph or SVG (Omarchy's default is 12), with
 # icon-canvas raised to match: the icon is drawn at the smaller of the two.
-# Both sit in the same block. `omarchy display text size` edits [font] there
-# and leaves the rest. A [bar] table outside the block would make the file
-# invalid TOML, so install refuses one. The bar's text follows the shell's
-# [font] base-size.
+# Both sit in the same block; left out, Omarchy's own sizes apply.
+# `omarchy display text size` edits [font] there and leaves the rest. A [bar]
+# table outside the block would make the file invalid TOML, so install refuses
+# one. The bar's text follows the shell's [font] base-size.
 #
-# The workspace widget (a plugin omarchy-plugins installs) takes the stock
-# omarchy.workspaces' place: moved right after it while it is on the bar,
-# then the stock one is disabled. The widget's settings, when
-# omarchy-bar/settings/<id>.json lists them, are set with `omarchy bar set`
-# into its shell.json entry (keys the file doesn't list are left as they
-# are); the check compares every listed key. Once the widget has an enabled
-# clone (`omarchy plugin clone`, clonedFrom), the clone stands for it.
-# usage: omarchy-bar.sh [check] <top|bottom|left|right> <size> [icon-size] [workspace-widget-id]
+# A stock widget turned off (omarchy.workspaces, when a plugin draws the
+# workspaces) is disabled with `omarchy plugin disable`, which takes it off
+# the bar.
+# usage: omarchy-bar.sh [check] position=<top|bottom|left|right> size=<n> [background=<opaque|glassy|none>] [icon-size=<n>] [off=<widget-id>]...
 set -eu
 
-USAGE="usage: $0 [check] <top|bottom|left|right> <size> [icon-size] [workspace-widget-id]"
+USAGE="usage: $0 [check] position=<top|bottom|left|right> size=<n> [background=<opaque|glassy|none>] [icon-size=<n>] [off=<widget-id>]..."
 MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
-POSITION=${1:?$USAGE}
-SIZE=${2:?$USAGE}
-shift 2
-# A number is the icon size; anything else is the workspace widget.
-ICON_SIZE=""
-case "${1:-}" in '' | *[!0-9]*) ;; *) ICON_SIZE=$1; shift ;; esac
-WIDGET=${1:-}
+POSITION="" SIZE="" BACKGROUND="" ICON_SIZE="" OFF=""
+for arg in "$@"; do
+  case "$arg" in
+    position=*) POSITION=${arg#*=} ;;
+    size=*) SIZE=${arg#*=} ;;
+    background=*) BACKGROUND=${arg#*=} ;;
+    icon-size=*) ICON_SIZE=${arg#*=} ;;
+    off=?*) OFF="$OFF ${arg#*=}" ;;
+    *) echo "$arg: not a key=value this script knows" >&2; echo "$USAGE" >&2; exit 2 ;;
+  esac
+done
 case "$POSITION" in top | bottom) KEY=size-horizontal ;; left | right) KEY=size-vertical ;;
-  *) echo "position must be top, bottom, left or right" >&2; exit 2 ;; esac
+  *) echo "position must be top, bottom, left or right" >&2; echo "$USAGE" >&2; exit 2 ;; esac
 case "$SIZE" in '' | *[!0-9]*) echo "size must be a whole number" >&2; exit 2 ;; esac
+case "$BACKGROUND" in '' | opaque | glassy | none) ;; *) echo "background must be opaque, glassy or none" >&2; exit 2 ;; esac
+case "$ICON_SIZE" in *[!0-9]*) echo "icon-size must be a whole number" >&2; exit 2 ;; esac
 
-STOCK=omarchy.workspaces
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib/shell-ready.sh"
-. "$HERE/lib/plugin-update-hint.sh"
+. "$HERE/lib/bar-widgets.sh"
 shell_ready "$MODE"
-WIDGET_SETTINGS=$HERE/omarchy-bar/settings/$WIDGET.json
-JSON=$HOME/.config/omarchy/shell.json
 TOML=$HOME/.config/omarchy/shell.toml
 BEGIN="# >>> Managed by loadout (omarchy-bar)"
 END="# <<< Managed by loadout (omarchy-bar)"
@@ -76,42 +84,33 @@ rest() {
 }
 
 positioned() {
-  [ -f "$JSON" ] && [ "$(jq -r '.bar.position // "top"' "$JSON")" = "$POSITION" ]
+  [ -f "$BAR_JSON" ] && [ "$(jq -r '.bar.position // "top"' "$BAR_JSON")" = "$POSITION" ]
+}
+
+GLASS=${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/toggles/hypr/bar-glassy.lua
+
+# No background named, or it's the one the bar has, with Hyprland's blur
+# behind it exactly when it's glassy.
+backed() {
+  [ -n "$BACKGROUND" ] || return 0
+  [ -f "$BAR_JSON" ] && [ "$(jq -r '.bar.background // "opaque"' "$BAR_JSON")" = "$BACKGROUND" ] || return 1
+  if [ "$BACKGROUND" = glassy ]; then [ -f "$GLASS" ]; else [ ! -f "$GLASS" ]; fi
 }
 
 sized() {
   [ "$(current)" = "$(block)" ] && ! rest | grep -q '^[[:space:]]*\[bar\]'
 }
 
-enabled() {
-  omarchy plugin list --json | jq -e --arg id "$1" 'any(.[]; .id == $id and .enabled)' >/dev/null
-}
-
-# The widget's enabled clone, else the widget.
-shown() {
-  omarchy plugin list --json | jq -r --arg id "$WIDGET" '[.[] | select(.enabled and .clonedFrom == $id) | .id][0] // $id'
-}
-
-on_bar() {
-  [ -f "$JSON" ] && jq -e --arg id "$1" '[.bar.layout[]?[]?.id] | index($id) != null' "$JSON" >/dev/null
-}
-
-# No widget named, or it's on the bar and the stock one is off.
-replaced() {
-  [ -z "$WIDGET" ] || { w=$(shown); enabled "$w" && on_bar "$w" && ! enabled "$STOCK"; }
-}
-
-# Every key the widget's settings file lists has that value in its bar entry.
-configured() {
-  [ -n "$WIDGET" ] && [ -f "$WIDGET_SETTINGS" ] || return 0
-  jq -e -n --arg id "$(shown)" --slurpfile want "$WIDGET_SETTINGS" --slurpfile shell "$JSON" '
-    ([$shell[0].bar.layout[]?[]? | select(.id == $id)][0] // {}) as $entry
-    | $want[0] | to_entries | all(.value == $entry[.key])' >/dev/null
+# Every stock widget named off is disabled.
+off() {
+  for id in $OFF; do
+    ! widget_enabled "$id" || return 1
+  done
 }
 
 case "$MODE" in
 check)
-  positioned && sized && replaced && configured
+  positioned && backed && sized && off
   ;;
 install)
   if rest | grep -q '^[[:space:]]*\[bar\]'; then
@@ -119,6 +118,7 @@ install)
     exit 1
   fi
   positioned || omarchy bar position "$POSITION"
+  backed || omarchy bar background "$BACKGROUND" >/dev/null
   mkdir -p "$(dirname "$TOML")"
   others=$(rest)
   if [ -n "$others" ]; then
@@ -126,17 +126,10 @@ install)
   else
     block > "$TOML"
   fi
-  if [ -n "$WIDGET" ] && ! replaced; then
-    enabled "$(shown)" || { echo "$WIDGET isn't installed and enabled: add it to omarchy-plugins" >&2; exit 1; }
-    if on_bar "$STOCK"; then omarchy bar move "$(shown)" --after "$STOCK"; fi
-    if enabled "$STOCK"; then omarchy plugin disable "$STOCK"; fi
-  fi
-  if ! configured; then
-    for key in $(jq -r 'keys[]' "$WIDGET_SETTINGS"); do
-      omarchy bar set "$(shown)" "$key" "$(jq -c --arg k "$key" '.[$k]' "$WIDGET_SETTINGS")" --json >/dev/null
-    done
-  fi
-  positioned && sized && replaced && configured ||
-    { echo "the bar's position, thickness, icon size or workspace widget isn't what the opt-in names after install" >&2; plugin_update_hint "$WIDGET"; exit 1; }
+  for id in $OFF; do
+    if widget_enabled "$id"; then omarchy plugin disable "$id" >/dev/null; fi
+  done
+  positioned && backed && sized && off ||
+    { echo "the bar's position, background, thickness, icon size or stock widgets turned off aren't what the opt-in names after install" >&2; exit 1; }
   ;;
 esac

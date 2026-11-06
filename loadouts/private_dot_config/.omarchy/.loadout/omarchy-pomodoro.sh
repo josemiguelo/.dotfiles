@@ -7,9 +7,7 @@
 # omarchy-pomodoro/menu.jsonc, kept as a block right after the opening brace
 # of ~/.config/omarchy/extensions/omarchy-menu.jsonc. Its entries end in
 # commas; the menu's reader drops trailing ones. They run the plugin's own
-# bin/omarchy-pomodoro by its path, so nothing goes on the PATH. The widget
-# configured is the plugin's, or its clone (`omarchy plugin clone`,
-# clonedFrom pomodoro-omarchy) once that has taken its place.
+# bin/omarchy-pomodoro by its path, so nothing goes on the PATH.
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -17,26 +15,10 @@ ID=pomodoro-omarchy
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC=$HERE/omarchy-pomodoro
 . "$HERE/lib/plugin-update-hint.sh"
-JSON=$HOME/.config/omarchy/shell.json
+. "$HERE/lib/bar-widgets.sh"
 MENU=$HOME/.config/omarchy/extensions/omarchy-menu.jsonc
 BEGIN="  // >>> Managed by loadout (omarchy-pomodoro)"
 END="  // <<< Managed by loadout (omarchy-pomodoro)"
-
-enabled() {
-  omarchy plugin list --json | jq -e --arg id "$1" 'any(.[]; .id == $id and .enabled)' >/dev/null
-}
-
-# The plugin's enabled clone, else the plugin.
-effective() {
-  omarchy plugin list --json | jq -r --arg id "$1" '[.[] | select(.enabled and .clonedFrom == $id) | .id][0] // $id'
-}
-WIDGET=$(effective "$ID")
-
-configured() {
-  jq -e -n --arg id "$WIDGET" --slurpfile want "$SRC/settings.json" --slurpfile shell "$JSON" '
-    ([$shell[0].bar.layout[]?[]? | select(.id == $id)][0] // {}) as $entry
-    | $want[0] | to_entries | all(.value == $entry[.key])' >/dev/null
-}
 
 block() {
   echo "$BEGIN"
@@ -51,7 +33,7 @@ current() {
 }
 
 in_place() {
-  enabled "$WIDGET" && configured && [ "$(current)" = "$(block)" ]
+  widget_enabled "$ID" && widget_configured "$ID" "$SRC/settings.json" && [ "$(current)" = "$(block)" ]
 }
 
 case "${1:-install}" in
@@ -59,12 +41,8 @@ check)
   in_place
   ;;
 install)
-  enabled "$WIDGET" || { echo "$ID isn't installed and enabled: add it to omarchy-plugins" >&2; exit 1; }
-  if ! configured; then
-    for key in $(jq -r 'keys[]' "$SRC/settings.json"); do
-      omarchy bar set "$WIDGET" "$key" "$(jq -c --arg k "$key" '.[$k]' "$SRC/settings.json")" --json >/dev/null
-    done
-  fi
+  widget_enabled "$ID" || { echo "$ID isn't installed and enabled: add it to omarchy-plugins" >&2; exit 1; }
+  widget_configured "$ID" "$SRC/settings.json" || widget_configure "$ID" "$SRC/settings.json"
   mkdir -p "$(dirname "$MENU")"
   [ -f "$MENU" ] || printf '{\n}\n' > "$MENU"
   grep -q '^[[:space:]]*{' "$MENU" || { echo "$MENU has no opening brace to put the menu entries after" >&2; exit 1; }

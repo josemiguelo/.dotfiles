@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "d9c29d9fc90d8cfb12c8f2f9360f56e1ee68268491c3189f94c262fc99529ed8",
+  "sources": "14833a351e5b9ada9518f48959138c8d3a1de39ab5ff56eb0ed290cd22089d29",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1493,7 +1493,7 @@
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-bar": {
-        "description": "Omarchy bar position, thickness, icon size, workspace widget and its settings",
+        "description": "Omarchy bar position, background, thickness, icon size and stock widgets turned off",
         "file": ".loadout/omarchy-bar.sh",
         "check": "file:.loadout/omarchy-bar.sh check \"$@\"",
         "after": [
@@ -2104,10 +2104,10 @@
           "omarchy-google-bindings",
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
-          "omarchy-bar top 24 17 tornikegomareli.spaces",
+          "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces evindor.keystroke left before josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
@@ -2243,10 +2243,10 @@
           "omarchy-google-bindings",
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
-          "omarchy-bar top 24 17 tornikegomareli.spaces",
+          "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces evindor.keystroke left before josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
