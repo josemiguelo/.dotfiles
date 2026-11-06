@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-06T15:40:32.328437387Z",
+  "updatedAt": "2026-11-06T03:24:29.403179923Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -375,7 +375,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -470,9 +470,9 @@
       "exitCode": 0
     },
     "omarchy-hypr-config": {
-      "status": "pending",
-      "lastRun": "2026-11-06T15:40:28.566097729Z",
-      "exitCode": 1
+      "status": "done",
+      "lastRun": "2026-10-13T14:22:52.458179861Z",
+      "exitCode": 0
     },
     "omarchy-close-window-key": {
       "status": "done",
@@ -523,11 +523,6 @@
       "status": "done",
       "lastRun": "2026-10-28T02:13:44.002486523Z",
       "exitCode": 0
-    },
-    "omarchy-workspace-layout-menu": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
     },
     "omarchy-1password": {
       "status": "done",
