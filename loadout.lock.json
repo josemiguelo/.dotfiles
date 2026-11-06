@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "c8e46d6d132f4c0438bba2f777ffa9ae825456a8492f6ec943e1f716ee3fe33c",
+  "sources": "59d35fc4df6d79bc014767f4a31a0cd65d141055d3fbed5c0bb2c9ce231dc397",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1730,6 +1730,12 @@
         "check": "file:.loadout/omarchy-webapps-remove.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "omarchy-workspace-layout-menu": {
+        "description": "Menu entries setting the focused workspace's layout only",
+        "file": ".loadout/omarchy-workspace-layout-menu.sh",
+        "check": "file:.loadout/omarchy-workspace-layout-menu.sh check \"$@\"",
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
       "onepassword-cli": {
         "description": "1Password CLI connected to an account through the app",
         "file": ".loadout/cli-integration.sh",
@@ -2113,6 +2119,7 @@
           "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
+          "omarchy-workspace-layout-menu",
           "omarchy-1password",
           "onepassword-cli",
           "omarchy-vscode",
@@ -2252,6 +2259,7 @@
           "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
+          "omarchy-workspace-layout-menu",
           "omarchy-1password",
           "onepassword-cli",
           "omarchy-vscode",

@@ -50,6 +50,14 @@ script "omarchy-idle" {
   managed_by  = ".loadout/omarchy-idle.sh"
 }
 
+# Appearance > This Workspace's Layout in the Omarchy menu: each layout for
+# the focused workspace only (omarchy-workspace-layout-set), with Omarchy's
+# own entry relabelled "Default Workspace Layout".
+script "omarchy-workspace-layout-menu" {
+  description = "Menu entries setting the focused workspace's layout only"
+  managed_by  = ".loadout/omarchy-workspace-layout-menu.sh"
+}
+
 script "omarchy-keystroke-windows" {
   description = "Hyper+Space lists every window, by workspace (Keystroke)"
   managed_by  = ".loadout/omarchy-keystroke-windows.sh"

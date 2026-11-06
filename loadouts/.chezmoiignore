@@ -26,6 +26,11 @@
 .local/bin/omarchy-theme-mode-toggle
 {{ end }}
 
+# Setting the focused workspace's layout, for the Omarchy menu's entries.
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+.local/bin/omarchy-workspace-layout-set
+{{ end }}
+
 # Spotify's launch flags work around a crash under Omarchy's Wayland session.
 {{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/spotify-flags.conf

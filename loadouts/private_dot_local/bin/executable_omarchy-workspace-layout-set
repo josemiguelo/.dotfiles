@@ -1,0 +1,30 @@
+#!/bin/sh
+# Set the focused workspace's layout, and only its: tiling (dwindle),
+# scrolling or floating. Omarchy has a cycle for that
+# (omarchy-hyprland-workspace-layout-toggle, SUPER + L, forward or back) and
+# a setting for the other workspaces' default, not a "set"; any layout is one
+# step of the cycle away, forward or back, so this takes that step and
+# Omarchy's toggle does the rest: applying it, saving it for the next login,
+# its notification, the bar and the dock. A layout already on is left alone.
+# usage: omarchy-workspace-layout-set <tiling|dwindle|scrolling|floating>
+set -eu
+
+case "${1:-}" in
+tiling | dwindle) want=dwindle ;;
+scrolling | floating) want=$1 ;;
+*) echo "usage: $0 <tiling|dwindle|scrolling|floating>" >&2; exit 2 ;;
+esac
+
+# The cycle is dwindle → scrolling → floating → dwindle. A layout outside it
+# (Hyprland's master) steps to dwindle first, so three steps always reach it.
+for _ in 1 2 3; do
+  current=$(omarchy-hyprland-workspace-layout-current)
+  [ "$current" != "$want" ] || exit 0
+  case "$current>$want" in
+  dwindle\>scrolling | scrolling\>floating | floating\>dwindle) omarchy-hyprland-workspace-layout-toggle ;;
+  dwindle\>floating | floating\>scrolling | scrolling\>dwindle) omarchy-hyprland-workspace-layout-toggle back ;;
+  *) omarchy-hyprland-workspace-layout-toggle ;;
+  esac
+done
+[ "$(omarchy-hyprland-workspace-layout-current)" = "$want" ] ||
+  { echo "the workspace isn't $want after the toggle" >&2; exit 1; }
