@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "14833a351e5b9ada9518f48959138c8d3a1de39ab5ff56eb0ed290cd22089d29",
+  "sources": "98d5e897fb979bb4ff358744a22119b17e91cbf1a0c00bb5536774761c036aec",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1597,7 +1597,7 @@
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-harpoon": {
-        "description": "Hyper+letter app hotkeys (jump, overlay)",
+        "description": "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape",
         "file": ".loadout/omarchy-harpoon.sh",
         "check": "file:.loadout/omarchy-harpoon.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
@@ -1701,7 +1701,7 @@
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-webapp-claude": {
-        "description": "Claude web app, on Hyper+C",
+        "description": "Claude web app, the AI overlay's main app (Hyper+A)",
         "file": ".loadout/omarchy-webapp-claude.sh",
         "check": "file:.loadout/omarchy-webapp-claude.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"

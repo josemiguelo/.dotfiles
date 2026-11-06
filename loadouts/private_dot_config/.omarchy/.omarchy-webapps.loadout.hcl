@@ -19,6 +19,6 @@ script "omarchy-webapp-google-calendar" {
 }
 
 script "omarchy-webapp-claude" {
-  description = "Claude web app, on Hyper+C"
+  description = "Claude web app, the AI overlay's main app (Hyper+A)"
   managed_by  = ".loadout/omarchy-webapp-claude.sh"
 }

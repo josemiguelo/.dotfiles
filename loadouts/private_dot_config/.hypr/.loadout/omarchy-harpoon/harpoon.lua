@@ -1,10 +1,14 @@
--- Per-app hotkeys, like Raycast's: one key per app, in one of two modes.
---   jump     go to the app: on this workspace first, else the next
---            workspace to the right that has it. Pressed while the app is
---            focused, its next window, workspace by workspace and left to
---            right, wrapping. A key only ever lands on its own app.
---   overlay  the app lives in its own special workspace, shown over the
---            current one and hidden by the same key
+-- Hotkeys, like Raycast's, in one of two modes.
+--   jump     one key per app: go to the app, on this workspace first, else
+--            the next workspace to the right that has it. Pressed while the
+--            app is focused, its next window, workspace by workspace and left
+--            to right, wrapping. A key only ever lands on its own app.
+--   overlay  one key per scratchpad workspace of its own (special:harpoon-
+--            <name>), shown over the current one and hidden by the same key.
+--            Its app's windows are pulled in from wherever they are, and any
+--            other window opened while it's shown stays in it; the key shows
+--            it on the window last used there, whatever app that is. The
+--            app is the overlay's main one: what an empty overlay launches.
 -- No window yet: the key launches the app. Jump never moves windows, so
 -- layouts stay as they are. Windows on special workspaces (overlays, the
 -- scratchpad) are never jumped to. The workspace card that shows after a
@@ -15,7 +19,10 @@
 --   local harpoon = require("hypr.harpoon")
 --   harpoon.bind("SUPER + CTRL + ALT + SHIFT + B",
 --     { name = "Browser", class = "^brave%-browser$", launch = "omarchy-launch-browser", mode = "jump" })
--- class is a Lua pattern on the window class, or a list of them.
+--   harpoon.bind("SUPER + CTRL + ALT + SHIFT + A",
+--     { name = "AI", class = "^brave%-claude%.ai__%-Default$", launch = "omarchy-launch-webapp https://claude.ai/", mode = "overlay" })
+-- class is a Lua pattern on the window class, or a list of them; an
+-- overlay's name names its workspace.
 
 local M = {}
 
@@ -147,19 +154,32 @@ local function adopt(app)
   end
 end
 
+-- The window last used on a workspace, by its name, or nil.
+local function last_on(workspace)
+  local last
+  for _, w in ipairs(hl.get_windows()) do
+    if w.mapped ~= false and ws_name(w) == workspace and (not last or by_recency(w, last)) then last = w end
+  end
+  return last
+end
+
 function modes.overlay(app)
   local name = overlay_name(app)
-  local list = windows_of(app)
-  if #list == 0 then
-    app.pending = true
-    return launch(app)
-  end
   if special_visible(name) then
     return dispatch(hl.dsp.workspace.toggle_special(name))
   end
   adopt(app)
+  -- The moves are dispatched, so the windows read from the app's list.
+  local last = last_on("special:" .. name)
+  for _, w in ipairs(windows_of(app)) do
+    if not last or by_recency(w, last) then last = w end
+  end
+  if not last then
+    app.pending = true
+    return launch(app)
+  end
   dispatch(hl.dsp.workspace.toggle_special(name))
-  focus(windows_of(app)[1])
+  focus(last)
 end
 
 -- An overlay app's new window opens in its overlay when the key launched it.

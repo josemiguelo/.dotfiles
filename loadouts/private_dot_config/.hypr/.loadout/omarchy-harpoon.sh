@@ -1,15 +1,16 @@
 #!/bin/sh
-# Per-app hotkeys on Hyper, like Raycast's: omarchy-harpoon/harpoon.lua is
+# App and scratchpad hotkeys on Hyper, like Raycast's: omarchy-harpoon/harpoon.lua is
 # the engine (deployed as ~/.config/hypr/harpoon.lua, which Hyprland's Lua
 # loads as hypr.harpoon) and omarchy-harpoon/bindings.lua the apps and keys,
 # kept as a block in ~/.config/hypr/bindings.lua, Omarchy's personal-bindings
-# file. Hyper is SUPER+CTRL+ALT+SHIFT, which the keyboard sends from one key
-# (Keychron Launcher); Omarchy binds nothing on it. omarchy-harpoon/plugin
+# file, with Omarchy's scratchpad moved from SUPER+S to Hyper+Escape. Hyper
+# is SUPER+CTRL+ALT+SHIFT, which the keyboard sends from one key (Keychron
+# Launcher); Omarchy binds nothing on it. omarchy-harpoon/plugin
 # is the Omarchy shell plugin that names the workspace you land on after any
 # workspace change, installed into ~/.config/omarchy/plugins/ and enabled. The check compares the engine, the
 # block and the plugin with the repo's, requires the plugin enabled, and has
 # hypr-option.lua evaluate the whole config: each key runs exactly one
-# binding. Install rewrites the block between its markers and confirms the
+# binding, Hyper+Escape the scratchpad and SUPER+S nothing. Install rewrites the block between its markers and confirms the
 # keys in the running Hyprland when there is one — by description, since with
 # a Lua config hyprctl binds shows a function reference, never the action.
 # Modes: `check` / `install` (default).
@@ -57,11 +58,14 @@ keys() {
   sed -n 's/^harpoon\.bind(hyper \.\. "\([A-Z0-9]*\)".*/\1/p' "$SRC/bindings.lua"
 }
 
-# Each key runs exactly the one harpoon binding (a Lua function).
+# Each key runs exactly the one harpoon binding (a Lua function), and the
+# scratchpad is on Hyper+Escape alone.
 bound() {
   for k in $(keys); do
     [ "$(lua "$PROBE" "bind:$HYPER + $k")" = "<dispatcher>" ] || return 1
   done
+  [ "$(lua "$PROBE" "bind:$HYPER + ESCAPE")" = "<workspace.toggle_special>" ] &&
+    [ "$(lua "$PROBE" "bind:SUPER + S")" = nil ]
 }
 
 in_place() {
@@ -100,13 +104,16 @@ install)
     errors=$(HYPRLAND_INSTANCE_SIGNATURE=$sig hyprctl configerrors | grep -v '^[[:space:]]*$' || true)
     [ -z "$errors" ] || { echo "Hyprland reports config errors after the reload: $errors" >&2; exit 1; }
     live=$(HYPRLAND_INSTANCE_SIGNATURE=$sig hyprctl binds -j)
-    for k in $(keys); do
+    for k in $(keys) ESCAPE; do
       got=$(printf '%s' "$live" | jq -r --argjson m "$MASK" --arg k "$k" \
         '[.[] | select(.modmask == $m and .key == $k) | .description] | join("|")')
       case "$got" in
       *"|"* | "") echo "the running Hyprland binds Hyper+$k to '$got', not one harpoon key" >&2; exit 1 ;;
       esac
     done
+    # modmask 64: SUPER alone.
+    printf '%s' "$live" | jq -e '[.[] | select(.modmask == 64 and .key == "S")] | length == 0' >/dev/null ||
+      { echo "the running Hyprland still binds SUPER+S" >&2; exit 1; }
   else
     echo "Hyprland isn't reachable from here; the keys work at the next login."
   fi

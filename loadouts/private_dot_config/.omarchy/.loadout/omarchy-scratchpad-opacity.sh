@@ -1,5 +1,5 @@
 #!/bin/sh
-# Kitty windows in the scratchpad (SUPER+S) less see-through than kitty's
+# Kitty windows in the scratchpad (Hyper+Escape) less see-through than kitty's
 # background_opacity, while every other kitty window keeps it. A Hyprland
 # window rule can't do it: the compositor caps a window's opacity at 1, so a
 # rule only makes windows more transparent — 1.12 and 3.0 looked the same

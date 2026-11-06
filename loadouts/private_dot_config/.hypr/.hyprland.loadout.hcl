@@ -31,10 +31,11 @@ script "omarchy-activity-monitor-size" {
   managed_by  = ".loadout/omarchy-activity-monitor-size.sh"
 }
 
-# Per-app hotkeys on Hyper, like Raycast's: jump to the app or show it as an
-# overlay.
+# Hotkeys on Hyper, like Raycast's: jump to an app, or show a scratchpad
+# workspace of its own (AI, Media, Social, Notes) on the window last used there;
+# Omarchy's scratchpad on Hyper+Escape.
 script "omarchy-harpoon" {
-  description = "Hyper+letter app hotkeys (jump, overlay)"
+  description = "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape"
   managed_by  = ".loadout/omarchy-harpoon.sh"
 }
 
