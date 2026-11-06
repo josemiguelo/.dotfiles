@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-05T16:06:52.485766883Z",
+  "updatedAt": "2026-11-06T00:07:23.178593603Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -130,6 +130,11 @@
     "gum": {
       "status": "installed",
       "version": "2.0.2",
+      "reason": null
+    },
+    "intentional": {
+      "status": "installed",
+      "version": "0.5.4",
       "reason": null
     },
     "jetbrains-toolbox": {
