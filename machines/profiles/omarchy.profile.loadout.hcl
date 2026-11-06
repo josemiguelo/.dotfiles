@@ -65,6 +65,7 @@ profile "omarchy" {
     args(script.omarchy-theme-mode, "tokyo-night", "catppuccin-latte"),
 
     omarchy_bar(),
+    script.omarchy-workspace-layout-menu,
 
     # Apps the Omarchy way
     script.omarchy-1password, script.onepassword-cli, script.omarchy-vscode, script.omarchy-brave,
