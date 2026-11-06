@@ -33,10 +33,12 @@ script "omarchy-activity-monitor-size" {
 
 # Hotkeys on Hyper, like Raycast's: jump to an app, or show a scratchpad
 # workspace of its own (AI, Media, Social, Notes) on the window last used there;
-# Omarchy's scratchpad on Hyper+Escape.
+# Omarchy's scratchpad on Hyper+Escape. The engine is
+# github.com/josemiguelo/omarchy-harpoon, which omarchy-plugins installs.
 script "omarchy-harpoon" {
   description = "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape"
   managed_by  = ".loadout/omarchy-harpoon.sh"
+  run_after   = [script.omarchy-plugins]
 }
 
 # The machine's dark and light themes, for omarchy-theme-mode-toggle

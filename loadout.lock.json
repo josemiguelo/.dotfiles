@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "98d5e897fb979bb4ff358744a22119b17e91cbf1a0c00bb5536774761c036aec",
+  "sources": "c8e46d6d132f4c0438bba2f777ffa9ae825456a8492f6ec943e1f716ee3fe33c",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1600,6 +1600,9 @@
         "description": "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape",
         "file": ".loadout/omarchy-harpoon.sh",
         "check": "file:.loadout/omarchy-harpoon.sh check \"$@\"",
+        "after": [
+          "scripts.omarchy-plugins"
+        ],
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-hypr-config": {
@@ -2105,7 +2108,7 @@
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
           "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
@@ -2244,7 +2247,7 @@
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
           "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",

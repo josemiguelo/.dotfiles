@@ -1,14 +1,15 @@
 #!/bin/sh
-# App and scratchpad hotkeys on Hyper, like Raycast's: omarchy-harpoon/harpoon.lua is
-# the engine (deployed as ~/.config/hypr/harpoon.lua, which Hyprland's Lua
-# loads as hypr.harpoon) and omarchy-harpoon/bindings.lua the apps and keys,
-# kept as a block in ~/.config/hypr/bindings.lua, Omarchy's personal-bindings
+# App and scratchpad hotkeys on Hyper, like Raycast's, with
+# github.com/josemiguelo/omarchy-harpoon: an Omarchy shell plugin
+# (josemiguelo.harpoon, the card naming the workspace you land on) that
+# omarchy-plugins installs, and its engine, hypr/harpoon.lua, linked as
+# ~/.config/hypr/harpoon.lua so Hyprland's Lua loads it as hypr.harpoon and
+# `omarchy plugin update` updates it. omarchy-harpoon/bindings.lua is the apps
+# and keys, kept as a block in ~/.config/hypr/bindings.lua, Omarchy's personal-bindings
 # file, with Omarchy's scratchpad moved from SUPER+S to Hyper+Escape. Hyper
 # is SUPER+CTRL+ALT+SHIFT, which the keyboard sends from one key (Keychron
-# Launcher); Omarchy binds nothing on it. omarchy-harpoon/plugin
-# is the Omarchy shell plugin that names the workspace you land on after any
-# workspace change, installed into ~/.config/omarchy/plugins/ and enabled. The check compares the engine, the
-# block and the plugin with the repo's, requires the plugin enabled, and has
+# Launcher); Omarchy binds nothing on it. The check wants the link, the block
+# as the repo has it and the plugin enabled, and has
 # hypr-option.lua evaluate the whole config: each key runs exactly one
 # binding, Hyper+Escape the scratchpad and SUPER+S nothing. Install rewrites the block between its markers and confirms the
 # keys in the running Hyprland when there is one — by description, since with
@@ -27,14 +28,11 @@ END="-- <<< Managed by loadout (omarchy-harpoon)"
 HYPER="SUPER + CTRL + ALT + SHIFT"
 # modmask: SUPER 64 + CTRL 4 + ALT 8 + SHIFT 1.
 MASK=77
-PLUGIN_ID=josemiguelo.harpoon-toast
-PLUGIN_DIR=$HOME/.config/omarchy/plugins/$PLUGIN_ID
-PLUGIN_FILES="manifest.json Toast.qml"
+PLUGIN_ID=josemiguelo.harpoon
+TARGET=$HOME/.config/omarchy/plugins/$PLUGIN_ID/hypr/harpoon.lua
 
-plugin_copied() {
-  for f in $PLUGIN_FILES; do
-    [ -f "$PLUGIN_DIR/$f" ] && cmp -s "$SRC/plugin/$f" "$PLUGIN_DIR/$f" || return 1
-  done
+linked() {
+  [ -L "$ENGINE" ] && [ "$(readlink "$ENGINE")" = "$TARGET" ] && [ -f "$TARGET" ]
 }
 
 plugin_enabled() {
@@ -69,8 +67,7 @@ bound() {
 }
 
 in_place() {
-  [ -f "$ENGINE" ] && cmp -s "$SRC/harpoon.lua" "$ENGINE" && [ "$(current)" = "$(block)" ] && bound &&
-    plugin_copied && plugin_enabled
+  linked && [ "$(current)" = "$(block)" ] && bound && plugin_enabled
 }
 
 case "${1:-install}" in
@@ -78,25 +75,15 @@ check)
   in_place
   ;;
 install)
+  [ -f "$TARGET" ] && plugin_enabled ||
+    { echo "$PLUGIN_ID isn't installed and enabled: add it to omarchy-plugins" >&2; exit 1; }
   mkdir -p "$(dirname "$CONF")"
-  cp "$SRC/harpoon.lua" "$ENGINE"
+  ln -sfn "$TARGET" "$ENGINE"
   touch "$CONF"
   # The file without the old block and its trailing blank lines, then the
   # current block.
   rest=$(awk -v b="$BEGIN" -v e="$END" '$0 == b { skip = 1 } !skip { print } $0 == e { skip = 0 }' "$CONF")
   { printf '%s\n\n' "$rest"; block; } > "$CONF"
-  changed=no
-  plugin_copied || changed=yes
-  mkdir -p "$PLUGIN_DIR"
-  for f in $PLUGIN_FILES; do cp "$SRC/plugin/$f" "$PLUGIN_DIR/$f"; done
-  # Enabling goes through the running shell. A loaded plugin keeps its old
-  # QML, even across disable/enable, until the shell restarts.
-  omarchy-shell shell rescanPlugins >/dev/null
-  plugin_enabled || omarchy plugin enable "$PLUGIN_ID" >/dev/null ||
-    { echo "couldn't enable the $PLUGIN_ID shell plugin (is omarchy-shell running?)" >&2; exit 1; }
-  if [ "$changed" = yes ]; then
-    omarchy restart shell >/dev/null 2>&1 || echo "restart the Omarchy shell to load the new $PLUGIN_ID (omarchy restart shell)" >&2
-  fi
   in_place || { echo "the Hyper keys don't each run one harpoon binding after $CONF: something loaded later binds them" >&2; exit 1; }
   sig=$(live_instance)
   if [ -n "$sig" ]; then

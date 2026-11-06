@@ -78,6 +78,7 @@ function "omarchy_bar" {
       "https://github.com/binoymanoj/pomodoro-omarchy.git",
       "https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git",
       "https://github.com/sumdahl/omarchy-plugin-media.git",
+      "https://github.com/josemiguelo/omarchy-harpoon.git",
     ),
     args(script.omarchy-bar-own-widgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode"),
     args(script.omarchy-bar-widgets,
