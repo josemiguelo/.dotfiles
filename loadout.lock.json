@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "24abc945701cd4150dd1fc87fe3b61ed12dbcc37e42ff0818a1066574cccddca",
+  "sources": "263fefd2e9929a6104673483aece0f9584716424732614403558e1526bf2b9dc",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1352,6 +1352,16 @@
         ],
         "origin": "loadouts/.ssh"
       },
+      "intentional-sync": {
+        "description": "Intentional's sync config, from 1Password",
+        "file": ".loadout/sync-config.sh",
+        "check": "file:.loadout/sync-config.sh check \"$@\"",
+        "after": [
+          "scripts.onepassword-cli",
+          "programs.intentional"
+        ],
+        "origin": "loadouts/private_dot_config/.intentional"
+      },
       "java-macos-integration": {
         "description": "mise's JDKs registered with macOS (java_home)",
         "file": ".loadout/java-macos.sh",
@@ -1728,6 +1738,16 @@
         "check": "file:.loadout/omarchy-webapps-remove.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "onepassword-cli": {
+        "description": "1Password CLI connected to an account through the app",
+        "file": ".loadout/cli-integration.sh",
+        "check": "file:.loadout/cli-integration.sh check \"$@\"",
+        "after": [
+          "programs.1password",
+          "programs.1password-cli"
+        ],
+        "origin": "loadouts/private_dot_config/.1password"
+      },
       "remove-brew-tmux": {
         "description": "no tpack, tmux or git from brew (Linux has its own)",
         "file": ".loadout/remove-brew-tmux.sh",
@@ -2093,6 +2113,7 @@
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
+          "onepassword-cli",
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
@@ -2232,6 +2253,7 @@
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
+          "onepassword-cli",
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
@@ -2261,7 +2283,8 @@
           "omarchy-sudoless-docker",
           "omarchy-activity-monitor-size 90% 90%",
           "omarchy-scratchpad-opacity 0.99",
-          "solaar-no-autostart"
+          "solaar-no-autostart",
+          "intentional-sync t2-macbook"
         ],
         "script-variants": {
           "setup-libvirt": "arch",

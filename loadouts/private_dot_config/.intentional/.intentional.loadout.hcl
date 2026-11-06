@@ -19,3 +19,11 @@ program "intentional" {
   version            = "intentional --version"
   updates_managed_by = ".loadout/outdated-intentional.sh"
 }
+
+# Sync's secrets from 1Password, so a new machine syncs once installed. The
+# device name comes from the machine: `args(script.intentional-sync, "<name>")`.
+script "intentional-sync" {
+  description = "Intentional's sync config, from 1Password"
+  managed_by  = ".loadout/sync-config.sh"
+  run_after   = [script.onepassword-cli, program.intentional]
+}

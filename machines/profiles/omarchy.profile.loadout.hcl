@@ -67,7 +67,7 @@ profile "omarchy" {
     omarchy_bar(),
 
     # Apps the Omarchy way
-    script.omarchy-1password, script.omarchy-vscode, script.omarchy-brave,
+    script.omarchy-1password, script.onepassword-cli, script.omarchy-vscode, script.omarchy-brave,
     args(script.omarchy-default-browser, "brave"),
     script.surfingkeys, script.surfingkeys-split-view,
     args(script.omarchy-agents-prune, "claude", "codex", "gh", "gemini"),
