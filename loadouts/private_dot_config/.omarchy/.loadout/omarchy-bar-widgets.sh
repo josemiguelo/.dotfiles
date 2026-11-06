@@ -1,13 +1,16 @@
 #!/bin/sh
-# Where installed bar widgets (omarchy-plugins, omarchy-bar-icons) sit, from
+# Where installed bar widgets (omarchy-plugins, omarchy-bar-own-widgets) sit, from
 # the machine's multi-line opt-in, one widget per line:
 # "<id> <section> <before|after> <neighbour-id>"
-# ("io.github.sumdahl.media right after omarchy.tray"). Placement is Omarchy's
-# own bar layout (~/.config/omarchy/shell.json), changed with `omarchy bar
-# move`. A widget with omarchy-bar/settings/<id>.json gets those settings set
+# ("io.github.sumdahl.media right after omarchy.tray"; the sections are
+# Omarchy's: left, centerBegin, center, centerEnd, tray, right). Placement is
+# Omarchy's own bar layout (~/.config/omarchy/shell.json), changed with
+# `omarchy bar move`, or `omarchy bar put` for a widget off the bar (enabled
+# by its plugins[] entry alone, like Keystroke's menu). A widget with
+# omarchy-bar/settings/<id>.json gets those settings set
 # with `omarchy bar set` into its entry (keys the file doesn't list are left
-# as they are). An id whose plugin has an enabled omarchy-bar-icons clone
-# (clonedFrom) stands for the clone, which has taken its place. The check:
+# as they are). An id whose plugin has an enabled clone (`omarchy plugin
+# clone`, clonedFrom) stands for the clone, which has taken its place. The check:
 # each widget enabled, right before/after its neighbour in that section, and
 # every listed setting at its value.
 # usage: omarchy-bar-widgets.sh [check] "<id> <section> <before|after> <neighbour>"...
@@ -30,6 +33,10 @@ enabled() {
 # The plugin's enabled clone, else the id itself.
 effective() {
   omarchy plugin list --json | jq -r --arg id "$1" '[.[] | select(.enabled and .clonedFrom == $id) | .id][0] // $id'
+}
+
+on_bar() {
+  [ -f "$JSON" ] && jq -e --arg id "$1" '[.bar.layout[]?[]?.id] | index($id) != null' "$JSON" >/dev/null
 }
 
 # placed <id> <section> <before|after> <neighbour>
@@ -73,6 +80,7 @@ lines "$@" | {
     id=$(effective "$name")
     neighbour=$(effective "$near")
     if [ "$MODE" = install ]; then
+      on_bar "$id" || omarchy bar put "$id" --section "$section" "--$rel" "$neighbour" >/dev/null || true
       enabled "$id" || { echo "$id isn't installed and enabled" >&2; failed=1; continue; }
       placed "$id" "$section" "$rel" "$neighbour" ||
         omarchy bar move "$id" --section "$section" "--$rel" "$neighbour" >/dev/null

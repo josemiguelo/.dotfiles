@@ -1,7 +1,7 @@
 #!/bin/sh
-# The Omarchy bar's position, thickness and, optionally, the widget that
-# replaces the stock workspace numbers, from the machine's opt-in
-# ("omarchy-bar bottom 30 tornikegomareli.spaces").
+# The Omarchy bar's position, thickness and, optionally, its icon size and
+# the widget that replaces the stock workspace numbers, from the machine's
+# opt-in ("omarchy-bar bottom 30 17 tornikegomareli.spaces").
 #
 # The position is Omarchy's own setting (~/.config/omarchy/shell.json,
 # bar.position), set with `omarchy bar position`. The thickness is
@@ -9,9 +9,13 @@
 # ones; Omarchy's default is 26) at font base-size 12, scaled with the font
 # like Omarchy's; it lives in a block in ~/.config/omarchy/shell.toml, the
 # machine-level file whose keys win over the theme's and which the shell
-# reloads live. `omarchy display text size` edits [font] there and leaves the
-# rest. A [bar] table outside the block would make the file invalid TOML, so
-# install refuses one. The bar's text follows the shell's [font] base-size.
+# reloads live. The icon size (Omarchy 4.5 on) is icon-size, the size every
+# bar icon is drawn at, glyph or SVG (Omarchy's default is 12), with
+# icon-canvas raised to match: the icon is drawn at the smaller of the two.
+# Both sit in the same block. `omarchy display text size` edits [font] there
+# and leaves the rest. A [bar] table outside the block would make the file
+# invalid TOML, so install refuses one. The bar's text follows the shell's
+# [font] base-size.
 #
 # The workspace widget (a plugin omarchy-plugins installs) takes the stock
 # omarchy.workspaces' place: moved right after it while it is on the bar,
@@ -19,16 +23,20 @@
 # omarchy-bar/settings/<id>.json lists them, are set with `omarchy bar set`
 # into its shell.json entry (keys the file doesn't list are left as they
 # are); the check compares every listed key. Once the widget has an enabled
-# omarchy-bar-icons clone (clonedFrom), the clone stands for it.
-# usage: omarchy-bar.sh [check] <top|bottom|left|right> <size> [workspace-widget-id]
+# clone (`omarchy plugin clone`, clonedFrom), the clone stands for it.
+# usage: omarchy-bar.sh [check] <top|bottom|left|right> <size> [icon-size] [workspace-widget-id]
 set -eu
 
-USAGE="usage: $0 [check] <top|bottom|left|right> <size> [workspace-widget-id]"
+USAGE="usage: $0 [check] <top|bottom|left|right> <size> [icon-size] [workspace-widget-id]"
 MODE=install
 if [ "${1:-}" = check ]; then MODE=check; shift; fi
 POSITION=${1:?$USAGE}
 SIZE=${2:?$USAGE}
-WIDGET=${3:-}
+shift 2
+# A number is the icon size; anything else is the workspace widget.
+ICON_SIZE=""
+case "${1:-}" in '' | *[!0-9]*) ;; *) ICON_SIZE=$1; shift ;; esac
+WIDGET=${1:-}
 case "$POSITION" in top | bottom) KEY=size-horizontal ;; left | right) KEY=size-vertical ;;
   *) echo "position must be top, bottom, left or right" >&2; exit 2 ;; esac
 case "$SIZE" in '' | *[!0-9]*) echo "size must be a whole number" >&2; exit 2 ;; esac
@@ -46,9 +54,13 @@ END="# <<< Managed by loadout (omarchy-bar)"
 
 block() {
   echo "$BEGIN"
-  echo "# The bar's thickness at font base-size 12 (loadouts/private_dot_config/.omarchy/.loadout/omarchy-bar.sh)."
+  echo "# The bar's thickness at font base-size 12 and its icon size (loadouts/private_dot_config/.omarchy/.loadout/omarchy-bar.sh)."
   echo "[bar]"
   echo "$KEY = $SIZE"
+  if [ -n "$ICON_SIZE" ]; then
+    echo "icon-size = $ICON_SIZE"
+    echo "icon-canvas = $ICON_SIZE"
+  fi
   echo "$END"
 }
 
@@ -125,6 +137,6 @@ install)
     done
   fi
   positioned && sized && replaced && configured ||
-    { echo "the bar's position, thickness or workspace widget isn't what the opt-in names after install" >&2; plugin_update_hint "$WIDGET"; exit 1; }
+    { echo "the bar's position, thickness, icon size or workspace widget isn't what the opt-in names after install" >&2; plugin_update_hint "$WIDGET"; exit 1; }
   ;;
 esac

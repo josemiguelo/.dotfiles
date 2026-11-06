@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "josemiguelo.theme-mode",
+  "name": "Theme mode",
+  "version": "2.0.0",
+  "author": "josemiguelo",
+  "license": "MIT",
+  "description": "Whether the theme is dark or light, click switches to the other",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "ThemeMode.qml"
+  },
+  "barWidget": {
+    "displayName": "Theme mode",
+    "description": "Whether the theme is dark or light, click switches to the other",
+    "category": "Appearance",
+    "allowMultiple": false
+  }
+}

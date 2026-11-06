@@ -1,8 +1,8 @@
 # Sourced by the scripts that talk to the Omarchy shell over IPC (omarchy-shell,
 # and `omarchy plugin …`, which goes through it). omarchy-shell gives each call
 # OMARCHY_SHELL_IPC_TIMEOUT, 2s by default, and the shell can take longer while
-# it hot-reloads plugins or restarts — omarchy-bar-icons restarts it after
-# rebuilding widgets — so a script run right after reads "omarchy-shell is not
+# it hot-reloads plugins or restarts — omarchy-bar-own-widgets restarts it
+# after installing widgets — so a script run right after reads "omarchy-shell is not
 # responding", or a plugin as not enabled. Calls get 10s here, and
 # shell_ready waits (up to 30s) until the shell answers at all.
 # shell_ready <mode>: a `check` asks once and gives up at once: with no shell

@@ -1,9 +1,36 @@
 # fcitx5's global settings, only what differs from its defaults (it fills in
-# the rest). Omarchy runs fcitx5 for its XCompose sequences and ships no file
-# here.
+# the rest). Omarchy runs fcitx5 for its XCompose sequences and its input
+# methods; from 4.5 it ships this file (config/fcitx5/config) and its
+# migrations edit it in place, so its sections are kept here as Omarchy
+# writes them, or the next apply would undo them.
+
+# Omarchy's: Super+I switches input methods, so fcitx5's own Ctrl+Space
+# trigger is replaced by the keys only CJK keyboards have, leaving Ctrl+Space
+# to tmux and other Super keys to the desktop.
+[Hotkey/TriggerKeys]
+0=Zenkaku_Hankaku
+1=Hangul
+
+[Hotkey/ActivateKeys]
+0=Henkan
+
+[Hotkey/DeactivateKeys]
+0=Muhenkan
+
+# Omarchy's: a lone Shift leaves an engine like Pinyin for Latin input and
+# returns to it.
+[Hotkey/AltTriggerKeys]
+0=Shift_L
+
+[Hotkey/EnumerateGroupForwardKeys]
+
+[Hotkey/EnumerateGroupBackwardKeys]
 
 # fcitx5 toggles its embedded preedit on Ctrl+Alt+P by default, which kitty
 # never sees then: that key opens the command palette (kitty.conf). The toggle
 # moves to Ctrl+Alt+Shift+P, which neither kitty nor Hyprland uses.
 [Hotkey/TogglePreedit]
 0=Control+Alt+Shift+P
+
+[Behavior]
+ActiveByDefault=False

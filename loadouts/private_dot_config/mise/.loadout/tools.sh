@@ -2,7 +2,8 @@
 # mise tools: every version ~/.config/mise/config.toml pins (the file comes
 # from the chezmoi dotfiles; the mise-tools oracle moves its pins) is
 # installed. No plugin step: mise resolves every tool from its own
-# registry.
+# registry. Lazy tools (Omarchy 4.5's agents, /etc/mise/conf.d) install on
+# first use and `mise install` skips them, so they count as present.
 # Modes: `check` / `install` (default).
 set -eu
 command -v mise >/dev/null 2>&1 || { echo "mise not found" >&2; exit 1; }
@@ -15,7 +16,7 @@ check)
   # Captured first: a mise error (an untrusted or broken config) prints
   # nothing, which would read as "nothing missing". Its message stays on stderr.
   out=$(mise ls --missing) || { echo "mise ls --missing failed" >&2; exit 1; }
-  missing=$(printf '%s\n' "$out" | awk 'NF { print $1 "@" $2 }')
+  missing=$(printf '%s\n' "$out" | awk 'NF && !/\(lazy\)/ { print $1 "@" $2 }')
   [ -z "$missing" ] && exit 0
   for m in $missing; do echo "missing: $m"; done
   exit 1

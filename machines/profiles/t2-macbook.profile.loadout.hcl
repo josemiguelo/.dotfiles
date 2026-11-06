@@ -26,6 +26,7 @@ profile "t2-macbook" {
 
     variant(script.t2-hid-apple-keyboard, "arch"),
     script.t2-fan-curve, script.t2-fan-gpu-card, script.t2-boot-clock, script.t2-gmux-backlight,
+    script.t2-bcm-firmware,
     script.t2-render-gpu,
     variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
     script.omarchy-sudoless-docker,

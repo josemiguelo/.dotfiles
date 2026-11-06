@@ -6,8 +6,10 @@
 .config/nvim/README.md
 .config/nvim/LICENSE
 
-# The agents Omarchy installs through mise: Omarchy machines only. The whole
-# directory, or chezmoi still creates it (empty) around the ignored file.
+# mise's conf.d: off machines that aren't Omarchy, whole, or chezmoi still
+# creates it (empty) around the ignored files. (Omarchy's agents lived here
+# until Omarchy 4.5 declared them itself, in /etc/mise/conf.d; on Omarchy the
+# folder stays, so .chezmoiremove reaches their file.)
 {{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
 .config/mise/conf.d
 .config/mise/conf.d/**

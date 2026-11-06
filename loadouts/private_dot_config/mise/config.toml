@@ -1,10 +1,9 @@
 # Global tool versions, managed by mise (was ~/.tool-versions under asdf).
-# A plain file on purpose: `mise use -g`, `mise up --bump` and Omarchy's
-# ~/.local/bin wrappers (which run `mise use -g <tool>` on first launch)
-# write here, and `chezmoi re-add` brings their change back into the source.
-# The agents Omarchy installs through mise (claude, codex, gh) live in
-# conf.d/omarchy.toml, deployed on Omarchy only: elsewhere they come from
-# their own installers.
+# A plain file on purpose: `mise use -g` and `mise up --bump` write here, and
+# `chezmoi re-add` brings their change back into the source. The agents
+# Omarchy installs through mise (claude, codex, gh) are Omarchy's own, from
+# 4.5 in /etc/mise/conf.d/omarchy-tools.toml: elsewhere they come from their
+# own installers.
 [tools]
 # The first version of each list is the default.
 node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0"]
@@ -25,8 +24,3 @@ gradle = ["8.14.2", "7.6.3"]
 # mise's default maven source starts after 3.6.3.
 "vfox:mise-plugins/vfox-maven" = "3.6.3"
 cocoapods = { version = "1.16.0", os = ["macos"] }
-
-# Omarchy's own setting: `mise up` (which `omarchy update` runs) keeps the
-# versions it upgrades from instead of pruning them.
-[settings.upgrade]
-auto_prune = false

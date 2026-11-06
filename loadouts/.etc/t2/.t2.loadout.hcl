@@ -10,6 +10,15 @@ program "t2fanrd" {
 
 # The T2 Mac fixes, the t2-* scripts: `run = [script.t2-fan-curve]`.
 
+# The Wi-Fi/Bluetooth firmware package, which has left the repos: kept
+# installed and explicit, restored from a local copy or 1Password.
+script "t2-bcm-firmware" {
+  description = "apple-bcm-firmware 14.0-1 installed explicitly, with a copy to restore it from"
+  managed_by  = ".loadout/bcm-firmware.sh"
+  needs_sudo  = true
+  run_after   = [script.onepassword-cli]
+}
+
 # /etc/t2fand.conf, which no package owns: this is the only record of the
 # curve.
 script "t2-fan-curve" {

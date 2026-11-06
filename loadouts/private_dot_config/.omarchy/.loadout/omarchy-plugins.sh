@@ -46,10 +46,10 @@ plugin_id() {
 }
 
 # Enabled as `omarchy plugin list` says, through an enabled clone of it
-# (clonedFrom; omarchy-bar-icons rebuilds plugins that way), or by an entry in
+# (clonedFrom, as `omarchy plugin clone` makes one), or by an entry in
 # shell.json's plugins[]: the list only counts a bar widget that is on the
-# bar, while the shell also loads one listed there (Keystroke's menu, with its
-# bar button replaced by omarchy-menu-button).
+# bar, while the shell also loads one listed there (Keystroke's menu, while
+# its bar button is off the bar).
 enabled() {
   omarchy plugin list --json | jq -e --arg id "$1" 'any(.[]; (.id == $id or .clonedFrom == $id) and .enabled)' >/dev/null ||
     { [ -f "$SHELL_JSON" ] && jq -e --arg id "$1" 'any(.plugins[]?; .id == $id) and (.disabledPlugins // [] | index($id) | not)' "$SHELL_JSON" >/dev/null; }

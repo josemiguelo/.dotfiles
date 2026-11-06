@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "263fefd2e9929a6104673483aece0f9584716424732614403558e1526bf2b9dc",
+  "sources": "d9c29d9fc90d8cfb12c8f2f9360f56e1ee68268491c3189f94c262fc99529ed8",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1493,7 +1493,7 @@
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-bar": {
-        "description": "Omarchy bar position, thickness, workspace widget and its settings",
+        "description": "Omarchy bar position, thickness, icon size, workspace widget and its settings",
         "file": ".loadout/omarchy-bar.sh",
         "check": "file:.loadout/omarchy-bar.sh check \"$@\"",
         "after": [
@@ -1501,10 +1501,10 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
-      "omarchy-bar-icons": {
-        "description": "Bar widgets with SVG icons, rebuilt from their source",
-        "file": ".loadout/omarchy-bar-icons.sh",
-        "check": "file:.loadout/omarchy-bar-icons.sh check \"$@\"",
+      "omarchy-bar-own-widgets": {
+        "description": "This repo's own bar widgets, installed and enabled",
+        "file": ".loadout/omarchy-bar-own-widgets.sh",
+        "check": "file:.loadout/omarchy-bar-own-widgets.sh check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1516,7 +1516,7 @@
         "check": "file:.loadout/omarchy-bar-widgets.sh check \"$@\"",
         "after": [
           "scripts.omarchy-plugins",
-          "scripts.omarchy-bar-icons"
+          "scripts.omarchy-bar-own-widgets"
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
@@ -1632,16 +1632,6 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
-      "omarchy-menu-button": {
-        "description": "The menu button in the place of Keystroke's bar button",
-        "file": ".loadout/omarchy-menu-button.sh",
-        "check": "file:.loadout/omarchy-menu-button.sh check \"$@\"",
-        "after": [
-          "scripts.omarchy-plugins",
-          "scripts.omarchy-bar-icons"
-        ],
-        "origin": "loadouts/private_dot_config/.omarchy"
-      },
       "omarchy-plugins": {
         "description": "Omarchy shell plugins installed and enabled",
         "file": ".loadout/omarchy-plugins.sh",
@@ -1649,12 +1639,11 @@
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-pomodoro": {
-        "description": "Pomodoro timer: by the clock, 50+10, Trigger menu entries",
+        "description": "Pomodoro timer: 50+10, Trigger menu entries",
         "file": ".loadout/omarchy-pomodoro.sh",
         "check": "file:.loadout/omarchy-pomodoro.sh check \"$@\"",
         "after": [
-          "scripts.omarchy-plugins",
-          "scripts.omarchy-bar-icons"
+          "scripts.omarchy-plugins"
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
@@ -1838,6 +1827,16 @@
           "scripts.omarchy-brave"
         ],
         "origin": "loadouts/private_dot_config/surfingkeys"
+      },
+      "t2-bcm-firmware": {
+        "description": "apple-bcm-firmware 14.0-1 installed explicitly, with a copy to restore it from",
+        "file": ".loadout/bcm-firmware.sh",
+        "check": "file:.loadout/bcm-firmware.sh check \"$@\"",
+        "after": [
+          "scripts.onepassword-cli"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
       },
       "t2-boot-clock": {
         "description": "keep the EC hardware clock set (T2 Mac)",
@@ -2105,11 +2104,10 @@
           "omarchy-google-bindings",
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
-          "omarchy-bar top 24 tornikegomareli.spaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/jankeesvw/omarchy-notification-center.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
-          "omarchy-bar-icons josemiguelo.menu-button josemiguelo.workspace-layout josemiguelo.theme-mode omarchy.monitor omarchy.bluetooth omarchy.network omarchy.audio omarchy.power omarchy.agents omarchy.system-update omarchy.indicators omarchy.weather omarchy.tray jankeesvw.notification-center io.github.zeus-deus.voxtype io.github.sumdahl.media pomodoro-omarchy omarchy.clock tornikegomareli.spaces",
-          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces josemiguelo.menu-button left before josemiguelo.workspace-layout io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
-          "omarchy-menu-button",
+          "omarchy-bar top 24 17 tornikegomareli.spaces",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
+          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces evindor.keystroke left before josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
@@ -2245,11 +2243,10 @@
           "omarchy-google-bindings",
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
-          "omarchy-bar top 24 tornikegomareli.spaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/jankeesvw/omarchy-notification-center.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
-          "omarchy-bar-icons josemiguelo.menu-button josemiguelo.workspace-layout josemiguelo.theme-mode omarchy.monitor omarchy.bluetooth omarchy.network omarchy.audio omarchy.power omarchy.agents omarchy.system-update omarchy.indicators omarchy.weather omarchy.tray jankeesvw.notification-center io.github.zeus-deus.voxtype io.github.sumdahl.media pomodoro-omarchy omarchy.clock tornikegomareli.spaces",
-          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces josemiguelo.menu-button left before josemiguelo.workspace-layout io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
-          "omarchy-menu-button",
+          "omarchy-bar top 24 17 tornikegomareli.spaces",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
+          "omarchy-bar-widgets josemiguelo.workspace-layout left before tornikegomareli.spaces evindor.keystroke left before josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-1password",
@@ -2277,6 +2274,7 @@
           "t2-fan-gpu-card",
           "t2-boot-clock",
           "t2-gmux-backlight",
+          "t2-bcm-firmware",
           "t2-render-gpu",
           "setup-libvirt",
           "ufw-libvirt",

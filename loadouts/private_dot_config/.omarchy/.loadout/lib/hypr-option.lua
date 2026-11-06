@@ -53,9 +53,11 @@ local function merge(into, from)
 end
 
 -- Absorbs anything: indexing, calls, concatenation, comparison, arithmetic.
+-- Numeric keys are nil, so ipairs() over an absorbed list (Omarchy 4.5's
+-- qconsole.lua walks hl.get_workspace_windows()) ends instead of looping.
 local sink
 local absorb = {
-  __index = function() return sink end,
+  __index = function(_, k) if type(k) == "number" then return nil end return sink end,
   __newindex = function() end,
   __call = function() return sink end,
   __concat = function() return "" end,
@@ -69,6 +71,9 @@ local absorb = {
   __sub = function() return 0 end,
   __mul = function() return 0 end,
   __div = function() return 0 end,
+  __mod = function() return 0 end,
+  __idiv = function() return 0 end,
+  __pow = function() return 0 end,
 }
 sink = setmetatable({}, absorb)
 

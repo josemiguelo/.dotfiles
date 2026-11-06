@@ -15,7 +15,8 @@
 # `off` runs against a stand-in brightnessctl that reports 0, and saving
 # anyway means the wrapper is needed. Once it stops, install removes the
 # wrapper. The check requires the session to actually run it (the evaluated
-# config's PATH and the running shell's).
+# config's PATH and the running shell's). Omarchy 4.5 fixed it: once every
+# Omarchy machine has run install on 4.5 or later, this script can go.
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -62,7 +63,9 @@ case "\$1" in -s*) touch "$tmp/saved" ;; esac
 exit 0
 STUB
   chmod +x "$tmp/brightnessctl"
-  PATH="$tmp:$PATH" "$1" off >/dev/null 2>&1 || true
+  # Omarchy 4.5 on records the level in $XDG_RUNTIME_DIR instead: a stand-in
+  # one, so the stub's 0 isn't what the next `restore` brings back.
+  PATH="$tmp:$PATH" XDG_RUNTIME_DIR="$tmp" "$1" off >/dev/null 2>&1 || true
   saved=1
   [ -e "$tmp/saved" ] && saved=0
   rm -rf "$tmp"

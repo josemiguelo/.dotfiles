@@ -1,8 +1,8 @@
 # Sourced by the scripts that build on Omarchy shell plugins installed from
 # git (~/.config/omarchy/plugins/<id>, by omarchy-plugins). Nothing updates
 # those checkouts but `omarchy plugin update` (or `loadout outdated`), while
-# these scripts, and omarchy-bar-icons' patches, follow upstream: a checkout
-# left behind shows up as a missing file or a patch that no longer applies.
+# these scripts follow upstream: a checkout left behind shows up as a
+# missing file or a setting the plugin doesn't know yet.
 # plugin_update_hint names the ones that are behind, for a script to print
 # after it fails; only then, since it fetches each one.
 #
@@ -26,7 +26,7 @@ plugin_diverged() {
 
 # plugin_update_hint <id>...: on stderr, a line for each id that is a git
 # checkout behind its remote's HEAD. Ids without one (Omarchy's built-ins,
-# omarchy-bar-icons' clones) are skipped. Always succeeds.
+# clones) are skipped. Always succeeds.
 plugin_update_hint() {
   for hint_id in "$@"; do
     hint_dir=$HOME/.config/omarchy/plugins/$hint_id

@@ -1,6 +1,6 @@
 #!/bin/sh
-# The Pomodoro timer plugin (pomodoro-omarchy, installed by omarchy-plugins):
-# on the bar's center section right after the clock, its settings from
+# The Pomodoro timer plugin (pomodoro-omarchy, installed by omarchy-plugins;
+# where it sits on the bar is omarchy-bar-widgets'): its settings from
 # omarchy-pomodoro/settings.json (set with `omarchy bar set` into its
 # shell.json entry; keys the file doesn't list are left as they are), and a
 # Pomodoro submenu under Trigger in the Omarchy menu (Keystroke serves it):
@@ -8,14 +8,12 @@
 # of ~/.config/omarchy/extensions/omarchy-menu.jsonc. Its entries end in
 # commas; the menu's reader drops trailing ones. They run the plugin's own
 # bin/omarchy-pomodoro by its path, so nothing goes on the PATH. The widget
-# placed and configured is the plugin's, or its omarchy-bar-icons clone
-# (clonedFrom pomodoro-omarchy) once that has taken its place; likewise the
-# clock it follows.
+# configured is the plugin's, or its clone (`omarchy plugin clone`,
+# clonedFrom pomodoro-omarchy) once that has taken its place.
 # Modes: `check` / `install` (default).
 set -eu
 
 ID=pomodoro-omarchy
-AFTER=omarchy.clock
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC=$HERE/omarchy-pomodoro
 . "$HERE/lib/plugin-update-hint.sh"
@@ -28,20 +26,11 @@ enabled() {
   omarchy plugin list --json | jq -e --arg id "$1" 'any(.[]; .id == $id and .enabled)' >/dev/null
 }
 
-# A plugin's enabled clone, else the plugin: the widget and the clock it
-# sits after.
+# The plugin's enabled clone, else the plugin.
 effective() {
   omarchy plugin list --json | jq -r --arg id "$1" '[.[] | select(.enabled and .clonedFrom == $id) | .id][0] // $id'
 }
 WIDGET=$(effective "$ID")
-CLOCK=$(effective "$AFTER")
-
-# In the center section, right after the clock.
-placed() {
-  [ -f "$JSON" ] && jq -e --arg id "$WIDGET" --arg after "$CLOCK" '
-    [.bar.layout.center[]?.id] as $c
-    | ($c | index($after)) as $a | $a != null and $c[$a + 1] == $id' "$JSON" >/dev/null
-}
 
 configured() {
   jq -e -n --arg id "$WIDGET" --slurpfile want "$SRC/settings.json" --slurpfile shell "$JSON" '
@@ -62,7 +51,7 @@ current() {
 }
 
 in_place() {
-  enabled "$WIDGET" && placed && configured && [ "$(current)" = "$(block)" ]
+  enabled "$WIDGET" && configured && [ "$(current)" = "$(block)" ]
 }
 
 case "${1:-install}" in
@@ -71,7 +60,6 @@ check)
   ;;
 install)
   enabled "$WIDGET" || { echo "$ID isn't installed and enabled: add it to omarchy-plugins" >&2; exit 1; }
-  placed || omarchy bar move "$WIDGET" --section center --after "$CLOCK" >/dev/null
   if ! configured; then
     for key in $(jq -r 'keys[]' "$SRC/settings.json"); do
       omarchy bar set "$WIDGET" "$key" "$(jq -c --arg k "$key" '.[$k]' "$SRC/settings.json")" --json >/dev/null
@@ -89,7 +77,7 @@ install)
     printf '%s\n' "$rest" | awk 'found { print } !found && /^[[:space:]]*\{/ { found = 1 }'
   } > "$MENU.tmp"
   mv "$MENU.tmp" "$MENU"
-  in_place || { echo "the Pomodoro plugin isn't placed, configured and in the menu after install" >&2; plugin_update_hint "$ID"; exit 1; }
+  in_place || { echo "the Pomodoro plugin isn't configured and in the menu after install" >&2; plugin_update_hint "$ID"; exit 1; }
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac
