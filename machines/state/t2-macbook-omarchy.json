@@ -5,21 +5,21 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-06T02:10:00.966121517Z",
+  "updatedAt": "2026-11-06T03:24:29.403179923Z",
   "programs": {
     "1password": {
       "status": "installed",
-      "version": "8.12.40",
+      "version": "8.12.44",
       "reason": null
     },
     "1password-cli": {
       "status": "installed",
-      "version": "2.41.0",
+      "version": "2.42.0",
       "reason": null
     },
     "antigravity": {
       "status": "installed",
-      "version": "2.5.5",
+      "version": "2.6.0",
       "reason": null
     },
     "anydesk": {
@@ -29,7 +29,7 @@
     },
     "atuin": {
       "status": "installed",
-      "version": "18.23.0",
+      "version": "18.24.1",
       "reason": null
     },
     "awscli": {
@@ -44,7 +44,7 @@
     },
     "brave": {
       "status": "installed",
-      "version": "1.97.59",
+      "version": "1.99.55",
       "reason": null
     },
     "btop": {
@@ -54,12 +54,12 @@
     },
     "chezmoi": {
       "status": "installed",
-      "version": "2.73.1",
+      "version": "2.73.3",
       "reason": null
     },
     "code": {
       "status": "installed",
-      "version": "1.142.0",
+      "version": "1.145.1",
       "reason": null
     },
     "curl": {
@@ -179,7 +179,7 @@
     },
     "mise": {
       "status": "installed",
-      "version": "2026.10.14",
+      "version": "2026.11.1",
       "reason": null
     },
     "ngrok": {
@@ -229,7 +229,7 @@
     },
     "slack": {
       "status": "installed",
-      "version": "4.52.178",
+      "version": "4.52.182",
       "reason": null
     },
     "solaar": {
@@ -269,7 +269,7 @@
     },
     "teams-for-linux": {
       "status": "installed",
-      "version": "2.26.0",
+      "version": "2.28.0",
       "reason": null
     },
     "tmux": {
@@ -375,7 +375,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -496,7 +496,7 @@
     },
     "omarchy-bar": {
       "status": "done",
-      "lastRun": "2026-10-28T02:13:42.688372953Z",
+      "lastRun": "2026-11-06T03:20:08.858535597Z",
       "exitCode": 0
     },
     "omarchy-plugins": {
@@ -504,19 +504,14 @@
       "lastRun": "2026-10-13T14:23:12.200349607Z",
       "exitCode": 0
     },
-    "omarchy-bar-icons": {
+    "omarchy-bar-own-widgets": {
       "status": "done",
-      "lastRun": "2026-10-20T03:16:56.496283150Z",
+      "lastRun": "2026-11-06T03:19:52.858848326Z",
       "exitCode": 0
     },
     "omarchy-bar-widgets": {
       "status": "done",
-      "lastRun": "2026-10-13T14:23:49.056303419Z",
-      "exitCode": 0
-    },
-    "omarchy-menu-button": {
-      "status": "done",
-      "lastRun": "2026-10-13T14:23:46.152963782Z",
+      "lastRun": "2026-11-06T03:20:12.040151336Z",
       "exitCode": 0
     },
     "omarchy-keystroke-windows": {
@@ -531,7 +526,7 @@
     },
     "omarchy-1password": {
       "status": "done",
-      "lastRun": "2026-11-05T16:06:41.907918646Z",
+      "lastRun": "2026-11-06T03:24:27.599689261Z",
       "exitCode": 0
     },
     "onepassword-cli": {
@@ -566,7 +561,7 @@
     },
     "omarchy-agents-prune": {
       "status": "done",
-      "lastRun": "2026-10-21T01:41:39.460257175Z",
+      "lastRun": "2026-11-06T03:23:06.320599267Z",
       "exitCode": 0
     },
     "omarchy-webapps-remove": {
@@ -596,7 +591,7 @@
     },
     "omarchy-keyboard-backlight-guard": {
       "status": "done",
-      "lastRun": "2026-10-13T14:24:01.906156608Z",
+      "lastRun": "2026-11-06T03:23:04.433765807Z",
       "exitCode": 0
     },
     "omarchy-idle": {
@@ -652,6 +647,11 @@
     "t2-gmux-backlight": {
       "status": "done",
       "lastRun": "2026-10-28T02:17:54.669140164Z",
+      "exitCode": 0
+    },
+    "t2-bcm-firmware": {
+      "status": "done",
+      "lastRun": "2026-11-06T03:06:37.809469243Z",
       "exitCode": 0
     },
     "t2-render-gpu": {
