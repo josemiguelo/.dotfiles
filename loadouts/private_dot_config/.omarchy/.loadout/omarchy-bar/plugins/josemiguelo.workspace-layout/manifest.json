@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "josemiguelo.workspace-layout",
   "name": "Workspace layout",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "author": "josemiguelo",
   "license": "MIT",
-  "description": "Layout of the focused workspace (tiling, scrolling or floating), click cycles it",
+  "description": "Layout of the focused workspace by name (dwindle, master, scrolling, floating), click cycles it",
   "kinds": [
     "bar-widget"
   ],
@@ -14,7 +14,7 @@
   },
   "barWidget": {
     "displayName": "Workspace layout",
-    "description": "Layout of the focused workspace (tiling, scrolling or floating), click cycles it",
+    "description": "Layout of the focused workspace by name (dwindle, master, scrolling, floating), click cycles it",
     "category": "Compositor",
     "allowMultiple": false
   }

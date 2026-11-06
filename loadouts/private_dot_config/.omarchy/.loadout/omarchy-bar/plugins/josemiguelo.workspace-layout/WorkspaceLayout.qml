@@ -4,10 +4,9 @@ import Quickshell.Hyprland
 import Quickshell.Io
 import qs.Ui
 
-// The layout of the focused workspace, as the glyph Omarchy's own workspaces
-// widget gives it (a square tiles, a circle scrolls, a triangle floats),
-// drawn by BarIconButton like every bar icon, at the bar's icon size. A
-// click runs Omarchy's toggle, the one on SUPER + L. Floating is not a
+// The layout of the focused workspace, by name (dwindle, master, scrolling,
+// floating), drawn by WidgetButton like the bar's other text, at its body
+// size. A click runs Omarchy's toggle, the one on SUPER + L. Floating is not a
 // Hyprland layout, so the mode is read the way
 // omarchy-hyprland-workspace-layout-current reads it: the workspace's file
 // the toggle writes, else the default layout's file, else the tiledLayout
@@ -31,12 +30,6 @@ BarWidget {
   function modeIn(text, key) {
     var match = String(text || "").match(new RegExp(key + ' = "([a-z]*)"'))
     return match ? match[1] : ""
-  }
-
-  function glyph(mode) {
-    if (mode === "scrolling") return "󰝥"
-    if (mode === "floating") return "󰔶"
-    return "󱓻"
   }
 
   FileView {
@@ -96,11 +89,11 @@ BarWidget {
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
-  BarIconButton {
+  WidgetButton {
     id: button
     anchors.fill: parent
     bar: root.bar
-    text: root.layout === "" ? "" : root.glyph(root.layout)
+    text: root.layout
     tooltipText: root.workspace ? "Workspace " + root.workspace.name + ": " + root.layout + " (click cycles)" : ""
     onPressed: function() {
       if (!root.bar) return
