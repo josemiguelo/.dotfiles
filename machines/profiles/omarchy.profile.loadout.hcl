@@ -9,9 +9,9 @@ profile "omarchy" {
       program.curl, program.git, program.gcc, program.procps-ng, program.zsh, program.chezmoi,
       program.mise, program.kitty, program.tmux,
       local.everyday_cli,
-      program.voxtype, program.code, program.sublime-text, program.obsidian, program.spotify,
+      program.code, program.sublime-text, program.obsidian, program.spotify,
       program.vlc, program["1password"], program["1password-cli"],
-      program.ttf-firacode-nerd, program.wtype, program.zenity, program.ghostscript,
+      program.ttf-firacode-nerd, program.ghostscript,
       program.flatpak, program.libxcrypt-compat,
     ]
   }
@@ -21,7 +21,7 @@ profile "omarchy" {
   via "omarchy-aur" {
     install = [
       program.antigravity, program.slack, program.teams-for-linux, program.anydesk,
-      program.voxtype-tui, program.brave,
+      program.brave,
     ]
   }
 
@@ -80,6 +80,7 @@ profile "omarchy" {
     script.omarchy-command-overrides, script.omarchy-keyboard-backlight-guard,
     # The screensaver gets ~14 minutes (it starts at 150s) before the lock.
     args(script.omarchy-idle, "1000"),
-    script.omarchy-dictation, script.omarchy-dictation-gpu,
+    script.omarchy-default-dictation, script.omarchy-remove-voxtype-extras,
+    args(script.superwhisper-settings, "processing=offline", "language=auto"),
   ]
 }

@@ -23,11 +23,11 @@ profile "macos" {
     install = [
       program.kitty, program["1password-cli"],
       program.raycast, program.codex, program.jordanbaird-ice, program.lunar, program.meetingbar,
-      program.obs,
+      program.obs, program.superwhisper,
     ]
   }
   via "brew-tap-cask" {
-    install = [program.tpack, program.voxtype]
+    install = [program.tpack]
   }
 
   run = [
@@ -37,6 +37,5 @@ profile "macos" {
     local.shell_scripts,
     script.mise-tools, script.mise-default-packages, script.java-macos-integration,
     script.tmux-plugins,
-    script.voxtype-setup,
   ]
 }

@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "b3b4ab583a6321694daa311a4ec2cab945f169d4e8ae6b9d9cf7482688b10d35",
+  "sources": "8348c3c9ecb36ea7c2d2b009dca130aebfb9e7a502c5f1562a1cdd0f0e75ff66",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1005,6 +1005,13 @@
         },
         "origin": "loadouts/.etc/pacman"
       },
+      "superwhisper": {
+        "description": "Superwhisper dictation",
+        "install": {
+          "brew-cask": {}
+        },
+        "origin": "loadouts/private_dot_config/.superwhisper"
+      },
       "swtpm": {
         "description": "TPM emulator for guests",
         "install": {
@@ -1164,27 +1171,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "voxtype": {
-        "description": "Voxtype push-to-talk speech-to-text",
-        "install": {
-          "brew-tap-cask": {
-            "with": {
-              "tap": "peteonrails/voxtype"
-            }
-          },
-          "omarchy": {
-            "pkg": "voxtype-bin"
-          }
-        },
-        "origin": "loadouts/private_dot_config/.voxtype"
-      },
-      "voxtype-tui": {
-        "description": "Voxtype's settings TUI and the Voxtype plugin's backend",
-        "install": {
-          "omarchy-aur": {}
-        },
-        "origin": "loadouts/private_dot_config/.voxtype"
-      },
       "wget": {
         "install": {
           "brew": {}
@@ -1211,13 +1197,6 @@
         },
         "origin": "loadouts/private_dot_config/workmux"
       },
-      "wtype": {
-        "description": "xdotool type for Wayland (voxtype's typing backend)",
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/private_dot_config/.voxtype"
-      },
       "xz-devel": {
         "install": {
           "dnf": {}
@@ -1236,13 +1215,6 @@
           "brew": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "zenity": {
-        "description": "GTK dialogs from scripts (the Voxtype plugin's file chooser)",
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/private_dot_config/.voxtype"
       },
       "zlib-devel": {
         "install": {
@@ -1561,6 +1533,13 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "omarchy-default-dictation": {
+        "description": "Superwhisper as Omarchy's dictation backend",
+        "run": "omarchy-install-dictation-superwhisper --background",
+        "check": "test \"$(omarchy default dictation 2>/dev/null)\" = superwhisper",
+        "sudo": true,
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
       "omarchy-default-terminal": {
         "description": "kitty as omarchy's default terminal",
         "file": ".loadout/default-terminal.sh",
@@ -1569,26 +1548,6 @@
           "programs.kitty"
         ],
         "origin": "loadouts/private_dot_config/kitty"
-      },
-      "omarchy-dictation": {
-        "description": "Voxtype dictation, set up the way Omarchy's installer does",
-        "file": ".loadout/dictation.sh",
-        "check": "file:.loadout/dictation.sh check \"$@\"",
-        "after": [
-          "programs.voxtype",
-          "programs.wtype"
-        ],
-        "origin": "loadouts/private_dot_config/.voxtype"
-      },
-      "omarchy-dictation-gpu": {
-        "description": "Voxtype dictation on the GPU (Vulkan)",
-        "file": ".loadout/dictation-gpu.sh",
-        "check": "file:.loadout/dictation-gpu.sh check \"$@\"",
-        "after": [
-          "scripts.omarchy-dictation"
-        ],
-        "sudo": true,
-        "origin": "loadouts/private_dot_config/.voxtype"
       },
       "omarchy-google-bindings": {
         "description": "email and calendar keys open Gmail and Google Calendar",
@@ -1648,6 +1607,16 @@
         "after": [
           "scripts.omarchy-plugins"
         ],
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
+      "omarchy-remove-voxtype-extras": {
+        "description": "no Voxtype bar plugin or settings TUI (stock Voxtype stays)",
+        "run": "{ omarchy plugin remove io.github.zeus-deus.voxtype --yes; omarchy-pkg-drop voxtype-tui; }",
+        "check": "! pacman -Q voxtype-tui >/dev/null 2>&1 && test ! -e \"$HOME/.config/omarchy/plugins/io.github.zeus-deus.voxtype\"",
+        "after": [
+          "scripts.omarchy-default-dictation"
+        ],
+        "sudo": true,
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-scratchpad-opacity": {
@@ -1819,6 +1788,15 @@
         ],
         "origin": "loadouts/private_dot_config"
       },
+      "superwhisper-settings": {
+        "description": "Superwhisper's processing mode and settings",
+        "file": ".loadout/superwhisper-settings.sh",
+        "check": "file:.loadout/superwhisper-settings.sh check \"$@\"",
+        "after": [
+          "scripts.omarchy-default-dictation"
+        ],
+        "origin": "loadouts/private_dot_config/.superwhisper"
+      },
       "surfingkeys": {
         "description": "Surfingkeys in Brave, reading ~/.config/surfingkeys/surfingkeys.js",
         "file": ".loadout/surfingkeys.sh",
@@ -1938,16 +1916,6 @@
         "file": ".loadout/user-environment.sh",
         "check": "file:.loadout/user-environment.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/.environment.d"
-      },
-      "voxtype-setup": {
-        "description": "Voxtype configured, Voxtype.app created (macOS)",
-        "file": ".loadout/voxtype-setup.sh",
-        "check": "file:.loadout/voxtype-setup.sh check \"$@\"",
-        "after": [
-          "programs.voxtype"
-        ],
-        "sudo": true,
-        "origin": "loadouts/private_dot_config/.voxtype"
       },
       "workmux-setup": {
         "description": "workmux's status-tracking hooks and skills for the agents here",
@@ -2077,13 +2045,9 @@
           "ttf-firacode-nerd": "omarchy",
           "vim": "brew",
           "vlc": "omarchy",
-          "voxtype": "omarchy",
-          "voxtype-tui": "omarchy-aur",
           "workmux": "brew-tap",
-          "wtype": "omarchy",
           "yazi": "omarchy",
           "yq": "brew",
-          "zenity": "omarchy",
           "zoxide": "omarchy",
           "zsh": "omarchy"
         },
@@ -2114,9 +2078,9 @@
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2135,8 +2099,9 @@
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-idle 1000",
-          "omarchy-dictation",
-          "omarchy-dictation-gpu",
+          "omarchy-default-dictation",
+          "omarchy-remove-voxtype-extras",
+          "superwhisper-settings processing=offline language=auto",
           "setup-ssh id_ed25519",
           "github-ssh-key id_ed25519"
         ],
@@ -2217,13 +2182,9 @@
           "virt-manager": "omarchy",
           "virt-viewer": "omarchy",
           "vlc": "omarchy",
-          "voxtype": "omarchy",
-          "voxtype-tui": "omarchy-aur",
           "workmux": "brew-tap",
-          "wtype": "omarchy",
           "yazi": "omarchy",
           "yq": "brew",
-          "zenity": "omarchy",
           "zoxide": "omarchy",
           "zsh": "omarchy"
         },
@@ -2254,9 +2215,9 @@
           "omarchy-harpoon",
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
-          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/Zeus-Deus/voxtype-omarchy-plugin.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
+          "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray io.github.zeus-deus.voxtype right after io.github.sumdahl.media omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2275,8 +2236,9 @@
           "omarchy-command-overrides",
           "omarchy-keyboard-backlight-guard",
           "omarchy-idle 1000",
-          "omarchy-dictation",
-          "omarchy-dictation-gpu",
+          "omarchy-default-dictation",
+          "omarchy-remove-voxtype-extras",
+          "superwhisper-settings processing=offline language=auto",
           "setup-ssh id_ed25519",
           "github-ssh-key id_ed25519",
           "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm omalauncher-galaxy-a56 work-mac",

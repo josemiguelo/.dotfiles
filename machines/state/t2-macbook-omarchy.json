@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-06T15:55:18.991308319Z",
+  "updatedAt": "2026-11-07T23:07:59.792316175Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -134,7 +134,7 @@
     },
     "intentional": {
       "status": "installed",
-      "version": "0.5.4",
+      "version": "0.5.6",
       "reason": null
     },
     "jetbrains-toolbox": {
@@ -322,24 +322,9 @@
       "version": "3.0.24",
       "reason": null
     },
-    "voxtype": {
-      "status": "installed",
-      "version": "1.1.1",
-      "reason": null
-    },
-    "voxtype-tui": {
-      "status": "installed",
-      "version": "0.1.9",
-      "reason": null
-    },
     "workmux": {
       "status": "installed",
       "version": "0.1.277",
-      "reason": null
-    },
-    "wtype": {
-      "status": "installed",
-      "version": "0.4",
       "reason": null
     },
     "yazi": {
@@ -350,11 +335,6 @@
     "yq": {
       "status": "installed",
       "version": "4.54.1",
-      "reason": null
-    },
-    "zenity": {
-      "status": "installed",
-      "version": "4.2.2",
       "reason": null
     },
     "zoxide": {
@@ -375,7 +355,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -435,7 +415,7 @@
       "exitCode": 0
     },
     "mise-default-packages": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
       "exitCode": 0
     },
@@ -604,14 +584,14 @@
       "lastRun": null,
       "exitCode": null
     },
-    "omarchy-dictation": {
+    "omarchy-default-dictation": {
       "status": "done",
-      "lastRun": "2026-10-13T14:24:07.723742372Z",
+      "lastRun": "2026-11-07T23:07:53.902047127Z",
       "exitCode": 0
     },
-    "omarchy-dictation-gpu": {
+    "omarchy-remove-voxtype-extras": {
       "status": "done",
-      "lastRun": "2026-10-13T14:24:07.800448203Z",
+      "lastRun": "2026-11-07T23:07:55.917027341Z",
       "exitCode": 0
     },
     "setup-ssh": {

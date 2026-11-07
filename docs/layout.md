@@ -10,7 +10,7 @@ Everything loadout knows about a tool that lands in `$HOME` sits in chezmoi's so
 - A tool without any gets the same spot behind a dot. A one-liner is a file in its destination's parent (`loadouts/private_dot_config/.ripgrep.loadout.hcl`: `~/.config` unless the tool's home is elsewhere, like `loadouts/.ssh/` or `loadouts/private_dot_local/share/.fonts/`); one with scripts or files of its own is a dot-folder named after it (`loadouts/private_dot_config/.ngrok/.ngrok.loadout.hcl` + `.loadout/`). When it gains a config, drop the dot (`git mv .ngrok ngrok`).
 - Never a plain folder holding only a manifest: chezmoi creates it, empty, in `$HOME`. Dot entries that aren't chezmoi's own never reach `$HOME`.
 - `**` never enters a dot folder, so `sources` globs exactly `loadouts/**/.*.loadout.hcl`, `loadouts/**/.*/.*.loadout.hcl` and `loadouts/.etc/*/.*.loadout.hcl`: a manifest deeper inside a dot folder isn't found.
-- Omarchy's own setup of `$HOME` is `loadouts/private_dot_config/.omarchy/` (its shell and bar, overrides, scratchpad, web apps, the `omarchy-<app>` scripts) and `.hypr/` (Hyprland); its setup of Voxtype sits with Voxtype (`.voxtype/.dictation.loadout.hcl`).
+- Omarchy's own setup of `$HOME` is `loadouts/private_dot_config/.omarchy/` (its shell and bar, overrides, scratchpad, web apps, the `omarchy-<app>` scripts) and `.hypr/` (Hyprland).
 
 ## Outside `$HOME`
 
@@ -18,7 +18,7 @@ An app whose work happens outside `$HOME` still lives with the app: virtualizati
 
 ## Scripts and helpers
 
-Paths in a manifest are relative to its folder, and its commands run there with `LOADOUT_REPO` set, so moving a file with its scripts needs no edit. Helpers several apps share live in `lib/` (`"$LOADOUT_REPO/lib/…"`); one app's live in its own `.loadout/` (Omarchy's in `.omarchy/.loadout/lib/`, used by `.hypr/` and `.voxtype/` too). A script that also runs outside loadout (an Omarchy hook) reaches them relative to itself (`$HERE/../../../../lib/…`): nothing sets `LOADOUT_REPO` there.
+Paths in a manifest are relative to its folder, and its commands run there with `LOADOUT_REPO` set, so moving a file with its scripts needs no edit. Helpers several apps share live in `lib/` (`"$LOADOUT_REPO/lib/…"`); one app's live in its own `.loadout/` (Omarchy's in `.omarchy/.loadout/lib/`, used by `.hypr/` too). A script that also runs outside loadout (an Omarchy hook) reaches them relative to itself (`$HERE/../../../../lib/…`): nothing sets `LOADOUT_REPO` there.
 
 ## Homebrew, flatpak, dnf
 

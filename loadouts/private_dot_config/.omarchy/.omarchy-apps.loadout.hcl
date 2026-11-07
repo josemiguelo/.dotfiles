@@ -29,6 +29,30 @@ script "omarchy-default-browser" {
   run_after   = [program.brave, script.omarchy-brave]
 }
 
+# Superwhisper as the dictation backend Omarchy's keys (Alt+Space, Right Alt)
+# run, set by Omarchy's own installer, unattended (--background): it installs
+# superwhisper-bin when missing (Omarchy 4.5 ships it, but a machine upgraded
+# from before may not have it), runs its per-user setup and makes it the
+# backend. What a fresh 4.5 install's first run does.
+script "omarchy-default-dictation" {
+  description = "Superwhisper as Omarchy's dictation backend"
+  run         = "omarchy-install-dictation-superwhisper --background"
+  check       = "test \"$(omarchy default dictation 2>/dev/null)\" = superwhisper"
+  needs_sudo  = true
+}
+
+# What this repo added around Voxtype, Omarchy's dictation backend here before
+# Superwhisper: its bar plugin and settings TUI. Voxtype itself stays as
+# Omarchy's installer left it.
+script "omarchy-remove-voxtype-extras" {
+  description  = "no Voxtype bar plugin or settings TUI (stock Voxtype stays)"
+  run          = "omarchy plugin remove io.github.zeus-deus.voxtype --yes; omarchy-pkg-drop voxtype-tui"
+  check        = "! pacman -Q voxtype-tui >/dev/null 2>&1 && test ! -e \"$HOME/.config/omarchy/plugins/io.github.zeus-deus.voxtype\""
+  needs_sudo   = true
+  run_after    = [script.omarchy-default-dictation]
+  transitional = true
+}
+
 # Omarchy's installer (keyring, no self-update, its theme); overwrites
 # settings.json and opens VS Code once.
 script "omarchy-vscode" {
