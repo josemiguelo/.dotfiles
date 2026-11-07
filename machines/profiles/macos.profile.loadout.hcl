@@ -5,7 +5,7 @@ profile "macos" {
 
   install = [
     variant(program.setup-brew, "macos"),
-    program.ngrok, program.claude, program.kotlin-lsp,
+    program.ngrok, program.claude,
   ]
   via "brew" {
     install = [
@@ -33,6 +33,7 @@ profile "macos" {
   run = [
     local.dotfiles_all,
     script.setup-git, script.skills-repo, script.workmux-setup, script.nvim-plugins,
+    script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
     script.download-fonts,
     local.shell_scripts,
     script.mise-tools, script.mise-default-packages, script.java-macos-integration,

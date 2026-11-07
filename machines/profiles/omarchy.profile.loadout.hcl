@@ -31,7 +31,6 @@ profile "omarchy" {
     variant(program.jetbrains-toolbox, "linux"),
     variant(program.tpack, "linux"),
     program.ngrok,
-    program.kotlin-lsp,
     program.intentional,
   ]
   via "brew" {
@@ -51,7 +50,8 @@ profile "omarchy" {
     # claude comes from mise here (conf.d/omarchy.toml).
     local.dotfiles_all,
     script.setup-git, script.skills-repo, script.workmux-setup, script.default-shell,
-    script.nvim-plugins, script.unlink-brew-glib, script.keychron-launcher-access,
+    script.nvim-plugins, script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
+    script.unlink-brew-glib, script.keychron-launcher-access,
     local.shell_scripts,
     script.mise-tools, script.mise-default-packages,
     args(script.omarchy-default-agent, "claude"),

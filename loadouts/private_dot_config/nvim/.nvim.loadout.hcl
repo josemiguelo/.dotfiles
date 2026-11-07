@@ -12,16 +12,23 @@ script "nvim-plugins" {
   updates_managed_by = ".loadout/outdated-plugins.sh"
 }
 
-# kotlin.nvim's server, from its GitHub release while Mason's download link
-# is dead; kotlin.lua points the plugin at it. Its builds expire weeks after
-# release, so the update check keeps it current.
-program "kotlin-lsp" {
-  description = "Kotlin language server for Neovim (kotlin.nvim)"
-
-  custom {
-    installed_by = ".loadout/install-kotlin-lsp.sh"
-  }
-
-  version            = run_script(".loadout/outdated-kotlin-lsp.sh version")
+# kotlin.nvim's server, installed by Mason (kotlin.lua asks for it too). Its
+# builds expire weeks after release and Mason never updates by itself, so
+# Mason's newer build shows up as outdated here. A script, not a program:
+# Mason comes with the lazy plugins, after every program is installed.
+script "mason-kotlin-lsp" {
+  description        = "kotlin-lsp for kotlin.nvim, from Mason"
+  managed_by         = ".loadout/mason-kotlin-lsp.sh"
+  run_after          = [script.nvim-plugins]
   updates_managed_by = ".loadout/outdated-kotlin-lsp.sh"
+}
+
+# The copy an earlier version downloaded from kotlin-lsp's GitHub releases
+# while Mason's download link was dead (mason-registry#17523).
+script "remove-kotlin-lsp-download" {
+  description  = "no kotlin-lsp download outside Mason"
+  run          = "rm -rf \"$HOME/.local/share/kotlin-lsp\""
+  check        = "test ! -e \"$HOME/.local/share/kotlin-lsp\""
+  run_after    = [script.mason-kotlin-lsp]
+  transitional = true
 }

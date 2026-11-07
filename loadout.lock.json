@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "8348c3c9ecb36ea7c2d2b009dca130aebfb9e7a502c5f1562a1cdd0f0e75ff66",
+  "sources": "733076c4e9039db7b2cc3852df55fdd20fda4e482e3e549ff701793684da751e",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -616,24 +616,6 @@
           "brew-cask": {}
         },
         "origin": "loadouts/private_dot_config/kitty"
-      },
-      "kotlin-lsp": {
-        "description": "Kotlin language server for Neovim (kotlin.nvim)",
-        "version": {
-          "command": "file:.loadout/outdated-kotlin-lsp.sh version",
-          "regex": "([0-9]+\\.[0-9][0-9.]*)",
-          "origin": "loadouts/private_dot_config/nvim"
-        },
-        "install": {
-          "custom": {
-            "command": "file:.loadout/install-kotlin-lsp.sh"
-          }
-        },
-        "outdated": {
-          "command": "file:.loadout/outdated-kotlin-lsp.sh",
-          "upgrade": "file:.loadout/outdated-kotlin-lsp.sh update"
-        },
-        "origin": "loadouts/private_dot_config/nvim"
       },
       "lazydocker": {
         "install": {
@@ -1366,6 +1348,15 @@
         "check": "file:.loadout/machine-name.sh check \"$@\"",
         "origin": "loadouts/private_dot_config/private_omalauncher"
       },
+      "mason-kotlin-lsp": {
+        "description": "kotlin-lsp for kotlin.nvim, from Mason",
+        "file": ".loadout/mason-kotlin-lsp.sh",
+        "check": "file:.loadout/mason-kotlin-lsp.sh check \"$@\"",
+        "after": [
+          "scripts.nvim-plugins"
+        ],
+        "origin": "loadouts/private_dot_config/nvim"
+      },
       "mise-default-packages": {
         "description": "default npm/gem packages in every mise node/ruby version",
         "file": ".loadout/default-packages.sh",
@@ -1730,6 +1721,15 @@
         "check": "! flatpak --user info org.mozilla.firefox >/dev/null 2>&1",
         "origin": "loadouts/private_dot_config/.firefox"
       },
+      "remove-kotlin-lsp-download": {
+        "description": "no kotlin-lsp download outside Mason",
+        "run": "rm -rf \"$HOME/.local/share/kotlin-lsp\"",
+        "check": "test ! -e \"$HOME/.local/share/kotlin-lsp\"",
+        "after": [
+          "scripts.mason-kotlin-lsp"
+        ],
+        "origin": "loadouts/private_dot_config/nvim"
+      },
       "setup-completions": {
         "description": "shell completions",
         "file": ".loadout/completions.sh",
@@ -2020,7 +2020,6 @@
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",
-          "kotlin-lsp": "custom",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "libxcrypt-compat": "omarchy",
@@ -2060,6 +2059,8 @@
           "workmux-setup",
           "default-shell",
           "nvim-plugins",
+          "mason-kotlin-lsp",
+          "remove-kotlin-lsp-download",
           "unlink-brew-glib",
           "keychron-launcher-access",
           "zsh-plugins",
@@ -2148,7 +2149,6 @@
           "jetbrains-toolbox": "linux",
           "just": "brew",
           "kitty": "omarchy",
-          "kotlin-lsp": "custom",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "libvirt": "omarchy",
@@ -2197,6 +2197,8 @@
           "workmux-setup",
           "default-shell",
           "nvim-plugins",
+          "mason-kotlin-lsp",
+          "remove-kotlin-lsp-download",
           "unlink-brew-glib",
           "keychron-launcher-access",
           "zsh-plugins",
@@ -2281,6 +2283,11 @@
         "command": "file:.loadout/outdated-antidote-plugins.sh",
         "upgrade": "file:.loadout/outdated-antidote-plugins.sh update {item}",
         "origin": "loadouts/private_dot_config/zsh"
+      },
+      "mason-kotlin-lsp": {
+        "command": "file:.loadout/outdated-kotlin-lsp.sh",
+        "upgrade": "file:.loadout/outdated-kotlin-lsp.sh update {item}",
+        "origin": "loadouts/private_dot_config/nvim"
       },
       "mise-tools": {
         "command": "file:.loadout/outdated-tools.sh",

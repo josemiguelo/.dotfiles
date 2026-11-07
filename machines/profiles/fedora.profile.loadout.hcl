@@ -32,7 +32,6 @@ profile "fedora" {
     variant(program.tpack, "linux"),
     program.ngrok,
     program.claude,
-    program.kotlin-lsp,
   ]
   via "brew" {
     install = [
@@ -46,7 +45,8 @@ profile "fedora" {
 
   run = [
     local.dotfiles_all,
-    script.setup-git, script.default-shell, script.nvim-plugins, script.download-fonts,
+    script.setup-git, script.default-shell, script.nvim-plugins, script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
+    script.download-fonts,
     script.user-environment, script.unlink-brew-glib,
     local.shell_scripts,
     script.tmux-plugins, script.remove-brew-tmux,
