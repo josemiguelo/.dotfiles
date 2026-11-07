@@ -13,6 +13,9 @@
 # The registry is one `name<TAB>description` line per command; '#' comments and
 # blank lines are skipped. An optional third field, `<TAB>command`, is what runs
 # instead of the name (which is then just a label); the picker doesn't show it.
+# An optional fourth field, `<TAB>no-args`, runs the command at once, without
+# asking for arguments (leave the third field empty to keep the name:
+# `name<TAB>description<TAB><TAB>no-args`).
 # COMMAND_PALETTE_COMMANDS points at another file. `<registry>.local`, in no
 # repo, adds one machine's own commands (the work laptop's child repo deploys
 # its there).
@@ -57,19 +60,21 @@ palette_confirm_theme() {
 # The registry's commands as the picker shows them: a table, the names padded to
 # the longest so the descriptions line up, each column in its own color (the
 # terminal's blue and green, so they follow its theme). A line is the display
-# text, then the name and the command line (empty when the line has none), by
-# tabs: the picker shows the first field only, and what it returns says what was
-# picked without parsing the display text.
+# text, then the name, whether it asks for arguments (`args` or `no-args`) and
+# the command line (empty when the line has none), by tabs: the picker shows the
+# first field only, and what it returns says what was picked without parsing the
+# display text. The command line comes last: bash's read collapses empty
+# tab-separated fields, so only the last one may be empty.
 palette_list() {
   local registries=("$palette_commands_file")
   [[ -r $palette_commands_file.local ]] && registries+=("$palette_commands_file.local")
   cat "${registries[@]}" | grep -vE '^[[:space:]]*(#|$)' | awk -F'\t' '
-    { name[NR] = $1; desc[NR] = $2; cmd[NR] = $3; if (length($1) > width) width = length($1) }
+    { name[NR] = $1; desc[NR] = $2; cmd[NR] = $3; mode[NR] = ($4 == "no-args") ? "no-args" : "args"; if (length($1) > width) width = length($1) }
     END {
       for (i = 1; i <= NR; i++) {
         pad = sprintf("%" width "s", "")
         shown = name[i] substr(pad, 1, width - length(name[i]))
-        printf "\033[1;34m%s\033[0m  \033[32m%s\033[0m\t%s\t%s\n", shown, desc[i], name[i], cmd[i]
+        printf "\033[1;34m%s\033[0m  \033[32m%s\033[0m\t%s\t%s\t%s\n", shown, desc[i], name[i], mode[i], cmd[i]
       }
     }'
 }
@@ -91,16 +96,22 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
 
   # Esc or Ctrl-C in the picker closes the palette.
   choice=$(palette_list | fzf --ansi --delimiter=$'\t' --with-nth=1 --prompt='command> ' --header='enter: pick') || exit 0
-  IFS=$'\t' read -r _ name command_line <<<"$choice"
+  IFS=$'\t' read -r _ name arg_mode command_line <<<"$choice"
   # The command line is the registry's third field when the line has one, else the name.
   command_line=${command_line:-$name}
 
   # Yes/No question, as gum's confirm. Ctrl-C closes the palette (130); Esc is
-  # gum's 'No', so it runs the command with no arguments.
+  # gum's 'No', so it runs the command with no arguments. A no-args entry skips
+  # it, as a No.
   args=
-  palette_confirm_theme
-  gum confirm 'Enter arguments for this command?'
-  case $? in
+  if [[ $arg_mode == no-args ]]; then
+    answer=1
+  else
+    palette_confirm_theme
+    gum confirm 'Enter arguments for this command?'
+    answer=$?
+  fi
+  case $answer in
   0)
     # The arguments are edited with zsh's vared, not bash's readline: `read -e`
     # inside zsh -ic did not take ctrl+arrows. vared draws to stdout, so the

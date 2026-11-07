@@ -161,6 +161,16 @@ case "$(cat "$fix/prompt.log")" in
 *) bad "the argument prompt still uses the label (got [$(cat "$fix/prompt.log")])" ;;
 esac
 
+# A no-args fourth field: no question, no prompt, the command runs at once with
+# no arguments, by its name or by its command line.
+printf 'quick\tno questions\t\tno-args\nlabelled\tno questions\tnvim -c Bar\tno-args\n' >"$fix/noargs"
+REGISTRY_FILE="$fix/noargs" run_palette FAKE_PICK=quick < <(printf 'ignored\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic quick " "no-args: the name runs with no arguments"
+eq "$(cat "$fix/gum.log")" "" "no-args: no arguments question"
+eq "$(cat "$fix/prompt.log")" "" "no-args: no argument prompt opens"
+REGISTRY_FILE="$fix/noargs" run_palette FAKE_PICK=labelled < <(printf 'ignored\n')
+eq "$(cat "$fix/zsh.log")" "unset|-ic nvim -c Bar " "no-args: a command line runs with no arguments"
+
 # Esc in the picker: nothing runs.
 run_palette FAKE_CANCEL=1 < <(printf 'x\n')
 eq "$(cat "$fix/zsh.log")" "" "cancelled picker: no command runs"
