@@ -60,7 +60,7 @@ profile "omarchy" {
     script.link-jetbrains-launchers-linux,
 
     # Hyprland
-    args(script.omarchy-hypr-config, "input", "looknfeel"),
+    args(script.omarchy-hypr-config, "input", "looknfeel", "bindings"),
     script.omarchy-close-window-key, script.omarchy-google-bindings, script.omarchy-harpoon,
     args(script.omarchy-theme-mode, "tokyo-night", "catppuccin-latte"),
 

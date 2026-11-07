@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.2.0",
-  "sources": "59d35fc4df6d79bc014767f4a31a0cd65d141055d3fbed5c0bb2c9ce231dc397",
+  "sources": "b3b4ab583a6321694daa311a4ec2cab945f169d4e8ae6b9d9cf7482688b10d35",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2108,7 +2108,7 @@
           "remove-brew-tmux",
           "omarchy-tmux-theme",
           "link-jetbrains-launchers-linux",
-          "omarchy-hypr-config input looknfeel",
+          "omarchy-hypr-config input looknfeel bindings",
           "omarchy-close-window-key",
           "omarchy-google-bindings",
           "omarchy-harpoon",
@@ -2248,7 +2248,7 @@
           "remove-brew-tmux",
           "omarchy-tmux-theme",
           "link-jetbrains-launchers-linux",
-          "omarchy-hypr-config input looknfeel",
+          "omarchy-hypr-config input looknfeel bindings",
           "omarchy-close-window-key",
           "omarchy-google-bindings",
           "omarchy-harpoon",

@@ -1,15 +1,15 @@
 #!/bin/sh
 # Hyprland settings kept in this repo: hypr-config/<file>.lua (next to this
-# script) holds plain hl.config and hl.animation calls for
+# script) holds plain hl.config, hl.animation and hl.unbind calls for
 # ~/.config/hypr/<file>.lua, the matching personal-overrides file
 # Omarchy's hyprland.lua loads after its defaults (input, looknfeel,
 # bindings, …). The machine's opt-in names the files
 # ("omarchy-hypr-config input looknfeel"). Install writes each file's
 # contents into a block between markers in the Hyprland file, rewritten in
 # place on every install. The check doesn't read text: hypr-option.lua
-# evaluates the repo file alone to list the settings it makes, then the whole
-# Hyprland config, and every one of those settings must end up with that
-# value — a later override anywhere in the chain fails it. Install then
+# evaluates the repo file alone to list the settings it makes (and the keys
+# it unbinds), then the whole Hyprland config, and every one of those must end
+# up the same — a later override anywhere in the chain fails it. Install then
 # reloads the running Hyprland and requires no config errors.
 # usage: omarchy-hypr-config.sh [check] <file>...
 set -eu

@@ -27,8 +27,10 @@
 --   every setting the config ends up with, one per line: <path>\t<value>
 --   (general.gaps_in\t3; a list value joined by spaces; hl.device settings
 --   as device:<name>.<key>\t<value>; hl.animation as
---   animation:<leaf>.<key>\t<value>, the leaf's last call only), sorted;
---   exits 2 when the config itself fails to load.
+--   animation:<leaf>.<key>\t<value>, the leaf's last call only; every key
+--   the config binds or unbinds as bind:<KEY>\t<commands> (the key as
+--   SUPER+SHIFT+E, its binds' commands joined by " | ", nil once unbound)),
+--   sorted; exits 2 when the config itself fails to load.
 -- Limits: this RUNS the config (Omarchy's does read-only probes at load:
 -- `find`, command-exists checks), and anything the stand-in returns is a
 -- placeholder — a setting under `if hl.<query>() then` sees a fake answer.
@@ -97,6 +99,7 @@ os.getenv = function(name)
   return real_getenv(name)
 end
 local written = {} -- key -> the key as the bind wrote it ("SUPER + Q")
+local touched = {} -- every key a bind or unbind named
 
 -- hl.dsp.window.close() -> { builtin = "window.close" }, however deep.
 local function builtin(name)
@@ -118,6 +121,7 @@ hl = setmetatable({
     binds[key] = binds[key] or {}
     table.insert(binds[key], exec)
     written[key] = tostring(keys)
+    touched[key] = true
   end,
   env = function(name, value)
     envs[tostring(name)] = tostring(value)
@@ -143,6 +147,7 @@ hl = setmetatable({
   end,
   unbind = function(keys)
     binds[key_of(keys)] = nil
+    touched[key_of(keys)] = true
   end,
   -- o.bind turns a command into hl.dsp.exec_cmd(command): keep the command.
   -- Every other hl.dsp.* (window.close(), layout(…)) is a built-in action:
@@ -206,6 +211,9 @@ if path == "leaves" then
     for k, v in pairs(settings) do
       table.insert(lines, "animation:" .. leaf .. "." .. tostring(k) .. "\t" .. value_text(v))
     end
+  end
+  for key in pairs(touched) do
+    table.insert(lines, "bind:" .. key .. "\t" .. (binds[key] and table.concat(binds[key], " | ") or "nil"))
   end
   table.sort(lines)
   print(table.concat(lines, "\n"))
