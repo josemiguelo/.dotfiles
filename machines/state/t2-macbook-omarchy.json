@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-07T23:07:59.792316175Z",
+  "updatedAt": "2026-11-07T23:24:47.487000664Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -415,7 +415,7 @@
       "exitCode": 0
     },
     "mise-default-packages": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
       "exitCode": 0
     },
@@ -593,6 +593,11 @@
       "status": "done",
       "lastRun": "2026-11-07T23:07:55.917027341Z",
       "exitCode": 0
+    },
+    "superwhisper-settings": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
     },
     "setup-ssh": {
       "status": "done",
