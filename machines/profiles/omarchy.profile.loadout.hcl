@@ -6,7 +6,7 @@ profile "omarchy" {
 
   via "omarchy" {
     install = [
-      program.curl, program.git, program.gcc, program.procps-ng, program.zsh, program.chezmoi,
+      program.bun, program.curl, program.git, program.gcc, program.procps-ng, program.zsh, program.chezmoi,
       program.mise, program.kitty, program.tmux,
       local.everyday_cli,
       program.code, program.sublime-text, program.obsidian, program.spotify,
@@ -53,7 +53,7 @@ profile "omarchy" {
     script.nvim-plugins, script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
     script.unlink-brew-glib, script.keychron-launcher-access,
     local.shell_scripts,
-    script.mise-tools, script.mise-default-packages,
+    script.mise-tools, script.mise-default-packages, script.mise-drop-bun,
     args(script.omarchy-default-agent, "claude"),
     script.omarchy-default-terminal,
     script.tmux-plugins, script.remove-brew-tmux, script.omarchy-tmux-theme,

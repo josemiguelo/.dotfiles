@@ -10,7 +10,7 @@ profile "macos" {
   via "brew" {
     install = [
       local.everyday_cli,
-      program.scrcpy, program.chezmoi, program.mise, program.tmux,
+      program.bun, program.scrcpy, program.chezmoi, program.mise, program.tmux,
       program.awscli, program.trash-cli, program.yq, program.azure-cli, program.coreutils,
       program.gawk, program.gh, program.ghostscript, program.gnu-sed, program.jira-cli, program.jq,
       program.qemu, program.tree, program.unixodbc, program.wget, program.try,
@@ -36,7 +36,7 @@ profile "macos" {
     script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
     script.download-fonts,
     local.shell_scripts,
-    script.mise-tools, script.mise-default-packages, script.java-macos-integration,
+    script.mise-tools, script.mise-default-packages, script.mise-drop-bun, script.java-macos-integration,
     script.tmux-plugins,
   ]
 }

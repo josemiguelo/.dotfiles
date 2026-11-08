@@ -20,6 +20,10 @@ An app whose work happens outside `$HOME` still lives with the app: virtualizati
 
 Paths in a manifest are relative to its folder, and its commands run there with `LOADOUT_REPO` set, so moving a file with its scripts needs no edit. Helpers several apps share live in `lib/` (`"$LOADOUT_REPO/lib/…"`); one app's live in its own `.loadout/` (Omarchy's in `.omarchy/.loadout/lib/`, used by `.hypr/` too). A script that also runs outside loadout (an Omarchy hook) reaches them relative to itself (`$HERE/../../../../lib/…`): nothing sets `LOADOUT_REPO` there.
 
+## Bun scripts
+
+A loadout script is TypeScript run by Bun (`#!/usr/bin/env bun`, a `.ts` file; loadout runs a file with its `#!` interpreter): `main(check, install)` from `lib/loadout.ts` is the `check` / install protocol, and Bun Shell's ``$`…` `` runs commands, one argument per `${value}`. Shared modules are imported by name, never by `../` path: `#loadout` (`lib/loadout.ts`) and `#hypr` (`.omarchy/.loadout/lib/hypr.ts`), from `package.json`'s `imports` (a new one is a line there). `program.bun` installs Bun before any script runs. `bun install` at the repo root gives the editor Bun's types (`node_modules`, not committed); the scripts never need it. What runs before Bun exists stays `sh`: `bootstrap.sh`, and the files programs and installers name (`installed_by`, an installer's `run_script`).
+
 ## Homebrew, flatpak, dnf
 
 Every brew installer `requires` setup-brew, and setup-brew `provides "brew" { at = … }`, so brew's `bin` is on `PATH` for every command probed through it on a fresh machine; flatpak (`loadouts/private_dot_local/share/.flatpak.loadout.hcl`) and dnf (`loadouts/.etc/dnf/`) work the same way. Anything else that needs brew by a custom command calls `sh "$LOADOUT_REPO/loadouts/private_dot_config/.homebrew/.loadout/brew.sh" …`.

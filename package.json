@@ -1,0 +1,12 @@
+{
+  "name": "dotfiles-scripts",
+  "private": true,
+  "description": "loadout's Bun scripts: their shared modules by name (imports, read by Bun and by the editor), and type definitions for the editor only (bun install); the scripts run without installing anything.",
+  "imports": {
+    "#loadout": "./lib/loadout.ts",
+    "#hypr": "./loadouts/private_dot_config/.omarchy/.loadout/lib/hypr.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

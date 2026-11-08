@@ -36,7 +36,7 @@ profile "fedora" {
   via "brew" {
     install = [
       program.yazi, program.eza, program.atuin, program.git-delta, program.chezmoi,
-      program.yq, program.awscli, program.trash-cli,
+      program.bun, program.yq, program.awscli, program.trash-cli,
     ]
   }
   via "brew-tap" {

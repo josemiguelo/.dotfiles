@@ -23,6 +23,17 @@ program "mise" {
 
 # Exactly the versions config.toml pins; and whether those pins are behind
 # upstream.
+# Bun left mise's tools: the system's (program.bun) is the one Bun, the one
+# loadout's scripts run with. mise keeps an uninstalled tool's versions.
+# From $HOME, where mise reads the global config only.
+script "mise-drop-bun" {
+  description  = "no Bun from mise (the system's is the one Bun)"
+  run          = "cd \"$HOME\" && mise uninstall --all bun"
+  check        = "cd \"$HOME\" && ! mise ls --installed bun 2>/dev/null | grep -q ."
+  run_after    = [script.mise-tools]
+  transitional = true
+}
+
 script "mise-tools" {
   description        = "mise tools at the versions ~/.config/mise/config.toml pins"
   managed_by         = ".loadout/tools.sh"

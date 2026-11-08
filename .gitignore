@@ -23,3 +23,4 @@ loadouts/private_dot_config/zsh/**/*.zwc.old
 loadouts/private_dot_config/zsh/dot_zplugins.zsh
 loadouts/private_dot_config/zsh/~*
 loadouts/private_dot_config/zsh/dot_zlocal
+node_modules/

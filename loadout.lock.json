@@ -1,11 +1,11 @@
 {
   "format": 1,
-  "toolVersion": "4.2.0",
-  "sources": "733076c4e9039db7b2cc3852df55fdd20fda4e482e3e549ff701793684da751e",
+  "toolVersion": "4.3.0",
+  "sources": "4047041d3d7e94adc6b0a5aac04f71c4e46cef270b4ea1b4cd8ea36bb0e39bcf",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "4.2.0"
+      "min-tool-version": "4.3.0"
     },
     "layout": {
       "state": "machines/state",
@@ -263,6 +263,13 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/btop"
+      },
+      "bun": {
+        "install": {
+          "omarchy": {},
+          "brew": {}
+        },
+        "origin": "loadouts/private_dot_config"
       },
       "bzip2-devel": {
         "install": {
@@ -1366,6 +1373,15 @@
         ],
         "origin": "loadouts/private_dot_config/mise"
       },
+      "mise-drop-bun": {
+        "description": "no Bun from mise (the system's is the one Bun)",
+        "run": "cd \"$HOME\" && mise uninstall --all bun",
+        "check": "cd \"$HOME\" && ! mise ls --installed bun 2>/dev/null | grep -q .",
+        "after": [
+          "scripts.mise-tools"
+        ],
+        "origin": "loadouts/private_dot_config/mise"
+      },
       "mise-tools": {
         "description": "mise tools at the versions ~/.config/mise/config.toml pins",
         "file": ".loadout/tools.sh",
@@ -1445,8 +1461,8 @@
       },
       "omarchy-activity-monitor-size": {
         "description": "activity monitor (btop) window size",
-        "file": ".loadout/omarchy-activity-monitor-size.sh",
-        "check": "file:.loadout/omarchy-activity-monitor-size.sh check \"$@\"",
+        "file": ".loadout/omarchy-activity-monitor-size.ts",
+        "check": "file:.loadout/omarchy-activity-monitor-size.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-agents-prune": {
@@ -1495,8 +1511,8 @@
       },
       "omarchy-close-window-key": {
         "description": "SUPER+Q closes windows",
-        "file": ".loadout/omarchy-close-window-key.sh",
-        "check": "file:.loadout/omarchy-close-window-key.sh check \"$@\"",
+        "file": ".loadout/omarchy-close-window-key.ts",
+        "check": "file:.loadout/omarchy-close-window-key.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-command-overrides": {
@@ -1542,14 +1558,14 @@
       },
       "omarchy-google-bindings": {
         "description": "email and calendar keys open Gmail and Google Calendar",
-        "file": ".loadout/omarchy-google-bindings.sh",
-        "check": "file:.loadout/omarchy-google-bindings.sh check \"$@\"",
+        "file": ".loadout/omarchy-google-bindings.ts",
+        "check": "file:.loadout/omarchy-google-bindings.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-harpoon": {
         "description": "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape",
-        "file": ".loadout/omarchy-harpoon.sh",
-        "check": "file:.loadout/omarchy-harpoon.sh check \"$@\"",
+        "file": ".loadout/omarchy-harpoon.ts",
+        "check": "file:.loadout/omarchy-harpoon.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1557,8 +1573,8 @@
       },
       "omarchy-hypr-config": {
         "description": "Hyprland settings from hypr-config/*.lua",
-        "file": ".loadout/omarchy-hypr-config.sh",
-        "check": "file:.loadout/omarchy-hypr-config.sh check \"$@\"",
+        "file": ".loadout/omarchy-hypr-config.ts",
+        "check": "file:.loadout/omarchy-hypr-config.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-idle": {
@@ -1641,8 +1657,8 @@
       },
       "omarchy-theme-mode": {
         "description": "Hyper+Enter switches between the dark and light theme",
-        "file": ".loadout/omarchy-theme-mode.sh",
-        "check": "file:.loadout/omarchy-theme-mode.sh check \"$@\"",
+        "file": ".loadout/omarchy-theme-mode.ts",
+        "check": "file:.loadout/omarchy-theme-mode.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.hypr"
       },
       "omarchy-tmux-theme": {
@@ -2002,6 +2018,7 @@
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
+          "bun": "omarchy",
           "chezmoi": "omarchy",
           "code": "omarchy",
           "curl": "omarchy",
@@ -2067,6 +2084,7 @@
           "setup-completions",
           "mise-tools",
           "mise-default-packages",
+          "mise-drop-bun",
           "omarchy-default-agent claude",
           "omarchy-default-terminal",
           "tmux-plugins",
@@ -2129,6 +2147,7 @@
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
+          "bun": "omarchy",
           "chezmoi": "omarchy",
           "code": "omarchy",
           "curl": "omarchy",
@@ -2205,6 +2224,7 @@
           "setup-completions",
           "mise-tools",
           "mise-default-packages",
+          "mise-drop-bun",
           "omarchy-default-agent claude",
           "omarchy-default-terminal",
           "tmux-plugins",

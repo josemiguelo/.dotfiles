@@ -9,26 +9,26 @@
 # machine names.
 script "omarchy-hypr-config" {
   description = "Hyprland settings from hypr-config/*.lua"
-  managed_by  = ".loadout/omarchy-hypr-config.sh"
+  managed_by  = ".loadout/omarchy-hypr-config.ts"
 }
 
 script "omarchy-close-window-key" {
   description = "SUPER+Q closes windows"
-  managed_by  = ".loadout/omarchy-close-window-key.sh"
+  managed_by  = ".loadout/omarchy-close-window-key.ts"
 }
 
 # The email/calendar keys rebound from HEY to Gmail and Google Calendar web
 # apps.
 script "omarchy-google-bindings" {
   description = "email and calendar keys open Gmail and Google Calendar"
-  managed_by  = ".loadout/omarchy-google-bindings.sh"
+  managed_by  = ".loadout/omarchy-google-bindings.ts"
 }
 
 # btop's window at the machine's size (pixels or a share: 80% 80%), not
 # 875x600.
 script "omarchy-activity-monitor-size" {
   description = "activity monitor (btop) window size"
-  managed_by  = ".loadout/omarchy-activity-monitor-size.sh"
+  managed_by  = ".loadout/omarchy-activity-monitor-size.ts"
 }
 
 # Hotkeys on Hyper, like Raycast's: jump to an app, or show a scratchpad
@@ -37,7 +37,7 @@ script "omarchy-activity-monitor-size" {
 # github.com/josemiguelo/omarchy-harpoon, which omarchy-plugins installs.
 script "omarchy-harpoon" {
   description = "Hyper+letter app and overlay hotkeys, the scratchpad on Hyper+Escape"
-  managed_by  = ".loadout/omarchy-harpoon.sh"
+  managed_by  = ".loadout/omarchy-harpoon.ts"
   run_after   = [script.omarchy-plugins]
 }
 
@@ -45,5 +45,5 @@ script "omarchy-harpoon" {
 # (Hyper+Enter).
 script "omarchy-theme-mode" {
   description = "Hyper+Enter switches between the dark and light theme"
-  managed_by  = ".loadout/omarchy-theme-mode.sh"
+  managed_by  = ".loadout/omarchy-theme-mode.ts"
 }

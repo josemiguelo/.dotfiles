@@ -1,6 +1,6 @@
 -- App and scratchpad keys on Hyper (SUPER+CTRL+ALT+SHIFT, sent by the
 -- keyboard): see ~/.config/hypr/harpoon.lua for the modes
--- (loadouts/private_dot_config/.hypr/.loadout/omarchy-harpoon.sh rewrites this block).
+-- (loadouts/private_dot_config/.hypr/.loadout/omarchy-harpoon.ts rewrites this block).
 local harpoon = require("hypr.harpoon")
 local hyper = "SUPER + CTRL + ALT + SHIFT + "
 harpoon.bind(hyper .. "T", { name = "Terminal", class = "^kitty$", launch = "omarchy-launch-terminal", mode = "jump" })

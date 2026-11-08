@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-07T23:41:20.868365413Z",
+  "updatedAt": "2026-11-08T00:19:59.865594878Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -51,6 +51,11 @@
       "status": "installed",
       "version": "1.4.7",
       "reason": null
+    },
+    "bun": {
+      "status": "missing",
+      "version": null,
+      "reason": "error: package 'bun' was not found"
     },
     "chezmoi": {
       "status": "installed",
@@ -350,7 +355,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -420,7 +425,7 @@
       "exitCode": 0
     },
     "mise-default-packages": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
       "exitCode": 0
     },
@@ -456,27 +461,27 @@
     },
     "omarchy-hypr-config": {
       "status": "done",
-      "lastRun": "2026-11-06T15:39:35.065489521Z",
-      "exitCode": 1
+      "lastRun": "2026-11-08T00:19:56.096197416Z",
+      "exitCode": 0
     },
     "omarchy-close-window-key": {
       "status": "done",
-      "lastRun": "2026-10-13T14:22:52.610484317Z",
+      "lastRun": "2026-11-08T00:19:54.464505495Z",
       "exitCode": 0
     },
     "omarchy-google-bindings": {
       "status": "done",
-      "lastRun": "2026-10-13T14:22:52.771832959Z",
+      "lastRun": "2026-11-08T00:19:55.348435809Z",
       "exitCode": 0
     },
     "omarchy-harpoon": {
       "status": "done",
-      "lastRun": "2026-10-28T02:13:43.572064700Z",
+      "lastRun": "2026-11-08T00:19:55.963553867Z",
       "exitCode": 0
     },
     "omarchy-theme-mode": {
       "status": "done",
-      "lastRun": "2026-10-28T02:13:44.280262330Z",
+      "lastRun": "2026-11-08T00:19:56.272121391Z",
       "exitCode": 0
     },
     "omarchy-bar": {
@@ -671,7 +676,7 @@
     },
     "omarchy-activity-monitor-size": {
       "status": "done",
-      "lastRun": "2026-10-13T14:27:11.504990272Z",
+      "lastRun": "2026-11-08T00:19:54.269578131Z",
       "exitCode": 0
     },
     "omarchy-scratchpad-opacity": {
