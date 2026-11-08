@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "4.2.0",
-  "updatedAt": "2026-11-08T00:19:59.865594878Z",
+  "toolVersion": "4.3.0",
+  "updatedAt": "2026-11-08T02:55:22.076979586Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -53,9 +53,9 @@
       "reason": null
     },
     "bun": {
-      "status": "missing",
-      "version": null,
-      "reason": "error: package 'bun' was not found"
+      "status": "installed",
+      "version": "1.4.3",
+      "reason": null
     },
     "chezmoi": {
       "status": "installed",
@@ -355,7 +355,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -427,6 +427,11 @@
     "mise-default-packages": {
       "status": "done",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
+      "exitCode": 0
+    },
+    "mise-drop-bun": {
+      "status": "done",
+      "lastRun": "2026-11-08T02:45:44.768538617Z",
       "exitCode": 0
     },
     "omarchy-default-agent": {
