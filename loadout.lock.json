@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "f23404080a088101deb01d97a40a0d5084be85e2cf039f8d0101dc5a1c878724",
+  "sources": "77c262eaab9bc8f5de73e36da48aaaba8a4ec1f95e44b569b44a83364d6c3996",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -309,6 +309,12 @@
         ],
         "origin": "loadouts/private_dot_claude"
       },
+      "cmocka": {
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
+      },
       "code": {
         "description": "Visual Studio Code",
         "install": {
@@ -604,6 +610,12 @@
         },
         "origin": "loadouts/private_dot_config"
       },
+      "json-c": {
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
+      },
       "just": {
         "install": {
           "brew": {},
@@ -670,6 +682,13 @@
         },
         "origin": "loadouts/.etc/dnf"
       },
+      "linux-apfs-rw-dkms": {
+        "description": "APFS driver the Wi-Fi firmware fetcher mounts the macOS volume with (DKMS)",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "loadout": {
         "description": "loadout, which reads this repo",
         "version": {
@@ -701,6 +720,12 @@
         "description": "MeetingBar -- calendar meetings in the menu bar",
         "install": {
           "brew-cask": {}
+        },
+        "origin": "loadouts/private_dot_config"
+      },
+      "meson": {
+        "install": {
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -745,6 +770,12 @@
           "$HOME/.local/bin"
         ],
         "origin": "loadouts/private_dot_config/.ngrok"
+      },
+      "ninja": {
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
       },
       "obs": {
         "description": "OBS Studio -- screen recording/streaming",
@@ -818,6 +849,13 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/.libvirt"
+      },
+      "qemu-full": {
+        "description": "QEMU with every component (what omarchy-iso-test asks for)",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
       },
       "raycast": {
         "description": "Raycast launcher",
@@ -1008,8 +1046,123 @@
         },
         "origin": "loadouts/private_dot_config/.libvirt"
       },
-      "t2fanrd": {
-        "description": "T2 Mac fan control daemon",
+      "t2-arch-packages-keyring": {
+        "description": "the [t2-arch-packages] signing key, for pacman-key --populate",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-arch-packages-repo": {
+        "description": "the signed [t2-arch-packages] pacman repo, kept across pacman.conf refreshes",
+        "install": {
+          "omarchy": {
+            "command": "file:.loadout/arch-packages-repo.sh install",
+            "check": "file:.loadout/arch-packages-repo.sh check",
+            "present": true,
+            "sudo": true
+          }
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-bluetooth-dkms": {
+        "description": "btbcm/hci_uart with KaiT2en's Apple fixes: Bluetooth LE devices show up and connect (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-dkms-guard": {
+        "description": "aborts linux-omarchy upgrades that would break the T2 DKMS modules",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-fan-control": {
+        "description": "fan daemon and GTK app on t2smc (replaces t2fanrd)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-precision-trackpad-dkms": {
+        "description": "internal trackpad multitouch and Force Touch (DKMS; stock kernels see a plain mouse)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2bce-audio-ucm": {
+        "description": "ALSA UCM profiles for the T2 audio driver",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2bce-stack-dkms": {
+        "description": "T2 BCE bus: internal keyboard/trackpad, audio transport (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2sbs-dkms": {
+        "description": "battery charge relative to full (DKMS, replaces sbs)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2smc-dkms": {
+        "description": "T2 SMC: fans, charge limit, sensors, RTC (DKMS, replaces applesmc)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2smp-dkms": {
+        "description": "secondary CPUs offline around suspend: ~1 s wake (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2thunderbolt-dkms": {
+        "description": "Thunderbolt PM ordering, NHI before its ports (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
         "install": {
           "omarchy": {}
         },
@@ -1832,10 +1985,11 @@
         "origin": "loadouts/private_dot_config/surfingkeys"
       },
       "t2-bcm-firmware": {
-        "description": "apple-bcm-firmware 14.0-1 installed explicitly, with a copy to restore it from",
+        "description": "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback",
         "file": ".loadout/bcm-firmware.sh",
         "check": "file:.loadout/bcm-firmware.sh check \"$@\"",
         "after": [
+          "programs.linux-apfs-rw-dkms",
           "scripts.onepassword-cli"
         ],
         "sudo": true,
@@ -1845,26 +1999,6 @@
         "description": "keep the EC hardware clock set (T2 Mac)",
         "file": ".loadout/boot-clock.sh",
         "check": "file:.loadout/boot-clock.sh check \"$@\"",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-fan-curve": {
-        "description": "t2fanrd fan curve in /etc/t2fand.conf",
-        "file": ".loadout/fan-curve.sh",
-        "check": "file:.loadout/fan-curve.sh check \"$@\"",
-        "after": [
-          "programs.t2fanrd"
-        ],
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-fan-gpu-card": {
-        "description": "the GPU with a temperature sensor as card0, where t2fanrd reads it",
-        "file": ".loadout/fan-gpu-card.sh",
-        "check": "file:.loadout/fan-gpu-card.sh check \"$@\"",
-        "after": [
-          "programs.t2fanrd"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -1893,6 +2027,13 @@
             "origin": "loadouts/.etc/t2"
           }
         },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-kernel-args": {
+        "description": "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)",
+        "file": ".loadout/kernel-args.sh",
+        "check": "file:.loadout/kernel-args.sh check \"$@\"",
+        "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
       "t2-render-gpu": {
@@ -2149,6 +2290,7 @@
           "btop": "omarchy",
           "bun": "omarchy",
           "chezmoi": "omarchy",
+          "cmocka": "omarchy",
           "code": "omarchy",
           "curl": "omarchy",
           "dnsmasq": "omarchy",
@@ -2166,18 +2308,23 @@
           "gum": "omarchy",
           "intentional": "custom",
           "jetbrains-toolbox": "linux",
+          "json-c": "omarchy",
           "just": "brew",
           "kitty": "omarchy",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
           "libvirt": "omarchy",
           "libxcrypt-compat": "omarchy",
+          "linux-apfs-rw-dkms": "omarchy",
+          "meson": "omarchy",
           "mise": "omarchy",
           "ngrok": "custom",
+          "ninja": "omarchy",
           "obsidian": "omarchy",
           "omarchy-package-lists": "custom",
           "procps-ng": "omarchy",
           "qemu-desktop": "omarchy",
+          "qemu-full": "omarchy",
           "ripgrep": "omarchy",
           "rocm-smi-lib": "omarchy",
           "scrcpy": "brew",
@@ -2189,7 +2336,18 @@
           "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
-          "t2fanrd": "omarchy",
+          "t2-arch-packages-keyring": "omarchy",
+          "t2-arch-packages-repo": "omarchy",
+          "t2-bluetooth-dkms": "omarchy",
+          "t2-dkms-guard": "omarchy",
+          "t2-fan-control": "omarchy",
+          "t2-precision-trackpad-dkms": "omarchy",
+          "t2bce-audio-ucm": "omarchy",
+          "t2bce-stack-dkms": "omarchy",
+          "t2sbs-dkms": "omarchy",
+          "t2smc-dkms": "omarchy",
+          "t2smp-dkms": "omarchy",
+          "t2thunderbolt-dkms": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
           "tpack": "linux",
@@ -2265,8 +2423,7 @@
           "github-ssh-key id_ed25519",
           "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm omalauncher-galaxy-a56 work-mac",
           "t2-hid-apple-keyboard",
-          "t2-fan-curve",
-          "t2-fan-gpu-card",
+          "t2-kernel-args",
           "t2-boot-clock",
           "t2-gmux-backlight",
           "t2-bcm-firmware",

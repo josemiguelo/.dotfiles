@@ -1,43 +1,53 @@
 #!/bin/sh
 # Keep the T2 Mac's hardware clock set.
 #
-# The MacBookPro16,1 has one real, battery-backed RTC living in the EC. It is
-# exposed to Linux twice:
+# The MacBookPro16,1 has one real, battery-backed RTC living in the EC. Linux
+# sees it up to three times:
 #
-#   rtc0  legacy CMOS ports. What the kernel reads at boot (hctosys=1), but
-#         writes to it are discarded by the firmware — which is where the
-#         kernel's 11-minute NTP writeback goes, so it never took effect.
-#   rtc1  the ACPI Time and Alarm Device \_SB.PCI0.LPCB.ARTC (ACPI000E). Its
-#         _SRT method is the only write that actually sticks.
+#   rtc_cmos  legacy CMOS ports, rtc0. What the kernel reads at boot
+#             (hctosys=1), but writes to it are discarded by the firmware —
+#             which is where the kernel's 11-minute NTP writeback goes, so it
+#             never took effect.
+#   t2smc     KaiT2en's SMC driver (APP0001) registers the clock as an RTC it
+#             can read and write. On linux-omarchy it loads from the initramfs
+#             and takes rtc1 (reading the same time as rtc0).
+#   acpi-tad  the ACPI Time and Alarm Device \_SB.PCI0.LPCB.ARTC (ACPI000E).
+#             Its _SRT method writes the clock; reading it back returns -EIO
+#             on a stock kernel (Apple's _GRT fills the ACPI validity byte
+#             from an EC field it declares as padding, so acpi_tad throws the
+#             timestamp away). It was rtc1 under linux-t2, rtc2 now.
 #
-# So nothing in Linux had ever set this clock. It ticked accurately from a
+# Before, nothing in Linux had ever set this clock. It ticked accurately from a
 # cold-boot zero, every boot read back 1970-01-28, and systemd bumped that to
 # its own build date — leaving the machine ~6 weeks in the past until chrony
 # synced. Journal timestamps were wrong and PackageKit's reboot-to-install
 # offline updates aborted before rpm ever opened the database.
 #
-# One write through rtc1 fixes the boot clock permanently (rtc0 reads the same
-# EC clock, so hctosys picks it up); the shutdown hook keeps it from drifting.
-#
-# Reading rtc1 back returns -EIO on a stock kernel: Apple's _GRT fills the ACPI
-# validity byte (offset 7) from an EC field it declares as padding, so
-# acpi_tad throws away a perfectly good timestamp. Only the read path checks
-# that byte, which is why setting the clock works unpatched. The kernel quirk
-# that makes rtc1 readable is a separate, optional thing.
+# A shutdown unit writes the system time back through t2smc, or the ACPI TAD
+# where t2smc isn't loaded. Which rtcN each is depends on the kernel and load
+# order, so the unit runs a helper that picks the device by name at shutdown,
+# and neither the unit nor the helper names a number. Install also sets the
+# clock right away.
 set -eu
 
 UNIT=/etc/systemd/system/sync-hwclock.service
+HELPER=/usr/local/sbin/t2-hwclock-save
 
-# The EC clock, by name rather than by enumeration order — if rtc numbering
-# ever shifts, the generated unit stops matching and check reports pending.
-rtc_dev() {
-  for r in /sys/class/rtc/rtc*; do
-    if grep -q ACPI000E "$r/name" 2>/dev/null; then
-      echo "/dev/${r##*/}"
-      return 0
-    fi
+helper_text() {
+  cat <<'EOF'
+#!/bin/sh
+# Managed by loadout (t2-boot-clock): write the system time to the T2 Mac's EC
+# clock, through t2smc (APP0001) or else the ACPI TAD (ACPI000E), picked by
+# name since their rtcN numbers follow the kernel and load order.
+for name in APP0001 ACPI000E; do
+  for rtc in /sys/class/rtc/rtc*; do
+    grep -q "$name" "$rtc/name" 2>/dev/null || continue
+    exec /usr/sbin/hwclock --rtc="/dev/${rtc##*/}" --systohc
   done
-  return 1
+done
+echo "t2-hwclock-save: no EC clock (t2smc or ACPI TAD) here" >&2
+exit 1
+EOF
 }
 
 unit_text() {
@@ -53,24 +63,25 @@ Conflicts=shutdown.target
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/true
-ExecStop=/usr/sbin/hwclock --rtc=$1 --systohc
+ExecStop=$HELPER
 
 [Install]
 WantedBy=multi-user.target
 EOF
 }
 
-# Apple-only: elsewhere an ACPI000E device is a normal TAD next to a working
-# RTC, and there is nothing to fix.
+# Apple-only, and only with an EC clock device: elsewhere an ACPI000E device
+# is a normal TAD next to a working RTC, and there is nothing to fix.
 applicable() {
   [ "$(cat /sys/class/dmi/id/sys_vendor 2>/dev/null)" = "Apple Inc." ] || return 1
-  DEV=$(rtc_dev) || return 1
+  grep -q -E 'APP0001|ACPI000E' /sys/class/rtc/rtc*/name 2>/dev/null
 }
 
 case "${1:-install}" in
   check)
     applicable || exit 0
-    [ "$(cat "$UNIT" 2>/dev/null)" = "$(unit_text "$DEV")" ]
+    [ -x "$HELPER" ] && [ "$(cat "$HELPER")" = "$(helper_text)" ]
+    [ "$(cat "$UNIT" 2>/dev/null)" = "$(unit_text)" ]
     systemctl is-enabled --quiet sync-hwclock.service
     ;;
   install)
@@ -78,13 +89,16 @@ case "${1:-install}" in
       echo "No Apple EC clock here; nothing to do."
       exit 0
     fi
-    if [ "$(cat "$UNIT" 2>/dev/null)" != "$(unit_text "$DEV")" ]; then
-      unit_text "$DEV" | sudo tee "$UNIT" >/dev/null
+    if ! { [ -x "$HELPER" ] && [ "$(cat "$HELPER")" = "$(helper_text)" ]; }; then
+      helper_text | sudo install -D -m 755 /dev/stdin "$HELPER"
+    fi
+    if [ "$(cat "$UNIT" 2>/dev/null)" != "$(unit_text)" ]; then
+      unit_text | sudo tee "$UNIT" >/dev/null
       sudo systemctl daemon-reload
     fi
     sudo systemctl enable --now sync-hwclock.service
     # Set it now, so the fix applies without waiting for a shutdown.
-    sudo /usr/sbin/hwclock --rtc="$DEV" --systohc
+    sudo "$HELPER"
     ;;
   *) echo "usage: $0 [check|install]" >&2; exit 2 ;;
 esac

@@ -6,7 +6,7 @@ profile "t2-macbook" {
 
   via "omarchy" {
     install = [
-      program.t2fanrd,
+      local.kait2en, # KaiT2en's T2 drivers on linux-omarchy, and their repo
       local.arch_virtualization,
       program.solaar,
       program.rocm-smi-lib, # btop's stats for the Radeon Pro 5300M/5500M
@@ -25,7 +25,7 @@ profile "t2-macbook" {
     ),
 
     variant(script.t2-hid-apple-keyboard, "arch"),
-    script.t2-fan-curve, script.t2-fan-gpu-card, script.t2-boot-clock, script.t2-gmux-backlight,
+    script.t2-kernel-args, script.t2-boot-clock, script.t2-gmux-backlight,
     script.t2-bcm-firmware,
     script.t2-render-gpu,
     variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
