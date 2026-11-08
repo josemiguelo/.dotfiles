@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "77c262eaab9bc8f5de73e36da48aaaba8a4ec1f95e44b569b44a83364d6c3996",
+  "sources": "85c154d6fdadebd4b7b010af27175b2eed90cee13dba2d7a2cc67a76208de030",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1486,6 +1486,20 @@
         "sudo": true,
         "origin": "loadouts/private_dot_config/mise"
       },
+      "kait2en-dev": {
+        "description": "KaiT2en -> Omarchy development: forks, clones, signing key, daily kait2en-sync",
+        "file": ".loadout/kait2en-dev.sh",
+        "check": "file:.loadout/kait2en-dev.sh check \"$@\"",
+        "after": [
+          "scripts.bare-repos",
+          "scripts.onepassword-cli",
+          "programs.meson",
+          "programs.ninja",
+          "programs.json-c",
+          "programs.cmocka"
+        ],
+        "origin": "loadouts/.repos"
+      },
       "keychron-launcher-access": {
         "description": "Keychron Launcher can reach the keyboard (WebHID)",
         "file": ".loadout/launcher-access.sh",
@@ -2434,7 +2448,9 @@
           "omarchy-activity-monitor-size 90% 90%",
           "omarchy-scratchpad-opacity 0.99",
           "solaar-no-autostart",
-          "intentional-sync t2-macbook"
+          "intentional-sync t2-macbook",
+          "bare-repos t2-arch-packages omarchy omarchy-iso",
+          "kait2en-dev"
         ],
         "script-variants": {
           "setup-libvirt": "arch",
