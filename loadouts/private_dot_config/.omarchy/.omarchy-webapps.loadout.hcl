@@ -4,21 +4,21 @@
 # across re-provisioning.
 script "omarchy-webapps-remove" {
   description = "Omarchy web apps removed"
-  managed_by  = ".loadout/omarchy-webapps-remove.sh"
+  managed_by  = ".loadout/omarchy-webapps-remove.ts"
 }
 
 script "omarchy-webapp-gmail" {
   description = "Gmail web app, the default for email links"
-  managed_by  = ".loadout/omarchy-webapp-gmail.sh"
+  managed_by  = ".loadout/omarchy-webapp-gmail.ts"
   run_after   = [script.omarchy-webapps-remove]  # HEY's launcher claims mailto too
 }
 
 script "omarchy-webapp-google-calendar" {
   description = "Google Calendar web app"
-  managed_by  = ".loadout/omarchy-webapp-google-calendar.sh"
+  managed_by  = ".loadout/omarchy-webapp-google-calendar.ts"
 }
 
 script "omarchy-webapp-claude" {
   description = "Claude web app, the AI overlay's main app (Hyper+A)"
-  managed_by  = ".loadout/omarchy-webapp-claude.sh"
+  managed_by  = ".loadout/omarchy-webapp-claude.ts"
 }

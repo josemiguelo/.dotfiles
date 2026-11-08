@@ -1,5 +1,5 @@
 # Sourced by the scripts that override an Omarchy command (see
-# omarchy-command-overrides.sh). Everything Hyprland starts — the shell with
+# omarchy-command-overrides.ts; lib/omarchy.ts is the same for Bun scripts). Everything Hyprland starts — the shell with
 # its lock and idle code included — finds commands on a PATH that starts with
 # OVERRIDES_DIR (ahead of Omarchy's own $OMARCHY_PATH/bin), so a wrapper there
 # replaces the Omarchy command of the same name. Needs PROBE (hypr-option.lua).

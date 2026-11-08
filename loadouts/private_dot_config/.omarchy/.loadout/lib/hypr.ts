@@ -48,16 +48,18 @@ export const block = (name: string, body: string[]) => {
 
 /**
  * file with name's block replaced by body: the rest of the file, its trailing
- * blank lines dropped, a blank line, then the block at the end.
+ * blank lines dropped, a blank line, then the block at the end. Blocks named
+ * in replaces (the block's earlier owners) go too.
  */
-export async function writeBlock(file: string, name: string, body: string[]) {
-  const [begin, end] = markers(name);
+export async function writeBlock(file: string, name: string, body: string[], replaces: string[] = []) {
+  const begins = [name, ...replaces].map((n) => markers(n)[0]);
+  const ends = [name, ...replaces].map((n) => markers(n)[1]);
   const rest: string[] = [];
   let skip = false;
   for (const line of (await read(file)).split("\n")) {
-    if (line === begin) skip = true;
+    if (begins.includes(line)) skip = true;
     if (!skip) rest.push(line);
-    if (line === end) skip = false;
+    if (ends.includes(line)) skip = false;
   }
   await mkdir(dirname(file), { recursive: true });
   await Bun.write(file, rest.join("\n").replace(/\n+$/, "") + "\n\n" + block(name, body).join("\n") + "\n");

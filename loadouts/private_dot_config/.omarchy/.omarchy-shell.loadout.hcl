@@ -6,8 +6,8 @@
 # Omarchy way; and whether each is behind its remote.
 script "omarchy-plugins" {
   description        = "Omarchy shell plugins installed and enabled"
-  managed_by         = ".loadout/omarchy-plugins.sh"
-  updates_managed_by = ".loadout/outdated-plugins.sh"
+  managed_by         = ".loadout/omarchy-plugins.ts"
+  updates_managed_by = ".loadout/outdated-plugins.ts"
 }
 
 # The bar itself, one key=value per argument: "position=top", "size=24",
@@ -15,7 +15,7 @@ script "omarchy-plugins" {
 # (repeats).
 script "omarchy-bar" {
   description = "Omarchy bar position, background, thickness, icon size and stock widgets turned off"
-  managed_by  = ".loadout/omarchy-bar.sh"
+  managed_by  = ".loadout/omarchy-bar.ts"
   run_after   = [script.omarchy-plugins]
 }
 
@@ -23,7 +23,7 @@ script "omarchy-bar" {
 # per argument.
 script "omarchy-bar-own-widgets" {
   description = "This repo's own bar widgets, installed and enabled"
-  managed_by  = ".loadout/omarchy-bar-own-widgets.sh"
+  managed_by  = ".loadout/omarchy-bar-own-widgets.ts"
   run_after   = [script.omarchy-plugins]
 }
 
@@ -34,20 +34,20 @@ script "omarchy-bar-own-widgets" {
 # section on a stock bar, or one placed by an earlier line.
 script "omarchy-bar-widgets" {
   description = "Bar widgets' places and settings"
-  managed_by  = ".loadout/omarchy-bar-widgets.sh"
+  managed_by  = ".loadout/omarchy-bar-widgets.ts"
   run_after   = [script.omarchy-plugins, script.omarchy-bar-own-widgets]
 }
 
 script "omarchy-pomodoro" {
   description = "Pomodoro timer: 50+10, Trigger menu entries"
-  managed_by  = ".loadout/omarchy-pomodoro.sh"
+  managed_by  = ".loadout/omarchy-pomodoro.ts"
   run_after   = [script.omarchy-plugins]
 }
 
 # Seconds idle before the session locks and the display goes off: "1000".
 script "omarchy-idle" {
   description = "the session locks after the opt-in's seconds idle"
-  managed_by  = ".loadout/omarchy-idle.sh"
+  managed_by  = ".loadout/omarchy-idle.ts"
 }
 
 # Appearance > This Workspace's Layout in the Omarchy menu: each layout for
@@ -55,12 +55,12 @@ script "omarchy-idle" {
 # own entry relabelled "Default Workspace Layout".
 script "omarchy-workspace-layout-menu" {
   description = "Menu entries setting the focused workspace's layout only"
-  managed_by  = ".loadout/omarchy-workspace-layout-menu.sh"
+  managed_by  = ".loadout/omarchy-workspace-layout-menu.ts"
 }
 
 script "omarchy-keystroke-windows" {
   description = "Hyper+Space lists every window, by workspace (Keystroke)"
-  managed_by  = ".loadout/omarchy-keystroke-windows.sh"
+  managed_by  = ".loadout/omarchy-keystroke-windows.ts"
   run_after   = [script.omarchy-plugins]
 }
 

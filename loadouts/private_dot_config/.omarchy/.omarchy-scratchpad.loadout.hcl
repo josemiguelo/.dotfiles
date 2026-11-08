@@ -2,6 +2,6 @@
 # needs kitty.conf's dynamic_background_opacity.
 script "omarchy-scratchpad-opacity" {
   description = "scratchpad kitty windows less see-through"
-  managed_by  = ".loadout/omarchy-scratchpad-opacity.sh"
+  managed_by  = ".loadout/omarchy-scratchpad-opacity.ts"
   run_after   = [program.kitty]
 }

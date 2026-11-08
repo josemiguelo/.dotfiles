@@ -4,7 +4,9 @@
   "description": "loadout's Bun scripts: their shared modules by name (imports, read by Bun and by the editor), and type definitions for the editor only (bun install); the scripts run without installing anything.",
   "imports": {
     "#loadout": "./lib/loadout.ts",
-    "#hypr": "./loadouts/private_dot_config/.omarchy/.loadout/lib/hypr.ts"
+    "#hypr": "./loadouts/private_dot_config/.omarchy/.loadout/lib/hypr.ts",
+    "#omarchy": "./loadouts/private_dot_config/.omarchy/.loadout/lib/omarchy.ts",
+    "#webapp": "./loadouts/private_dot_config/.omarchy/.loadout/lib/webapp.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

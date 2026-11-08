@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "4047041d3d7e94adc6b0a5aac04f71c4e46cef270b4ea1b4cd8ea36bb0e39bcf",
+  "sources": "f23404080a088101deb01d97a40a0d5084be85e2cf039f8d0101dc5a1c878724",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1450,8 +1450,8 @@
       },
       "omarchy-1password": {
         "description": "1Password via Omarchy's installer, unscaled, Ctrl+Shift+Space Quick Access",
-        "file": ".loadout/omarchy-1password.sh",
-        "check": "file:.loadout/omarchy-1password.sh check \"$@\"",
+        "file": ".loadout/omarchy-1password.ts",
+        "check": "file:.loadout/omarchy-1password.ts check \"$@\"",
         "after": [
           "programs.1password",
           "programs.1password-cli"
@@ -1467,14 +1467,14 @@
       },
       "omarchy-agents-prune": {
         "description": "only the Omarchy agent launchers and configs in use",
-        "file": ".loadout/omarchy-agents-prune.sh",
-        "check": "file:.loadout/omarchy-agents-prune.sh check \"$@\"",
+        "file": ".loadout/omarchy-agents-prune.ts",
+        "check": "file:.loadout/omarchy-agents-prune.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-bar": {
         "description": "Omarchy bar position, background, thickness, icon size and stock widgets turned off",
-        "file": ".loadout/omarchy-bar.sh",
-        "check": "file:.loadout/omarchy-bar.sh check \"$@\"",
+        "file": ".loadout/omarchy-bar.ts",
+        "check": "file:.loadout/omarchy-bar.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1482,8 +1482,8 @@
       },
       "omarchy-bar-own-widgets": {
         "description": "This repo's own bar widgets, installed and enabled",
-        "file": ".loadout/omarchy-bar-own-widgets.sh",
-        "check": "file:.loadout/omarchy-bar-own-widgets.sh check \"$@\"",
+        "file": ".loadout/omarchy-bar-own-widgets.ts",
+        "check": "file:.loadout/omarchy-bar-own-widgets.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1491,8 +1491,8 @@
       },
       "omarchy-bar-widgets": {
         "description": "Bar widgets' places and settings",
-        "file": ".loadout/omarchy-bar-widgets.sh",
-        "check": "file:.loadout/omarchy-bar-widgets.sh check \"$@\"",
+        "file": ".loadout/omarchy-bar-widgets.ts",
+        "check": "file:.loadout/omarchy-bar-widgets.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins",
           "scripts.omarchy-bar-own-widgets"
@@ -1501,8 +1501,8 @@
       },
       "omarchy-brave": {
         "description": "Brave, set up by Omarchy's browser installer",
-        "file": ".loadout/omarchy-brave.sh",
-        "check": "file:.loadout/omarchy-brave.sh check \"$@\"",
+        "file": ".loadout/omarchy-brave.ts",
+        "check": "file:.loadout/omarchy-brave.ts check \"$@\"",
         "after": [
           "programs.brave"
         ],
@@ -1517,8 +1517,8 @@
       },
       "omarchy-command-overrides": {
         "description": "local replacements of Omarchy commands come first",
-        "file": ".loadout/omarchy-command-overrides.sh",
-        "check": "file:.loadout/omarchy-command-overrides.sh check \"$@\"",
+        "file": ".loadout/omarchy-command-overrides.ts",
+        "check": "file:.loadout/omarchy-command-overrides.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-default-agent": {
@@ -1532,7 +1532,7 @@
       },
       "omarchy-default-browser": {
         "description": "Omarchy's default browser",
-        "file": ".loadout/omarchy-default-browser-arch.sh",
+        "file": ".loadout/omarchy-default-browser-arch.ts",
         "check": "test \"$(omarchy default browser)\" = \"$1\"",
         "after": [
           "programs.brave",
@@ -1579,14 +1579,14 @@
       },
       "omarchy-idle": {
         "description": "the session locks after the opt-in's seconds idle",
-        "file": ".loadout/omarchy-idle.sh",
-        "check": "file:.loadout/omarchy-idle.sh check \"$@\"",
+        "file": ".loadout/omarchy-idle.ts",
+        "check": "file:.loadout/omarchy-idle.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-keyboard-backlight-guard": {
         "description": "keyboard backlight comes back after sleep",
-        "file": ".loadout/omarchy-keyboard-backlight-guard.sh",
-        "check": "file:.loadout/omarchy-keyboard-backlight-guard.sh check \"$@\"",
+        "file": ".loadout/omarchy-keyboard-backlight-guard.ts",
+        "check": "file:.loadout/omarchy-keyboard-backlight-guard.ts check \"$@\"",
         "after": [
           "scripts.omarchy-command-overrides"
         ],
@@ -1594,8 +1594,8 @@
       },
       "omarchy-keystroke-windows": {
         "description": "Hyper+Space lists every window, by workspace (Keystroke)",
-        "file": ".loadout/omarchy-keystroke-windows.sh",
-        "check": "file:.loadout/omarchy-keystroke-windows.sh check \"$@\"",
+        "file": ".loadout/omarchy-keystroke-windows.ts",
+        "check": "file:.loadout/omarchy-keystroke-windows.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1603,14 +1603,14 @@
       },
       "omarchy-plugins": {
         "description": "Omarchy shell plugins installed and enabled",
-        "file": ".loadout/omarchy-plugins.sh",
-        "check": "file:.loadout/omarchy-plugins.sh check \"$@\"",
+        "file": ".loadout/omarchy-plugins.ts",
+        "check": "file:.loadout/omarchy-plugins.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-pomodoro": {
         "description": "Pomodoro timer: 50+10, Trigger menu entries",
-        "file": ".loadout/omarchy-pomodoro.sh",
-        "check": "file:.loadout/omarchy-pomodoro.sh check \"$@\"",
+        "file": ".loadout/omarchy-pomodoro.ts",
+        "check": "file:.loadout/omarchy-pomodoro.ts check \"$@\"",
         "after": [
           "scripts.omarchy-plugins"
         ],
@@ -1628,8 +1628,8 @@
       },
       "omarchy-scratchpad-opacity": {
         "description": "scratchpad kitty windows less see-through",
-        "file": ".loadout/omarchy-scratchpad-opacity.sh",
-        "check": "file:.loadout/omarchy-scratchpad-opacity.sh check \"$@\"",
+        "file": ".loadout/omarchy-scratchpad-opacity.ts",
+        "check": "file:.loadout/omarchy-scratchpad-opacity.ts check \"$@\"",
         "after": [
           "programs.kitty"
         ],
@@ -1647,8 +1647,8 @@
       },
       "omarchy-sudoless-docker": {
         "description": "sudoless Docker (user in the docker group)",
-        "file": ".loadout/omarchy-sudoless-docker.sh",
-        "check": "file:.loadout/omarchy-sudoless-docker.sh check \"$@\"",
+        "file": ".loadout/omarchy-sudoless-docker.ts",
+        "check": "file:.loadout/omarchy-sudoless-docker.ts check \"$@\"",
         "after": [
           "programs.lazydocker"
         ],
@@ -1672,8 +1672,8 @@
       },
       "omarchy-vscode": {
         "description": "VS Code, set up by Omarchy's installer",
-        "file": ".loadout/omarchy-vscode.sh",
-        "check": "file:.loadout/omarchy-vscode.sh check \"$@\"",
+        "file": ".loadout/omarchy-vscode.ts",
+        "check": "file:.loadout/omarchy-vscode.ts check \"$@\"",
         "after": [
           "programs.code"
         ],
@@ -1681,14 +1681,14 @@
       },
       "omarchy-webapp-claude": {
         "description": "Claude web app, the AI overlay's main app (Hyper+A)",
-        "file": ".loadout/omarchy-webapp-claude.sh",
-        "check": "file:.loadout/omarchy-webapp-claude.sh check \"$@\"",
+        "file": ".loadout/omarchy-webapp-claude.ts",
+        "check": "file:.loadout/omarchy-webapp-claude.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-webapp-gmail": {
         "description": "Gmail web app, the default for email links",
-        "file": ".loadout/omarchy-webapp-gmail.sh",
-        "check": "file:.loadout/omarchy-webapp-gmail.sh check \"$@\"",
+        "file": ".loadout/omarchy-webapp-gmail.ts",
+        "check": "file:.loadout/omarchy-webapp-gmail.ts check \"$@\"",
         "after": [
           "scripts.omarchy-webapps-remove"
         ],
@@ -1696,20 +1696,20 @@
       },
       "omarchy-webapp-google-calendar": {
         "description": "Google Calendar web app",
-        "file": ".loadout/omarchy-webapp-google-calendar.sh",
-        "check": "file:.loadout/omarchy-webapp-google-calendar.sh check \"$@\"",
+        "file": ".loadout/omarchy-webapp-google-calendar.ts",
+        "check": "file:.loadout/omarchy-webapp-google-calendar.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-webapps-remove": {
         "description": "Omarchy web apps removed",
-        "file": ".loadout/omarchy-webapps-remove.sh",
-        "check": "file:.loadout/omarchy-webapps-remove.sh check \"$@\"",
+        "file": ".loadout/omarchy-webapps-remove.ts",
+        "check": "file:.loadout/omarchy-webapps-remove.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "omarchy-workspace-layout-menu": {
         "description": "Menu entries setting the focused workspace's layout only",
-        "file": ".loadout/omarchy-workspace-layout-menu.sh",
-        "check": "file:.loadout/omarchy-workspace-layout-menu.sh check \"$@\"",
+        "file": ".loadout/omarchy-workspace-layout-menu.ts",
+        "check": "file:.loadout/omarchy-workspace-layout-menu.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "onepassword-cli": {
@@ -2320,8 +2320,8 @@
         "origin": "loadouts/private_dot_config/nvim"
       },
       "omarchy-plugins": {
-        "command": "file:.loadout/outdated-plugins.sh",
-        "upgrade": "file:.loadout/outdated-plugins.sh update {item}",
+        "command": "file:.loadout/outdated-plugins.ts",
+        "upgrade": "file:.loadout/outdated-plugins.ts update {item}",
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "tmux-plugins": {
