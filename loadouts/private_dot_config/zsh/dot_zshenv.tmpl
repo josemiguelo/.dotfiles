@@ -2,6 +2,14 @@
 # (chztry), which must not switch back to ~/.config/zsh for .zshrc.
 export ZDOTDIR=${${(%):-%x}:h}
 
+# A machine whose hostname isn't its name (the work laptop keeps the one its
+# IT gave it) names itself here, and a machine whose repo is a private child
+# of this one (loadout's contract 18) names that repo; loadout and the
+# templates' loadout/machine partial read both. Neither file is in any repo.
+# Here, not in ~/.zshenv: a zsh that inherits ZDOTDIR never reads that one.
+[[ -r ~/.config/loadout/machine ]] && export LOADOUT_MACHINE=$(<~/.config/loadout/machine)
+[[ -r ~/.config/loadout/repo ]] && export LOADOUT_REPO=$(<~/.config/loadout/repo)
+
 # mise skips the dotfiles' source copies of its config (templates for
 # ~/.config/mise, not project configs); as a setting in that config it comes
 # too late, after mise has already tried to load them.

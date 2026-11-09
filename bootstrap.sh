@@ -32,7 +32,8 @@
 # work laptop's, which builds on these dotfiles) takes --child <ssh url>: the
 # child declares it, so this repo's lock isn't asked; its hostname stays the
 # one its IT gave it, the name going in ~/.config/loadout/machine and the
-# child's checkout in ~/.config/loadout/repo (~/.zshenv exports both); the
+# child's checkout in ~/.config/loadout/repo (~/.config/zsh/.zshenv exports
+# both); the
 # child is cloned over ssh before the first apply (this repo's templates read
 # its machine through LOADOUT_REPO), so the machine's ssh key must already be
 # on GitHub; and loadout sets up the child, which runs this repo's recipes.
