@@ -37,6 +37,7 @@ profile "macos" {
     script.download-fonts,
     local.shell_scripts,
     script.mise-tools, script.mise-default-packages, script.mise-drop-bun, script.java-macos-integration,
+    script.android-sdk,
     script.tmux-plugins,
   ]
 }

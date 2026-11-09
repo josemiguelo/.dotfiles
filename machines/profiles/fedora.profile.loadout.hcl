@@ -50,7 +50,7 @@ profile "fedora" {
     script.user-environment, script.unlink-brew-glib,
     local.shell_scripts,
     script.tmux-plugins, script.remove-brew-tmux,
-    script.link-jetbrains-launchers-linux, script.remove-firefox-flatpak,
+    script.link-jetbrains-launchers-linux, script.android-sdk, script.remove-firefox-flatpak,
     script.skills-repo, script.workmux-setup,
   ]
 }

@@ -9,6 +9,8 @@
 
 SCRIPT_DIR="${0:A:h}/.."
 SCRIPT="$SCRIPT_DIR/loadouts/private_dot_config/zsh/plugins/android/android.plugin.zsh"
+# The plugin reads the SDK directory from here, as deployed to ~/.local/lib.
+SDK_DIR_LIB="$SCRIPT_DIR/loadouts/private_dot_local/lib/android-sdk-dir.sh"
 WORK="$(mktemp -d)"
 
 cleanup() { rm -rf -- "${WORK:?}" }
@@ -35,8 +37,14 @@ not_contains() { [[ "$1" != *"$2"* ]] && ok "$3" || bad "$3 (expected NOT to con
 # "$ANDROID_HOME|$ANDROID_SDK_ROOT|$PATH" so the caller can assert on it. The
 # plugin only conditionally overwrites these — it never resets them — so
 # start from a clean slate rather than inheriting this machine's real values.
+# The fixture gets the deployed SDK-directory helper unless it already has
+# one (or, for the case without it, a .no-lib marker).
 run_with_home() {
   local fixture_home="$1"
+  if [[ ! -e "$fixture_home/.no-lib" ]]; then
+    mkdir -p "$fixture_home/.local/lib"
+    cp "$SDK_DIR_LIB" "$fixture_home/.local/lib/android-sdk-dir.sh"
+  fi
   HOME="$fixture_home" SCRIPT="$SCRIPT" PATH="/usr/bin:/bin" \
     ANDROID_HOME="" ANDROID_SDK_ROOT="" zsh -c '
     source "$SCRIPT"
@@ -51,6 +59,15 @@ fixture="$WORK/none"
 mkdir -p "$fixture"
 result=$(run_with_home "$fixture")
 eq "${result%%|*}" "" "leaves ANDROID_HOME unset"
+
+### helper not deployed yet ###
+echo "no ~/.local/lib/android-sdk-dir.sh"
+
+fixture="$WORK/no-lib"
+mkdir -p "$fixture/Library/Android/Sdk"
+touch "$fixture/.no-lib"
+result=$(run_with_home "$fixture" 2>&1)
+eq "${result%%|*}" "" "leaves ANDROID_HOME unset, without an error, before the dotfiles are applied"
 
 ### capitalized Sdk ###
 echo "capitalized Sdk"

@@ -57,7 +57,7 @@ profile "omarchy" {
     args(script.omarchy-default-agent, "claude"),
     script.omarchy-default-terminal,
     script.tmux-plugins, script.remove-brew-tmux, script.omarchy-tmux-theme,
-    script.link-jetbrains-launchers-linux,
+    script.link-jetbrains-launchers-linux, script.android-sdk,
 
     # Hyprland
     args(script.omarchy-hypr-config, "input", "looknfeel", "bindings"),

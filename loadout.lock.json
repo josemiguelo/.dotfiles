@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "85c154d6fdadebd4b7b010af27175b2eed90cee13dba2d7a2cc67a76208de030",
+  "sources": "c61fcbf833797d1b2808bf6fa38a28cbd682d8ac7bffeabc0e04604733ddb126",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1397,6 +1397,12 @@
       }
     },
     "scripts": {
+      "android-sdk": {
+        "description": "Android SDK packages at the IDs .loadout/packages pins",
+        "file": ".loadout/sdk.ts",
+        "check": "file:.loadout/sdk.ts check \"$@\"",
+        "origin": "loadouts/private_dot_config/.android-sdk"
+      },
       "bare-repos": {
         "description": "josemiguelo's repos as bare clones in ~/Repos/gh/josemiguelo",
         "file": ".loadout/bare-repos.sh",
@@ -2246,6 +2252,7 @@
           "remove-brew-tmux",
           "omarchy-tmux-theme",
           "link-jetbrains-launchers-linux",
+          "android-sdk",
           "omarchy-hypr-config input looknfeel bindings",
           "omarchy-close-window-key",
           "omarchy-google-bindings",
@@ -2403,6 +2410,7 @@
           "remove-brew-tmux",
           "omarchy-tmux-theme",
           "link-jetbrains-launchers-linux",
+          "android-sdk",
           "omarchy-hypr-config input looknfeel bindings",
           "omarchy-close-window-key",
           "omarchy-google-bindings",
@@ -2467,6 +2475,11 @@
       }
     },
     "outdated": {
+      "android-sdk": {
+        "command": "file:.loadout/outdated-sdk.ts",
+        "upgrade": "file:.loadout/outdated-sdk.ts update {item}",
+        "origin": "loadouts/private_dot_config/.android-sdk"
+      },
       "antidote": {
         "command": "file:.loadout/outdated-antidote.sh",
         "upgrade": "file:.loadout/outdated-antidote.sh update {item}",

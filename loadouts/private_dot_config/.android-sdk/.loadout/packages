@@ -1,0 +1,7 @@
+# The Android SDK packages every machine with Android Studio keeps, as
+# sdkmanager IDs (`sdkmanager --list` names them), one per line. Exact
+# versions, the same on every machine; `loadout outdated` says when a newer one
+# is out on a pin's own line. Whatever Studio installs on top stays.
+build-tools;36.0.0
+platforms;android-36
+platform-tools
