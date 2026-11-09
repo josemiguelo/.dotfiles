@@ -65,45 +65,49 @@ export function problems(sdk: string): string[] {
   return missing;
 }
 
-/** A JDK's major version (8 for 1.8.0), 0 when it doesn't say. */
-async function javaMajor(jdk: string): Promise<number> {
-  const result = await $`${jdk}/bin/java -version`.quiet().nothrow();
-  const version = /version "([^"]+)"/.exec(result.stderr.toString() + result.stdout.toString())?.[1] ?? "";
-  const [first, second] = version.split(".").map(Number);
-  return (first === 1 ? second : first) || 0;
-}
-
 /**
- * sdkmanager's environment: Studio's JDK, and on macOS the system keychain
- * trusted as Studio trusts it, not only the JDK's own cacerts: a
- * TLS-intercepting proxy's root lives there, and without it every download
- * fails ("IO exception while downloading manifest"). KeychainStore-ROOT, the
- * keychain's roots with its admin trust settings, needs JDK 23.
+ * The trust sdkmanager tries, in order. The JDK's own cacerts first, then on
+ * macOS the login keychain (KeychainStore), where a TLS-intercepting proxy's
+ * root lives: with that proxy every download fails on cacerts alone ("IO
+ * exception while downloading manifest"). Only a fallback: the login keychain
+ * lacks the system's public roots, and KeychainStore-ROOT, which has those,
+ * lacks the proxy's. sdkmanager caches the lists it downloads, so a failure
+ * can show up only at a package's own download: every call retries.
  */
-async function sdkmanagerEnv(): Promise<Record<string, string | undefined>> {
+const TRUST = process.platform === "darwin" ? ["", "-Djavax.net.ssl.trustStoreType=KeychainStore"] : [""];
+
+/** sdkmanager's environment: Studio's JDK, with trust added to its options. */
+function sdkmanagerEnv(trust: string): Record<string, string | undefined> {
   const jdk = studioJdk() ?? fail("Android Studio not found (its bundled JDK runs sdkmanager)");
-  let opts = process.env.SDKMANAGER_OPTS ?? "";
-  if (process.platform === "darwin" && (await javaMajor(jdk)) >= 23) {
-    opts = `${opts} -Djavax.net.ssl.trustStoreType=KeychainStore-ROOT`.trim();
-  }
+  const opts = `${process.env.SDKMANAGER_OPTS ?? ""} ${trust}`.trim();
   return { ...process.env, JAVA_HOME: jdk, SDKMANAGER_OPTS: opts };
 }
+
+const DOWNLOAD_FAILED = /Failed to download any source lists|IO exception while downloading/;
 
 /**
  * Installs ids with sdkmanager, on the terminal: its progress shows, and a
  * license it hasn't been told to accept asks there.
  */
 export async function sdkmanagerInstall(sdk: string, ids: string[]) {
-  const child = Bun.spawn([sdkmanagerPath(sdk), `--sdk_root=${sdk}`, ...ids], {
-    env: await sdkmanagerEnv(),
-    stdio: ["inherit", "inherit", "inherit"],
-  });
-  if ((await child.exited) !== 0) throw new Error(`sdkmanager couldn't install ${ids.join(" ")}`);
+  for (const [i, trust] of TRUST.entries()) {
+    if (i > 0) console.error("sdkmanager couldn't download: retrying with the login keychain's certificates");
+    const child = Bun.spawn([sdkmanagerPath(sdk), `--sdk_root=${sdk}`, ...ids], {
+      env: sdkmanagerEnv(trust),
+      stdio: ["inherit", "inherit", "inherit"],
+    });
+    if ((await child.exited) === 0) return;
+  }
+  throw new Error(`sdkmanager couldn't install ${ids.join(" ")}`);
 }
 
 /** Every ID sdkmanager knows, installed or not, from its tables' first column. */
 export async function knownIds(sdk: string): Promise<Set<string>> {
-  const list = await out($`${sdkmanagerPath(sdk)} --sdk_root=${sdk} --list`.env(await sdkmanagerEnv()));
+  let list = "";
+  for (const trust of TRUST) {
+    list = await out($`${sdkmanagerPath(sdk)} --sdk_root=${sdk} --list 2>&1`.env(sdkmanagerEnv(trust)));
+    if (!DOWNLOAD_FAILED.test(list)) break;
+  }
   return new Set(
     list
       .split("\n")

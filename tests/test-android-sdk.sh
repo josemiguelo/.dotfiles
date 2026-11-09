@@ -30,8 +30,10 @@ for d in "/Applications/Android Studio.app/Contents/jbr/Contents/Home" /opt/andr
   [[ -x "$d/bin/java" ]] && real_studio=1
 done
 
-# fixture <name> [sdk] [studio|studio21] [sdkmanager]: a case directory with
-# the repo copy and an empty pins file, and whichever of the three it names.
+# fixture <name> [sdk] [studio] [sdkmanager]: a case directory with the repo
+# copy and an empty pins file, and whichever of the three it names. A
+# needs-keychain file in it makes sdkmanager's downloads fail, as behind a TLS
+# proxy, unless it trusts the login keychain.
 fixture() {
   F="$WORK/$1"
   shift
@@ -54,11 +56,9 @@ fixture() {
   for part in "$@"; do
     case "$part" in
     sdk) mkdir -p "$SDK" ;;
-    studio | studio21)
-      local version=25.0.2
-      [[ "$part" == studio21 ]] && version=21.0.6
+    studio)
       mkdir -p "$JDK/bin"
-      printf '#!/bin/sh\necho '\''openjdk version "%s" 2026-01-20'\'' >&2\n' "$version" >"$JDK/bin/java"
+      printf '#!/bin/sh\necho '\''openjdk version "25.0.2" 2026-01-20'\'' >&2\n' >"$JDK/bin/java"
       chmod +x "$JDK/bin/java"
       ;;
     sdkmanager)
@@ -74,6 +74,16 @@ for a; do
   --list) list=1 ;;
   esac
 done
+case "${SDKMANAGER_OPTS:-}" in
+*trustStoreType=KeychainStore) ;;
+*)
+  if [ -e "$(dirname "$LOG")/needs-keychain" ]; then
+    echo "Warning: Failed to download any source lists!" >&2
+    [ "$list" = 1 ] && exit 0
+    exit 1
+  fi
+  ;;
+esac
 if [ "$list" = 1 ]; then cat "$LIST"; exit 0; fi
 for a; do
   case $a in
@@ -161,15 +171,21 @@ contains "$(cat "$LOG")" "JAVA_HOME=$JDK " "runs sdkmanager on Android Studio's 
 run sdk.ts check
 eq "$rc" 0 "check passes afterwards"
 
+not_contains "$(cat "$LOG")" "KeychainStore" "the JDK's own cacerts first, when they're enough"
+
+fixture install-behind-proxy sdk studio sdkmanager
+touch "$F/needs-keychain"
+pin "build-tools;36.0.0"
+run sdk.ts install
 if [[ "$(uname -s)" == Darwin ]]; then
-  contains "$(cat "$LOG")" "-Djavax.net.ssl.trustStoreType=KeychainStore-ROOT" \
-    "on macOS, a JDK 23+ trusts the system keychain, where a TLS proxy's root lives"
-  fixture install-jdk21 sdk studio21 sdkmanager
-  pin "platform-tools"
-  run sdk.ts install
-  not_contains "$(cat "$LOG")" "KeychainStore" "an older JDK, which lacks KeychainStore-ROOT, keeps its own cacerts"
+  eq "$rc" 0 "behind a TLS proxy on macOS, installs"
+  eq "$(grep -c ARGS= "$LOG")" 2 "after one failed try"
+  contains "$(tail -n 1 "$LOG")" "OPTS=-Djavax.net.ssl.trustStoreType=KeychainStore " \
+    "retrying with the login keychain, where the proxy's root lives"
+  contains "$out" "retrying with the login keychain" "says why it runs sdkmanager twice"
 else
-  not_contains "$(cat "$LOG")" "KeychainStore" "off macOS, the JDK keeps its own cacerts"
+  eq "$rc" 1 "behind a TLS proxy off macOS, fails"
+  not_contains "$(cat "$LOG")" "KeychainStore" "with no keychain to retry with"
 fi
 
 fixture install-nothing sdk studio sdkmanager
@@ -232,6 +248,16 @@ eq "$(cat "$PINS")" "$(printf '%s\n' "# build tools" "build-tools;36.10.0" "buil
   "rewrites only that pin, comments and the other build-tools pin kept"
 run outdated-sdk.ts update build-tools
 contains "$out" "already pinned to 36.10.0" "a second update has nothing to do"
+
+if [[ "$(uname -s)" == Darwin ]]; then
+  cp "$LIST" "$WORK/list"
+  fixture outdated-behind-proxy sdk studio sdkmanager
+  touch "$F/needs-keychain"
+  cp "$WORK/list" "$LIST"
+  pin "build-tools;36.0.0"
+  run outdated-sdk.ts
+  eq "$out" "build-tools 36.0.0 36.10.0" "behind a TLS proxy on macOS, lists through the login keychain"
+fi
 
 fixture outdated-no-tools sdk studio
 pin "build-tools;36.0.0"
