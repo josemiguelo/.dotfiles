@@ -20,7 +20,7 @@ import { $, ok, out, read, run } from "#loadout";
 const HOME = process.env.HOME!;
 const CONF = `${HOME}/.config/mise/config.toml`;
 
-await run(async (agent) => {
+async function setDefault(agent?: string) {
   if (!agent) throw new Error("usage: default-agent.ts <agent>");
   const installed = () => ok($`mise where ${agent}`.cwd(HOME));
   if (!(await installed())) await $`mise install ${agent}`.cwd(HOME);
@@ -41,4 +41,6 @@ await run(async (agent) => {
   }
   if ((await out($`omarchy default agent`.cwd(HOME))) !== agent) throw new Error(`the default agent is still not ${agent}`);
   console.log(`${agent} is Omarchy's default agent; it sets itself up the first time it's opened`);
-});
+}
+
+await run(setDefault);

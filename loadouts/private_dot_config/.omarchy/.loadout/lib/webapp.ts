@@ -16,8 +16,10 @@ export async function webapp(app: WebApp) {
   const desktop = `${process.env.HOME}/.local/share/applications/${app.name}.desktop`;
   const exec = new RegExp(`^Exec=omarchy-launch-webapp.*${app.host.source}`, "m");
   const ready = async () => exec.test(await read(desktop));
-  await main(ready, async () => {
+  async function install() {
     await $`omarchy-webapp-install ${app.name} ${app.url} ${app.icon}`;
     if (!(await ready())) throw new Error(`${app.name} web app not in place after install`);
-  });
+  }
+
+  await main(ready, install);
 }

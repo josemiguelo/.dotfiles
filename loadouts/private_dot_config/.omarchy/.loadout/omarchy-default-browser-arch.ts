@@ -6,8 +6,10 @@
 // usage: omarchy-default-browser-arch.ts <browser>
 import { $, has, run } from "#loadout";
 
-await run(async (browser) => {
+async function setDefault(browser?: string) {
   if (!browser) throw new Error("usage: omarchy-default-browser-arch.ts <browser>");
   if (!has(browser)) throw new Error(`${browser} is not installed`);
   await $`omarchy default browser ${browser}`;
-});
+}
+
+await run(setDefault);

@@ -16,7 +16,7 @@ import { CONF, cloneOf, declared, toolsPath } from "#tmux";
 const GCB = repoPath("lib/git-clones-behind.sh");
 const name = (repo: string) => repo.split("/").pop()!;
 
-await run(async (mode, want) => {
+async function outdated(mode?: string, want?: string) {
   if (!existsSync(CONF)) return;
   const env = {
     ...process.env,
@@ -50,4 +50,6 @@ await run(async (mode, want) => {
     console.log(`${name(repo)} - ${tip} not installed https://github.com/${repo}`);
   }
   if (dirs.length > 0) await $`sh ${GCB} ${dirs}`.env(env);
-});
+}
+
+await run(outdated);

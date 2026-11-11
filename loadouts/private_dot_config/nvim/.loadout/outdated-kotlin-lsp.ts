@@ -9,8 +9,10 @@ import { masonInstall, masonOutdated } from "#nvim";
 const PACKAGE = "kotlin-lsp";
 const LUA = `${import.meta.dir}/mason.lua`;
 
-await run(async (mode) => {
+async function outdated(mode?: string) {
   if (mode === undefined) return masonOutdated(LUA, PACKAGE);
   if (mode === "update") return masonInstall(LUA, PACKAGE);
   throw new Error("usage: outdated-kotlin-lsp.ts [update <item>]");
-});
+}
+
+await run(outdated);

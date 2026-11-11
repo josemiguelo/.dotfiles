@@ -28,30 +28,31 @@ const hasFormula = (f: string) => ok(brew("list", "--formula", f));
 const usersOf = async (f: string) =>
   (await brew("uses", "--installed", f).quiet().nothrow()).stdout.toString().split(/\s+/).filter(Boolean);
 
-await main(
-  async () => {
-    if (!hasBrew()) return true;
-    let done = true;
-    if (await hasCask()) {
-      console.log("brew has the tpack cask");
+async function clean() {
+  if (!hasBrew()) return true;
+  let done = true;
+  if (await hasCask()) {
+    console.log("brew has the tpack cask");
+    done = false;
+  }
+  for (const f of FORMULAE) {
+    if ((await hasFormula(f)) && (await usersOf(f)).length === 0) {
+      console.log(`brew has ${f}`);
       done = false;
     }
-    for (const f of FORMULAE) {
-      if ((await hasFormula(f)) && (await usersOf(f)).length === 0) {
-        console.log(`brew has ${f}`);
-        done = false;
-      }
-    }
-    return done;
-  },
-  async () => {
-    if (!hasBrew()) return;
-    if (await hasCask()) await brew("uninstall", "--cask", "tpack");
-    for (const f of FORMULAE) {
-      if (!(await hasFormula(f))) continue;
-      const users = await usersOf(f);
-      if (users.length > 0) console.error(`keeping brew's ${f}: needed by ${users.join(" ")}`);
-      else await brew("uninstall", "--formula", f);
-    }
-  },
-);
+  }
+  return done;
+}
+
+async function install() {
+  if (!hasBrew()) return;
+  if (await hasCask()) await brew("uninstall", "--cask", "tpack");
+  for (const f of FORMULAE) {
+    if (!(await hasFormula(f))) continue;
+    const users = await usersOf(f);
+    if (users.length > 0) console.error(`keeping brew's ${f}: needed by ${users.join(" ")}`);
+    else await brew("uninstall", "--formula", f);
+  }
+}
+
+await main(clean, install);

@@ -26,4 +26,6 @@ async function install(...args: string[]) {
   if (left.length) throw new Error(`still installed after removal: ${left.join(" ")}`);
 }
 
-await main((...args) => stillThere(args).length === 0, install);
+const removed = (...args: string[]) => stillThere(args).length === 0;
+
+await main(removed, install);

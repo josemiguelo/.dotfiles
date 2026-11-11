@@ -24,7 +24,7 @@ async function ready() {
   return last >= 0 && lines[last].slice(OPTION.length).split(",").includes(EXT);
 }
 
-await main(ready, async () => {
+async function install() {
   if (await ready()) return;
   if (!existsSync(FLAGS)) throw new Error(`${FLAGS} is missing: set up Brave first`);
   const { lines, last } = await flags();
@@ -36,4 +36,6 @@ await main(ready, async () => {
     await Bun.write(FLAGS, `${text}${text === "" || text.endsWith("\n") ? "" : "\n"}${OPTION}${EXT}\n`);
   }
   console.error("Restart Brave to load the Split view keys extension");
-});
+}
+
+await main(ready, install);

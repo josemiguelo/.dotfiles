@@ -9,19 +9,20 @@ import { existsSync } from "node:fs";
 import { $, main } from "#loadout";
 import { CONF, cloneOf, declared, toolsPath } from "#tmux";
 
-await main(
-  async () => {
-    if (!existsSync(CONF)) {
-      console.error("tmux.conf not found");
-      return false;
-    }
-    const missing = (await declared()).filter((repo) => !cloneOf(repo));
-    for (const repo of missing) console.log(`missing plugin: ${repo}`);
-    return missing.length === 0;
-  },
-  async () => {
-    const PATH = await toolsPath();
-    if (!Bun.which("tpack", { PATH })) throw new Error("tpack not found");
-    await $`tpack install`.env({ ...process.env, PATH });
-  },
-);
+async function ready() {
+  if (!existsSync(CONF)) {
+    console.error("tmux.conf not found");
+    return false;
+  }
+  const missing = (await declared()).filter((repo) => !cloneOf(repo));
+  for (const repo of missing) console.log(`missing plugin: ${repo}`);
+  return missing.length === 0;
+}
+
+async function install() {
+  const PATH = await toolsPath();
+  if (!Bun.which("tpack", { PATH })) throw new Error("tpack not found");
+  await $`tpack install`.env({ ...process.env, PATH });
+}
+
+await main(ready, install);

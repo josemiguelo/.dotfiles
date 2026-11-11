@@ -23,9 +23,11 @@ const has = async (action: string, direction: string) =>
 
 const ready = async () => (await has("allow", "in")) && (await has("route:allow", "in")) && (await has("route:allow", "out"));
 
-await main(ready, async () => {
+async function install() {
   if (!(await has("allow", "in"))) await $`sudo ufw allow in on virbr0 comment ${TAG}`;
   if (!(await has("route:allow", "in"))) await $`sudo ufw route allow in on virbr0 comment ${TAG}`;
   if (!(await has("route:allow", "out"))) await $`sudo ufw route allow out on virbr0 comment ${TAG}`;
   if (!(await ready())) throw new Error(`ufw rules for virbr0 not found in ${RULES} after adding them`);
-});
+}
+
+await main(ready, install);

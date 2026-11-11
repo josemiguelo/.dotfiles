@@ -83,4 +83,6 @@ async function install(...keep: string[]) {
   if (left.length) throw new Error(`Omarchy agent files still present: ${left.join(" ")}`);
 }
 
-await main(async (...keep) => (await extra(keep)).length === 0, install);
+const pruned = async (...keep: string[]) => (await extra(keep)).length === 0;
+
+await main(pruned, install);

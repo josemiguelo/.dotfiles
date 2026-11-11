@@ -37,4 +37,6 @@ async function install(...args: string[]) {
   if (!(await setAlready(lock))) throw new Error(`${SHELL_JSON}'s idle.lock isn't ${lock} after install`);
 }
 
-await main((...args) => setAlready(lockSeconds(args)), install);
+const alreadySet = (...args: string[]) => setAlready(lockSeconds(args));
+
+await main(alreadySet, install);

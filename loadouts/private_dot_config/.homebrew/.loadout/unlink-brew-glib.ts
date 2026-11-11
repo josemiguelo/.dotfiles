@@ -25,15 +25,16 @@ const hasBrew = () => {
 
 const linked = () => existsSync(`${prefix}/bin/gsettings`);
 
-await main(
-  () => {
-    if (!hasBrew() || !linked()) return true;
-    console.log("brew's glib is linked: its gsettings shadows the system's");
-    return false;
-  },
-  async () => {
-    if (!hasBrew() || !linked()) return;
-    await brew("unlink", "glib");
-    if (linked()) throw new Error(`${prefix}/bin/gsettings is still there after brew unlink glib`);
-  },
-);
+function unlinked() {
+  if (!hasBrew() || !linked()) return true;
+  console.log("brew's glib is linked: its gsettings shadows the system's");
+  return false;
+}
+
+async function install() {
+  if (!hasBrew() || !linked()) return;
+  await brew("unlink", "glib");
+  if (linked()) throw new Error(`${prefix}/bin/gsettings is still there after brew unlink glib`);
+}
+
+await main(unlinked, install);

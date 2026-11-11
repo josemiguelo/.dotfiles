@@ -21,17 +21,18 @@ const linked = (name: string) => {
   }
 };
 
-await main(
-  () => scripts().every(linked),
-  async () => {
-    if (!existsSync(SCRIPTS_DIR)) {
-      console.log("JetBrains Toolbox scripts directory not found, skipping");
-      return;
-    }
-    mkdirSync(BIN_DIR, { recursive: true });
-    for (const name of scripts()) {
-      await $`ln -sf ${`${SCRIPTS_DIR}/${name}`} ${`${BIN_DIR}/${name}`}`;
-      console.log(`symlinked ${name} -> ${SCRIPTS_DIR}/${name}`);
-    }
-  },
-);
+const ready = () => scripts().every(linked);
+
+async function install() {
+  if (!existsSync(SCRIPTS_DIR)) {
+    console.log("JetBrains Toolbox scripts directory not found, skipping");
+    return;
+  }
+  mkdirSync(BIN_DIR, { recursive: true });
+  for (const name of scripts()) {
+    await $`ln -sf ${`${SCRIPTS_DIR}/${name}`} ${`${BIN_DIR}/${name}`}`;
+    console.log(`symlinked ${name} -> ${SCRIPTS_DIR}/${name}`);
+  }
+}
+
+await main(ready, install);

@@ -24,11 +24,13 @@ async function ready() {
   return false;
 }
 
-await main(ready, async () => {
+async function install() {
   if (await ready()) return;
   throw new Error(`Surfingkeys needs setting up in Brave, by hand:
   1. Install it: https://chromewebstore.google.com/detail/surfingkeys/${ID}
   2. brave://extensions/?id=${ID} → turn on "Allow access to file URLs"
   3. Surfingkeys' settings → Advanced mode → "Load settings from":
      file://${SETTINGS}`);
-});
+}
+
+await main(ready, install);

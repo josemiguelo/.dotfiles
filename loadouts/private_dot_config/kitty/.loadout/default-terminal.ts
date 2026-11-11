@@ -10,9 +10,10 @@ const WANT = "kitty";
 const current = async () =>
   (await $`xdg-terminal-exec --print-id`.quiet().nothrow()).stdout.toString().trim().split(":")[0];
 
-await main(
-  async () => (await current()) === `${WANT}.desktop`,
-  async () => {
-    await $`omarchy-default-terminal ${WANT}`;
-  },
-);
+const ready = async () => (await current()) === `${WANT}.desktop`;
+
+async function install() {
+  await $`omarchy-default-terminal ${WANT}`;
+}
+
+await main(ready, install);

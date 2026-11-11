@@ -21,19 +21,19 @@ const inGroup = async () => {
 /** `virsh net-info default`, read with sudo ("" when it fails). */
 const netInfo = async () => (await $`sudo virsh -c qemu:///system net-info default`.quiet().nothrow()).stdout.toString();
 
-await main(
-  async () =>
-    (await ok($`systemctl -q is-enabled libvirtd.service`)) &&
-    (await ok($`systemctl -q is-active libvirtd.service`)) &&
-    (await inGroup()),
-  async () => {
-    await $`sudo systemctl enable --now libvirtd.service`;
-    if (!(await inGroup())) {
-      await $`sudo usermod -aG libvirt ${USER}`;
-      console.log(`added ${USER} to libvirt — takes effect at the next login`);
-    }
-    if (!/^Autostart:\s*yes/m.test(await netInfo())) await $`sudo virsh -c qemu:///system net-autostart default`;
-    if (!/^Active:\s*yes/m.test(await netInfo())) await $`sudo virsh -c qemu:///system net-start default`;
-    await $`sudo virsh -c qemu:///system net-list --all`;
-  },
-);
+const ready = async () => (await ok($`systemctl -q is-enabled libvirtd.service`)) &&
+  (await ok($`systemctl -q is-active libvirtd.service`)) &&
+  (await inGroup());
+
+async function install() {
+  await $`sudo systemctl enable --now libvirtd.service`;
+  if (!(await inGroup())) {
+    await $`sudo usermod -aG libvirt ${USER}`;
+    console.log(`added ${USER} to libvirt — takes effect at the next login`);
+  }
+  if (!/^Autostart:\s*yes/m.test(await netInfo())) await $`sudo virsh -c qemu:///system net-autostart default`;
+  if (!/^Active:\s*yes/m.test(await netInfo())) await $`sudo virsh -c qemu:///system net-start default`;
+  await $`sudo virsh -c qemu:///system net-list --all`;
+}
+
+await main(ready, install);

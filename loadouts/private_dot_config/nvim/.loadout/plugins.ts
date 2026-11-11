@@ -12,4 +12,6 @@
 import { main } from "#loadout";
 import { lazyCheck, lazyInstall } from "#nvim";
 
-await main(() => lazyCheck(`${import.meta.dir}/plugins.lua`), lazyInstall);
+const ready = () => lazyCheck(`${import.meta.dir}/plugins.lua`);
+
+await main(ready, lazyInstall);

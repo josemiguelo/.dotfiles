@@ -16,7 +16,8 @@ import { masonHas, masonInstall } from "#nvim";
 
 const PACKAGE = "kotlin-lsp";
 
-await main(
-  () => masonHas(PACKAGE),
-  () => masonInstall(`${import.meta.dir}/mason.lua`, PACKAGE),
-);
+const installed = () => masonHas(PACKAGE);
+
+const install = () => masonInstall(`${import.meta.dir}/mason.lua`, PACKAGE);
+
+await main(installed, install);

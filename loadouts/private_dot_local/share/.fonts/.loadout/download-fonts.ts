@@ -13,18 +13,19 @@ const target = darwin ? `${process.env.HOME}/Library/Fonts` : `${process.env.HOM
 
 const fira = (dir: string) => (existsSync(dir) ? readdirSync(dir).filter((n) => n.startsWith("Fira Code")) : []);
 
-await main(
-  () => fira(target).length > 0,
-  async () => {
-    const tmp = await mkdtemp(`${tmpdir()}/fonts-`);
-    try {
-      await $`curl -fsSL -o ${`${tmp}/FiraCode.zip`} ${URL}`;
-      await $`unzip ${`${tmp}/FiraCode.zip`} -d ${`${tmp}/FiraCode`}`;
-      mkdirSync(target, { recursive: true });
-      for (const font of fira(`${tmp}/FiraCode`)) copyFileSync(`${tmp}/FiraCode/${font}`, `${target}/${font}`);
-      if (!darwin) await $`fc-cache -fv`;
-    } finally {
-      await rm(tmp, { recursive: true, force: true });
-    }
-  },
-);
+const ready = () => fira(target).length > 0;
+
+async function install() {
+  const tmp = await mkdtemp(`${tmpdir()}/fonts-`);
+  try {
+    await $`curl -fsSL -o ${`${tmp}/FiraCode.zip`} ${URL}`;
+    await $`unzip ${`${tmp}/FiraCode.zip`} -d ${`${tmp}/FiraCode`}`;
+    mkdirSync(target, { recursive: true });
+    for (const font of fira(`${tmp}/FiraCode`)) copyFileSync(`${tmp}/FiraCode/${font}`, `${target}/${font}`);
+    if (!darwin) await $`fc-cache -fv`;
+  } finally {
+    await rm(tmp, { recursive: true, force: true });
+  }
+}
+
+await main(ready, install);

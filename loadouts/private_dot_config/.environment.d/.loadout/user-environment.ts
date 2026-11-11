@@ -24,11 +24,12 @@ async function missing() {
   return (await wanted()).filter((l) => !current.has(l));
 }
 
-await main(
-  async () => (await missing()).length === 0,
-  async () => {
-    if ((await missing()).length > 0) await $`systemctl --user daemon-reload`;
-    const left = await missing();
-    if (left.length > 0) throw new Error(`still not in the user manager environment:\n${left.join("\n")}`);
-  },
-);
+const ready = async () => (await missing()).length === 0;
+
+async function install() {
+  if ((await missing()).length > 0) await $`systemctl --user daemon-reload`;
+  const left = await missing();
+  if (left.length > 0) throw new Error(`still not in the user manager environment:\n${left.join("\n")}`);
+}
+
+await main(ready, install);

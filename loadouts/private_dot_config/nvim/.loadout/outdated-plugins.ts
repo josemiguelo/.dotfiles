@@ -9,8 +9,10 @@ import { lazyOutdated, lazyUpdate } from "#nvim";
 
 const LUA = `${import.meta.dir}/plugins.lua`;
 
-await run(async (mode, plugin) => {
+async function outdated(mode?: string, plugin?: string) {
   if (mode === undefined) return lazyOutdated(LUA);
   if (mode === "update" && plugin) return lazyUpdate(LUA, plugin);
   throw new Error("usage: outdated-plugins.ts [update <plugin>]");
-});
+}
+
+await run(outdated);

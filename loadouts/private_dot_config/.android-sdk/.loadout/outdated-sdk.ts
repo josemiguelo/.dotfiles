@@ -60,7 +60,7 @@ async function repin(old: string, next: string) {
   await Bun.write(PINS, lines.join("\n"));
 }
 
-await run(async (mode?: string, item?: string) => {
+async function outdated(mode?: string, item?: string) {
   const sdk = await sdkDir();
   // Nothing to ask with: say nothing (a non-zero exit would read as a failure).
   if (!sdk || !existsSync(sdkmanagerPath(sdk)) || !studioJdk()) return;
@@ -83,4 +83,6 @@ await run(async (mode?: string, item?: string) => {
     const newest = newestInMajor(known, name, pin);
     if (newest && newest !== pin) console.log(`${name} ${pin} ${newest}`);
   }
-});
+}
+
+await run(outdated);
