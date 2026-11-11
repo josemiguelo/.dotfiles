@@ -3,6 +3,7 @@
 
 program "antigravity" {
   description = "Antigravity IDE"
+  later       = "a large app download; nothing in setup needs it"
 
   via "dnf-repo" {
     params = { repofile = file(".loadout/antigravity.repo") }

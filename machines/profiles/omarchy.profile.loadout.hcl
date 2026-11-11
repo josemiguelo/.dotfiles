@@ -16,9 +16,7 @@ profile "omarchy" {
     ]
   }
   via "flatpak" {
-    # stremio is off: its first Flathub download stalls the whole setup; install
-    # it afterwards with `loadout install stremio`.
-    install = [program.flathub-remote, /* program.stremio */]
+    install = [program.flathub-remote, program.stremio]
   }
   via "omarchy-aur" {
     install = [
@@ -55,7 +53,9 @@ profile "omarchy" {
     script.nvim-plugins, script.mason-kotlin-lsp, script.remove-kotlin-lsp-download,
     script.unlink-brew-glib, script.keychron-launcher-access,
     local.shell_scripts,
-    script.mise-tools, script.mise-default-packages, script.mise-drop-bun,
+    # Each tool's default version now; the older ones and the rest later.
+    args(script.mise-tools, "node", "python", "neovim", "go"), script.mise-tools-later,
+    script.mise-default-packages, script.mise-drop-bun,
     args(script.omarchy-default-agent, "claude"),
     script.omarchy-default-terminal,
     script.tmux-plugins, script.remove-brew-tmux, script.omarchy-tmux-theme,

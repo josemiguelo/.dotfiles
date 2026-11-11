@@ -2,6 +2,7 @@
 
 program "google-cloud-cli" {
   description = "Google Cloud CLI"
+  later       = "a large Homebrew install; nothing in setup needs it"
 
   via "dnf-repo" {
     params = { repofile = file(".loadout/google-cloud-cli.repo") }

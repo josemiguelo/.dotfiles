@@ -18,6 +18,7 @@ script "nvim-plugins" {
 # Mason comes with the lazy plugins, after every program is installed.
 script "mason-kotlin-lsp" {
   description        = "kotlin-lsp for kotlin.nvim, from Mason"
+  later              = "a large download only Kotlin editing needs"
   managed_by         = ".loadout/mason-kotlin-lsp.sh"
   run_after          = [script.nvim-plugins]
   updates_managed_by = ".loadout/outdated-kotlin-lsp.sh"
@@ -27,6 +28,7 @@ script "mason-kotlin-lsp" {
 # while Mason's download link was dead (mason-registry#17523).
 script "remove-kotlin-lsp-download" {
   description  = "no kotlin-lsp download outside Mason"
+  later        = "cleans up after mason-kotlin-lsp, which is later"
   run          = "rm -rf \"$HOME/.local/share/kotlin-lsp\""
   check        = "test ! -e \"$HOME/.local/share/kotlin-lsp\""
   run_after    = [script.mason-kotlin-lsp]

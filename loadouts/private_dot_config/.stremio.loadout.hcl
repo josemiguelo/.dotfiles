@@ -2,6 +2,6 @@
 
 program "stremio" {
   description = "Stremio media center"
-  spare       = "off the omarchy profile: its first Flathub download stalls setup; loadout install stremio"
+  later       = "a big Flathub download; nothing else needs it"
   via "flatpak" { pkg = "com.stremio.Stremio" }
 }

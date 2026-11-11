@@ -38,6 +38,11 @@
 # its machine through LOADOUT_REPO), so the machine's ssh key must already be
 # on GitHub; and loadout sets up the child, which runs this repo's recipes.
 #
+# setup-new-machine runs its later phase too (the programs and scripts the
+# repo marks `later`: big downloads, builds from source) after the rest, so
+# every question it asks comes first and the slow part needs nobody; stopped
+# there, the machine is set up and running bootstrap again finishes it.
+#
 # A step loadout couldn't finish (one that needs a hand, such as Android
 # Studio or a browser extension, fails on every fresh machine) doesn't stop
 # the end: loadout lists what failed, the closing instructions still print,

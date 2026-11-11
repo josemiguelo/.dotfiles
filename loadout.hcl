@@ -10,7 +10,7 @@ repo {
   name             = "jm's machines"
   state            = "machines/state"
   configs          = "loadouts"
-  min_tool_version = "4.3.0"
+  min_tool_version = "4.4.0"
   sources = [
     "loadouts/**/.*.loadout.hcl",
     "loadouts/**/.*/.*.loadout.hcl",

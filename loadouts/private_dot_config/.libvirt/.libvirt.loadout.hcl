@@ -6,41 +6,49 @@
 # 11) are optional deps the Fedora group installed too.
 program "libvirt" {
   description = "libvirt virtualization daemon and tools"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "qemu-desktop" {
   description = "QEMU/KVM for desktop guests"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "virt-manager" {
   description = "virt-manager GUI"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "virt-install" {
   description = "virt-install, command-line VM creation"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "virt-viewer" {
   description = "virt-viewer, a guest's graphical console"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "dnsmasq" {
   description = "DNS/DHCP for libvirt's default NAT network"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "edk2-ovmf" {
   description = "UEFI firmware for guests"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
 program "swtpm" {
   description = "TPM emulator for guests"
+  later       = "VMs can wait; nothing in setup needs them"
   install_via = [omarchy]
 }
 
@@ -61,6 +69,7 @@ locals {
 # profile maps it today (the compile lists it).
 program "virtualization" {
   description = "virtualization stack (libvirt, qemu, virt-manager)"
+  later       = "VMs can wait; nothing in setup needs them"
   spare       = "Fedora's half of setup-libvirt; no machine runs Fedora today"
   via "dnf" {
     managed_by = ".loadout/virtualization.sh"
@@ -72,6 +81,7 @@ program "virtualization" {
 # autostarting; Arch and Fedora do it differently.
 script "setup-libvirt" {
   description = "libvirtd enabled and the login user in its group"
+  later       = "sets up the later virtualization programs"
   needs_sudo  = true
 
   variant "arch" {
@@ -100,6 +110,7 @@ script "setup-libvirt" {
 # Omarchy allows Docker's DNS.
 script "ufw-libvirt" {
   description = "ufw allows libvirt's default NAT network (virbr0)"
+  later       = "opens the firewall for the later virtualization programs"
   managed_by  = ".loadout/ufw-libvirt.sh"
   needs_sudo  = true
   run_after   = [script.setup-libvirt]

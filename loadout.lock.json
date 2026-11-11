@@ -1,11 +1,11 @@
 {
   "format": 1,
-  "toolVersion": "4.3.0",
-  "sources": "7491ed16886ddb7f4ae7de5fcdb8cd3e497adedb69a09d471b89d0bded7ae5a1",
+  "toolVersion": "4.4.0",
+  "sources": "08ecbc768b021c98874d4035597e22f35b5d27419dee5f42a67fa34f62382dfd",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "4.3.0"
+      "min-tool-version": "4.4.0"
     },
     "layout": {
       "state": "machines/state",
@@ -199,6 +199,7 @@
             "pkg": "antigravity-ide"
           }
         },
+        "later": "a large app download; nothing in setup needs it",
         "origin": "loadouts/private_dot_config/.antigravity"
       },
       "anydesk": {
@@ -212,6 +213,7 @@
             "pkg": "anydesk-bin"
           }
         },
+        "later": "a large app download; nothing in setup needs it",
         "origin": "loadouts/private_dot_config/.anydesk"
       },
       "atuin": {
@@ -231,6 +233,7 @@
         "install": {
           "brew": {}
         },
+        "later": "a large Homebrew install; nothing in setup needs it",
         "origin": "loadouts/private_dot_config"
       },
       "azure-cli": {
@@ -379,6 +382,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "edk2-ovmf": {
@@ -386,6 +390,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "eza": {
@@ -539,6 +544,7 @@
             "pkg": "gcloud-cli"
           }
         },
+        "later": "a large Homebrew install; nothing in setup needs it",
         "origin": "loadouts/private_dot_config/.gcloud"
       },
       "gum": {
@@ -661,6 +667,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "libxcrypt-compat": {
@@ -811,6 +818,7 @@
         "install": {
           "omarchy-aur": {}
         },
+        "later": "built from source, for mise's Python 2.7 alone",
         "origin": "loadouts/private_dot_config/mise"
       },
       "openssl-devel": {
@@ -855,6 +863,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "qemu-full": {
@@ -907,6 +916,7 @@
             }
           }
         },
+        "later": "a large Homebrew install; nothing in setup needs it",
         "origin": "loadouts/private_dot_config"
       },
       "setup-brew": {
@@ -969,6 +979,7 @@
             "pkg": "slack-desktop"
           }
         },
+        "later": "a large app download; nothing in setup needs it",
         "origin": "loadouts/private_dot_config/.slack"
       },
       "solaar": {
@@ -1013,6 +1024,7 @@
             "pkg": "com.stremio.Stremio"
           }
         },
+        "later": "a big Flathub download; nothing else needs it",
         "origin": "loadouts/private_dot_config"
       },
       "sublime-text": {
@@ -1051,6 +1063,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "t2-arch-packages-keyring": {
@@ -1187,6 +1200,7 @@
             "pkg": "teams-for-linux-bin"
           }
         },
+        "later": "a large app download; nothing in setup needs it",
         "origin": "loadouts/private_dot_config"
       },
       "terraform": {
@@ -1284,6 +1298,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "virt-manager": {
@@ -1291,6 +1306,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "virt-viewer": {
@@ -1298,6 +1314,7 @@
         "install": {
           "omarchy": {}
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "virtualization": {
@@ -1310,6 +1327,7 @@
             "sudo": true
           }
         },
+        "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "vlc": {
@@ -1408,6 +1426,7 @@
         "description": "Android SDK packages at the IDs .loadout/packages pins",
         "file": ".loadout/sdk.ts",
         "check": "file:.loadout/sdk.ts check \"$@\"",
+        "later": "large SDK downloads, after Android Studio comes by hand",
         "origin": "loadouts/private_dot_config/.android-sdk"
       },
       "bare-repos": {
@@ -1542,6 +1561,7 @@
         "after": [
           "scripts.nvim-plugins"
         ],
+        "later": "a large download only Kotlin editing needs",
         "origin": "loadouts/private_dot_config/nvim"
       },
       "mise-default-packages": {
@@ -1567,9 +1587,19 @@
         "file": ".loadout/tools.sh",
         "check": "file:.loadout/tools.sh check \"$@\"",
         "after": [
-          "programs.mise",
+          "programs.mise"
+        ],
+        "origin": "loadouts/private_dot_config/mise"
+      },
+      "mise-tools-later": {
+        "description": "the rest of the mise tools config.toml pins",
+        "file": ".loadout/tools.sh",
+        "check": "file:.loadout/tools.sh check \"$@\"",
+        "after": [
+          "scripts.mise-tools",
           "programs.openssl-1.1"
         ],
+        "later": "older versions and builds from source; setup needs none of them",
         "origin": "loadouts/private_dot_config/mise"
       },
       "nvim-plugins": {
@@ -1925,6 +1955,7 @@
         "after": [
           "scripts.mason-kotlin-lsp"
         ],
+        "later": "cleans up after mason-kotlin-lsp, which is later",
         "origin": "loadouts/private_dot_config/nvim"
       },
       "setup-completions": {
@@ -1942,6 +1973,7 @@
       "setup-libvirt": {
         "description": "libvirtd enabled and the login user in its group",
         "sudo": true,
+        "later": "sets up the later virtualization programs",
         "variants": {
           "arch": {
             "file": ".loadout/setup-libvirt-arch.sh",
@@ -2088,6 +2120,7 @@
           "scripts.setup-libvirt"
         ],
         "sudo": true,
+        "later": "opens the firewall for the later virtualization programs",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "unlink-brew-glib": {
@@ -2221,6 +2254,7 @@
           "slack": "omarchy-aur",
           "spotify": "omarchy",
           "starship": "omarchy",
+          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
@@ -2251,7 +2285,8 @@
           "keychron-launcher-access",
           "zsh-plugins",
           "setup-completions",
-          "mise-tools",
+          "mise-tools node python neovim go",
+          "mise-tools-later",
           "mise-default-packages",
           "mise-drop-bun",
           "omarchy-default-agent claude",
@@ -2363,6 +2398,7 @@
           "solaar": "omarchy",
           "spotify": "omarchy",
           "starship": "omarchy",
+          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
           "t2-arch-packages-keyring": "omarchy",
@@ -2409,7 +2445,8 @@
           "keychron-launcher-access",
           "zsh-plugins",
           "setup-completions",
-          "mise-tools",
+          "mise-tools node python neovim go",
+          "mise-tools-later",
           "mise-default-packages",
           "mise-drop-bun",
           "omarchy-default-agent claude",

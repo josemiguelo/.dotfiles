@@ -39,14 +39,27 @@ script "mise-drop-bun" {
 # pythons config.toml pins against it.
 program "openssl-1.1" {
   description = "OpenSSL 1.1, for mise's Python 2.7 builds"
+  later       = "built from source, for mise's Python 2.7 alone"
   via "omarchy-aur" {}
 }
 
+# Named by the machine (`args(script.mise-tools, "node", "python")`), only
+# those tools' default versions: setup's core, with mise-tools-later bringing
+# the rest. Without names, every version (macOS, omalauncher).
 script "mise-tools" {
   description        = "mise tools at the versions ~/.config/mise/config.toml pins"
   managed_by         = ".loadout/tools.sh"
-  run_after          = [program.mise, program["openssl-1.1"]]
+  run_after          = [program.mise]
   updates_managed_by = ".loadout/outdated-tools.sh"
+}
+
+# Everything mise-tools' names left out: older versions, tools nothing in
+# setup needs, and Python 2.7's build from source against openssl-1.1.
+script "mise-tools-later" {
+  description = "the rest of the mise tools config.toml pins"
+  later       = "older versions and builds from source; setup needs none of them"
+  managed_by  = ".loadout/tools.sh"
+  run_after   = [script.mise-tools, program["openssl-1.1"]]
 }
 
 # mise seeds default packages only into versions it installs later; this

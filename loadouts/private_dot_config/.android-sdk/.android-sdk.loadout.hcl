@@ -4,6 +4,7 @@
 
 script "android-sdk" {
   description        = "Android SDK packages at the IDs .loadout/packages pins"
+  later              = "large SDK downloads, after Android Studio comes by hand"
   managed_by         = ".loadout/sdk.ts"
   updates_managed_by = ".loadout/outdated-sdk.ts"
 }

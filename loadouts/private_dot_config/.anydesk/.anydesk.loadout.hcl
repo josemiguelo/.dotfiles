@@ -2,6 +2,7 @@
 
 program "anydesk" {
   description = "AnyDesk remote desktop"
+  later       = "a large app download; nothing in setup needs it"
 
   via "dnf" {
     installed_by = ".loadout/install-anydesk.sh"
