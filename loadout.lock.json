@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "7b05e9661fa2955e7382921ad29432310df64e740e031656b7588afc5897cbd7",
+  "sources": "c53316a5ed43b4aeae699310ead82b82d400978e52b5551f2b3a30cb526f35b9",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2024,6 +2024,7 @@
         "after": [
           "scripts.omarchy-default-dictation"
         ],
+        "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
       },
       "surfingkeys": {

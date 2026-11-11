@@ -14,6 +14,7 @@ program "superwhisper" {
 # spoken one (English and Spanish both come out right).
 script "superwhisper-settings" {
   description = "Superwhisper's processing mode and settings"
+  later       = "an offline mode downloads gigabytes of models; dictation can wait for them"
   managed_by  = ".loadout/superwhisper-settings.sh"
   run_after   = [script.omarchy-default-dictation]
 }
