@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "c61fcbf833797d1b2808bf6fa38a28cbd682d8ac7bffeabc0e04604733ddb126",
+  "sources": "7b3c3e11b0635f97133c9a8b4b09b055aa8bdffd788f867c2b4149bd6a09d79a",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -806,6 +806,13 @@
         },
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "openssl-1.1": {
+        "description": "OpenSSL 1.1, for mise's Python 2.7 builds",
+        "install": {
+          "omarchy-aur": {}
+        },
+        "origin": "loadouts/private_dot_config/mise"
+      },
       "openssl-devel": {
         "install": {
           "dnf": {}
@@ -1560,7 +1567,8 @@
         "file": ".loadout/tools.sh",
         "check": "file:.loadout/tools.sh check \"$@\"",
         "after": [
-          "programs.mise"
+          "programs.mise",
+          "programs.openssl-1.1"
         ],
         "origin": "loadouts/private_dot_config/mise"
       },
@@ -2205,6 +2213,7 @@
           "ngrok": "custom",
           "obsidian": "omarchy",
           "omarchy-package-lists": "custom",
+          "openssl-1.1": "omarchy-aur",
           "procps-ng": "omarchy",
           "ripgrep": "omarchy",
           "scrcpy": "brew",
@@ -2343,6 +2352,7 @@
           "ninja": "omarchy",
           "obsidian": "omarchy",
           "omarchy-package-lists": "custom",
+          "openssl-1.1": "omarchy-aur",
           "procps-ng": "omarchy",
           "qemu-desktop": "omarchy",
           "qemu-full": "omarchy",

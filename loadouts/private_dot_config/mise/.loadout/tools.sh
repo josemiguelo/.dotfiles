@@ -22,6 +22,17 @@ check)
   exit 1
   ;;
 install)
+  # Python 2.x builds from source, and its ssl module only against OpenSSL
+  # 1.x: where openssl-1.1 sits beside the system's (Arch, the AUR's
+  # package), those versions build first, pointed at it. Only them: the
+  # flags would also reach any other tool mise compiles.
+  ssl11=/usr/include/openssl-1.1
+  if [ -d "$ssl11" ]; then
+    out=$(mise ls --missing python) || { echo "mise ls --missing failed" >&2; exit 1; }
+    for v in $(printf '%s\n' "$out" | awk '$2 ~ /^2\./ { print $2 }'); do
+      CPPFLAGS="-I$ssl11" LDFLAGS="-L/usr/lib/openssl-1.1" mise install "python@$v"
+    done
+  fi
   mise install
   ;;
 *) echo "usage: $0 [check|install]" >&2; exit 2 ;;

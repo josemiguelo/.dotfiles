@@ -21,7 +21,7 @@ profile "omarchy" {
   via "omarchy-aur" {
     install = [
       program.antigravity, program.slack, program.teams-for-linux, program.anydesk,
-      program.brave,
+      program.brave, program["openssl-1.1"],
     ]
   }
 

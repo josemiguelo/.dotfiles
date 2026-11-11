@@ -34,10 +34,18 @@ script "mise-drop-bun" {
   transitional = true
 }
 
+# OpenSSL 1.1 beside the system's: Python 2.7's ssl module builds against
+# 1.x only, and Arch dropped 1.1 from its repos. tools.sh builds the 2.x
+# pythons config.toml pins against it.
+program "openssl-1.1" {
+  description = "OpenSSL 1.1, for mise's Python 2.7 builds"
+  via "omarchy-aur" {}
+}
+
 script "mise-tools" {
   description        = "mise tools at the versions ~/.config/mise/config.toml pins"
   managed_by         = ".loadout/tools.sh"
-  run_after          = [program.mise]
+  run_after          = [program.mise, program["openssl-1.1"]]
   updates_managed_by = ".loadout/outdated-tools.sh"
 }
 
