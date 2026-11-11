@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "08ecbc768b021c98874d4035597e22f35b5d27419dee5f42a67fa34f62382dfd",
+  "sources": "7b05e9661fa2955e7382921ad29432310df64e740e031656b7588afc5897cbd7",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2127,6 +2127,10 @@
         "description": "brew's glib unlinked (the system's gsettings reaches dconf)",
         "file": ".loadout/unlink-brew-glib.sh",
         "check": "file:.loadout/unlink-brew-glib.sh check \"$@\"",
+        "after": [
+          "programs.scrcpy"
+        ],
+        "later": "glib comes with later brew installs (scrcpy); it unlinks after all of them",
         "origin": "loadouts/private_dot_config/.homebrew"
       },
       "user-environment": {
