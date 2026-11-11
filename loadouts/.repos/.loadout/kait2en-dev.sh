@@ -20,6 +20,7 @@
 # isn't. Existing clones are only fetched, never reset.
 # Modes: `check` / `install` (default).
 set -eu
+. "$LOADOUT_REPO/loadouts/private_dot_config/.1password/.loadout/op-unlocked.sh"
 
 REPOS=$HOME/Repos/gh
 BRANCH=t2-kait2en
@@ -111,10 +112,7 @@ vfio_install() {
 key_ok() { gpg --list-secret-keys "$FPR" >/dev/null 2>&1; }
 
 key_install() {
-  op vault list >/dev/null 2>&1 || {
-    echo "kait2en-dev: 1Password isn't unlocked for the CLI: unlock the app (and approve its prompt), then run this again" >&2
-    return 1
-  }
+  op_unlocked kait2en-dev || return 1
   op read "$KEY_REF" | gpg --batch --quiet --import
   echo "$FPR:6:" | gpg --quiet --import-ownertrust
 }

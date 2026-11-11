@@ -27,6 +27,7 @@
 # tethering or a USB Ethernet adapter); then the Wi-Fi driver reloads.
 # Modes: `check` / `install` (default).
 set -eu
+. "$LOADOUT_REPO/loadouts/private_dot_config/.1password/.loadout/op-unlocked.sh"
 
 FETCHER=apple-bcm-firmware-fetcher
 STATE=/var/lib/apple-bcm-firmware-fetcher/installed-files
@@ -85,10 +86,8 @@ from_fallback() {
     if verified "$CACHE"; then
       source=$CACHE
     else
-      op vault list >/dev/null 2>&1 || {
-        echo "no macOS volume and no copy of $FILE here, and 1Password isn't unlocked for the CLI: unlock the app (and approve its prompt), then run this again" >&2
-        exit 1
-      }
+      echo "no macOS volume and no copy of $FILE here: from 1Password" >&2
+      op_unlocked t2-bcm-firmware || exit 1
       tmp=$(mktemp -d)
       trap 'rm -rf "$tmp"' EXIT
       op document get "$FILE" --vault "$VAULT" --out-file "$tmp/$FILE" >/dev/null

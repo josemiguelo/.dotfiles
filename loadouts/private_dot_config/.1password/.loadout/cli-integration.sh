@@ -12,6 +12,7 @@
 # ONEPASSWORD_WAIT seconds (default 900; 0 doesn't wait).
 # Modes: `check` / `install` (default).
 set -eu
+. "$LOADOUT_REPO/loadouts/private_dot_config/.1password/.loadout/op-unlocked.sh"
 
 WAIT=${ONEPASSWORD_WAIT:-900}
 FLAG=--force-device-scale-factor=1
@@ -35,11 +36,7 @@ open_app() {
 }
 
 approve() {
-  echo "onepassword-cli: approve the prompt in the 1Password app (unlock it first if asked)…" >&2
-  op vault list >/dev/null || {
-    echo "onepassword-cli: 1Password didn't let the CLI in (locked, or the prompt was denied)" >&2
-    exit 1
-  }
+  op_unlocked onepassword-cli || exit 1
   echo "onepassword-cli: the CLI is connected" >&2
 }
 

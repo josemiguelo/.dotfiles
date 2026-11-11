@@ -9,6 +9,7 @@
 # Usage: `sync-config.sh [check] <device name>` (loadout passes the machine's
 # arguments after the mode; install has no mode word).
 set -eu
+. "$LOADOUT_REPO/loadouts/private_dot_config/.1password/.loadout/op-unlocked.sh"
 
 mode=install
 case "${1:-}" in check | install) mode=$1; shift ;; esac
@@ -33,10 +34,7 @@ install)
   ready && exit 0
   # onepassword-cli checks the integration is set up; reading also needs the
   # app unlocked, which only shows now.
-  op vault list >/dev/null 2>&1 || {
-    echo "1Password isn't unlocked for the CLI: unlock the app (and approve its prompt), then run this again" >&2
-    exit 1
-  }
+  op_unlocked intentional-sync || exit 1
   # Each read on its own line, so a failed one stops here (inside a command's
   # arguments it wouldn't), and nothing is written unless all came back.
   database_url=$(op read "$item/database url")
