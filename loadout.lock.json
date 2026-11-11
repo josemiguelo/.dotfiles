@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "5bbb5ce0b4d9ed8c55675ca47777fc7bdb1535ac4982026638477759bfdfdf78",
+  "sources": "7491ed16886ddb7f4ae7de5fcdb8cd3e497adedb69a09d471b89d0bded7ae5a1",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1704,7 +1704,7 @@
       },
       "omarchy-default-agent": {
         "description": "Omarchy's default coding agent",
-        "file": ".loadout/default-agent.sh",
+        "file": ".loadout/default-agent.ts",
         "check": "test \"$(omarchy default agent)\" = \"$1\"",
         "after": [
           "scripts.mise-tools"

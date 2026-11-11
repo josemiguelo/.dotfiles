@@ -70,7 +70,7 @@ script "java-macos-integration" {
 # named by the machine: `args(script.omarchy-default-agent, "claude")`.
 script "omarchy-default-agent" {
   description = "Omarchy's default coding agent"
-  file        = ".loadout/default-agent.sh"
+  file        = ".loadout/default-agent.ts"
   check       = "test \"$(omarchy default agent)\" = \"$1\""
   run_after   = [script.mise-tools]
 }
