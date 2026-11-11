@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "1a6a21d8b2ebfa721e41b7e162bd181a1a9f4458260dab66aa3ce0ed84b6ed63",
+  "sources": "89d26ba36d12f11635a02c06855f595b09c7dfc61db9bc45006a1c2ebbf36bae",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1556,8 +1556,8 @@
       },
       "mason-kotlin-lsp": {
         "description": "kotlin-lsp for kotlin.nvim, from Mason",
-        "file": ".loadout/mason-kotlin-lsp.sh",
-        "check": "file:.loadout/mason-kotlin-lsp.sh check \"$@\"",
+        "file": ".loadout/mason-kotlin-lsp.ts",
+        "check": "file:.loadout/mason-kotlin-lsp.ts check \"$@\"",
         "after": [
           "scripts.nvim-plugins"
         ],
@@ -1604,8 +1604,8 @@
       },
       "nvim-plugins": {
         "description": "lazy.nvim plugins at the commits lazy-lock.json locks",
-        "file": ".loadout/plugins.sh",
-        "check": "file:.loadout/plugins.sh check \"$@\"",
+        "file": ".loadout/plugins.ts",
+        "check": "file:.loadout/plugins.ts check \"$@\"",
         "after": [
           "scripts.mise-tools"
         ],
@@ -1874,8 +1874,8 @@
       },
       "omarchy-tmux-theme": {
         "description": "tmux keeps kitty's palette across omarchy theme switches",
-        "file": ".loadout/omarchy-theme.sh",
-        "check": "file:.loadout/omarchy-theme.sh check \"$@\"",
+        "file": ".loadout/omarchy-theme.ts",
+        "check": "file:.loadout/omarchy-theme.ts check \"$@\"",
         "after": [
           "programs.tmux"
         ],
@@ -1935,8 +1935,8 @@
       },
       "remove-brew-tmux": {
         "description": "no tpack, tmux or git from brew (Linux has its own)",
-        "file": ".loadout/remove-brew-tmux.sh",
-        "check": "file:.loadout/remove-brew-tmux.sh check \"$@\"",
+        "file": ".loadout/remove-brew-tmux.ts",
+        "check": "file:.loadout/remove-brew-tmux.ts check \"$@\"",
         "after": [
           "programs.tpack"
         ],
@@ -2105,8 +2105,8 @@
       },
       "tmux-plugins": {
         "description": "tmux plugins tmux.conf declares",
-        "file": ".loadout/plugins.sh",
-        "check": "file:.loadout/plugins.sh check \"$@\"",
+        "file": ".loadout/plugins.ts",
+        "check": "file:.loadout/plugins.ts check \"$@\"",
         "after": [
           "programs.tmux",
           "programs.tpack"
@@ -2541,8 +2541,8 @@
         "origin": "loadouts/private_dot_config/zsh"
       },
       "mason-kotlin-lsp": {
-        "command": "file:.loadout/outdated-kotlin-lsp.sh",
-        "upgrade": "file:.loadout/outdated-kotlin-lsp.sh update {item}",
+        "command": "file:.loadout/outdated-kotlin-lsp.ts",
+        "upgrade": "file:.loadout/outdated-kotlin-lsp.ts update {item}",
         "origin": "loadouts/private_dot_config/nvim"
       },
       "mise-tools": {
@@ -2551,8 +2551,8 @@
         "origin": "loadouts/private_dot_config/mise"
       },
       "nvim-plugins": {
-        "command": "file:.loadout/outdated-plugins.sh",
-        "upgrade": "file:.loadout/outdated-plugins.sh update {item}",
+        "command": "file:.loadout/outdated-plugins.ts",
+        "upgrade": "file:.loadout/outdated-plugins.ts update {item}",
         "origin": "loadouts/private_dot_config/nvim"
       },
       "omarchy-plugins": {
@@ -2561,8 +2561,8 @@
         "origin": "loadouts/private_dot_config/.omarchy"
       },
       "tmux-plugins": {
-        "command": "file:.loadout/outdated-plugins.sh",
-        "upgrade": "file:.loadout/outdated-plugins.sh update {item}",
+        "command": "file:.loadout/outdated-plugins.ts",
+        "upgrade": "file:.loadout/outdated-plugins.ts update {item}",
         "origin": "loadouts/private_dot_config/tmux"
       }
     },

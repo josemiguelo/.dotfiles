@@ -28,15 +28,15 @@ program "tpack" {
 # behind its GitHub tip.
 script "tmux-plugins" {
   description        = "tmux plugins tmux.conf declares"
-  managed_by         = ".loadout/plugins.sh"
+  managed_by         = ".loadout/plugins.ts"
   run_after          = [program.tmux, program.tpack]
-  updates_managed_by = ".loadout/outdated-plugins.sh"
+  updates_managed_by = ".loadout/outdated-plugins.ts"
 }
 
 # Linux: brew's tpack cask gone, with the tmux and git it pulled in.
 script "remove-brew-tmux" {
   description = "no tpack, tmux or git from brew (Linux has its own)"
-  managed_by  = ".loadout/remove-brew-tmux.sh"
+  managed_by  = ".loadout/remove-brew-tmux.ts"
   run_after   = [program.tpack]
 }
 
@@ -44,6 +44,6 @@ script "remove-brew-tmux" {
 # kitty's palette.
 script "omarchy-tmux-theme" {
   description = "tmux keeps kitty's palette across omarchy theme switches"
-  managed_by  = ".loadout/omarchy-theme.sh"
+  managed_by  = ".loadout/omarchy-theme.ts"
   run_after   = [program.tmux]
 }

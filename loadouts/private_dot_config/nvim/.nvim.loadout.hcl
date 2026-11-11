@@ -7,9 +7,9 @@
 # bring it back with `chezmoi re-add`.
 script "nvim-plugins" {
   description        = "lazy.nvim plugins at the commits lazy-lock.json locks"
-  managed_by         = ".loadout/plugins.sh"
+  managed_by         = ".loadout/plugins.ts"
   run_after          = [script.mise-tools]
-  updates_managed_by = ".loadout/outdated-plugins.sh"
+  updates_managed_by = ".loadout/outdated-plugins.ts"
 }
 
 # kotlin.nvim's server, installed by Mason (kotlin.lua asks for it too). Its
@@ -19,9 +19,9 @@ script "nvim-plugins" {
 script "mason-kotlin-lsp" {
   description        = "kotlin-lsp for kotlin.nvim, from Mason"
   later              = "a large download only Kotlin editing needs"
-  managed_by         = ".loadout/mason-kotlin-lsp.sh"
+  managed_by         = ".loadout/mason-kotlin-lsp.ts"
   run_after          = [script.nvim-plugins]
-  updates_managed_by = ".loadout/outdated-kotlin-lsp.sh"
+  updates_managed_by = ".loadout/outdated-kotlin-lsp.ts"
 }
 
 # The copy an earlier version downloaded from kotlin-lsp's GitHub releases

@@ -26,7 +26,7 @@ return {
       {
         "mason.nvim",
         -- Loadout installs it too and reports Mason's newer builds
-        -- (.loadout/mason-kotlin-lsp.sh): they expire weeks after release.
+        -- (.loadout/mason-kotlin-lsp.ts): they expire weeks after release.
         opts = { ensure_installed = { "kotlin-lsp" } },
       },
     },

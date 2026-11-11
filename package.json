@@ -7,7 +7,9 @@
     "#android-sdk": "./loadouts/private_dot_config/.android-sdk/.loadout/lib/android-sdk.ts",
     "#hypr": "./loadouts/private_dot_config/.omarchy/.loadout/lib/hypr.ts",
     "#omarchy": "./loadouts/private_dot_config/.omarchy/.loadout/lib/omarchy.ts",
-    "#webapp": "./loadouts/private_dot_config/.omarchy/.loadout/lib/webapp.ts"
+    "#webapp": "./loadouts/private_dot_config/.omarchy/.loadout/lib/webapp.ts",
+    "#nvim": "./loadouts/private_dot_config/nvim/.loadout/lib/nvim.ts",
+    "#tmux": "./loadouts/private_dot_config/tmux/.loadout/lib/tmux.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
