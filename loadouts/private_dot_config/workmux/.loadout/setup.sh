@@ -50,8 +50,10 @@ missing() {
     [ -f "$COPILOT/hooks/workmux-status.json" ] || { echo "missing hooks: $COPILOT/hooks/workmux-status.json"; ok=1; }
   fi
   if [ -d "$OPENCODE" ]; then
-    ls "$OPENCODE"/plugin/workmux-status* "$OPENCODE"/plugins/workmux-status* >/dev/null 2>&1 \
-      || { echo "missing hooks: $OPENCODE/plugin/workmux-status.ts"; ok=1; }
+    # Older workmux wrote plugin/workmux-status.ts, newer plugins/workmux-status/:
+    # either will do (one ls over both fails when either is absent).
+    { ls -d "$OPENCODE"/plugin/workmux-status* || ls -d "$OPENCODE"/plugins/workmux-status*; } >/dev/null 2>&1 \
+      || { echo "missing hooks: $OPENCODE/plugins/workmux-status"; ok=1; }
     skills "$OPENCODE/skills" || ok=1
   fi
   version=$(workmux --version)
