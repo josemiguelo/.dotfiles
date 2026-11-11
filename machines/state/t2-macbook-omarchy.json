@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.3.0",
-  "updatedAt": "2026-11-11T02:48:49.267279513Z",
+  "updatedAt": "2026-11-11T03:01:31.395709196Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -143,8 +143,8 @@
       "reason": null
     },
     "intentional": {
-      "status": "missing",
-      "version": null,
+      "status": "installed",
+      "version": "0.5.6",
       "reason": null
     },
     "jetbrains-toolbox": {
@@ -465,7 +465,7 @@
       "exitCode": 0
     },
     "workmux-setup": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-11-11T02:18:04.283933752Z",
       "exitCode": 1
     },
@@ -620,7 +620,7 @@
       "exitCode": 0
     },
     "omarchy-1password": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-11-11T02:12:42.509895567Z",
       "exitCode": 0
     },
@@ -725,8 +725,8 @@
       "exitCode": 0
     },
     "t2-hid-apple-keyboard": {
-      "status": "pending",
-      "lastRun": "2026-11-11T02:16:34.489238674Z",
+      "status": "done",
+      "lastRun": "2026-11-11T02:56:07.761361748Z",
       "exitCode": 0
     },
     "t2-kernel-args": {
