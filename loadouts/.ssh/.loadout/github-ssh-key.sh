@@ -8,7 +8,9 @@
 # Install logs gh in when it isn't (`gh auth login --web`: a one-time code to
 # approve in the browser, the one browser step of a new machine), adds the key,
 # and deletes any older key with the same title: a previous install of this
-# machine. Keys with other titles are never touched.
+# machine. Keys with other titles are never touched. It also makes ssh gh's
+# git protocol (what `gh repo clone` uses) when gh was logged in by hand with
+# https before setup: the login above, which says ssh, is skipped then.
 #
 # gh comes from wherever the machine has it: mise's shims (Omarchy's
 # conf.d/omarchy.toml installs it through mise), PATH or Homebrew's prefix
@@ -39,18 +41,27 @@ authenticates() {
     grep -q "successfully authenticated"
 }
 
+# gh's git protocol for github.com is ssh (nothing to say without gh).
+gh_ssh() {
+  command -v gh >/dev/null 2>&1 || return 0
+  [ "$(gh config get -h github.com git_protocol 2>/dev/null)" = ssh ]
+}
+
 on_github() {
   gh api user/keys --paginate --jq '.[].key' 2>/dev/null | grep -qF -- "$(cut -d' ' -f2 "$KEY.pub")"
 }
 
 case "$MODE" in
 check)
-  authenticates || { ! ssh_key_loaded "$KEY" && on_github; }
+  { authenticates || { ! ssh_key_loaded "$KEY" && on_github; }; } && gh_ssh
   ;;
 install)
   [ -f "$KEY.pub" ] || { echo "no $KEY.pub: setup-ssh makes it" >&2; exit 1; }
   ssh_key_loaded "$KEY" || ssh-add "$KEY"
-  authenticates && exit 0
+  if authenticates; then
+    gh_ssh || { gh config set -h github.com git_protocol ssh && echo "gh's git protocol is ssh now"; }
+    exit 0
+  fi
   command -v gh >/dev/null 2>&1 ||
     { echo "gh isn't installed: map the gh program for this machine (Omarchy: mise-tools installs it)" >&2; exit 1; }
   if ! gh auth status -h github.com >/dev/null 2>&1; then
@@ -70,6 +81,7 @@ install)
     gh ssh-key add "$KEY.pub" --title "$TITLE"
   fi
   authenticates || { echo "GitHub still refuses $KEY over ssh" >&2; exit 1; }
+  gh_ssh || gh config set -h github.com git_protocol ssh
   echo "GitHub knows $KEY as \"$TITLE\""
   ;;
 esac
