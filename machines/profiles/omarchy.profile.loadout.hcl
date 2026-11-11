@@ -16,7 +16,9 @@ profile "omarchy" {
     ]
   }
   via "flatpak" {
-    install = [program.flathub-remote, program.stremio]
+    # stremio is off: its first Flathub download stalls the whole setup; install
+    # it afterwards with `loadout install stremio`.
+    install = [program.flathub-remote, /* program.stremio */]
   }
   via "omarchy-aur" {
     install = [

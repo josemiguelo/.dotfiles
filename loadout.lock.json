@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.3.0",
-  "sources": "7b3c3e11b0635f97133c9a8b4b09b055aa8bdffd788f867c2b4149bd6a09d79a",
+  "sources": "5bbb5ce0b4d9ed8c55675ca47777fc7bdb1535ac4982026638477759bfdfdf78",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2221,7 +2221,6 @@
           "slack": "omarchy-aur",
           "spotify": "omarchy",
           "starship": "omarchy",
-          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
@@ -2364,7 +2363,6 @@
           "solaar": "omarchy",
           "spotify": "omarchy",
           "starship": "omarchy",
-          "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
           "t2-arch-packages-keyring": "omarchy",
