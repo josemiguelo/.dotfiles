@@ -85,7 +85,7 @@ script "setup-libvirt" {
   needs_sudo  = true
 
   variant "arch" {
-    managed_by = ".loadout/setup-libvirt-arch.sh"
+    managed_by = ".loadout/setup-libvirt-arch.ts"
     run_after  = [program.libvirt, program.qemu-desktop, program.dnsmasq]
   }
 
@@ -111,7 +111,7 @@ script "setup-libvirt" {
 script "ufw-libvirt" {
   description = "ufw allows libvirt's default NAT network (virbr0)"
   later       = "opens the firewall for the later virtualization programs"
-  managed_by  = ".loadout/ufw-libvirt.sh"
+  managed_by  = ".loadout/ufw-libvirt.ts"
   needs_sudo  = true
   run_after   = [script.setup-libvirt]
 }

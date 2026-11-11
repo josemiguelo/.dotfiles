@@ -5,7 +5,7 @@
 # both in its own profile, so `install` only says what to do there.
 script "surfingkeys" {
   description = "Surfingkeys in Brave, reading ~/.config/surfingkeys/surfingkeys.js"
-  managed_by  = ".loadout/surfingkeys.sh"
+  managed_by  = ".loadout/surfingkeys.ts"
   run_after   = [program.brave]
 }
 
@@ -14,6 +14,6 @@ script "surfingkeys" {
 # path joins Omarchy's --load-extension line in brave-flags.conf.
 script "surfingkeys-split-view" {
   description = "Brave loads the Split view keys extension behind Surfingkeys' gs"
-  managed_by  = ".loadout/split-view.sh"
+  managed_by  = ".loadout/split-view.ts"
   run_after   = [script.omarchy-brave]
 }

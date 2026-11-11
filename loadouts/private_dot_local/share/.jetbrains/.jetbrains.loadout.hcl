@@ -16,6 +16,6 @@ program "jetbrains-toolbox" {
 
 script "link-jetbrains-launchers-linux" {
   description = "symlink JetBrains Toolbox launcher scripts into ~/.local/bin"
-  managed_by  = ".loadout/link-launchers.sh"
+  managed_by  = ".loadout/link-launchers.ts"
   run_after   = [program.jetbrains-toolbox]
 }

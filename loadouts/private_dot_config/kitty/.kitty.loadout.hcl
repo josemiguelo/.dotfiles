@@ -20,6 +20,6 @@ program "ttf-firacode-nerd" {
 
 script "omarchy-default-terminal" {
   description = "kitty as omarchy's default terminal"
-  managed_by  = ".loadout/default-terminal.sh"
+  managed_by  = ".loadout/default-terminal.ts"
   run_after   = [program.kitty]
 }

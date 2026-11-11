@@ -4,6 +4,6 @@
 script "unlink-brew-glib" {
   description = "brew's glib unlinked (the system's gsettings reaches dconf)"
   later       = "glib comes with later brew installs (scrcpy); it unlinks after all of them"
-  managed_by  = ".loadout/unlink-brew-glib.sh"
+  managed_by  = ".loadout/unlink-brew-glib.ts"
   run_after   = [program.scrcpy]
 }

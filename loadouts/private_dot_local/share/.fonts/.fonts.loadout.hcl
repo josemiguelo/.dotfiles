@@ -2,5 +2,5 @@
 # (macOS, Fedora).
 script "download-fonts" {
   description = "FiraCode nerd fonts"
-  managed_by  = ".loadout/download-fonts.sh"
+  managed_by  = ".loadout/download-fonts.ts"
 }

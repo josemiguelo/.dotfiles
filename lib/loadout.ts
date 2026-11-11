@@ -63,6 +63,20 @@ export async function mainCheckoutPath(file: string): Promise<string> {
   return (await Bun.file(main).exists()) ? main : own;
 }
 
+/** path in the repo loadout runs (`$LOADOUT_REPO`, which loadout sets for every command). */
+export const repoPath = (path: string) => join(process.env.LOADOUT_REPO ?? fail("LOADOUT_REPO isn't set: run this through loadout"), path);
+
+/**
+ * Homebrew's prefix on this OS, from brew-prefix.sh, the one place that
+ * decides it (the sh scripts source it). By OS, not by what exists: check for
+ * `${prefix}/bin/brew` before relying on it.
+ */
+export const brewPrefix = () =>
+  out($`sh -c ${'. "$1"; printf %s "$BREW_PREFIX"'} sh ${repoPath("loadouts/private_dot_local/lib/brew-prefix.sh")}`);
+
+/** brew through brew.sh (a PATH brew first, then the prefix's; unattended), as every brew command the repo runs. */
+export const brew = (...args: string[]) => $`sh ${repoPath("loadouts/private_dot_config/.homebrew/.loadout/brew.sh")} ${args}`;
+
 type Step =(...args: string[]) => Promise<unknown> | unknown;
 
 /**
