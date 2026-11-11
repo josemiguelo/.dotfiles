@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "4.3.0",
-  "updatedAt": "2026-11-11T17:21:43.882938937Z",
+  "toolVersion": "4.4.0",
+  "updatedAt": "2026-11-11T21:11:09.320305606Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -282,6 +282,11 @@
       "version": "1.27.0",
       "reason": null
     },
+    "stremio": {
+      "status": "installed",
+      "version": "1.2.2",
+      "reason": null
+    },
     "sublime-text": {
       "status": "installed",
       "version": "4.4215",
@@ -440,7 +445,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -509,6 +514,11 @@
       "lastRun": "2026-11-11T16:35:15.297759426Z",
       "exitCode": 0
     },
+    "mise-tools-later": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
     "mise-default-packages": {
       "status": "done",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
@@ -541,7 +551,7 @@
     },
     "omarchy-tmux-theme": {
       "status": "done",
-      "lastRun": "2026-11-11T16:39:43.537398960Z",
+      "lastRun": "2026-11-11T21:09:14.300653909Z",
       "exitCode": 0
     },
     "link-jetbrains-launchers-linux": {
@@ -551,7 +561,7 @@
     },
     "android-sdk": {
       "status": "pending",
-      "lastRun": "2026-11-11T17:21:34.108356475Z",
+      "lastRun": "2026-11-11T21:11:07.341080723Z",
       "exitCode": 1
     },
     "omarchy-hypr-config": {
@@ -641,7 +651,7 @@
     },
     "surfingkeys": {
       "status": "pending",
-      "lastRun": "2026-11-11T17:21:39.899832902Z",
+      "lastRun": "2026-11-11T21:09:15.583930389Z",
       "exitCode": 1
     },
     "surfingkeys-split-view": {
@@ -716,7 +726,7 @@
     },
     "omarchy-sshd": {
       "status": "done",
-      "lastRun": "2026-11-11T16:39:43.132998559Z",
+      "lastRun": "2026-11-11T21:09:14.173906445Z",
       "exitCode": 0
     },
     "t2-hid-apple-keyboard": {
@@ -736,7 +746,7 @@
     },
     "t2-gmux-backlight": {
       "status": "done",
-      "lastRun": "2026-11-11T16:42:36.238777544Z",
+      "lastRun": "2026-11-11T21:09:15.787458293Z",
       "exitCode": 0
     },
     "t2-bcm-firmware": {
@@ -746,7 +756,7 @@
     },
     "t2-render-gpu": {
       "status": "done",
-      "lastRun": "2026-11-11T16:42:43.549589903Z",
+      "lastRun": "2026-11-11T21:09:15.873586163Z",
       "exitCode": 0
     },
     "setup-libvirt": {
