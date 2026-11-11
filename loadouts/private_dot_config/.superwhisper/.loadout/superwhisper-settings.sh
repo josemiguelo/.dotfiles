@@ -30,17 +30,24 @@ missing() {
   models | jq -r --arg m "$1" '.processingModes[] | select(.value == $m) | .missing[]'
 }
 
-state() {
-  models | jq -r --arg id "$1" '.models[] | select(.id == $id) | .download.state'
+# "<state> <partialBytes> <sizeBytes>" of one model.
+progress() {
+  models | jq -r --arg id "$1" '.models[] | select(.id == $id) | "\(.download.state) \(.partialBytes // 0) \(.sizeBytes // 0)"'
 }
 
-# Downloads one model and waits for it (up to an hour).
+# Downloads one model and waits for it (up to an hour), saying how far it got
+# once a minute: a large one takes a while, and a setup run shouldn't look stuck.
 download() {
   tries=0
-  until [ "$(state "$1")" = installed ]; do
-    case $(state "$1") in
+  while :; do
+    set -- "$1" $(progress "$1")
+    [ "$2" = installed ] && { echo "  $1: done"; return 0; }
+    case $2 in
     missing | paused) superwhisper models download "$1" >/dev/null 2>&1 || true ;;
     esac
+    if [ $((tries % 6)) -eq 0 ] && [ "${4:-0}" -gt 0 ]; then
+      echo "  $1: $(($3 * 100 / $4))% of $(($4 / 1048576)) MB ($2, $((tries / 6))m)"
+    fi
     tries=$((tries + 1))
     [ "$tries" -lt 360 ] || { echo "$1 didn't finish downloading" >&2; return 1; }
     sleep 10
