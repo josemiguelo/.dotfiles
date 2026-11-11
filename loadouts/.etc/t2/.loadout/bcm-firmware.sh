@@ -61,6 +61,9 @@ macos_volume() {
 
 reload_wifi() {
   # brcmfmac read no firmware when it loaded; loading it again reads it now.
+  # brcmfmac_wcc holds brcmfmac, so it goes first (as the fetcher's own reload
+  # does); otherwise removing brcmfmac fails with "in use".
+  sudo modprobe -r brcmfmac_wcc 2>/dev/null || true
   sudo modprobe -r brcmfmac 2>/dev/null && sudo modprobe brcmfmac 2>/dev/null ||
     echo "reboot for the Wi-Fi to pick up the firmware" >&2
 }
