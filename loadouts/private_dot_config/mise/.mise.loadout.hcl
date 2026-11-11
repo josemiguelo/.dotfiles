@@ -66,7 +66,7 @@ script "mise-tools-later" {
 # backfills every one.
 script "mise-default-packages" {
   description = "default npm/gem packages in every mise node/ruby version"
-  managed_by  = ".loadout/default-packages.sh"
+  managed_by  = ".loadout/default-packages.ts"
   run_after   = [script.mise-tools]
 }
 
@@ -74,7 +74,7 @@ script "mise-default-packages" {
 # asdf-java's macOS integration did. The macos profile runs it.
 script "java-macos-integration" {
   description = "mise's JDKs registered with macOS (java_home)"
-  managed_by  = ".loadout/java-macos.sh"
+  managed_by  = ".loadout/java-macos.ts"
   needs_sudo  = true
   run_after   = [script.mise-tools]
 }

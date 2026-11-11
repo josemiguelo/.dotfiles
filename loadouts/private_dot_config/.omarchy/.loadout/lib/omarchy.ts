@@ -199,8 +199,7 @@ export async function menuBlockWrite(name: string, note: string, entriesFile: st
 // Everything Hyprland starts (the shell with its lock and idle code
 // included) finds commands on a PATH that starts with OVERRIDES_DIR, ahead
 // of Omarchy's own $OMARCHY_PATH/bin, so a wrapper there replaces the
-// Omarchy command of the same name. omarchy-overrides-lib.sh is the same,
-// for the sh scripts that still use it.
+// Omarchy command of the same name.
 
 export const OVERRIDES_DIR = `${HOME}/.local/share/omarchy-overrides/bin`;
 export const OMARCHY_BIN = `${process.env.OMARCHY_PATH || "/usr/share/omarchy"}/bin`;

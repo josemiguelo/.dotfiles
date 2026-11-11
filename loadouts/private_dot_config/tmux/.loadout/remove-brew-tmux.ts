@@ -6,21 +6,13 @@
 // cask, then tmux and git unless another brew package still needs them (that
 // one is reported and left alone: removing it would break the other).
 // Modes: `check` / `install` (default).
-import { accessSync, constants } from "node:fs";
-import { brew, brewPrefix, main, ok } from "#loadout";
+import { brew, brewPrefix, executable, main, ok } from "#loadout";
 
 const FORMULAE = ["tmux", "git"];
 const prefix = await brewPrefix();
 
 /** Without brew there's nothing to remove. */
-const hasBrew = () => {
-  try {
-    accessSync(`${prefix}/bin/brew`, constants.X_OK);
-    return true;
-  } catch {
-    return false;
-  }
-};
+const hasBrew = () => executable(`${prefix}/bin/brew`);
 
 const hasCask = () => ok(brew("list", "--cask", "tpack"));
 const hasFormula = (f: string) => ok(brew("list", "--formula", f));

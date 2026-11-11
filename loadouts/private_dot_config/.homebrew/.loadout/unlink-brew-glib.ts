@@ -8,20 +8,13 @@
 // an unlinked keg unlinked. Its build-only tools (gdbus-codegen,
 // glib-mkenums…) leave PATH too: nothing here builds from source.
 // Modes: `check` / `install` (default).
-import { accessSync, constants, existsSync } from "node:fs";
-import { brew, brewPrefix, main } from "#loadout";
+import { existsSync } from "node:fs";
+import { brew, brewPrefix, executable, main } from "#loadout";
 
 const prefix = await brewPrefix();
 
 /** Without brew there's nothing to unlink. */
-const hasBrew = () => {
-  try {
-    accessSync(`${prefix}/bin/brew`, constants.X_OK);
-    return true;
-  } catch {
-    return false;
-  }
-};
+const hasBrew = () => executable(`${prefix}/bin/brew`);
 
 const linked = () => existsSync(`${prefix}/bin/gsettings`);
 

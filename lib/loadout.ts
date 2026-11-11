@@ -1,8 +1,9 @@
 // What loadout's Bun scripts share: the managed_by protocol, and commands as
 // terse as sh's. Commands are Bun Shell's $`…`: each ${value} is one
 // argument, quoted for you, and a command that fails throws, with its output.
-import { realpathSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { accessSync, constants, realpathSync } from "node:fs";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { $ } from "bun";
 export { $ };
@@ -29,6 +30,34 @@ export const ok = async (command: ReturnType<typeof $>) => (await command.quiet(
  */
 export const read = (path: string): Promise<string> => readFile(path, "utf8").catch(() => "");
 
+/** A file's text as `$(cat file)` reads it: trailing newlines dropped, "" when there's none. */
+export const readTrimmed = async (path: string) => (await read(path)).replace(/\n+$/, "");
+
+/** Can this user run path? (sh's `[ -x path ]`) */
+export function executable(path: string) {
+  try {
+    accessSync(path, constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * text into path as root, with mode, its folder made: through a private temp
+ * file and `sudo install`, never stdin (a Bun Shell redirect can't be opened
+ * as /dev/stdin).
+ */
+export async function sudoWrite(path: string, text: string, mode = "644") {
+  const dir = await mkdtemp(join(tmpdir(), "loadout-"));
+  try {
+    await Bun.write(join(dir, "file"), text);
+    await $`sudo install -D -m ${mode} ${join(dir, "file")} ${path}`;
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
 /** Re-run test() until it's true; fails after tries * every seconds. */
 export async function waitUntil(test: () => Promise<boolean>, what = "it", every = 10, tries = 360) {
   for (let i = 0; i < tries; i++) {
@@ -48,7 +77,6 @@ export async function waitUntil(test: () => Promise<boolean>, what = "it", every
  * as an absolute path when it isn't in a worktree, or when the main checkout
  * has no copy yet (a script new to the feature): loadout's check, run from
  * the main checkout after the merge, sees the path differ and installs again.
- * lib/main-checkout.sh is the same, for sh scripts.
  */
 export async function mainCheckoutPath(file: string): Promise<string> {
   const dir = realpathSync(dirname(file));

@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "deb52696740567691c98e597c7ef12646284c4f36084aeb25bb28088fdcc9ad3",
+  "sources": "0a15e1f7e663b18e66bac8ff53a45865eb7e0d7b58832a1e591cf86d4be47067",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1510,8 +1510,8 @@
       },
       "java-macos-integration": {
         "description": "mise's JDKs registered with macOS (java_home)",
-        "file": ".loadout/java-macos.sh",
-        "check": "file:.loadout/java-macos.sh check \"$@\"",
+        "file": ".loadout/java-macos.ts",
+        "check": "file:.loadout/java-macos.ts check \"$@\"",
         "after": [
           "scripts.mise-tools"
         ],
@@ -1534,8 +1534,8 @@
       },
       "keychron-launcher-access": {
         "description": "Keychron Launcher can reach the keyboard (WebHID)",
-        "file": ".loadout/launcher-access.sh",
-        "check": "file:.loadout/launcher-access.sh check \"$@\"",
+        "file": ".loadout/launcher-access.ts",
+        "check": "file:.loadout/launcher-access.ts check \"$@\"",
         "sudo": true,
         "origin": "loadouts/.etc/keychron"
       },
@@ -1566,8 +1566,8 @@
       },
       "mise-default-packages": {
         "description": "default npm/gem packages in every mise node/ruby version",
-        "file": ".loadout/default-packages.sh",
-        "check": "file:.loadout/default-packages.sh check \"$@\"",
+        "file": ".loadout/default-packages.ts",
+        "check": "file:.loadout/default-packages.ts check \"$@\"",
         "after": [
           "scripts.mise-tools"
         ],
@@ -2019,8 +2019,8 @@
       },
       "superwhisper-settings": {
         "description": "Superwhisper's processing mode and settings",
-        "file": ".loadout/superwhisper-settings.sh",
-        "check": "file:.loadout/superwhisper-settings.sh check \"$@\"",
+        "file": ".loadout/superwhisper-settings.ts",
+        "check": "file:.loadout/superwhisper-settings.ts check \"$@\"",
         "after": [
           "scripts.omarchy-default-dictation"
         ],
@@ -2058,15 +2058,15 @@
       },
       "t2-boot-clock": {
         "description": "keep the EC hardware clock set (T2 Mac)",
-        "file": ".loadout/boot-clock.sh",
-        "check": "file:.loadout/boot-clock.sh check \"$@\"",
+        "file": ".loadout/boot-clock.ts",
+        "check": "file:.loadout/boot-clock.ts check \"$@\"",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
       "t2-gmux-backlight": {
         "description": "screen brightness kept across suspend and reboots (T2 Mac)",
-        "file": ".loadout/gmux-backlight.sh",
-        "check": "file:.loadout/gmux-backlight.sh check \"$@\"",
+        "file": ".loadout/gmux-backlight.ts",
+        "check": "file:.loadout/gmux-backlight.ts check \"$@\"",
         "after": [
           "scripts.omarchy-command-overrides"
         ],
@@ -2078,13 +2078,13 @@
         "sudo": true,
         "variants": {
           "arch": {
-            "file": ".loadout/hid-apple-keyboard-arch.sh",
-            "check": "file:.loadout/hid-apple-keyboard-arch.sh check \"$@\"",
+            "file": ".loadout/hid-apple-keyboard-arch.ts",
+            "check": "file:.loadout/hid-apple-keyboard-arch.ts check \"$@\"",
             "origin": "loadouts/.etc/t2"
           },
           "fedora": {
-            "file": ".loadout/hid-apple-keyboard.sh",
-            "check": "file:.loadout/hid-apple-keyboard.sh check \"$@\"",
+            "file": ".loadout/hid-apple-keyboard.ts",
+            "check": "file:.loadout/hid-apple-keyboard.ts check \"$@\"",
             "origin": "loadouts/.etc/t2"
           }
         },
@@ -2092,15 +2092,15 @@
       },
       "t2-kernel-args": {
         "description": "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)",
-        "file": ".loadout/kernel-args.sh",
-        "check": "file:.loadout/kernel-args.sh check \"$@\"",
+        "file": ".loadout/kernel-args.ts",
+        "check": "file:.loadout/kernel-args.ts check \"$@\"",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
       "t2-render-gpu": {
         "description": "Hyprland renders on the GPU driving the panel (T2 Mac)",
-        "file": ".loadout/render-gpu.sh",
-        "check": "file:.loadout/render-gpu.sh check \"$@\"",
+        "file": ".loadout/render-gpu.ts",
+        "check": "file:.loadout/render-gpu.ts check \"$@\"",
         "origin": "loadouts/.etc/t2"
       },
       "tmux-plugins": {

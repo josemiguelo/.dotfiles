@@ -15,6 +15,6 @@ program "superwhisper" {
 script "superwhisper-settings" {
   description = "Superwhisper's processing mode and settings"
   later       = "an offline mode downloads gigabytes of models; dictation can wait for them"
-  managed_by  = ".loadout/superwhisper-settings.sh"
+  managed_by  = ".loadout/superwhisper-settings.ts"
   run_after   = [script.omarchy-default-dictation]
 }

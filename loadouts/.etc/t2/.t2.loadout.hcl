@@ -127,7 +127,7 @@ script "t2-bcm-firmware" {
 # (#6562 once swapped pcie_ports=compat for pm_async=off). Next boot.
 script "t2-kernel-args" {
   description = "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)"
-  managed_by  = ".loadout/kernel-args.sh"
+  managed_by  = ".loadout/kernel-args.ts"
   needs_sudo  = true
 }
 
@@ -135,7 +135,7 @@ script "t2-kernel-args" {
 # legacy CMOS rtc only reads it. Writes it back at shutdown.
 script "t2-boot-clock" {
   description = "keep the EC hardware clock set (T2 Mac)"
-  managed_by  = ".loadout/boot-clock.sh"
+  managed_by  = ".loadout/boot-clock.ts"
   needs_sudo  = true
 }
 
@@ -147,13 +147,13 @@ script "t2-hid-apple-keyboard" {
   needs_sudo  = true
 
   variant "arch" {  # Limine (limine-mkinitcpio)
-    managed_by = ".loadout/hid-apple-keyboard-arch.sh"
+    managed_by = ".loadout/hid-apple-keyboard-arch.ts"
   }
 
   # dracut
   variant "fedora" {
     spare      = "no machine runs Fedora today"
-    managed_by = ".loadout/hid-apple-keyboard.sh"
+    managed_by = ".loadout/hid-apple-keyboard.ts"
   }
 }
 
@@ -161,7 +161,7 @@ script "t2-hid-apple-keyboard" {
 # under systemd-backlight for reboots.
 script "t2-gmux-backlight" {
   description = "screen brightness kept across suspend and reboots (T2 Mac)"
-  managed_by  = ".loadout/gmux-backlight.sh"
+  managed_by  = ".loadout/gmux-backlight.ts"
   needs_sudo  = true
   run_after   = [script.omarchy-command-overrides]
 }
@@ -170,5 +170,5 @@ script "t2-gmux-backlight" {
 # block), not the iGPU.
 script "t2-render-gpu" {
   description = "Hyprland renders on the GPU driving the panel (T2 Mac)"
-  managed_by  = ".loadout/render-gpu.sh"
+  managed_by  = ".loadout/render-gpu.ts"
 }
