@@ -7,6 +7,11 @@
 # A new agent or skill in workmux needs a line here.
 # setup asks before each part and only on a terminal, so install runs it in
 # one (script) and answers yes.
+# It also runs `opencode --version` (to pick OpenCode's plugin), and Omarchy's
+# opencode is a lazy mise tool that installs on its first run: on a fresh
+# machine that install failed inside setup, which only says "opencode
+# --version failed" and fails the whole step. So install runs it once first,
+# its errors on screen: OpenCode installs on its own, or the run says why not.
 # Modes: `check` / `install` (default).
 set -eu
 
@@ -74,6 +79,10 @@ case "${1:-install}" in
     missing >/dev/null
     ;;
   install)
+    if command -v opencode >/dev/null 2>&1; then
+      echo "workmux-setup: OpenCode first (Omarchy installs it on first use)" >&2
+      opencode --version >/dev/null || { echo "opencode --version failed: workmux setup can't pick its plugin" >&2; exit 1; }
+    fi
     yes | head -n 10 | in_terminal workmux setup --hooks --skills
     mkdir -p "$(dirname "$STAMP")"
     workmux --version >"$STAMP"
