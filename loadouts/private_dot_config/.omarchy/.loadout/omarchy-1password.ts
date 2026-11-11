@@ -11,6 +11,10 @@
 // here when it lacks the flag, never created) and Ctrl+Shift+Space, which
 // opens Quick Access from a block in ~/.config/hypr/bindings.lua — Wayland
 // gives 1Password no global shortcut of its own.
+// The installer opens 1Password as it finishes, and the app writes its
+// autostart entry a few seconds later, without the flag: rewritten before it
+// appeared, it stayed pending until the next run. So after installing, the
+// script waits (up to half a minute, while 1Password runs) for that entry.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
 import { $, has, main, ok, read } from "#loadout";
@@ -36,6 +40,18 @@ const body = [
 const installed = async () =>
   (await ok($`pacman -Q 1password`)) && (await ok($`pacman -Q 1password-cli`)) && (!has("chromium") || existsSync(EXTENSION));
 
+/**
+ * The entry 1Password writes on its first start, a few seconds after the
+ * installer opens it: waited for while it runs, then left to the check
+ * (none in time is start at login off, which is fine).
+ */
+async function settleAutostart() {
+  for (let i = 0; i < 30 && !existsSync(AUTOSTART); i++) {
+    if (!(await ok($`pgrep -x 1password`))) return;
+    await Bun.sleep(1000);
+  }
+}
+
 /** No autostart entry (start at login off) is fine; one without the flag isn't. */
 const autostartScaled = async () => !existsSync(AUTOSTART) || new RegExp(`^Exec=.*${FLAG}`, "m").test(await read(AUTOSTART));
 
@@ -45,7 +61,10 @@ const bound = async () =>
 const ready = async () => (await installed()) && (await autostartScaled()) && (await bound());
 
 async function install() {
-  if (!(await installed())) await $`omarchy-install-service-1password`;
+  if (!(await installed())) {
+    await $`omarchy-install-service-1password`;
+    await settleAutostart();
+  }
   if (!(await installed())) throw new Error("1Password isn't fully set up");
   if (!(await autostartScaled())) {
     const entry = (await read(AUTOSTART)).replace(/^Exec=(\S*1password)/gm, `Exec=$1 ${FLAG}`);
