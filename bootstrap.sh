@@ -38,6 +38,11 @@
 # its machine through LOADOUT_REPO), so the machine's ssh key must already be
 # on GitHub; and loadout sets up the child, which runs this repo's recipes.
 #
+# A step loadout couldn't finish (one that needs a hand, such as Android
+# Studio or a browser extension, fails on every fresh machine) doesn't stop
+# the end: loadout lists what failed, the closing instructions still print,
+# and the exit status is still loadout's.
+#
 # Safe to run again: every step skips what's done. --dry-run prints the
 # commands without running them.
 # usage: bootstrap.sh [--dry-run] <machine> [--child <ssh url>]
@@ -227,11 +232,18 @@ EOF
     # The child's own dotfiles; this repo's are applied above.
     run env LOADOUT_REPO="$LREPO" loadout --repo "$LREPO" --machine "$MACHINE" apply
   fi
+  setup=0
   run env LOADOUT_REPO="$LREPO" \
     MISE_IGNORED_CONFIG_PATHS="$REPO:$HOME/.local/share/chezmoi__worktrees" \
-    loadout --repo "$LREPO" --machine "$MACHINE" setup-new-machine --yes
+    loadout --repo "$LREPO" --machine "$MACHINE" setup-new-machine --yes || setup=$?
 
-  say "done: $MACHINE"
+  if [ "$setup" -eq 0 ]; then
+    say "done: $MACHINE"
+  else
+    say "done: $MACHINE, with steps left (loadout listed them above)"
+    echo "Finish them by hand or fix them, then run loadout setup-new-machine again"
+    echo "(it skips what's done)."
+  fi
   if [ -n "$OMALAUNCHER" ]; then
     echo "Open a new terminal: the login shell is zsh now, with LOADOUT_MACHINE set."
     echo "Then look at git status in $REPO: setup tracks launcher files the repo"
@@ -240,6 +252,7 @@ EOF
     echo "Reboot now: the login shell, new groups (docker, libvirt), the rebuilt"
     echo "initramfs and the session's environment only apply after it."
   fi
+  return "$setup"
 }
 
 # Last, with the terminal as input: under `curl | sh` the script itself is
