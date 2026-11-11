@@ -20,9 +20,9 @@ and becomes the hostname (each install keeps its own state file, so a reinstall 
 hostname, clones the child, and sets it up from there. [`bootstrap.sh`](bootstrap.sh) installs git and
 chezmoi, sets the hostname, applies the dotfiles over https, installs loadout
 and runs `loadout setup-new-machine`; `--dry-run` prints the commands
-instead. What it asks for: the sudo password, a passphrase for this machine's
-new ssh key (`setup-ssh`), and once, a GitHub login in the browser
-(`github-ssh-key` adds the key to the account). Reboot when it's done.
+instead. What it asks for: the sudo password and, once, a GitHub login in the
+browser (`github-ssh-key` adds this machine's new ssh key, made without a
+passphrase by `setup-ssh`, to the account). Reboot when it's done.
 
 On a fresh Omarchy, run `omarchy update` (or at least `sudo pacman -Sy`)
 first: the install leaves pacman without package lists, and installing

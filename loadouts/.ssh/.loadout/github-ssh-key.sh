@@ -18,10 +18,11 @@
 # wrapper runs `mise use -g gh`, which writes gh into the dotfiles'
 # config.toml. $HOME is the cwd: from the repo, mise would find the
 # dotfiles' copy of its config and ask to trust it.
-# The check asks GitHub over ssh whether the key authenticates. The key has a
-# passphrase, so ssh goes through the agent (.loadout/ssh-agent.sh); while the key
-# isn't in it (no ssh since login), the check can't ask, and asks gh instead
-# whether GitHub has the key. Install adds it to the agent (asking for the
+# The check asks GitHub over ssh whether the key authenticates. setup-ssh makes
+# it without a passphrase, so ssh reads it directly; a key made earlier with
+# one goes through the agent (.loadout/ssh-agent.sh), and while it isn't in it
+# (no ssh since login) the check can't ask, and asks gh instead whether GitHub
+# has the key. Install adds it to the agent (asking for such a key's
 # passphrase) before it tries.
 # usage: github-ssh-key.sh [check] <key-name>
 set -eu

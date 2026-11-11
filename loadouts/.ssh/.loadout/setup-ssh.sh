@@ -21,13 +21,16 @@ if [ "$(uname -s)" = "Linux" ] && [ -d /run/systemd/system ] && ! systemctl --us
   systemctl --user enable --now ssh-agent.socket
 fi
 
-# A new key has a passphrase (ssh-keygen asks for it): the key pushes to
-# GitHub, and on the T2 logs in over ssh, so a copy of the file mustn't be
-# enough. Into the agent right away, so github-ssh-key's ssh finds it; from
-# then on AddKeysToAgent asks once per login. Commented with the machine's
-# name, as github-ssh-key titles it on GitHub.
+# A new key has no passphrase, so setup never stops to ask for one: the file
+# alone is the key (it pushes to GitHub, and on the T2 logs in over ssh), kept
+# safe by the disk's encryption and its 600 mode. Into the agent right away
+# all the same (no prompt without a passphrase). Commented with the machine's
+# name, as github-ssh-key titles it on GitHub. A key made earlier with a
+# passphrase keeps it (`ssh-keygen -p -f <key>` drops it).
 if [ ! -f "$SSH_KEY" ]; then
-  ssh-keygen -t ed25519 -C "${LOADOUT_MACHINE:-$(hostname -s)}" -f "$SSH_KEY"
+  mkdir -p "$(dirname "$SSH_KEY")"
+  chmod 700 "$(dirname "$SSH_KEY")"
+  ssh-keygen -q -t ed25519 -N "" -C "${LOADOUT_MACHINE:-$(hostname -s)}" -f "$SSH_KEY"
   ssh_agent_up
   ssh-add "$SSH_KEY"
 fi

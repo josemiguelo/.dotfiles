@@ -1,6 +1,7 @@
-# ssh_agent_up: an agent this script's ssh and ssh-add reach. The machine's
-# key has a passphrase, and ssh never asks for one under BatchMode, so the
-# scripts that use the key go through an agent: the dotfiles' (openssh's
+# ssh_agent_up: an agent this script's ssh and ssh-add reach. setup-ssh makes
+# keys without a passphrase now, but one made earlier has one, and ssh never
+# asks for it under BatchMode, so the scripts that use the key go through an
+# agent: the dotfiles' (openssh's
 # ssh-agent.socket user unit on Linux with systemd, launchd's on macOS) when
 # it's reachable, else one of the script's own, which dies with it
 # (omalauncher's proot has no unit).
