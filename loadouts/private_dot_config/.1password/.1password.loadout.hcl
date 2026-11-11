@@ -21,6 +21,6 @@ program "1password-cli" {
 # 1Password runs after.
 script "onepassword-cli" {
   description = "1Password CLI connected to an account through the app"
-  managed_by  = ".loadout/cli-integration.sh"
+  managed_by  = ".loadout/cli-integration.ts"
   run_after   = [program["1password"], program["1password-cli"]]
 }

@@ -12,6 +12,6 @@ program "workmux" {
 # skills.
 script "workmux-setup" {
   description = "workmux's status-tracking hooks and skills for the agents here"
-  managed_by  = ".loadout/setup.sh"
+  managed_by  = ".loadout/setup.ts"
   run_after   = [program.workmux]
 }

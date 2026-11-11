@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "89d26ba36d12f11635a02c06855f595b09c7dfc61db9bc45006a1c2ebbf36bae",
+  "sources": "deb52696740567691c98e597c7ef12646284c4f36084aeb25bb28088fdcc9ad3",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1500,8 +1500,8 @@
       },
       "intentional-sync": {
         "description": "Intentional's sync config, from 1Password",
-        "file": ".loadout/sync-config.sh",
-        "check": "file:.loadout/sync-config.sh check \"$@\"",
+        "file": ".loadout/sync-config.ts",
+        "check": "file:.loadout/sync-config.ts check \"$@\"",
         "after": [
           "scripts.onepassword-cli",
           "programs.intentional"
@@ -1520,8 +1520,8 @@
       },
       "kait2en-dev": {
         "description": "KaiT2en -> Omarchy development: forks, clones, signing key, daily kait2en-sync",
-        "file": ".loadout/kait2en-dev.sh",
-        "check": "file:.loadout/kait2en-dev.sh check \"$@\"",
+        "file": ".loadout/kait2en-dev.ts",
+        "check": "file:.loadout/kait2en-dev.ts check \"$@\"",
         "after": [
           "scripts.bare-repos",
           "scripts.onepassword-cli",
@@ -1848,8 +1848,8 @@
       },
       "omarchy-sshd": {
         "description": "sshd with key-only logins for the trusted GitHub keys",
-        "file": ".loadout/omarchy-sshd.sh",
-        "check": "file:.loadout/omarchy-sshd.sh check \"$@\"",
+        "file": ".loadout/omarchy-sshd.ts",
+        "check": "file:.loadout/omarchy-sshd.ts check \"$@\"",
         "after": [
           "scripts.github-ssh-key"
         ],
@@ -1925,8 +1925,8 @@
       },
       "onepassword-cli": {
         "description": "1Password CLI connected to an account through the app",
-        "file": ".loadout/cli-integration.sh",
-        "check": "file:.loadout/cli-integration.sh check \"$@\"",
+        "file": ".loadout/cli-integration.ts",
+        "check": "file:.loadout/cli-integration.ts check \"$@\"",
         "after": [
           "programs.1password",
           "programs.1password-cli"
@@ -2047,8 +2047,8 @@
       },
       "t2-bcm-firmware": {
         "description": "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback",
-        "file": ".loadout/bcm-firmware.sh",
-        "check": "file:.loadout/bcm-firmware.sh check \"$@\"",
+        "file": ".loadout/bcm-firmware.ts",
+        "check": "file:.loadout/bcm-firmware.ts check \"$@\"",
         "after": [
           "programs.linux-apfs-rw-dkms",
           "scripts.onepassword-cli"
@@ -2142,8 +2142,8 @@
       },
       "workmux-setup": {
         "description": "workmux's status-tracking hooks and skills for the agents here",
-        "file": ".loadout/setup.sh",
-        "check": "file:.loadout/setup.sh check \"$@\"",
+        "file": ".loadout/setup.ts",
+        "check": "file:.loadout/setup.ts check \"$@\"",
         "after": [
           "programs.workmux"
         ],

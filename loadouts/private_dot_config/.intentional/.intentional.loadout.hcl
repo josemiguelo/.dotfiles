@@ -24,6 +24,6 @@ program "intentional" {
 # device name comes from the machine: `args(script.intentional-sync, "<name>")`.
 script "intentional-sync" {
   description = "Intentional's sync config, from 1Password"
-  managed_by  = ".loadout/sync-config.sh"
+  managed_by  = ".loadout/sync-config.ts"
   run_after   = [script.onepassword-cli, program.intentional]
 }

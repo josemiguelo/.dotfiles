@@ -14,7 +14,7 @@ script "bare-repos" {
 # package signing key from 1Password, and kait2en-sync's daily timer.
 script "kait2en-dev" {
   description = "KaiT2en -> Omarchy development: forks, clones, signing key, daily kait2en-sync"
-  managed_by  = ".loadout/kait2en-dev.sh"
+  managed_by  = ".loadout/kait2en-dev.ts"
   run_after   = [
     script.bare-repos, script.onepassword-cli,
     program.meson, program.ninja, program.json-c, program.cmocka,

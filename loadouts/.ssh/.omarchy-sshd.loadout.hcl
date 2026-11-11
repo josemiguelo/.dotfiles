@@ -4,7 +4,7 @@
 # logins); authorized_keys mirrors the account's keys with the named titles.
 script "omarchy-sshd" {
   description = "sshd with key-only logins for the trusted GitHub keys"
-  managed_by  = ".loadout/omarchy-sshd.sh"
+  managed_by  = ".loadout/omarchy-sshd.ts"
   needs_sudo  = true
 
   # gh logged in, with the scope that lists the account's keys.

@@ -117,7 +117,7 @@ locals {
 # a program: the fallback replaces the fetcher, which conflicts with it.
 script "t2-bcm-firmware" {
   description = "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback"
-  managed_by  = ".loadout/bcm-firmware.sh"
+  managed_by  = ".loadout/bcm-firmware.ts"
   needs_sudo  = true
   run_after   = [program.linux-apfs-rw-dkms, script.onepassword-cli]
 }
