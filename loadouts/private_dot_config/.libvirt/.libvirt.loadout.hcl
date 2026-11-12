@@ -52,6 +52,14 @@ program "swtpm" {
   install_via = [omarchy]
 }
 
+# libvirt's optional DMI support: the host's SMBIOS for `virsh sysinfo` and
+# guests' sysinfo; without it libvirtd logs "Cannot find 'dmidecode'" at start.
+program "dmidecode" {
+  description = "DMI table reader, libvirt's host system info"
+  later       = "VMs can wait; nothing in setup needs them"
+  install_via = [omarchy]
+}
+
 locals {
   arch_virtualization = [
     program.libvirt,
@@ -62,6 +70,7 @@ locals {
     program.dnsmasq,
     program.edk2-ovmf,
     program.swtpm,
+    program.dmidecode,
   ]
 }
 

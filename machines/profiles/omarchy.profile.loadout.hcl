@@ -12,7 +12,7 @@ profile "omarchy" {
       program.code, program.sublime-text, program.obsidian, program.spotify,
       program.vlc, program["1password"], program["1password-cli"],
       program.ttf-firacode-nerd, program.ghostscript,
-      program.flatpak, program.libxcrypt-compat,
+      program.flatpak, program.libxcrypt-compat, program.rtkit,
     ]
   }
   via "flatpak" {

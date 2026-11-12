@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "a2f83a48e7c0346bad8cb9f4176895ed16682fc737b319524ecdc57c52c09c24",
+  "sources": "553f3924b7707c8b2ca8cbf1253e80b9f7cd239f7cb5d96ea2cd08247c87e8ca",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -369,6 +369,14 @@
           }
         },
         "origin": "loadouts/.etc/dnf"
+      },
+      "dmidecode": {
+        "description": "DMI table reader, libvirt's host system info",
+        "install": {
+          "omarchy": {}
+        },
+        "later": "VMs can wait; nothing in setup needs them",
+        "origin": "loadouts/private_dot_config/.libvirt"
       },
       "dnf-plugins-core": {
         "description": "dnf plugins (provides the copr command)",
@@ -899,6 +907,12 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/btop"
+      },
+      "rtkit": {
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config"
       },
       "rust": {
         "install": {
@@ -2271,6 +2285,7 @@
           "openssl-1.1": "omarchy-aur",
           "procps-ng": "omarchy",
           "ripgrep": "omarchy",
+          "rtkit": "omarchy",
           "scrcpy": "brew",
           "setup-brew": "linux",
           "slack": "omarchy-aur",
@@ -2379,6 +2394,7 @@
           "cmocka": "omarchy",
           "code": "omarchy",
           "curl": "omarchy",
+          "dmidecode": "omarchy",
           "dnsmasq": "omarchy",
           "edk2-ovmf": "omarchy",
           "eza": "omarchy",
@@ -2414,6 +2430,7 @@
           "qemu-full": "omarchy",
           "ripgrep": "omarchy",
           "rocm-smi-lib": "omarchy",
+          "rtkit": "omarchy",
           "scrcpy": "brew",
           "setup-brew": "linux",
           "slack": "omarchy-aur",
