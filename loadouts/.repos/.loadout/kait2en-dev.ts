@@ -3,8 +3,10 @@
 // bare clones bare-repos makes of t2-arch-packages, omarchy and omarchy-iso:
 //
 // - the forks (omarchy, omarchy-iso): an `upstream` remote (omacom/<repo>) and
-//   the t2-kait2en branch checked out in all_worktrees/t2-kait2en, where the
-//   T2 work lives and the ISO is built from;
+//   the fork's T2 branch checked out in all_worktrees/<branch>: omarchy's
+//   t2-kait2en-stable (the T2 commits on Omarchy's stable release, its only
+//   branch on GitHub; the ISO installs from it) and omarchy-iso's t2-kait2en
+//   (the ISO builder, whose --stable builds stable ISOs);
 // - clones kait2en-sync and the ISO build read: KaiT2en upstream and
 //   omacom/omarchy-pkgs, in ~/Repos/gh/<owner>/<repo> like gclone's;
 // - libvfio-user with its gpio-pci-idio-16 sample built, the fake-hardware
@@ -26,14 +28,15 @@ import { opUnlocked } from "#onepassword";
 
 const HOME = process.env.HOME!;
 const REPOS = `${HOME}/Repos/gh`;
-const BRANCH = "t2-kait2en";
 const FPR = "077D8295CCF834D3F5EC25F70506B72C34EB162F";
 const KEY_REF = "op://Personal/kait2en/t2-arch-packages-signing-key.asc";
 const VFIO = `${REPOS}/nutanix/libvfio-user`;
 const VFIO_BIN = `${VFIO}/build/samples/gpio-pci-idio-16`;
 const UNITS = `${process.env.XDG_CONFIG_HOME || `${HOME}/.config`}/systemd/user`;
 const SYNC = `${REPOS}/josemiguelo/t2-arch-packages/all_worktrees/main/bin/kait2en-sync`;
-const FORKS = ["omarchy", "omarchy-iso"];
+// Each fork's T2 branch, the one checked out and built from.
+const BRANCHES: Record<string, string> = { omarchy: "t2-kait2en-stable", "omarchy-iso": "t2-kait2en" };
+const FORKS = Object.keys(BRANCHES);
 const CLONES = ["kaiT2en/KaiT2en-Fedora", "omacom/omarchy-pkgs"];
 
 const SERVICE = `# Managed by loadout (kait2en-dev).
@@ -64,7 +67,7 @@ const upstream = (repo: string) => `https://github.com/omacom/${repo}.git`;
 async function forkOk(repo: string) {
   const dir = forkDir(repo);
   const url = (await $`git -C ${dir} config --get remote.upstream.url`.quiet().nothrow()).stdout.toString().trim();
-  return url === upstream(repo) && existsSync(`${dir}/all_worktrees/${BRANCH}`);
+  return url === upstream(repo) && existsSync(`${dir}/all_worktrees/${BRANCHES[repo]}`);
 }
 
 async function forkInstall(repo: string) {
@@ -75,15 +78,16 @@ async function forkInstall(repo: string) {
   await $`git -C ${dir} config remote.upstream.pushurl no_push`;
   await $`git -C ${dir} fetch --quiet origin`;
   await $`git -C ${dir} fetch --quiet upstream`;
-  const worktree = `${dir}/all_worktrees/${BRANCH}`;
+  const branch = BRANCHES[repo];
+  const worktree = `${dir}/all_worktrees/${branch}`;
   if (!existsSync(worktree)) {
-    if (await ok($`git -C ${dir} show-ref --verify --quiet refs/heads/${BRANCH}`)) {
-      await $`git -C ${dir} worktree add --quiet ${worktree} ${BRANCH}`;
+    if (await ok($`git -C ${dir} show-ref --verify --quiet refs/heads/${branch}`)) {
+      await $`git -C ${dir} worktree add --quiet ${worktree} ${branch}`;
     } else {
-      await $`git -C ${dir} worktree add --quiet -b ${BRANCH} ${worktree} origin/${BRANCH}`;
+      await $`git -C ${dir} worktree add --quiet -b ${branch} ${worktree} origin/${branch}`;
     }
-    await $`git -C ${worktree} branch --quiet --set-upstream-to=origin/${BRANCH} ${BRANCH}`;
-    console.log(`kait2en-dev: ${repo}'s ${BRANCH} checked out in ${worktree}`);
+    await $`git -C ${worktree} branch --quiet --set-upstream-to=origin/${branch} ${branch}`;
+    console.log(`kait2en-dev: ${repo}'s ${branch} checked out in ${worktree}`);
   }
 }
 
@@ -138,7 +142,7 @@ async function unitsInstall() {
 /** Everything in place; says what isn't. */
 async function check() {
   const missing: string[] = [];
-  for (const repo of FORKS) if (!(await forkOk(repo))) missing.push(`${repo} upstream remote or ${BRANCH} worktree`);
+  for (const repo of FORKS) if (!(await forkOk(repo))) missing.push(`${repo} upstream remote or ${BRANCHES[repo]} worktree`);
   for (const repo of CLONES) if (!cloneOk(repo)) missing.push(repo);
   if (!vfioOk()) missing.push(VFIO_BIN);
   if (!(await keyOk())) missing.push(`signing key ${FPR}`);

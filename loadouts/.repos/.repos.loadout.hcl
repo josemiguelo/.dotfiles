@@ -9,7 +9,8 @@ script "bare-repos" {
 }
 
 # The KaiT2en -> Omarchy work (docs/t2-macbook.md), on top of bare-repos'
-# t2-arch-packages, omarchy and omarchy-iso: the forks' t2-kait2en worktrees
+# t2-arch-packages, omarchy and omarchy-iso: the forks' T2 worktrees (omarchy's
+# t2-kait2en-stable, omarchy-iso's t2-kait2en)
 # and upstream remotes, KaiT2en and omarchy-pkgs, libvfio-user built, the
 # package signing key from 1Password, and kait2en-sync's daily timer.
 script "kait2en-dev" {
