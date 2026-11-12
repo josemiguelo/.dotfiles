@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.4.0",
-  "updatedAt": "2026-11-12T19:38:10.764508396Z",
+  "updatedAt": "2026-11-12T20:25:48.862543697Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -596,7 +596,7 @@
     },
     "android-sdk": {
       "status": "pending",
-      "lastRun": "2026-11-12T02:53:18.160359736Z",
+      "lastRun": "2026-11-12T20:10:05.872786476Z",
       "exitCode": 1
     },
     "omarchy-hypr-config": {
