@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "a66c5ee889b293cb800a0f84fd6990df9a7d5923dca161512c3fa87e35ecbeb2",
+  "sources": "7f6a658188ee921a043e0a3c532834aab83cb659112bd5c1932b58a01f74d387",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1143,6 +1143,17 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-force-click": {
+        "description": "Force Touch settings app and daemon (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "t2-trackpad-actuator-dkms"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-precision-trackpad-dkms": {
         "description": "internal trackpad multitouch and Force Touch (DKMS; stock kernels see a plain mouse)",
         "depends-on": [
@@ -1155,6 +1166,16 @@
       },
       "t2-smc-control": {
         "description": "SMC app and battery gauging daemon on t2smc (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-trackpad-actuator-dkms": {
+        "description": "trackpad Taptic Engine driver: a haptic click on force click (DKMS)",
         "depends-on": [
           "t2-arch-packages-repo"
         ],
@@ -2106,6 +2127,16 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
+      "t2-force-click-daemon": {
+        "description": "the Force Touch daemon running (T2 Mac)",
+        "run": "sudo systemctl enable --now t2-force-click.service",
+        "check": "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service",
+        "after": [
+          "programs.t2-force-click"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-gmux-backlight": {
         "description": "screen brightness kept across suspend and reboots (T2 Mac)",
         "file": ".loadout/gmux-backlight.ts",
@@ -2484,8 +2515,10 @@
           "t2-dkms-guard": "omarchy",
           "t2-dsp": "omarchy",
           "t2-fan-control": "omarchy",
+          "t2-force-click": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
+          "t2-trackpad-actuator-dkms": "omarchy",
           "t2-wireless-dkms": "omarchy",
           "t2bce-audio-ucm": "omarchy",
           "t2bce-stack-dkms": "omarchy",
@@ -2578,6 +2611,7 @@
           "t2-ibridge-unmanaged",
           "t2-charge-limit 85",
           "t2-smc-gaugingd",
+          "t2-force-click-daemon",
           "setup-libvirt",
           "ufw-libvirt",
           "omarchy-sudoless-docker",

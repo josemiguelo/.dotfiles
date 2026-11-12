@@ -99,6 +99,22 @@ program "bankstown-lv2" {
   install_via = [omarchy]
 }
 
+# The trackpad's Taptic Engine: a haptic click on force click. Its udev rule
+# moves the haptic interface from hid-apple to it at boot and after resume.
+program "t2-trackpad-actuator-dkms" {
+  description = "trackpad Taptic Engine driver: a haptic click on force click (DKMS)"
+  depends_on  = [program.t2-arch-packages-repo]
+  install_via = [omarchy]
+}
+
+# Click pressure, the force click threshold and an action bound to a force
+# click; its daemon (script.t2-force-click-daemon) applies them at boot.
+program "t2-force-click" {
+  description = "Force Touch settings app and daemon (KaiT2en)"
+  depends_on  = [program.t2-arch-packages-repo, program.t2-trackpad-actuator-dkms]
+  install_via = [omarchy]
+}
+
 program "t2bce-audio-ucm" {
   description = "ALSA UCM profiles for the T2 audio driver"
   depends_on  = [program.t2-arch-packages-repo]
@@ -132,6 +148,8 @@ locals {
     program.t2-fan-control,
     program.t2-smc-control,
     program.t2bce-audio-ucm,
+    program.t2-trackpad-actuator-dkms,
+    program.t2-force-click,
     program.bankstown-lv2,
     program.t2-dsp,
     program.t2-dkms-guard,
@@ -224,6 +242,16 @@ script "t2-smc-gaugingd" {
   run         = "sudo systemctl enable --now t2-smc-gaugingd.service"
   check       = "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service"
   run_after   = [program.t2-smc-control]
+}
+
+# t2-force-click's root daemon: applies the saved click settings at boot and
+# runs the action bound to a force click.
+script "t2-force-click-daemon" {
+  description = "the Force Touch daemon running (T2 Mac)"
+  needs_sudo  = true
+  run         = "sudo systemctl enable --now t2-force-click.service"
+  check       = "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service"
+  run_after   = [program.t2-force-click]
 }
 
 # The T2's internal USB network link (05ac:8233), macOS's line to the T2

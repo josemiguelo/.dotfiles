@@ -32,6 +32,7 @@ profile "t2-macbook" {
     script.t2-ibridge-unmanaged,
     args(script.t2-charge-limit, "85"),
     script.t2-smc-gaugingd,
+    script.t2-force-click-daemon,
     variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
     script.omarchy-sudoless-docker,
     args(script.omarchy-activity-monitor-size, "90%", "90%"),
