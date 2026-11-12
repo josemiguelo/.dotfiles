@@ -81,6 +81,23 @@ program "t2-smc-control" {
   install_via = [omarchy]
 }
 
+# The speaker and microphone processing macOS applies (PipeWire filter
+# chains, KaiT2en's DSP): a udev rule renames the card t2-16_1 and the
+# speakers' default output becomes "Mac 16,1 native DSP Speakers". Takes
+# effect at the next boot.
+program "t2-dsp" {
+  description = "speaker and mic DSP as PipeWire filter chains (KaiT2en)"
+  depends_on  = [program.t2-arch-packages-repo, program.bankstown-lv2]
+  install_via = [omarchy]
+}
+
+# The virtual bass plugin t2-dsp's speaker graphs run (AUR-only in Arch).
+program "bankstown-lv2" {
+  description = "Bankstown bass enhancer LV2 plugin, for t2-dsp"
+  depends_on  = [program.t2-arch-packages-repo]
+  install_via = [omarchy]
+}
+
 program "t2bce-audio-ucm" {
   description = "ALSA UCM profiles for the T2 audio driver"
   depends_on  = [program.t2-arch-packages-repo]
@@ -114,6 +131,8 @@ locals {
     program.t2-fan-control,
     program.t2-smc-control,
     program.t2bce-audio-ucm,
+    program.bankstown-lv2,
+    program.t2-dsp,
     program.t2-dkms-guard,
   ]
 }

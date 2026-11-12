@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "e2e71faa7bb9c958ed69327b96317b397ee3b5f291d0f2a5415d136a4ee8a112",
+  "sources": "6ed11b546f09e926e9b8e134cc49741e1a1de11bb4c7909414600bc1a41b1812",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -242,6 +242,16 @@
           "brew": {}
         },
         "origin": "loadouts/private_dot_config"
+      },
+      "bankstown-lv2": {
+        "description": "Bankstown bass enhancer LV2 plugin, for t2-dsp",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
       },
       "bat": {
         "install": {
@@ -1116,6 +1126,17 @@
         "description": "aborts linux-omarchy upgrades that would break the T2 DKMS modules",
         "depends-on": [
           "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-dsp": {
+        "description": "speaker and mic DSP as PipeWire filter chains (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "bankstown-lv2"
         ],
         "install": {
           "omarchy": {}
@@ -2403,6 +2424,7 @@
           "anydesk": "omarchy-aur",
           "atuin": "omarchy",
           "awscli": "brew",
+          "bankstown-lv2": "omarchy",
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
@@ -2461,6 +2483,7 @@
           "t2-arch-packages-repo": "omarchy",
           "t2-bluetooth-dkms": "omarchy",
           "t2-dkms-guard": "omarchy",
+          "t2-dsp": "omarchy",
           "t2-fan-control": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
