@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "553f3924b7707c8b2ca8cbf1253e80b9f7cd239f7cb5d96ea2cd08247c87e8ca",
+  "sources": "7eee31c9f97b0bb7f420a32ae8364c6d53cf02f4df90513f8a8fb77c865a1284",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1142,6 +1142,16 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-smc-control": {
+        "description": "SMC app and battery gauging daemon on t2smc (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2bce-audio-ucm": {
         "description": "ALSA UCM profiles for the T2 audio driver",
         "depends-on": [
@@ -2077,6 +2087,13 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
+      "t2-charge-limit": {
+        "description": "battery charge limit in the T2 SMC (T2 Mac)",
+        "file": ".loadout/charge-limit.ts",
+        "check": "file:.loadout/charge-limit.ts check \"$@\"",
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-gmux-backlight": {
         "description": "screen brightness kept across suspend and reboots (T2 Mac)",
         "file": ".loadout/gmux-backlight.ts",
@@ -2132,6 +2149,16 @@
         "description": "Hyprland renders on the GPU driving the panel (T2 Mac)",
         "file": ".loadout/render-gpu.ts",
         "check": "file:.loadout/render-gpu.ts check \"$@\"",
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-smc-gaugingd": {
+        "description": "battery gauge calibration charges under the charge limit (T2 Mac)",
+        "run": "sudo systemctl enable --now t2-smc-gaugingd.service",
+        "check": "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service",
+        "after": [
+          "programs.t2-smc-control"
+        ],
+        "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
       "tmux-plugins": {
@@ -2446,6 +2473,7 @@
           "t2-dkms-guard": "omarchy",
           "t2-fan-control": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
+          "t2-smc-control": "omarchy",
           "t2bce-audio-ucm": "omarchy",
           "t2bce-stack-dkms": "omarchy",
           "t2sbs-dkms": "omarchy",
@@ -2536,6 +2564,8 @@
           "t2-bcm-firmware",
           "t2-render-gpu",
           "t2-ibridge-unmanaged",
+          "t2-charge-limit 85",
+          "t2-smc-gaugingd",
           "setup-libvirt",
           "ufw-libvirt",
           "omarchy-sudoless-docker",

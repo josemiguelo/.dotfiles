@@ -73,6 +73,14 @@ program "t2-fan-control" {
   install_via = [omarchy]
 }
 
+# Its t2-smc-gaugingd lifts the charge limit for a full charge when the gauge
+# needs one (script.t2-smc-gaugingd keeps it running).
+program "t2-smc-control" {
+  description = "SMC app and battery gauging daemon on t2smc (KaiT2en)"
+  depends_on  = [program.t2-arch-packages-repo]
+  install_via = [omarchy]
+}
+
 program "t2bce-audio-ucm" {
   description = "ALSA UCM profiles for the T2 audio driver"
   depends_on  = [program.t2-arch-packages-repo]
@@ -104,6 +112,7 @@ locals {
     program.t2-bluetooth-dkms,
     program.linux-apfs-rw-dkms,
     program.t2-fan-control,
+    program.t2-smc-control,
     program.t2bce-audio-ucm,
     program.t2-dkms-guard,
   ]
@@ -175,6 +184,26 @@ script "t2-gmux-backlight" {
   managed_by  = ".loadout/gmux-backlight.ts"
   needs_sudo  = true
   run_after   = [script.omarchy-command-overrides]
+}
+
+# The battery's charge limit, named by the machine:
+# `args(script.t2-charge-limit, "85")`. The SMC keeps it across reboots (and
+# in macOS); t2-smc-gaugingd lifts it for calibration charges.
+script "t2-charge-limit" {
+  description = "battery charge limit in the T2 SMC (T2 Mac)"
+  managed_by  = ".loadout/charge-limit.ts"
+  needs_sudo  = true
+}
+
+# A permanent charge limit keeps the battery gauge from recalibrating:
+# t2-smc-gaugingd lifts it for a full charge when the gauge's DOD0 is 3 days
+# old or the last full charge 21, as powerd does on macOS.
+script "t2-smc-gaugingd" {
+  description = "battery gauge calibration charges under the charge limit (T2 Mac)"
+  needs_sudo  = true
+  run         = "sudo systemctl enable --now t2-smc-gaugingd.service"
+  check       = "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service"
+  run_after   = [program.t2-smc-control]
 }
 
 # The T2's internal USB network link (05ac:8233), macOS's line to the T2

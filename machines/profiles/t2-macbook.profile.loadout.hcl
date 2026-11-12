@@ -30,6 +30,8 @@ profile "t2-macbook" {
     script.t2-bcm-firmware,
     script.t2-render-gpu,
     script.t2-ibridge-unmanaged,
+    args(script.t2-charge-limit, "85"),
+    script.t2-smc-gaugingd,
     variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
     script.omarchy-sudoless-docker,
     args(script.omarchy-activity-monitor-size, "90%", "90%"),
