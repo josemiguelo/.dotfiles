@@ -24,3 +24,5 @@ loadouts/private_dot_config/zsh/dot_zplugins.zsh
 loadouts/private_dot_config/zsh/~*
 loadouts/private_dot_config/zsh/dot_zlocal
 node_modules/
+# npm's lockfile: this repo installs with bun (bun.lock); an editor running npm makes one.
+package-lock.json
