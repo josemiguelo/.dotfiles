@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "7f6a658188ee921a043e0a3c532834aab83cb659112bd5c1932b58a01f74d387",
+  "sources": "c360c595e0d1aa996773f9222baf76772fcb95c5c2b10c43f824f0bd0a0270f9",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2033,6 +2033,13 @@
         ],
         "origin": "loadouts/private_dot_config/.omarchy"
       },
+      "remove-t2-boot-clock": {
+        "description": "no sync-hwclock.service (t2smc writes the EC clock itself)",
+        "run": "{ sudo systemctl disable --now sync-hwclock.service 2>/dev/null; sudo rm -f /etc/systemd/system/sync-hwclock.service /usr/local/sbin/t2-hwclock-save && sudo systemctl daemon-reload; }",
+        "check": "test ! -e /etc/systemd/system/sync-hwclock.service && test ! -e /usr/local/sbin/t2-hwclock-save",
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "setup-completions": {
         "description": "shell completions",
         "file": ".loadout/completions.sh",
@@ -2113,13 +2120,6 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
-      "t2-boot-clock": {
-        "description": "keep the EC hardware clock set (T2 Mac)",
-        "file": ".loadout/boot-clock.ts",
-        "check": "file:.loadout/boot-clock.ts check \"$@\"",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-charge-limit": {
         "description": "battery charge limit in the T2 SMC (T2 Mac)",
         "file": ".loadout/charge-limit.ts",
@@ -2186,6 +2186,12 @@
           "programs.t2-arch-packages-repo"
         ],
         "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-post-update-check": {
+        "description": "a check of the T2 setup after every omarchy update (T2 Mac)",
+        "file": ".loadout/post-update-check.ts",
+        "check": "file:.loadout/post-update-check.ts check \"$@\"",
         "origin": "loadouts/.etc/t2"
       },
       "t2-render-gpu": {
@@ -2604,7 +2610,7 @@
           "t2-omarchy-channel",
           "t2-hid-apple-keyboard",
           "t2-kernel-args",
-          "t2-boot-clock",
+          "remove-t2-boot-clock",
           "t2-gmux-backlight",
           "t2-bcm-firmware",
           "t2-render-gpu",
@@ -2612,6 +2618,7 @@
           "t2-charge-limit 85",
           "t2-smc-gaugingd",
           "t2-force-click-daemon",
+          "t2-post-update-check",
           "setup-libvirt",
           "ufw-libvirt",
           "omarchy-sudoless-docker",

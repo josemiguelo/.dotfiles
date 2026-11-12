@@ -156,7 +156,7 @@ locals {
   ]
 }
 
-# The T2 Mac fixes, the t2-* scripts: `run = [script.t2-boot-clock]`.
+# The T2 Mac fixes, the t2-* scripts: `run = [script.t2-gmux-backlight]`.
 
 # The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
 # volume by apple-bcm-firmware-fetcher, or, with no macOS volume, the old
@@ -189,12 +189,16 @@ script "t2-kernel-args" {
   needs_sudo  = true
 }
 
-# The real clock lives in the EC: t2smc reaches it (read and write), the
-# legacy CMOS rtc only reads it. Writes it back at shutdown.
-script "t2-boot-clock" {
-  description = "keep the EC hardware clock set (T2 Mac)"
-  managed_by  = ".loadout/boot-clock.ts"
-  needs_sudo  = true
+# The real clock lives in the EC, and t2smc writes the system time to it in
+# its own suspend and shutdown callbacks (as macOS does before every power
+# transition), so the shutdown unit t2-boot-clock installed for it only did
+# the same again: this takes the unit and its helper off.
+script "remove-t2-boot-clock" {
+  description  = "no sync-hwclock.service (t2smc writes the EC clock itself)"
+  needs_sudo   = true
+  run          = "sudo systemctl disable --now sync-hwclock.service 2>/dev/null; sudo rm -f /etc/systemd/system/sync-hwclock.service /usr/local/sbin/t2-hwclock-save && sudo systemctl daemon-reload"
+  check        = "test ! -e /etc/systemd/system/sync-hwclock.service && test ! -e /usr/local/sbin/t2-hwclock-save"
+  transitional = true
 }
 
 # The internal keyboard: Fn/Ctrl and Alt/Super swaps and the fnmode that
@@ -252,6 +256,13 @@ script "t2-force-click-daemon" {
   run         = "sudo systemctl enable --now t2-force-click.service"
   check       = "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service"
   run_after   = [program.t2-force-click]
+}
+
+# An Omarchy post-update hook that asks loadout about the T2 items after each
+# `omarchy update` and notifies when the update undid one.
+script "t2-post-update-check" {
+  description = "a check of the T2 setup after every omarchy update (T2 Mac)"
+  managed_by  = ".loadout/post-update-check.ts"
 }
 
 # The T2's internal USB network link (05ac:8233), macOS's line to the T2
