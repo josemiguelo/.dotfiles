@@ -122,6 +122,17 @@ script "t2-bcm-firmware" {
   run_after   = [program.linux-apfs-rw-dkms, script.onepassword-cli]
 }
 
+# Omarchy's stable channel, which the T2 ISO is built for (--stable): an ISO
+# built without it installs edge and says nothing. Runs after the repo's
+# pre-refresh-pacman hook is in place, since a channel switch rewrites
+# pacman.conf.
+script "t2-omarchy-channel" {
+  description = "Omarchy on the stable channel, as the T2 ISO is built (T2 Mac)"
+  managed_by  = ".loadout/omarchy-channel.ts"
+  needs_sudo  = true
+  run_after   = [program.t2-arch-packages-repo]
+}
+
 # The KaiT2en kernel arguments Omarchy's installer writes for T2 Macs, kept
 # against upstream migrations that rewrite /etc/limine-entry-tool.d/t2-mac.conf
 # (#6562 once swapped pcie_ports=compat for pm_async=off). Next boot.

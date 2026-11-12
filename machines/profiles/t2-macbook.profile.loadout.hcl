@@ -24,6 +24,7 @@ profile "t2-macbook" {
       "work-mac",
     ),
 
+    script.t2-omarchy-channel,
     variant(script.t2-hid-apple-keyboard, "arch"),
     script.t2-kernel-args, script.t2-boot-clock, script.t2-gmux-backlight,
     script.t2-bcm-firmware,

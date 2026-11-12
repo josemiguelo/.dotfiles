@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "0a15e1f7e663b18e66bac8ff53a45865eb7e0d7b58832a1e591cf86d4be47067",
+  "sources": "527373ba9ceeb298a19cfa0bd7c4445692fa789ac61212798a1a6b7244913054",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2097,6 +2097,16 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
+      "t2-omarchy-channel": {
+        "description": "Omarchy on the stable channel, as the T2 ISO is built (T2 Mac)",
+        "file": ".loadout/omarchy-channel.ts",
+        "check": "file:.loadout/omarchy-channel.ts check \"$@\"",
+        "after": [
+          "programs.t2-arch-packages-repo"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-render-gpu": {
         "description": "Hyprland renders on the GPU driving the panel (T2 Mac)",
         "file": ".loadout/render-gpu.ts",
@@ -2494,6 +2504,7 @@
           "setup-ssh id_ed25519",
           "github-ssh-key id_ed25519",
           "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm omalauncher-galaxy-a56 work-mac",
+          "t2-omarchy-channel",
           "t2-hid-apple-keyboard",
           "t2-kernel-args",
           "t2-boot-clock",
