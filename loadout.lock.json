@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "9d254e12df2fbca6fa0cfaeab457b2cd638f8b66f44180e017fd560899653021",
+  "sources": "a66c5ee889b293cb800a0f84fd6990df9a7d5923dca161512c3fa87e35ecbeb2",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1112,16 +1112,6 @@
         },
         "origin": "loadouts/.etc/t2"
       },
-      "t2-bluetooth-dkms": {
-        "description": "btbcm/hci_uart with KaiT2en's Apple fixes: Bluetooth LE devices show up and connect (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-dkms-guard": {
         "description": "aborts linux-omarchy upgrades that would break the T2 DKMS modules",
         "depends-on": [
@@ -1165,6 +1155,16 @@
       },
       "t2-smc-control": {
         "description": "SMC app and battery gauging daemon on t2smc (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-wireless-dkms": {
+        "description": "brcmfmac and btbcm/hci_uart with KaiT2en's Apple fixes: Wi-Fi resume, Bluetooth LE devices (DKMS)",
         "depends-on": [
           "t2-arch-packages-repo"
         ],
@@ -2481,12 +2481,12 @@
           "swtpm": "omarchy",
           "t2-arch-packages-keyring": "omarchy",
           "t2-arch-packages-repo": "omarchy",
-          "t2-bluetooth-dkms": "omarchy",
           "t2-dkms-guard": "omarchy",
           "t2-dsp": "omarchy",
           "t2-fan-control": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
+          "t2-wireless-dkms": "omarchy",
           "t2bce-audio-ucm": "omarchy",
           "t2bce-stack-dkms": "omarchy",
           "t2sbs-dkms": "omarchy",

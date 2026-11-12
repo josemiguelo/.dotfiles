@@ -55,8 +55,9 @@ program "t2-precision-trackpad-dkms" {
   install_via = [omarchy]
 }
 
-program "t2-bluetooth-dkms" {
-  description = "btbcm/hci_uart with KaiT2en's Apple fixes: Bluetooth LE devices show up and connect (DKMS)"
+# Replaces t2-bluetooth-dkms (pacman's replaces=), which it grew from.
+program "t2-wireless-dkms" {
+  description = "brcmfmac and btbcm/hci_uart with KaiT2en's Apple fixes: Wi-Fi resume, Bluetooth LE devices (DKMS)"
   depends_on  = [program.t2-arch-packages-repo]
   install_via = [omarchy]
 }
@@ -126,7 +127,7 @@ locals {
     program.t2smp-dkms,
     program.t2thunderbolt-dkms,
     program.t2-precision-trackpad-dkms,
-    program.t2-bluetooth-dkms,
+    program.t2-wireless-dkms,
     program.linux-apfs-rw-dkms,
     program.t2-fan-control,
     program.t2-smc-control,
