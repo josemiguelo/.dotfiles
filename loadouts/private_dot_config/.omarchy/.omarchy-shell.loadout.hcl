@@ -99,6 +99,9 @@ function "omarchy_bar" {
       widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),
       widget("omarchy.keyboard-layout", "right", "before", "josemiguelo.theme-mode"),
       widget("omarchy.clock", "center", "at", "0"),
+      # Stock, but listed: a stray drag on the bar drops it in another section,
+      # and only a listed widget gets put back.
+      widget("omarchy.indicators", "centerBegin", "at", "0"),
     ),
     script.omarchy-keystroke-windows,
     script.omarchy-pomodoro,
