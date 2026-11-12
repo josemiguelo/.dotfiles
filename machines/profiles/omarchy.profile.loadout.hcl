@@ -72,7 +72,7 @@ profile "omarchy" {
     # Apps the Omarchy way
     script.omarchy-1password, script.onepassword-cli, script.omarchy-vscode, script.omarchy-brave,
     args(script.omarchy-default-browser, "brave"),
-    script.surfingkeys, script.surfingkeys-split-view,
+    script.remove-surfingkeys,
     args(script.omarchy-agents-prune, "claude", "codex", "gh", "gemini"),
 
     # Web apps: Google's in HEY's place

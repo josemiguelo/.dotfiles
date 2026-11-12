@@ -7,7 +7,7 @@
 // The installer copies Omarchy's flags over brave-flags.conf, and with them
 // its --load-extension line, the only one Chromium reads (the last). Whatever
 // else joined that line before (Intentional's extension, which its program
-// installs before this script runs; Surfingkeys' split view) would be gone,
+// installs before this script runs) would be gone,
 // so the entries that aren't Omarchy's are carried onto the new line.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";

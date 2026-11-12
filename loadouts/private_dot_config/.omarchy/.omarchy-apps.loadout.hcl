@@ -20,6 +20,15 @@ script "omarchy-brave" {
   run_after   = [program.brave]
 }
 
+# What Surfingkeys left in Brave's flags: the split view extension's entry on
+# the --load-extension line (its files go through .chezmoiremove).
+script "remove-surfingkeys" {
+  description  = "no Surfingkeys split view extension on Brave's --load-extension line"
+  managed_by   = ".loadout/remove-surfingkeys.ts"
+  run_after    = [script.omarchy-brave]
+  transitional = true
+}
+
 # The default browser, named by the machine:
 # `args(script.omarchy-default-browser, "brave")`.
 script "omarchy-default-browser" {

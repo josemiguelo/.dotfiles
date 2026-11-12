@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "7eee31c9f97b0bb7f420a32ae8364c6d53cf02f4df90513f8a8fb77c865a1284",
+  "sources": "e2e71faa7bb9c958ed69327b96317b397ee3b5f291d0f2a5415d136a4ee8a112",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1982,6 +1982,15 @@
         "later": "cleans up after mason-kotlin-lsp, which is later",
         "origin": "loadouts/private_dot_config/nvim"
       },
+      "remove-surfingkeys": {
+        "description": "no Surfingkeys split view extension on Brave's --load-extension line",
+        "file": ".loadout/remove-surfingkeys.ts",
+        "check": "file:.loadout/remove-surfingkeys.ts check \"$@\"",
+        "after": [
+          "scripts.omarchy-brave"
+        ],
+        "origin": "loadouts/private_dot_config/.omarchy"
+      },
       "setup-completions": {
         "description": "shell completions",
         "file": ".loadout/completions.sh",
@@ -2050,24 +2059,6 @@
         ],
         "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
-      },
-      "surfingkeys": {
-        "description": "Surfingkeys in Brave, reading ~/.config/surfingkeys/surfingkeys.js",
-        "file": ".loadout/surfingkeys.ts",
-        "check": "file:.loadout/surfingkeys.ts check \"$@\"",
-        "after": [
-          "programs.brave"
-        ],
-        "origin": "loadouts/private_dot_config/surfingkeys"
-      },
-      "surfingkeys-split-view": {
-        "description": "Brave loads the Split view keys extension behind Surfingkeys' gs",
-        "file": ".loadout/split-view.ts",
-        "check": "file:.loadout/split-view.ts check \"$@\"",
-        "after": [
-          "scripts.omarchy-brave"
-        ],
-        "origin": "loadouts/private_dot_config/surfingkeys"
       },
       "t2-bcm-firmware": {
         "description": "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback",
@@ -2377,8 +2368,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
-          "surfingkeys",
-          "surfingkeys-split-view",
+          "remove-surfingkeys",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",
@@ -2540,8 +2530,7 @@
           "omarchy-vscode",
           "omarchy-brave",
           "omarchy-default-browser brave",
-          "surfingkeys",
-          "surfingkeys-split-view",
+          "remove-surfingkeys",
           "omarchy-agents-prune claude codex gh gemini",
           "omarchy-webapps-remove Basecamp HEY",
           "omarchy-webapp-gmail",

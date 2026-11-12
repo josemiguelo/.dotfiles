@@ -58,11 +58,11 @@ echo "no flags file before"
 eq "$(install_with -)" 0 "installs"
 eq "$(last_line)" "--load-extension=$O/copy-url,$O/yt-dlp" "Omarchy's line as it ships"
 
-echo "Intentional's and split view's extensions on the line"
+echo "Intentional's and another extension on the line"
 eq "$(install_with "--ozone-platform=wayland
---load-extension=$O/copy-url,/home/u/.local/share/intentional/extension,/home/u/.config/surfingkeys/split-view
+--load-extension=$O/copy-url,/home/u/.local/share/intentional/extension,/home/u/.local/share/other/extension
 ")" 0 "installs"
-eq "$(last_line)" "--load-extension=$O/copy-url,$O/yt-dlp,/home/u/.local/share/intentional/extension,/home/u/.config/surfingkeys/split-view" "carried after Omarchy's, in order"
+eq "$(last_line)" "--load-extension=$O/copy-url,$O/yt-dlp,/home/u/.local/share/intentional/extension,/home/u/.local/share/other/extension" "carried after Omarchy's, in order"
 eq "$(lines)" 1 "one --load-extension line"
 eq "$(tail -n 1 "$FLAGS")" "--no-default-browser-check" "the rest of Omarchy's file as it was"
 
