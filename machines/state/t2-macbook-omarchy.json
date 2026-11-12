@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "4.4.0",
-  "updatedAt": "2026-11-12T18:45:49.258082273Z",
+  "updatedAt": "2026-11-12T19:01:30.294663395Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -480,7 +480,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -774,9 +774,9 @@
       "lastRun": null,
       "exitCode": null
     },
-    "t2-boot-clock": {
+    "remove-t2-boot-clock": {
       "status": "done",
-      "lastRun": "2026-11-12T02:40:34.046125910Z",
+      "lastRun": "2026-11-12T19:01:25.312225224Z",
       "exitCode": 0
     },
     "t2-gmux-backlight": {
@@ -810,6 +810,11 @@
       "exitCode": 0
     },
     "t2-force-click-daemon": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-post-update-check": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
