@@ -177,6 +177,15 @@ script "t2-gmux-backlight" {
   run_after   = [script.omarchy-command-overrides]
 }
 
+# The T2's internal USB network link (05ac:8233), macOS's line to the T2
+# chip: no DHCP server answers on it, so NetworkManager would retry it every
+# 45 s. A udev rule (also written by the fork's fix-t2.sh) unmanages it.
+script "t2-ibridge-unmanaged" {
+  description = "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)"
+  managed_by  = ".loadout/ibridge-unmanaged.ts"
+  needs_sudo  = true
+}
+
 # Hyprland renders on whichever card has the panel connected (a uwsm env
 # block), not the iGPU.
 script "t2-render-gpu" {

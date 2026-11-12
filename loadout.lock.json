@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "527373ba9ceeb298a19cfa0bd7c4445692fa789ac61212798a1a6b7244913054",
+  "sources": "a2f83a48e7c0346bad8cb9f4176895ed16682fc737b319524ecdc57c52c09c24",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2090,6 +2090,13 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-ibridge-unmanaged": {
+        "description": "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
+        "file": ".loadout/ibridge-unmanaged.ts",
+        "check": "file:.loadout/ibridge-unmanaged.ts check \"$@\"",
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-kernel-args": {
         "description": "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)",
         "file": ".loadout/kernel-args.ts",
@@ -2511,6 +2518,7 @@
           "t2-gmux-backlight",
           "t2-bcm-firmware",
           "t2-render-gpu",
+          "t2-ibridge-unmanaged",
           "setup-libvirt",
           "ufw-libvirt",
           "omarchy-sudoless-docker",

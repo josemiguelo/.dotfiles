@@ -29,6 +29,7 @@ profile "t2-macbook" {
     script.t2-kernel-args, script.t2-boot-clock, script.t2-gmux-backlight,
     script.t2-bcm-firmware,
     script.t2-render-gpu,
+    script.t2-ibridge-unmanaged,
     variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
     script.omarchy-sudoless-docker,
     args(script.omarchy-activity-monitor-size, "90%", "90%"),
