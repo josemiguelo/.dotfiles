@@ -202,21 +202,12 @@ script "remove-t2-boot-clock" {
 }
 
 # The internal keyboard: Fn/Ctrl and Alt/Super swaps and the fnmode that
-# keeps Fn+arrows working beside the touchbar. Two ways to rebuild the
-# boot image; the machine picks.
+# keeps Fn+arrows working beside the touchbar. The boot image is rebuilt
+# through Limine (limine-mkinitcpio).
 script "t2-hid-apple-keyboard" {
   description = "internal keyboard fn/ctrl swap and fnmode"
+  managed_by  = ".loadout/hid-apple-keyboard.ts"
   needs_sudo  = true
-
-  variant "arch" {  # Limine (limine-mkinitcpio)
-    managed_by = ".loadout/hid-apple-keyboard-arch.ts"
-  }
-
-  # dracut
-  variant "fedora" {
-    spare      = "no machine runs Fedora today"
-    managed_by = ".loadout/hid-apple-keyboard.ts"
-  }
 }
 
 # A sleep hook sends the backlight level back on resume; a udev rule puts it

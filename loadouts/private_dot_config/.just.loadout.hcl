@@ -1,3 +1,3 @@
 program "just" {
-  install_via = [brew, dnf]
+  install_via = [brew]
 }

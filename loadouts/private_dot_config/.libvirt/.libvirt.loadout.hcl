@@ -1,9 +1,8 @@
 # Virtualization: KVM/QEMU with virt-manager, libvirt running for the login
 # user, and ufw letting its default NAT network through.
 
-# Arch: what Fedora's "virtualization" group installed, one package each.
-# dnsmasq is libvirt's NAT/DHCP; edk2-ovmf (UEFI) and swtpm (TPM, Windows
-# 11) are optional deps the Fedora group installed too.
+# KVM/QEMU and virt-manager, one package each. dnsmasq is libvirt's
+# NAT/DHCP; edk2-ovmf (UEFI) and swtpm (TPM, Windows 11) are optional deps.
 program "libvirt" {
   description = "libvirt virtualization daemon and tools"
   later       = "VMs can wait; nothing in setup needs them"
@@ -74,45 +73,14 @@ locals {
   ]
 }
 
-# Fedora: the virtualization dnf group; the two-mode script is its check. No
-# profile maps it today (the compile lists it).
-program "virtualization" {
-  description = "virtualization stack (libvirt, qemu, virt-manager)"
-  later       = "VMs can wait; nothing in setup needs them"
-  spare       = "Fedora's half of setup-libvirt; no machine runs Fedora today"
-  via "dnf" {
-    managed_by = ".loadout/virtualization.sh"
-    needs_sudo = true
-  }
-}
-
 # libvirtd running, the user in the right group, the default network
-# autostarting; Arch and Fedora do it differently.
+# autostarting.
 script "setup-libvirt" {
   description = "libvirtd enabled and the login user in its group"
   later       = "sets up the later virtualization programs"
+  managed_by  = ".loadout/setup-libvirt.ts"
   needs_sudo  = true
-
-  variant "arch" {
-    managed_by = ".loadout/setup-libvirt-arch.ts"
-    run_after  = [program.libvirt, program.qemu-desktop, program.dnsmasq]
-  }
-
-  # The source script ran usermod as root ($(whoami) bug); this is the
-  # login user, as intended.
-  variant "fedora" {
-    spare = "no machine runs Fedora today"
-    run = [
-      "sudo systemctl enable libvirtd",
-      "sudo systemctl start libvirtd",
-      "sudo usermod -a -G kvm \"$USER\"",
-    ]
-    check = [
-      "systemctl is-enabled libvirtd >/dev/null 2>&1",
-      "id -nG \"$USER\" | grep -qw kvm",
-    ]
-    run_after = [program.virtualization]
-  }
+  run_after   = [program.libvirt, program.qemu-desktop, program.dnsmasq]
 }
 
 # virbr0's DHCP/DNS and routed guest traffic, as commented rules the way

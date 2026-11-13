@@ -115,7 +115,6 @@ EOF
   if ! command -v git >/dev/null 2>&1; then
     if [ -n "$OMARCHY" ]; then run omarchy pkg add git
     elif [ "$OS" = Darwin ]; then run xcode-select --install; die "install the command line tools, then run this again"
-    elif command -v dnf >/dev/null 2>&1; then run sudo dnf install -y git
     else die "install git, then run this again"
     fi
   fi

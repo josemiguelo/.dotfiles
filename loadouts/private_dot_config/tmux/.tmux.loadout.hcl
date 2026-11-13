@@ -4,7 +4,7 @@
 # On Omarchy a base package, mapped to Omarchy's installer so workmux resolves
 # it without brew installing a second copy.
 program "tmux" {
-  install_via = [brew, dnf, omarchy]
+  install_via = [brew, omarchy]
 }
 
 program "tpack" {

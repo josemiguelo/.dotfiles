@@ -6,7 +6,7 @@ installs, maintains and keeps applied.
 
 ## New machine
 
-One command, on a fresh Omarchy, macOS or Fedora install:
+One command, on a fresh Omarchy or macOS install:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
@@ -29,7 +29,7 @@ chezmoi fails with "target not found".
 
 A machine new to the repo is declared first, compiled and pushed before the
 bootstrap reads it: `machine "<machine>" { extends = [profile.t2-macbook] }`
-(or `profile.omarchy`, `profile.macos`, `profile.fedora`) in `machines/<machine>.loadout.hcl`,
+(or `profile.omarchy`, `profile.macos`) in `machines/<machine>.loadout.hcl`,
 then `loadout compile` and commit the lock with it. `loadout sync` publishes its state
 afterwards (it commits only the state file). To ssh into the T2 laptop from it,
 add its name to the key titles `omarchy-sshd` trusts in

@@ -24,7 +24,7 @@ profile "t2-macbook" {
     ),
 
     script.t2-omarchy-channel,
-    variant(script.t2-hid-apple-keyboard, "arch"),
+    script.t2-hid-apple-keyboard,
     script.t2-kernel-args, script.remove-t2-boot-clock, script.t2-gmux-backlight,
     script.t2-bcm-firmware,
     script.t2-render-gpu,
@@ -33,7 +33,7 @@ profile "t2-macbook" {
     script.t2-smc-gaugingd,
     script.t2-force-click-daemon,
     script.t2-post-update-check,
-    variant(script.setup-libvirt, "arch"), script.ufw-libvirt,
+    script.setup-libvirt, script.ufw-libvirt,
     script.omarchy-sudoless-docker,
     args(script.omarchy-activity-monitor-size, "90%", "90%"),
     args(script.omarchy-scratchpad-opacity, "0.99"),

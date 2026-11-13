@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// Internal keyboard behaviour on the MacBookPro16,1 (T2).
+// Internal keyboard behaviour on the MacBookPro16,1 (T2) on Omarchy:
 //
 //   swap_fn_leftctrl=1  bottom-left corner key acts as Ctrl; the key labelled
 //                       "control" becomes Fn (and so toggles the touchbar
@@ -11,13 +11,16 @@
 //                       alone but keeps Fn+arrows = Home/End/PgUp/PgDn and
 //                       Fn+backspace = Delete.
 //
-// The live parameters matter as much as the file: hid_apple is loaded from the
-// initramfs (the T2 keyboard comes up over t2bce_vhci in early boot), so a
-// stale initramfs keeps old values alive across a reboot and modprobe.d is
-// never consulted again. check therefore verifies BOTH, and install
-// regenerates the initramfs whenever the conf is newer than it.
-import { existsSync, statSync } from "node:fs";
-import { release } from "node:os";
+// What differs on Omarchy:
+//   - Its installer writes this file first, once, as `fnmode=2` (so F-keys on
+//     external Apple-like keyboards are always F-keys); it is replaced here.
+//   - hid_apple loads from the initramfs (apple-t2.conf puts it in MODULES,
+//     and the modconf hook copies modprobe.d in), built by mkinitcpio through
+//     Limine: `limine-mkinitcpio` rebuilds it AND the boot entries, which a
+//     bare `mkinitcpio -P` would leave stale.
+//   - /boot isn't readable unprivileged, so the image's age can't be compared
+//     with the file's. The live parameters tell instead: after a boot they are
+//     what the initramfs loaded, so a mismatch means the image is stale.
 import { $, main, readTrimmed, sudoWrite } from "#loadout";
 
 const CONF = "/etc/modprobe.d/hid_apple.conf";
@@ -49,15 +52,15 @@ async function applyLive() {
 
 const ready = async () => (await confOk()) && (await liveOk());
 
-/** The conf is newer than the running kernel's initramfs (or there's none): dracut has to rebuild it. */
-function initramfsStale() {
-  const image = `/boot/initramfs-${release()}.img`;
-  return !existsSync(image) || statSync(CONF).mtimeMs > statSync(image).mtimeMs;
-}
-
 async function install() {
-  if (!(await confOk())) await sudoWrite(CONF, WANT);
-  if (initramfsStale()) await $`sudo dracut -f`;
+  let rebuild = false;
+  if (!(await confOk())) {
+    await sudoWrite(CONF, WANT);
+    rebuild = true;
+  }
+  // The image that booted didn't carry the file's values: rebuild it too.
+  if (!(await liveOk())) rebuild = true;
+  if (rebuild) await $`sudo limine-mkinitcpio`;
   await applyLive();
 }
 

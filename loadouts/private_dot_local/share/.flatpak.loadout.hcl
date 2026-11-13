@@ -2,15 +2,11 @@
 # (~/.local/share/flatpak). Every flatpak install `requires` both, so they
 # come first.
 
-# Fedora ships it; Omarchy doesn't.
+# Omarchy doesn't ship it.
 program "flatpak" {
   description = "flatpak app runtime"
 
   # So a plan installing it may install flatpaks after it.
-  via "dnf" {
-    provides "flatpak" {}
-  }
-
   via "omarchy" {
     provides "flatpak" {}
   }

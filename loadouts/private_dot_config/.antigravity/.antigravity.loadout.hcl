@@ -1,13 +1,8 @@
-# Antigravity: Google's repo on Fedora (.loadout/antigravity.repo), the AUR
-# elsewhere.
+# Antigravity: Google's IDE, from the AUR.
 
 program "antigravity" {
   description = "Antigravity IDE"
   later       = "a large app download; nothing in setup needs it"
-
-  via "dnf-repo" {
-    params = { repofile = file(".loadout/antigravity.repo") }
-  }
 
   # Google's IDE tarball, repackaged; not the AUR's `antigravity` (2.0, a
   # different product).

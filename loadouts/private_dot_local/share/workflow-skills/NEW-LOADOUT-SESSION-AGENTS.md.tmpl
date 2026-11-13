@@ -133,8 +133,8 @@ in the meantime.
   takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits where the tool lands in `loadouts/`, as
   `.<tool>.loadout.hcl` + `.loadout/` (beside its dotfiles, or behind a dot
   when it has none: `private_dot_config/.ripgrep.loadout.hcl`); what lands
-  outside `$HOME` (dnf, pacman, hardware) is in `.etc/<concern>/`
-  (`.etc/dnf/`, `.etc/t2/`). The
+  outside `$HOME` (hardware, system settings) is in `.etc/<concern>/`
+  (`.etc/t2/`, `.etc/keychron/`). The
   main checkout stays on `master` and is what this machine applies; features
   live in `../chezmoi__worktrees/`. This file's source is
   `loadouts/private_dot_local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md.tmpl`,

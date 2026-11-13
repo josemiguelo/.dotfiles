@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "591f78b0a5c805e4c1bdf5a646ed1d189268c96161b1766c5755bc747d4610e8",
+  "sources": "4cfee703bb3e77cd3a8257fdfc9cd49b47c6ef06574774562ee185e0441b293f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -84,10 +84,7 @@
         "check": "rpm -q {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "dnf -q --cacheonly check-update | awk 'NF>=3 && $2 ~ /^[0-9]/ {name=$1; sub(/[.][^.]*$/, \"\", name); print name, $2}'",
-        "upgrade": "sudo dnf upgrade --refresh -y",
-        "requires": [
-          "setup-dnf"
-        ]
+        "upgrade": "sudo dnf upgrade --refresh -y"
       },
       "dnf-copr": {
         "probe": "dnf",
@@ -98,11 +95,7 @@
         "check": "rpm -q {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "dnf -q --cacheonly check-update | awk 'NF>=3 && $2 ~ /^[0-9]/ {name=$1; sub(/[.][^.]*$/, \"\", name); print name, $2}'",
-        "upgrade": "sudo dnf upgrade --refresh -y",
-        "requires": [
-          "setup-dnf",
-          "dnf-plugins-core"
-        ]
+        "upgrade": "sudo dnf upgrade --refresh -y"
       },
       "dnf-repo": {
         "probe": "dnf",
@@ -113,10 +106,7 @@
         "check": "rpm -q {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "dnf -q --cacheonly check-update | awk 'NF>=3 && $2 ~ /^[0-9]/ {name=$1; sub(/[.][^.]*$/, \"\", name); print name, $2}'",
-        "upgrade": "sudo dnf upgrade --refresh -y",
-        "requires": [
-          "setup-dnf"
-        ]
+        "upgrade": "sudo dnf upgrade --refresh -y"
       },
       "flatpak": {
         "probe": "flatpak",
@@ -167,11 +157,6 @@
       "1password": {
         "description": "1Password desktop app",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "$LOADOUT_REPO/loadouts/private_dot_config/.1password/.loadout/1password.repo"
-            }
-          },
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/.1password"
@@ -187,11 +172,6 @@
       "antigravity": {
         "description": "Antigravity IDE",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "$LOADOUT_REPO/loadouts/private_dot_config/.antigravity/.loadout/antigravity.repo"
-            }
-          },
           "omarchy-aur": {
             "pkg": "antigravity-ide"
           }
@@ -202,10 +182,6 @@
       "anydesk": {
         "description": "AnyDesk remote desktop",
         "install": {
-          "dnf": {
-            "command": "file:.loadout/install-anydesk.sh",
-            "sudo": true
-          },
           "omarchy-aur": {
             "pkg": "anydesk-bin"
           }
@@ -219,12 +195,6 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "autoconf": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "awscli": {
         "install": {
@@ -280,12 +250,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "bzip2-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "chezmoi": {
         "install": {
           "brew": {},
@@ -326,11 +290,6 @@
       "code": {
         "description": "Visual Studio Code",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "$LOADOUT_REPO/loadouts/private_dot_config/.code/.loadout/vscode.repo"
-            }
-          },
           "omarchy": {
             "pkg": "visual-studio-code-bin"
           }
@@ -352,28 +311,9 @@
       },
       "curl": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "dbus-devel": {
-        "description": "D-Bus development headers",
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "development-tools-group": {
-        "description": "dnf Development Tools group",
-        "install": {
-          "dnf": {
-            "command": "sudo dnf group install -y development-tools",
-            "check": "x=$(dnf group list --installed 2>/dev/null) && printf '%s\\n' \"$x\" | grep -q '^development-tools '",
-            "present": true
-          }
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "dmidecode": {
         "description": "DMI table reader, libvirt's host system info",
@@ -382,13 +322,6 @@
         },
         "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
-      },
-      "dnf-plugins-core": {
-        "description": "dnf plugins (provides the copr command)",
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "dnsmasq": {
         "description": "DNS/DHCP for libvirt's default NAT network",
@@ -420,22 +353,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "findutils": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "firefox": {
-        "description": "Firefox browser",
-        "install": {
-          "dnf": {
-            "command": "file:.loadout/install-firefox.sh",
-            "sudo": true
-          }
-        },
-        "origin": "loadouts/private_dot_config/.firefox"
-      },
       "flathub-remote": {
         "description": "flathub flatpak remote (user)",
         "install": {
@@ -450,13 +367,6 @@
       "flatpak": {
         "description": "flatpak app runtime",
         "install": {
-          "dnf": {
-            "provides": [
-              {
-                "binary": "flatpak"
-              }
-            ]
-          },
           "omarchy": {
             "provides": [
               {
@@ -470,7 +380,6 @@
       "fzf": {
         "install": {
           "brew": {},
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/fzf"
@@ -483,16 +392,9 @@
       },
       "gcc": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "gdbm-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "gh": {
         "description": "GitHub CLI",
@@ -510,7 +412,6 @@
       },
       "git": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/.gitconfig"
@@ -528,24 +429,9 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "google-chrome-stable": {
-        "description": "Google Chrome browser",
-        "install": {
-          "dnf": {
-            "command": "file:.loadout/install-chrome.sh",
-            "sudo": true
-          }
-        },
-        "origin": "loadouts/private_dot_config/.google-chrome"
-      },
       "google-cloud-cli": {
         "description": "Google Cloud CLI",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "$LOADOUT_REPO/loadouts/private_dot_config/.gcloud/.loadout/google-cloud-cli.repo"
-            }
-          },
           "brew-cask": {
             "pkg": "gcloud-cli"
           }
@@ -630,19 +516,13 @@
       },
       "just": {
         "install": {
-          "brew": {},
-          "dnf": {}
+          "brew": {}
         },
         "origin": "loadouts/private_dot_config"
       },
       "kitty": {
         "description": "kitty terminal emulator",
         "install": {
-          "dnf-copr": {
-            "with": {
-              "copr": "solopasha/kitty"
-            }
-          },
           "omarchy": {},
           "brew-cask": {}
         },
@@ -662,12 +542,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "libffi-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "libvirt": {
         "description": "libvirt virtualization daemon and tools",
         "install": {
@@ -678,22 +552,9 @@
       },
       "libxcrypt-compat": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "libyaml-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "libzstd-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "linux-apfs-rw-dkms": {
         "description": "APFS driver the Wi-Fi firmware fetcher mounts the macOS volume with (DKMS)",
@@ -752,12 +613,6 @@
         },
         "origin": "loadouts/private_dot_config/mise"
       },
-      "ncurses-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "ngrok": {
         "description": "ngrok tunnel",
         "version": {
@@ -794,9 +649,6 @@
       "obsidian": {
         "description": "Obsidian notes",
         "install": {
-          "flatpak": {
-            "pkg": "md.obsidian.Obsidian"
-          },
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/.obsidian"
@@ -821,27 +673,8 @@
         "later": "built from source, for mise's Python 2.7 alone",
         "origin": "loadouts/private_dot_config/mise"
       },
-      "openssl-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "patch": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "perl-FindBin": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "procps-ng": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
@@ -874,12 +707,6 @@
         },
         "origin": "loadouts/private_dot_config/raycast"
       },
-      "readline-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "ripgrep": {
         "install": {
           "brew": {},
@@ -900,21 +727,10 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "rust": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "scrcpy": {
         "description": "scrcpy Android screen mirroring",
         "install": {
-          "brew": {},
-          "dnf-copr": {
-            "with": {
-              "copr": "zeno/scrcpy"
-            }
-          }
+          "brew": {}
         },
         "later": "a large Homebrew install; nothing in setup needs it",
         "origin": "loadouts/private_dot_config"
@@ -955,26 +771,9 @@
         },
         "origin": "loadouts/private_dot_config/.homebrew"
       },
-      "setup-dnf": {
-        "description": "dnf.conf performance and behavior tweaks",
-        "install": {
-          "dnf": {
-            "command": "file:.loadout/setup-dnf.sh install",
-            "check": "file:.loadout/setup-dnf.sh check",
-            "present": true,
-            "sudo": true
-          }
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "slack": {
         "description": "Slack desktop app",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "$LOADOUT_REPO/loadouts/private_dot_config/.slack/.loadout/slack.repo"
-            }
-          },
           "omarchy-aur": {
             "pkg": "slack-desktop"
           }
@@ -985,7 +784,6 @@
       "solaar": {
         "description": "Logitech device manager",
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
@@ -997,18 +795,6 @@
           "brew-cask": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "sqlite": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
-      "sqlite-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
       },
       "starship": {
         "install": {
@@ -1030,12 +816,6 @@
       "sublime-text": {
         "description": "Sublime Text editor",
         "install": {
-          "dnf-repo": {
-            "regex": "([0-9]+)",
-            "with": {
-              "repofile": "https://download.sublimetext.com/rpm/stable/$(uname -m)/sublime-text.repo"
-            }
-          },
           "omarchy": {
             "pkg": "sublime-text-4"
           }
@@ -1224,11 +1004,6 @@
       "teams-for-linux": {
         "description": "Microsoft Teams client",
         "install": {
-          "dnf-repo": {
-            "with": {
-              "repofile": "https://repo.teamsforlinux.de/rpm/teams-for-linux.repo"
-            }
-          },
           "omarchy-aur": {
             "pkg": "teams-for-linux-bin"
           }
@@ -1247,16 +1022,9 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "tk-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "tmux": {
         "install": {
           "brew": {},
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/tmux"
@@ -1318,9 +1086,6 @@
       },
       "vim": {
         "install": {
-          "dnf": {
-            "pkg": "vim-enhanced"
-          },
           "brew": {}
         },
         "origin": "loadouts/private_dot_config"
@@ -1349,23 +1114,9 @@
         "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
-      "virtualization": {
-        "description": "virtualization stack (libvirt, qemu, virt-manager)",
-        "install": {
-          "dnf": {
-            "command": "file:.loadout/virtualization.sh install",
-            "check": "file:.loadout/virtualization.sh check",
-            "present": true,
-            "sudo": true
-          }
-        },
-        "later": "VMs can wait; nothing in setup needs them",
-        "origin": "loadouts/private_dot_config/.libvirt"
-      },
       "vlc": {
         "description": "VLC media player",
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
@@ -1390,12 +1141,6 @@
         },
         "origin": "loadouts/private_dot_config/workmux"
       },
-      "xz-devel": {
-        "install": {
-          "dnf": {}
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "yazi": {
         "install": {
           "brew": {},
@@ -1409,15 +1154,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "zlib-devel": {
-        "install": {
-          "dnf": {
-            "check": "rpm -q --whatprovides zlib-devel",
-            "regex": "([0-9]+\\.[0-9][0-9.]*)"
-          }
-        },
-        "origin": "loadouts/.etc/dnf"
-      },
       "zoxide": {
         "install": {
           "brew": {},
@@ -1427,7 +1163,6 @@
       },
       "zsh": {
         "install": {
-          "dnf": {},
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/zsh"
@@ -1894,12 +1629,6 @@
         ],
         "origin": "loadouts/private_dot_config/tmux"
       },
-      "remove-firefox-flatpak": {
-        "description": "remove the firefox flatpak",
-        "run": "flatpak --user uninstall --delete-data -y org.mozilla.firefox",
-        "check": "! flatpak --user info org.mozilla.firefox >/dev/null 2>&1",
-        "origin": "loadouts/private_dot_config/.firefox"
-      },
       "remove-kotlin-lsp-download": {
         "description": "no kotlin-lsp download outside Mason",
         "run": "rm -rf \"$HOME/.local/share/kotlin-lsp\"",
@@ -1940,28 +1669,15 @@
       },
       "setup-libvirt": {
         "description": "libvirtd enabled and the login user in its group",
+        "file": ".loadout/setup-libvirt.ts",
+        "check": "file:.loadout/setup-libvirt.ts check \"$@\"",
+        "after": [
+          "programs.libvirt",
+          "programs.qemu-desktop",
+          "programs.dnsmasq"
+        ],
         "sudo": true,
         "later": "sets up the later virtualization programs",
-        "variants": {
-          "arch": {
-            "file": ".loadout/setup-libvirt-arch.ts",
-            "check": "file:.loadout/setup-libvirt-arch.ts check \"$@\"",
-            "after": [
-              "programs.libvirt",
-              "programs.qemu-desktop",
-              "programs.dnsmasq"
-            ],
-            "origin": "loadouts/private_dot_config/.libvirt"
-          },
-          "fedora": {
-            "run": "sudo systemctl enable libvirtd && sudo systemctl start libvirtd && sudo usermod -a -G kvm \"$USER\"",
-            "check": "systemctl is-enabled libvirtd >/dev/null 2>&1 && id -nG \"$USER\" | grep -qw kvm",
-            "after": [
-              "programs.virtualization"
-            ],
-            "origin": "loadouts/private_dot_config/.libvirt"
-          }
-        },
         "origin": "loadouts/private_dot_config/.libvirt"
       },
       "setup-ssh": {
@@ -2035,19 +1751,9 @@
       },
       "t2-hid-apple-keyboard": {
         "description": "internal keyboard fn/ctrl swap and fnmode",
+        "file": ".loadout/hid-apple-keyboard.ts",
+        "check": "file:.loadout/hid-apple-keyboard.ts check \"$@\"",
         "sudo": true,
-        "variants": {
-          "arch": {
-            "file": ".loadout/hid-apple-keyboard-arch.ts",
-            "check": "file:.loadout/hid-apple-keyboard-arch.ts check \"$@\"",
-            "origin": "loadouts/.etc/t2"
-          },
-          "fedora": {
-            "file": ".loadout/hid-apple-keyboard.ts",
-            "check": "file:.loadout/hid-apple-keyboard.ts check \"$@\"",
-            "origin": "loadouts/.etc/t2"
-          }
-        },
         "origin": "loadouts/.etc/t2"
       },
       "t2-ibridge-unmanaged": {
@@ -2126,12 +1832,6 @@
         ],
         "later": "glib comes with later brew installs (scrcpy); it unlinks after all of them",
         "origin": "loadouts/private_dot_config/.homebrew"
-      },
-      "user-environment": {
-        "description": "systemd user environment matches ~/.config/environment.d",
-        "file": ".loadout/user-environment.ts",
-        "check": "file:.loadout/user-environment.ts check \"$@\"",
-        "origin": "loadouts/private_dot_config/.environment.d"
       },
       "workmux-setup": {
         "description": "workmux's status-tracking hooks and skills for the agents here",
@@ -2463,10 +2163,6 @@
           "bare-repos t2-arch-packages omarchy omarchy-iso",
           "kait2en-dev"
         ],
-        "script-variants": {
-          "setup-libvirt": "arch",
-          "t2-hid-apple-keyboard": "arch"
-        },
         "data": {
           "omarchy": true,
           "work": false,

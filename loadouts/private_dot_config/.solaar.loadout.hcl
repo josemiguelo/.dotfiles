@@ -1,11 +1,6 @@
 program "solaar" {
   description = "Logitech device manager"
-
-  via "dnf" {
-    spare = "for a Fedora machine; the fedora profile doesn't install solaar"
-  }
-
-  via "omarchy" {}
+  install_via = [omarchy]
 }
 
 # Launched when wanted, not at every login.

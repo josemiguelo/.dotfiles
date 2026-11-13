@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // libvirt on Arch, ready for virt-manager on qemu:///system without root:
-//   - libvirtd.service enabled and running (the monolithic daemon, as on
-//     Fedora; it also autostarts guests marked to autostart)
+//   - libvirtd.service enabled and running (the monolithic daemon; it also
+//     autostarts guests marked to autostart)
 //   - the login user in Arch's `libvirt` group, which libvirt's polkit rule
 //     lets manage the system connection (takes effect at the next login)
 //   - the `default` NAT network started and set to autostart
