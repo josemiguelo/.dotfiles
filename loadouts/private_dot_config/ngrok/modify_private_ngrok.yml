@@ -1,0 +1,20 @@
+#!/bin/sh
+# ngrok's console UI paints its own background (console_ui_color defaults to
+# black), which turns into a solid colored block on kitty's transparent
+# background. transparent leaves the terminal's own. The file also holds the
+# authtoken `ngrok config add-authtoken` writes, so this only sets that one
+# key under agent: and passes everything else through.
+exec awk '
+  function put() { print "    console_ui_color: transparent"; done = 1 }
+  /^agent:[[:space:]]*$/ { print; put(); inagent = 1; next }
+  /^[^[:space:]#]/ { inagent = 0 }
+  inagent && /^[[:space:]]+console_ui_color:/ { next }
+  { print; seen = 1 }
+  END {
+    if (!done) {
+      if (!seen) print "version: \"3\""
+      print "agent:"
+      put()
+    }
+  }
+'

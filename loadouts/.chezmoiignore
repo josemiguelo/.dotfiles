@@ -41,6 +41,12 @@
 .config/raycast
 {{ end }}
 
+# ngrok reads ~/Library/Application Support/ngrok on macOS, not ~/.config.
+{{ if eq .chezmoi.os "darwin" }}
+.config/ngrok
+.config/ngrok/**
+{{ end }}
+
 # omalauncher's Arch gets only its own: the launcher's configs, its zsh
 # (zsh-omalauncher, which ~/.zshenv points at there), its mise tools
 # (conf.d/omalauncher.toml, not config.toml's languages), its drawer's
