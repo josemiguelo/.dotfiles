@@ -9,4 +9,5 @@ program "loadout" {
 
   path    = ["$HOME/.local/bin"]
   version = "loadout --version"
+  spare   = "bootstrap.sh installs loadout on every machine; this is for one that lists it"
 }

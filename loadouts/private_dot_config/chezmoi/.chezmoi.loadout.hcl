@@ -2,7 +2,7 @@
 # applies the dotfiles itself; these scripts watch the checkout's git side.
 
 program "chezmoi" {
-  install_via = [brew, omarchy, pacman]
+  install_via = [brew, omarchy]
 }
 
 locals {

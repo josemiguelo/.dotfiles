@@ -29,10 +29,6 @@ data {
   # the rest comes from its private child repo.
   work = flag(false)
 
-  # Arch inside the omalauncher Android launcher: only the launcher's
-  # configs deploy, and no desktop's reach it.
-  omalauncher = flag(false)
-
   kitty {
     # background_opacity; Omarchy's scratchpad repaints its own windows on top.
     opacity = number(0.85)

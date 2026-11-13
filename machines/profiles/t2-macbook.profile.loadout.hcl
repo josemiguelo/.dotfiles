@@ -20,7 +20,6 @@ profile "t2-macbook" {
       "t2-macbook-omarchy",
       "t2-macbook-omarchy-2",
       "omarchy-vm",
-      "omalauncher-galaxy-a56",
       "work-mac",
     ),
 

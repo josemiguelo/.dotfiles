@@ -7,16 +7,6 @@ program "mise" {
   # On Omarchy, Omarchy's own mise-bin, ahead of Arch's extra/mise.
   via "omarchy" { pkg = "mise-bin" }
   via "brew" {}
-
-  # omalauncher's Arch: mise's own installer, into ~/.local/bin, where the
-  # launcher's install put it; `mise self-update` moves it.
-  # Its oracle is this variant's alone: a program-level one would replace
-  # the installers' (Omarchy's pacman, brew) for every machine.
-  custom "mise-run" {
-    command  = "curl -fsSL https://mise.run | sh"
-    version  = "$HOME/.local/bin/mise --version"
-    outdated = run_script(".loadout/outdated-mise.sh")
-  }
 }
 
 # What mise installs inside itself, and what builds on it: `run = [script.mise-tools]`.
@@ -45,7 +35,7 @@ program "openssl-1.1" {
 
 # Named by the machine (`args(script.mise-tools, "node", "python")`), only
 # those tools' default versions: setup's core, with mise-tools-later bringing
-# the rest. Without names, every version (macOS, omalauncher).
+# the rest. Without names, every version (macOS).
 script "mise-tools" {
   description        = "mise tools at the versions ~/.config/mise/config.toml pins"
   managed_by         = ".loadout/tools.sh"

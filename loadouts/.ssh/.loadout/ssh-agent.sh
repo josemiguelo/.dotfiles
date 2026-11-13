@@ -4,7 +4,7 @@
 # agent: the dotfiles' (openssh's
 # ssh-agent.socket user unit on Linux with systemd, launchd's on macOS) when
 # it's reachable, else one of the script's own, which dies with it
-# (omalauncher's proot has no unit).
+# (where systemd isn't running there's no unit).
 ssh_agent_up() {
   _sa_rc=0
   ssh-add -l >/dev/null 2>&1 || _sa_rc=$?

@@ -3,24 +3,14 @@
     "defaults": {
       "omarchy": false,
       "work": false,
-      "omalauncher": false,
       "kitty": {
         "opacity": 0.85
       }
     },
     "machines": {
-      "omalauncher-galaxy-a56": {
-        "omarchy": false,
-        "work": false,
-        "omalauncher": true,
-        "kitty": {
-          "opacity": 0.85
-        }
-      },
       "omarchy-vm": {
         "omarchy": true,
         "work": false,
-        "omalauncher": false,
         "kitty": {
           "opacity": 0.85
         }
@@ -28,7 +18,6 @@
       "t2-macbook-omarchy": {
         "omarchy": true,
         "work": false,
-        "omalauncher": false,
         "kitty": {
           "opacity": 0.85
         }

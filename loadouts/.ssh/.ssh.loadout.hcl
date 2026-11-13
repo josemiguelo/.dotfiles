@@ -6,7 +6,7 @@ script "setup-ssh" {
   file        = ".loadout/setup-ssh.sh"
   # The agent-unit clause is for Linux with systemd; uname short-circuits it
   # on macOS, and /run/systemd/system where systemd isn't running
-  # (omalauncher's proot).
+  # (a container).
   check = [
     "test -f $HOME/.ssh/$1",
     "grep -q 'AddKeysToAgent yes' $HOME/.ssh/config",

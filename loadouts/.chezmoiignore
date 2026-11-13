@@ -47,56 +47,9 @@
 .config/ngrok/**
 {{ end }}
 
-# omalauncher's Arch gets only its own: the launcher's configs, its zsh
-# (zsh-omalauncher, which ~/.zshenv points at there), its mise tools
-# (conf.d/omalauncher.toml, not config.toml's languages), its drawer's
-# terminal entries and the agents' global instructions pointing at this repo.
-# The desktops' configs (zsh, nvim, kitty, ...) are for desktops, and theirs
-# stay out of it.
-{{ if (includeTemplate "loadout/machine" . | fromJson).omalauncher }}
-*
-.*
-!.zshenv
-!.claude
-!.claude/CLAUDE.md
-!.codex
-!.codex/AGENTS.md
-!.config
-.config/*
-!.config/omalauncher
-!.config/omalauncher/**
-!.config/zsh-omalauncher
-!.config/zsh-omalauncher/**
-!.config/mise
-.config/mise/*
-!.config/mise/conf.d
-.config/mise/conf.d/*
-!.config/mise/conf.d/omalauncher.toml
-!.local
-.local/*
-!.local/share
-.local/share/*
-!.local/share/workflow-skills
-!.local/share/workflow-skills/**
-!.local/share/applications
-.local/share/applications/*
-!.local/share/applications/new-terminal.desktop
-!.local/share/applications/foot.desktop
-!.local/bin
-.local/bin/*
-!.local/bin/dotfiles-worktree-check
-{{ else }}
-.config/omalauncher
-.config/omalauncher/**
-.config/zsh-omalauncher
-.config/zsh-omalauncher/**
-.config/mise/conf.d/omalauncher.toml
-# Only omalauncher's terminal entries live there; a desktop entry of their
-# own would drop this line.
-.local/share/applications
-.local/share/applications/**
+# ~/.claude and ~/.codex are the agents' own: their source folders hold only
+# loadout's manifests and scripts, so chezmoi leaves both folders alone.
 .claude
 .claude/**
 .codex
 .codex/**
-{{ end }}

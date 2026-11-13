@@ -14,7 +14,7 @@ Everything loadout knows about a tool that lands in `$HOME` sits in chezmoi's so
 
 ## Outside `$HOME`
 
-An app whose work happens outside `$HOME` still lives with the app: virtualization in `.libvirt/`, Omarchy's sshd in `loadouts/.ssh/` beside the client side, omalauncher's fakeroot shim in `private_omalauncher/`, Homebrew in `.homebrew/`. What belongs to no app is in `loadouts/.etc/<concern>/`, the same shape (`.<concern>.loadout.hcl` + `.loadout/`): `.etc/dnf/`, `.etc/pacman/`, `.etc/t2/`, `.etc/keychron/`. So a dot-folder at the root of `loadouts/` is always a place in `$HOME` (`.ssh/`).
+An app whose work happens outside `$HOME` still lives with the app: virtualization in `.libvirt/`, Omarchy's sshd in `loadouts/.ssh/` beside the client side, Homebrew in `.homebrew/`. What belongs to no app is in `loadouts/.etc/<concern>/`, the same shape (`.<concern>.loadout.hcl` + `.loadout/`): `.etc/dnf/`, `.etc/t2/`, `.etc/keychron/`. So a dot-folder at the root of `loadouts/` is always a place in `$HOME` (`.ssh/`).
 
 ## Scripts and helpers
 

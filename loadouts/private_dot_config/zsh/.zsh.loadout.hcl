@@ -3,7 +3,7 @@
 
 # macOS ships zsh, so only Linux machines map it.
 program "zsh" {
-  install_via = [dnf, omarchy, pacman]
+  install_via = [dnf, omarchy]
 }
 
 # antidote and the bundles .zplugins declares, present as clones; and

@@ -1,3 +1,3 @@
 program "trash-cli" {
-  install_via = [brew, pacman]
+  install_via = [brew]
 }

@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "7b774955c786c6289b1bb62b13c1c2853ad7564d3235c0348a9bd984b3df3918",
+  "sources": "591f78b0a5c805e4c1bdf5a646ed1d189268c96161b1766c5755bc747d4610e8",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -160,10 +160,7 @@
         "check": "pacman -Q {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "checkupdates --nocolor | awk '$3 == \"->\" {print $1, $4}'",
-        "upgrade": "sudo pacman -Syu --noconfirm",
-        "requires": [
-          "sudo"
-        ]
+        "upgrade": "sudo pacman -Syu --noconfirm"
       }
     },
     "programs": {
@@ -256,8 +253,7 @@
       "bat": {
         "install": {
           "brew": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -293,8 +289,7 @@
       "chezmoi": {
         "install": {
           "brew": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/chezmoi"
       },
@@ -414,8 +409,7 @@
       "eza": {
         "install": {
           "brew": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -477,8 +471,7 @@
         "install": {
           "brew": {},
           "dnf": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/fzf"
       },
@@ -504,10 +497,7 @@
       "gh": {
         "description": "GitHub CLI",
         "install": {
-          "brew": {},
-          "pacman": {
-            "pkg": "github-cli"
-          }
+          "brew": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -521,16 +511,14 @@
       "git": {
         "install": {
           "dnf": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/.gitconfig"
       },
       "git-delta": {
         "install": {
           "brew": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -760,13 +748,7 @@
           "omarchy": {
             "pkg": "mise-bin"
           },
-          "brew": {},
-          "mise-run": {
-            "command": "curl -fsSL https://mise.run | sh",
-            "check": "$HOME/.local/bin/mise --version",
-            "regex": "([0-9]+\\.[0-9][0-9.]*)",
-            "outdated": "file:.loadout/outdated-mise.sh"
-          }
+          "brew": {}
         },
         "origin": "loadouts/private_dot_config/mise"
       },
@@ -844,12 +826,6 @@
           "dnf": {}
         },
         "origin": "loadouts/.etc/dnf"
-      },
-      "pacman-contrib": {
-        "install": {
-          "pacman": {}
-        },
-        "origin": "loadouts/.etc/pacman"
       },
       "patch": {
         "install": {
@@ -1065,15 +1041,6 @@
           }
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "sudo": {
-        "install": {
-          "pacman": {
-            "command": "file:.loadout/install-sudo.sh",
-            "regex": "([0-9][0-9.p]*[0-9])"
-          }
-        },
-        "origin": "loadouts/.etc/pacman"
       },
       "superwhisper": {
         "description": "Superwhisper dictation",
@@ -1312,8 +1279,7 @@
       },
       "trash-cli": {
         "install": {
-          "brew": {},
-          "pacman": {}
+          "brew": {}
         },
         "origin": "loadouts/private_dot_config"
       },
@@ -1410,12 +1376,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "wl-clipboard": {
-        "install": {
-          "pacman": {}
-        },
-        "origin": "loadouts/private_dot_config"
-      },
       "workmux": {
         "description": "git worktrees + tmux windows for parallel agent sessions",
         "depends-on": [
@@ -1461,30 +1421,16 @@
       "zoxide": {
         "install": {
           "brew": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
       },
       "zsh": {
         "install": {
           "dnf": {},
-          "omarchy": {},
-          "pacman": {}
+          "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/zsh"
-      },
-      "zsh-autosuggestions": {
-        "install": {
-          "pacman": {}
-        },
-        "origin": "loadouts/private_dot_config/zsh-omalauncher"
-      },
-      "zsh-syntax-highlighting": {
-        "install": {
-          "pacman": {}
-        },
-        "origin": "loadouts/private_dot_config/zsh-omalauncher"
       }
     },
     "scripts": {
@@ -1547,12 +1493,6 @@
         "check": "file:.loadout/download-fonts.ts check \"$@\"",
         "origin": "loadouts/private_dot_local/share/.fonts"
       },
-      "fakeroot-shim": {
-        "description": "a fakeroot that runs under proot, for checkupdates",
-        "run": "install -m 755 .loadout/fakeroot /usr/local/bin/fakeroot",
-        "check": "cmp -s .loadout/fakeroot /usr/local/bin/fakeroot",
-        "origin": "loadouts/private_dot_config/private_omalauncher"
-      },
       "github-ssh-key": {
         "description": "this machine's ssh key on GitHub",
         "file": ".loadout/github-ssh-key.sh",
@@ -1614,12 +1554,6 @@
         ],
         "origin": "loadouts/private_dot_local/share/.jetbrains"
       },
-      "machine-name": {
-        "description": "the machine's name in /etc/hostname and LOADOUT_MACHINE",
-        "file": ".loadout/machine-name.sh",
-        "check": "file:.loadout/machine-name.sh check \"$@\"",
-        "origin": "loadouts/private_dot_config/private_omalauncher"
-      },
       "mason-kotlin-lsp": {
         "description": "kotlin-lsp for kotlin.nvim, from Mason",
         "file": ".loadout/mason-kotlin-lsp.ts",
@@ -1676,54 +1610,6 @@
           "scripts.mise-tools"
         ],
         "origin": "loadouts/private_dot_config/nvim"
-      },
-      "obsidian-headless-sqlite": {
-        "description": "better-sqlite3's prebuilt binding for mise's obsidian-headless",
-        "file": ".loadout/headless-sqlite.sh",
-        "check": "file:.loadout/headless-sqlite.sh check \"$@\"",
-        "after": [
-          "scripts.mise-tools"
-        ],
-        "origin": "loadouts/private_dot_config/.obsidian"
-      },
-      "obsidian-sync": {
-        "description": "an Obsidian Sync vault in a local folder, through ob",
-        "file": ".loadout/sync.sh",
-        "check": "file:.loadout/sync.sh check \"$@\"",
-        "after": [
-          "scripts.mise-tools",
-          "scripts.obsidian-headless-sqlite"
-        ],
-        "origin": "loadouts/private_dot_config/.obsidian"
-      },
-      "omalauncher-layout": {
-        "description": "home as layout.toml says, once the widgets it names are there",
-        "file": ".loadout/layout.sh",
-        "check": "file:.loadout/layout.sh check \"$@\"",
-        "after": [
-          "programs.chezmoi"
-        ],
-        "origin": "loadouts/private_dot_config/private_omalauncher"
-      },
-      "omalauncher-requires": {
-        "description": "every package the launcher's widgets declare",
-        "file": ".loadout/requires.sh",
-        "check": "file:.loadout/requires.sh check \"$@\"",
-        "after": [
-          "programs.sudo",
-          "scripts.omalauncher-tracked"
-        ],
-        "sudo": true,
-        "origin": "loadouts/private_dot_config/private_omalauncher"
-      },
-      "omalauncher-tracked": {
-        "description": "the launcher's files on this phone, as they are, in the repo",
-        "file": ".loadout/tracked.sh",
-        "check": "file:.loadout/tracked.sh check \"$@\"",
-        "after": [
-          "programs.chezmoi"
-        ],
-        "origin": "loadouts/private_dot_config/private_omalauncher"
       },
       "omarchy-1password": {
         "description": "1Password via Omarchy's installer, unscaled, Ctrl+Shift+Space Quick Access",
@@ -2267,57 +2153,6 @@
       }
     },
     "machines": {
-      "omalauncher-galaxy-a56": {
-        "extends": [
-          "omalauncher"
-        ],
-        "pm": {
-          "bat": "pacman",
-          "chezmoi": "pacman",
-          "eza": "pacman",
-          "fzf": "pacman",
-          "gh": "pacman",
-          "git": "pacman",
-          "git-delta": "pacman",
-          "loadout": "custom",
-          "mise": "mise-run",
-          "pacman-contrib": "pacman",
-          "sudo": "pacman",
-          "trash-cli": "pacman",
-          "wl-clipboard": "pacman",
-          "zoxide": "pacman",
-          "zsh": "pacman",
-          "zsh-autosuggestions": "pacman",
-          "zsh-syntax-highlighting": "pacman"
-        },
-        "scripts": [
-          "machine-name",
-          "fakeroot-shim",
-          "omalauncher-tracked",
-          "omalauncher-requires",
-          "omalauncher-layout",
-          "bare-repos loadout loadout.wiki",
-          "skills-repo",
-          "setup-ssh id_ed25519",
-          "github-ssh-key id_ed25519",
-          "dotfiles-pull",
-          "dotfiles-push",
-          "dotfiles-ssh-remote",
-          "setup-git",
-          "mise-tools",
-          "obsidian-headless-sqlite",
-          "obsidian-sync jm ~/Obsidian/vault pull-only",
-          "default-shell"
-        ],
-        "data": {
-          "omarchy": false,
-          "work": false,
-          "omalauncher": true,
-          "kitty": {
-            "opacity": 0.85
-          }
-        }
-      },
       "omarchy-vm": {
         "extends": [
           "omarchy"
@@ -2444,7 +2279,6 @@
         "data": {
           "omarchy": true,
           "work": false,
-          "omalauncher": false,
           "kitty": {
             "opacity": 0.85
           }
@@ -2606,7 +2440,7 @@
           "superwhisper-settings processing=offline language=auto",
           "setup-ssh id_ed25519",
           "github-ssh-key id_ed25519",
-          "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm omalauncher-galaxy-a56 work-mac",
+          "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm work-mac",
           "t2-omarchy-channel",
           "t2-hid-apple-keyboard",
           "t2-kernel-args",
@@ -2636,7 +2470,6 @@
         "data": {
           "omarchy": true,
           "work": false,
-          "omalauncher": false,
           "kitty": {
             "opacity": 0.85
           }
@@ -2700,7 +2533,6 @@
     "data": {
       "omarchy": false,
       "work": false,
-      "omalauncher": false,
       "kitty": {
         "opacity": 0.85
       }

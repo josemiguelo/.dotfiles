@@ -15,7 +15,7 @@ SSH_KEY="$HOME/.ssh/$1"
 # openssh's ssh-agent.socket user unit, which Fedora installs but never
 # enables for a new account — without this, ssh-add fails with "Error
 # connecting to agent". (macOS runs its own agent via launchd; without
-# systemd, as in omalauncher's proot, there's no unit to enable.) First, so
+# systemd, as in a container, there's no unit to enable.) First, so
 # a new key goes into it.
 if [ "$(uname -s)" = "Linux" ] && [ -d /run/systemd/system ] && ! systemctl --user -q is-enabled ssh-agent.socket 2>/dev/null; then
   systemctl --user enable --now ssh-agent.socket

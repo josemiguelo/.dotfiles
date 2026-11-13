@@ -1,9 +1,5 @@
 # Only a zsh started without ZDOTDIR reads this file; one that inherits it (a
 # tmux pane, anything launched from a shell) goes straight to $ZDOTDIR's
 # .zshenv, so everything every zsh needs is set there.
-{{ if (includeTemplate "loadout/machine" . | fromJson).omalauncher -}}
-export ZDOTDIR=~/.config/zsh-omalauncher
-{{ else -}}
 export ZDOTDIR=~/.config/zsh
-{{ end -}}
 [[ -f $ZDOTDIR/.zshenv ]] && . $ZDOTDIR/.zshenv

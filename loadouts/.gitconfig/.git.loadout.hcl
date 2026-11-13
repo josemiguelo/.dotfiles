@@ -5,5 +5,5 @@ script "setup-git" {
 }
 
 program "git" {
-  install_via = [dnf, omarchy, pacman]
+  install_via = [dnf, omarchy]
 }

@@ -8,5 +8,4 @@ program "fzf" {
   }
 
   via "omarchy" {}
-  via "pacman" {}
 }

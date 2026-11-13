@@ -21,6 +21,5 @@ My machines in one public repo: chezmoi's source in `loadouts/` (`.chezmoiroot`;
 - Where a tool's manifest, scripts, files and helpers go: `docs/layout.md`.
 - Machines, profiles, their lists and machine names: `docs/machines.md`.
 - Changing a script that has a `tests/test-<name>.*`: run it and extend it; how they're written in `docs/testing.md`.
-- The omalauncher phone (`omalauncher-galaxy-a56`) or anything it gets: `docs/omalauncher.md`.
 - The T2 MacBook (`t2-macbook-omarchy`): `docs/t2-macbook.md`, and read it before anything that reinstalls, upgrades or migrates Omarchy there.
 - loadout's manifest language (`via`, `variant`, `args`, `requires`, `provides`, child repos): the loadout wiki, `Writing-Your-Manifest` and `Repo-Layout`, cloned at `~/Repos/gh/josemiguelo/loadout.wiki`.

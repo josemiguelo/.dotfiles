@@ -1,3 +1,3 @@
 program "bat" {
-  install_via = [brew, omarchy, pacman]
+  install_via = [brew, omarchy]
 }
