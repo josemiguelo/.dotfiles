@@ -10,25 +10,25 @@ program "zsh" {
 # whether the antidote clone and its bundles are behind their GitHub tips.
 script "zsh-plugins" {
   description = "antidote and the bundles .zplugins declares"
-  managed_by  = ".loadout/plugins.sh"
+  managed_by  = ".loadout/plugins.ts"
   run_after   = [program.zsh]
 
   outdated {
     name    = "antidote"
-    command = run_script(".loadout/outdated-antidote.sh")
-    upgrade = run_script(".loadout/outdated-antidote.sh update {item}")
+    command = run_script(".loadout/outdated-antidote.ts")
+    upgrade = run_script(".loadout/outdated-antidote.ts update {item}")
   }
 
   outdated {
     name    = "antidote-plugins"
-    command = run_script(".loadout/outdated-antidote-plugins.sh")
-    upgrade = run_script(".loadout/outdated-antidote-plugins.sh update {item}")
+    command = run_script(".loadout/outdated-antidote-plugins.ts")
+    upgrade = run_script(".loadout/outdated-antidote-plugins.ts update {item}")
   }
 }
 
 script "setup-completions" {
   description = "shell completions"
-  managed_by  = ".loadout/completions.sh"
+  managed_by  = ".loadout/completions.ts"
 }
 
 # Flips only once zsh and ~/.zshenv are in place, so the first zsh login is

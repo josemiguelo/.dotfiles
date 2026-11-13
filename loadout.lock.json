@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "50ec92db4a6ef524359a4080f20457ae2703d5a20db8f2f12934c36fa7b49244",
+  "sources": "7b774955c786c6289b1bb62b13c1c2853ad7564d3235c0348a9bd984b3df3918",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2042,8 +2042,8 @@
       },
       "setup-completions": {
         "description": "shell completions",
-        "file": ".loadout/completions.sh",
-        "check": "file:.loadout/completions.sh check \"$@\"",
+        "file": ".loadout/completions.ts",
+        "check": "file:.loadout/completions.ts check \"$@\"",
         "origin": "loadouts/private_dot_config/zsh"
       },
       "setup-git": {
@@ -2258,8 +2258,8 @@
       },
       "zsh-plugins": {
         "description": "antidote and the bundles .zplugins declares",
-        "file": ".loadout/plugins.sh",
-        "check": "file:.loadout/plugins.sh check \"$@\"",
+        "file": ".loadout/plugins.ts",
+        "check": "file:.loadout/plugins.ts check \"$@\"",
         "after": [
           "programs.zsh"
         ],
@@ -2650,13 +2650,13 @@
         "origin": "loadouts/private_dot_config/.android-sdk"
       },
       "antidote": {
-        "command": "file:.loadout/outdated-antidote.sh",
-        "upgrade": "file:.loadout/outdated-antidote.sh update {item}",
+        "command": "file:.loadout/outdated-antidote.ts",
+        "upgrade": "file:.loadout/outdated-antidote.ts update {item}",
         "origin": "loadouts/private_dot_config/zsh"
       },
       "antidote-plugins": {
-        "command": "file:.loadout/outdated-antidote-plugins.sh",
-        "upgrade": "file:.loadout/outdated-antidote-plugins.sh update {item}",
+        "command": "file:.loadout/outdated-antidote-plugins.ts",
+        "upgrade": "file:.loadout/outdated-antidote-plugins.ts update {item}",
         "origin": "loadouts/private_dot_config/zsh"
       },
       "mason-kotlin-lsp": {

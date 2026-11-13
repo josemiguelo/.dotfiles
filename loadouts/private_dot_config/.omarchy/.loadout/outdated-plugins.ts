@@ -15,9 +15,8 @@
 import { existsSync } from "node:fs";
 import { basename } from "node:path";
 import { $, fail } from "#loadout";
+import { behind } from "#git-clones";
 import { PLUGINS, pluginCheckouts, pluginDiverged } from "#omarchy";
-
-const GCB = `${process.env.LOADOUT_REPO}/lib/git-clones-behind.sh`;
 
 const [mode, id] = Bun.argv.slice(2);
 if (mode === "update") {
@@ -30,13 +29,11 @@ if (mode === "update") {
   process.exit((await $`omarchy plugin update ${id} --yes`.nothrow()).exitCode);
 }
 
-const dirs = pluginCheckouts();
-if (dirs.length === 0) process.exit(0);
-// git-clones-behind names each row by the folder, which is the plugin id, and
-// leaves each clone's FETCH_HEAD at its remote's HEAD, which pluginDiverged
-// compares against.
-const rows = (await $`sh ${GCB} ${dirs}`.env({ ...process.env, GCB_NAME: 'basename "$dir"' }).text()).trim();
-for (const row of rows ? rows.split("\n") : []) {
+// Each row named by the folder, which is the plugin id. behind leaves each
+// clone's FETCH_HEAD at its remote's HEAD, which pluginDiverged compares
+// against.
+const rows = await behind(pluginCheckouts().map((dir) => ({ name: basename(dir), dir })));
+for (const row of rows) {
   const [name, ...rest] = row.split(" ");
   const why = await pluginDiverged(`${PLUGINS}/${basename(name)}`);
   console.log(`${name} ${rest.join(" ")}${why ? ` diverged: ${why}, update by hand` : ""}`);
