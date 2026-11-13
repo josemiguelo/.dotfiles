@@ -29,7 +29,7 @@
 import { existsSync, statSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { $, main, ok } from "#loadout";
+import { $, main, ok } from "loadout/script";
 import { opUnlocked } from "#onepassword";
 
 const FETCHER = "apple-bcm-firmware-fetcher";

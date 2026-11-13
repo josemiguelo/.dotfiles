@@ -5,7 +5,7 @@
 // Tools come by hand: this names them when an install needs them, never
 // installs them. What Studio installs on top stays.
 // usage: sdk.ts [check]
-import { main } from "#loadout";
+import { main } from "loadout/script";
 import { missingPins, problems, sdkDir, sdkmanagerInstall } from "#android-sdk";
 
 const sdk = await sdkDir();

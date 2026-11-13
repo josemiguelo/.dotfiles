@@ -9,7 +9,7 @@ import { existsSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { $, read } from "#loadout";
+import { $, read } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const DATA = process.env.XDG_DATA_HOME || `${HOME}/.local/share`;

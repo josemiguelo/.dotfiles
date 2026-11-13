@@ -7,7 +7,7 @@
 // One `npm ls` / `gem list` query per tool version (not per package), run
 // concurrently up front — npm boots a node each.
 import { existsSync } from "node:fs";
-import { $, main, out, read } from "#loadout";
+import { $, main, out, read } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const NPM = `${HOME}/.default-npm-packages`;

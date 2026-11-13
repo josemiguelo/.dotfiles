@@ -6,7 +6,8 @@
 // Check is local-only (no fetch, instant). Converge pushes when the source
 // is clean and ahead; a dirty source fails visibly -- writing the commit is a
 // human decision, never automated. Modes: `check` / `install` (default).
-import { $, brewPrefix, main } from "#loadout";
+import { $, main } from "loadout/script";
+import { brewPrefix } from "#brew";
 
 // Anything but `check` or `install` is a usage error (exit 2): main would take
 // it for install's argument.

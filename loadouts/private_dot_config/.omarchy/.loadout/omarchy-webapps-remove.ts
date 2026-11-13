@@ -7,7 +7,7 @@
 // arguments on spaces, so a name with one can't be passed.
 // usage: omarchy-webapps-remove.ts [check] <name>...
 import { existsSync } from "node:fs";
-import { $, fail, main } from "#loadout";
+import { $, fail, main } from "loadout/script";
 
 const DIR = `${process.env.HOME}/.local/share/applications`;
 

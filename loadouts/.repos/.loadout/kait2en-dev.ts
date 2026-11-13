@@ -11,7 +11,7 @@
 //   omacom/omarchy-pkgs, in ~/Repos/gh/<owner>/<repo> like gclone's;
 // - libvfio-user with its gpio-pci-idio-16 sample built, the fake-hardware
 //   server of `omarchy-iso-test --fake-pci` (its build deps are the machine's
-//   omarchy_iso_test_deps);
+//   omarchyIsoTestDeps);
 // - the [t2-arch-packages] signing key in gpg, from the 1Password item
 //   "kait2en" (Personal vault), trusted ultimately, so kait2en-sync can sign;
 // - a daily user timer running `kait2en-sync notify`: a desktop notification
@@ -23,7 +23,7 @@
 // Modes: `check` / `install` (default).
 import { existsSync, mkdirSync, accessSync, constants } from "node:fs";
 import { dirname } from "node:path";
-import { $, main, ok, read } from "#loadout";
+import { $, main, ok, read } from "loadout/script";
 import { opUnlocked } from "#onepassword";
 
 const HOME = process.env.HOME!;

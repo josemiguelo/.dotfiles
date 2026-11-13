@@ -19,7 +19,7 @@
 // usage: omarchy-agents-prune.ts [check] <agent-to-keep>...
 import { lstatSync, readdirSync, statSync } from "node:fs";
 import { rm } from "node:fs/promises";
-import { main, read } from "#loadout";
+import { main, read } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const BIN = `${HOME}/.local/bin`;

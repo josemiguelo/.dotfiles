@@ -15,7 +15,8 @@
 // Modes: `check` / `install` (default).
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { $, brewPrefix, main, out, read } from "#loadout";
+import { $, main, out, read } from "loadout/script";
+import { brewPrefix } from "#brew";
 
 const HOME = process.env.HOME!;
 // brew's bin: workmux comes from a brew tap, and a new machine's shell

@@ -21,7 +21,7 @@
 import { existsSync, lstatSync, mkdtempSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 import { OMARCHY_BIN, OVERRIDES_DIR, executableHolds, overrideActive, writeExecutable } from "#omarchy";
 
 const COMMAND = "omarchy-brightness-keyboard";

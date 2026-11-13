@@ -14,8 +14,7 @@
 // omarchy-plugin-update fail on it.
 import { existsSync } from "node:fs";
 import { basename } from "node:path";
-import { $, fail } from "#loadout";
-import { behind } from "#git-clones";
+import { $, clonesBehind, fail, formatRow } from "loadout/script";
 import { PLUGINS, pluginCheckouts, pluginDiverged } from "#omarchy";
 
 const [mode, id] = Bun.argv.slice(2);
@@ -29,12 +28,11 @@ if (mode === "update") {
   process.exit((await $`omarchy plugin update ${id} --yes`.nothrow()).exitCode);
 }
 
-// Each row named by the folder, which is the plugin id. behind leaves each
-// clone's FETCH_HEAD at its remote's HEAD, which pluginDiverged compares
+// Each row named by the folder, which is the plugin id. clonesBehind leaves
+// each clone's FETCH_HEAD at its remote's HEAD, which pluginDiverged compares
 // against.
-const rows = await behind(pluginCheckouts().map((dir) => ({ name: basename(dir), dir })));
+const rows = await clonesBehind(pluginCheckouts().map((dir) => ({ name: basename(dir), dir })));
 for (const row of rows) {
-  const [name, ...rest] = row.split(" ");
-  const why = await pluginDiverged(`${PLUGINS}/${basename(name)}`);
-  console.log(`${name} ${rest.join(" ")}${why ? ` diverged: ${why}, update by hand` : ""}`);
+  const why = await pluginDiverged(`${PLUGINS}/${row.item}`);
+  console.log(`${formatRow(row)}${why ? ` diverged: ${why}, update by hand` : ""}`);
 }

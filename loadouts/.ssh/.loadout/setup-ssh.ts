@@ -4,7 +4,7 @@
 import { appendFileSync, chmodSync, mkdirSync, statSync } from "node:fs";
 import { hostname } from "node:os";
 import { dirname } from "node:path";
-import { $, ok, read, run } from "#loadout";
+import { $, ok, read, run } from "loadout/script";
 import { onTerminal, sshAgentUp } from "#ssh";
 
 const HOME = process.env.HOME!;

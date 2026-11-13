@@ -4,7 +4,7 @@
 import { accessSync, constants, readdirSync, statSync } from "node:fs";
 import { mkdir, rename } from "node:fs/promises";
 import { dirname } from "node:path";
-import { $, ok, read } from "#loadout";
+import { $, ok, read } from "loadout/script";
 import { HOME, probe } from "#hypr";
 
 /** A JSON file's value, or null when it's missing or not JSON. */

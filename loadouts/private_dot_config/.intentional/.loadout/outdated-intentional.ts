@@ -6,7 +6,7 @@
 //   outdated-intentional.ts update   install the latest release
 //
 // Silent when it isn't installed or the network is down.
-import { $, run } from "#loadout";
+import { $, run } from "loadout/script";
 
 /**
  * The installed version: `intentional --version` says "intentional <version>",

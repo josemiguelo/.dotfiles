@@ -3,8 +3,7 @@
   "private": true,
   "description": "loadout's Bun scripts: their shared modules by name (imports, read by Bun and by the editor), and type definitions for the editor only (bun install); the scripts run without installing anything.",
   "imports": {
-    "#loadout": "./lib/loadout.ts",
-    "#git-clones": "./lib/git-clones.ts",
+    "#brew": "./lib/brew.ts",
     "#bare-repo": "./lib/bare-repo.ts",
     "#ssh": "./loadouts/.ssh/.loadout/lib/ssh.ts",
     "#antidote": "./loadouts/private_dot_config/zsh/.loadout/lib/antidote.ts",

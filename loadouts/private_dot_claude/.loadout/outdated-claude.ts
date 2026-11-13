@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// claude's own outdated check (../.claude.loadout.hcl): is the claude binary
+// claude's own outdated check (../.claude.loadout.ts): is the claude binary
 // behind the latest published Claude Code release? claude.ai/install.sh
 // installs it as a plain self-updating binary, so no package manager knows
 // about it. `claude update` does the upgrade in place, so no re-install needed.
@@ -14,7 +14,7 @@
 // mise. The native installer's layout is the tell: ~/.local/bin/claude is a
 // symlink into ~/.local/share/claude/.
 import { readlinkSync } from "node:fs";
-import { $, run } from "#loadout";
+import { $, run } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const NATIVE = `${HOME}/.local/bin/claude`;

@@ -18,7 +18,7 @@
 // says: on such an install this finds it working and writes nothing.
 // Modes: `check` / `install` (default).
 import { existsSync, readdirSync } from "node:fs";
-import { $, main, out, readTrimmed, sudoWrite } from "#loadout";
+import { $, main, out, readTrimmed, sudoWrite } from "loadout/script";
 
 const RULE = "/etc/udev/rules.d/90-t2-ibridge-unmanaged.rules";
 const RULE_TEXT = `# Managed by loadout (t2-ibridge-unmanaged): NetworkManager leaves the T2's

@@ -9,7 +9,8 @@
 // glib-mkenums…) leave PATH too: nothing here builds from source.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
-import { brew, brewPrefix, executable, main } from "#loadout";
+import { executable, main } from "loadout/script";
+import { brew, brewPrefix } from "#brew";
 
 const prefix = await brewPrefix();
 

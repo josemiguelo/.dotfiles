@@ -12,7 +12,7 @@
 // the running Hyprland when there is one — by description, since with a Lua
 // config hyprctl binds shows a function reference, never the action.
 // Modes: `check` / `install` (default).
-import { main } from "#loadout";
+import { main } from "loadout/script";
 import { BINDINGS, OMARCHY_DEFAULTS, binds, liveInstance, probe, reload, sameKey, writeBlock } from "#hypr";
 
 const KEY = "SUPER + Q";

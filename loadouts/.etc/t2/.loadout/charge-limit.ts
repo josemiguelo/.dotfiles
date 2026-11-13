@@ -15,7 +15,7 @@
 // charge, so a calibration charge isn't drift.
 // Modes: `check` / `install` (default).
 import { readdirSync } from "node:fs";
-import { $, main, readTrimmed } from "#loadout";
+import { $, main, readTrimmed } from "loadout/script";
 
 const LIMIT = "/sys/class/power_supply/BAT0/charge_control_end_threshold";
 

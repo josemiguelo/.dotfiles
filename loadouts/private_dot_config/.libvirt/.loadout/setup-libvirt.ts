@@ -9,7 +9,7 @@
 // group. The network is set up by install, idempotently.
 // Modes: `check` / `install` (default).
 import { userInfo } from "node:os";
-import { $, main, ok } from "#loadout";
+import { $, main, ok } from "loadout/script";
 
 const USER = process.env.USER || userInfo().username;
 

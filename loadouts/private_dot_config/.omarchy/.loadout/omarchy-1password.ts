@@ -23,7 +23,7 @@
 // 900, as onepassword-cli does), then writes its own entry.
 // Modes: `check` / `install` (default).
 import { existsSync, mkdirSync, rmSync } from "node:fs";
-import { $, has, main, ok, read } from "#loadout";
+import { $, has, main, ok, read } from "loadout/script";
 import { BINDINGS, HOME, binds, block, blockIn, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 
 const NAME = "omarchy-1password";

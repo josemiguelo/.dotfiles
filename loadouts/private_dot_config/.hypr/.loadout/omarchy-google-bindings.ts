@@ -11,7 +11,7 @@
 // the description given here.
 // Modes: `check` / `install` (default).
 import { mkdir, chmod, stat } from "node:fs/promises";
-import { main, read } from "#loadout";
+import { main, read } from "loadout/script";
 import { BINDINGS, binds, liveInstance, probe, reload } from "#hypr";
 
 const BEGIN = "-- >>> Managed by loadout (omarchy-google-bindings)";

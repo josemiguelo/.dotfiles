@@ -5,7 +5,7 @@
 // The installer WRITES ~/.config/Code/User/settings.json (update.mode only)
 // and opens VS Code when it's done — the check keeps that to the first run.
 // Modes: `check` / `install` (default).
-import { $, main, ok, read } from "#loadout";
+import { $, main, ok, read } from "loadout/script";
 
 const ARGV = `${process.env.HOME}/.vscode/argv.json`;
 

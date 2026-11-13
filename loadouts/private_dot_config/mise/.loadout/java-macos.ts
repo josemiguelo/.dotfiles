@@ -12,7 +12,7 @@
 // nothing).
 // Modes: `check` / `install` (default).
 import { existsSync, readdirSync, readlinkSync } from "node:fs";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const JVM = process.env.JVM_DIR || "/Library/Java/JavaVirtualMachines";

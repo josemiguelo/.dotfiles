@@ -17,7 +17,7 @@ python = ["3.14.7", "2.7.18"]
 go = "1.27.1"
 rust = "1.98.1"
 ruby = "3.4.10"
-# The shells' and the editor's bun. loadout.hcl's `bun` is the one loadout's
+# The shells' and the editor's bun. loadout.ts's `bun` is the one loadout's
 # scripts run with; .githooks/pre-commit keeps both at one version.
 bun = "1.4.3"
 neovim = "nightly"

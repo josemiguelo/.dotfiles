@@ -6,7 +6,8 @@
 // pulled target state is loadout's (`sync`, `apply`).
 // Modes: `check` / `install` (default).
 import { statSync } from "node:fs";
-import { $, brewPrefix, main } from "#loadout";
+import { $, main } from "loadout/script";
+import { brewPrefix } from "#brew";
 
 // Anything but `check` or `install` is a usage error (exit 2): main would take
 // it for install's argument.

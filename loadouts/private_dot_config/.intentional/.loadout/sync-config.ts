@@ -9,7 +9,7 @@
 // usage: sync-config.ts [check] <device name>
 import { mkdirSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 import { opRead, opUnlocked } from "#onepassword";
 
 const CONFIG = `${process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`}/intentional/sync.json`;

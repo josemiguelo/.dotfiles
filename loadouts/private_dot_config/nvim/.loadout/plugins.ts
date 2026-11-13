@@ -9,7 +9,7 @@
 //   install    make it so: Lazy's own `restore`.
 // outdated-plugins.ts is the other half: what's newer upstream, and moving one.
 // Modes: `check` / `install` (default).
-import { main } from "#loadout";
+import { main } from "loadout/script";
 import { lazyCheck, lazyInstall } from "#nvim";
 
 const ready = () => lazyCheck(`${import.meta.dir}/plugins.lua`);

@@ -21,7 +21,7 @@
 //   - /boot isn't readable unprivileged, so the image's age can't be compared
 //     with the file's. The live parameters tell instead: after a boot they are
 //     what the initramfs loaded, so a mismatch means the image is stale.
-import { $, main, readTrimmed, sudoWrite } from "#loadout";
+import { $, main, readTrimmed, sudoWrite } from "loadout/script";
 
 const CONF = "/etc/modprobe.d/hid_apple.conf";
 const PARAMS = "/sys/module/hid_apple/parameters";

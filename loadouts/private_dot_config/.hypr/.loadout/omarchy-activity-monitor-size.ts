@@ -14,7 +14,7 @@
 // Hyprland expression — (monitor_w*0.8) — the form Omarchy's own webcam
 // overlay rule uses, so it follows whatever screen the window opens on.
 // usage: omarchy-activity-monitor-size.ts [check] <width> <height>
-import { fail, main } from "#loadout";
+import { fail, main } from "loadout/script";
 import { HOME, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 
 const NAME = "omarchy-activity-monitor-size";

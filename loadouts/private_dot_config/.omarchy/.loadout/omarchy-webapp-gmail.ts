@@ -5,7 +5,7 @@
 // x-scheme-handler/mailto, and xdg-mime making it the default. The handler
 // is named like Omarchy's so Omarchy's own web-app tools list and remove it.
 // Modes: `check` / `install` (default).
-import { $, main, out, read } from "#loadout";
+import { $, main, out, read } from "loadout/script";
 import { executableHolds, writeExecutable } from "#omarchy";
 
 const HOME = process.env.HOME!;

@@ -14,7 +14,7 @@
 // Modes: `check` / `install` (default).
 import { chmodSync, existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { main, readTrimmed } from "#loadout";
+import { main, readTrimmed } from "loadout/script";
 
 const HOOK = `${process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`}/omarchy/hooks/post-update.d/t2-loadout-check`;
 

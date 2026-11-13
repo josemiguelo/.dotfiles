@@ -7,7 +7,7 @@
 // usage: omarchy-bar-own-widgets.ts [check] <plugin-id>...
 import { existsSync, mkdtempSync } from "node:fs";
 import { cp, mkdir, rename, rm } from "node:fs/promises";
-import { $, fail, main, ok } from "#loadout";
+import { $, fail, main, ok } from "loadout/script";
 import { PLUGINS, shellReady, widgetEnabled } from "#omarchy";
 
 const SRC = `${import.meta.dir}/omarchy-bar/plugins`;

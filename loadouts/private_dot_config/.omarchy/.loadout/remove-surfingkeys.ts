@@ -13,7 +13,7 @@
 // count it.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
-import { main, read } from "#loadout";
+import { main, read } from "loadout/script";
 
 const CONFIG = process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`;
 const FLAGS = `${CONFIG}/brave-flags.conf`;

@@ -17,7 +17,7 @@
 // shows a function reference, never the action.
 // Modes: `check` / `install` (default).
 import { lstat, mkdir, readlink, symlink, unlink } from "node:fs/promises";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 import { BINDINGS, HOME, binds, block, blockIn, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 
 const NAME = "omarchy-harpoon";

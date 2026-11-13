@@ -30,7 +30,7 @@ import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { $, fail, mainCheckoutPath, main, ok, read } from "#loadout";
+import { $, fail, mainCheckoutPath, main, ok, read } from "loadout/script";
 import { HOME, block, blockIn, hyprctl, liveInstance, noConfigErrors, reload, writeBlock } from "#hypr";
 import { OMARCHY_BIN, OVERRIDES_DIR, overrideActive, executableHolds, writeExecutable } from "#omarchy";
 

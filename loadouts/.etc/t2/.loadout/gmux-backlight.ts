@@ -53,7 +53,7 @@
 // are root's; the wrapper and the listener are yours).
 // Modes: `check` / `install` (default).
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { $, executable, main, out, readTrimmed, sudoWrite } from "#loadout";
+import { $, executable, main, out, readTrimmed, sudoWrite } from "loadout/script";
 import { block, blockIn, writeBlock } from "#hypr";
 import { OMARCHY_BIN, OVERRIDES_DIR, overrideActive } from "#omarchy";
 

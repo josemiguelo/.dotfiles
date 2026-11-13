@@ -4,7 +4,7 @@
 // whatever mise has active).
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { $, fail, out, read } from "#loadout";
+import { $, fail, out, read } from "loadout/script";
 
 const HOME = process.env.HOME ?? "";
 

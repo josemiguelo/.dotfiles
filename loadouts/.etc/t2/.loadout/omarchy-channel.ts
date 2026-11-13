@@ -15,7 +15,7 @@
 // first, puts the [t2-arch-packages] repo back), swaps the packages and runs
 // omarchy-update.
 // Modes: `check` / `install` (default).
-import { $, main, ok, out } from "#loadout";
+import { $, main, ok, out } from "loadout/script";
 
 const CHANNEL = "stable";
 

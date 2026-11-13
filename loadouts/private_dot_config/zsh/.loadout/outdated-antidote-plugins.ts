@@ -9,8 +9,7 @@
 // with `antidote bundle`, fast-forward the one clone that's behind.
 // usage: outdated-antidote-plugins.ts [update <owner/repo>]
 import { existsSync } from "node:fs";
-import { $, run } from "#loadout";
-import { behind, fastForward } from "#git-clones";
+import { $, clonesBehind, fastForward, formatRow, run } from "loadout/script";
 import { BUNDLES, antidoteInstalled, bundleAll, bundlePaths, declared } from "#antidote";
 
 async function outdated(mode?: string, want?: string) {
@@ -35,7 +34,7 @@ async function outdated(mode?: string, want?: string) {
     const tip = remote.slice(0, 9).trim() || "?";
     console.log(`${repo} - ${tip} not installed https://github.com/${repo}`);
   }
-  for (const row of await behind(clones)) console.log(row);
+  for (const row of await clonesBehind(clones)) console.log(formatRow(row));
 }
 
 await run(outdated);

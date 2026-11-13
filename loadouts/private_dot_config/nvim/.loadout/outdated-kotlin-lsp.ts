@@ -3,7 +3,7 @@
 // <installed> <latest>` when Mason has a newer build; `update <item>` has
 // Mason install it. Both ask mason.lua (#nvim).
 // usage: outdated-kotlin-lsp.ts [update <item>]
-import { run } from "#loadout";
+import { run } from "loadout/script";
 import { masonInstall, masonOutdated } from "#nvim";
 
 const PACKAGE = "kotlin-lsp";

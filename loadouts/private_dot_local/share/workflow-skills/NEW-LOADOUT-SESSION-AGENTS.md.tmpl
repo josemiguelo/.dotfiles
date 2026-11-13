@@ -127,12 +127,12 @@ in the meantime.
   `loadout` reads{{ if stat (joinPath .chezmoi.homeDir ".config/loadout/repo") }}
   through this machine's child repo (`LOADOUT_REPO` points at the child, see
   "This machine's repos"){{ else }} (`LOADOUT_REPO` points here){{ end }}:
-  HCL manifests (`loadout.hcl`, `loadouts/`, `machines/`)
+  TypeScript manifests (`loadout.ts`, `loadouts/`, `machines/`)
   that `loadout --repo <worktree> compile` turns into the committed
   `loadout.lock.json`, and `machines/state/`. In a worktree, every loadout command
   takes `--repo <worktree>`: without it, `LOADOUT_REPO` picks the repo. A tool's loadout fragment sits where the tool lands in `loadouts/`, as
-  `.<tool>.loadout.hcl` + `.loadout/` (beside its dotfiles, or behind a dot
-  when it has none: `private_dot_config/.ripgrep.loadout.hcl`); what lands
+  `.<tool>.loadout.ts` + `.loadout/` (beside its dotfiles, or behind a dot
+  when it has none: `private_dot_config/.ripgrep.loadout.ts`); what lands
   outside `$HOME` (hardware, system settings) is in `.etc/<concern>/`
   (`.etc/t2/`, `.etc/keychron/`). The
   main checkout stays on `master` and is what this machine applies; features

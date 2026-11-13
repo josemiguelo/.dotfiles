@@ -15,7 +15,7 @@
 // usage: default-agent.ts <agent>   (its mise tool shares its name)
 import { chmod, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { $, ok, out, read, run } from "#loadout";
+import { $, ok, out, read, run } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const CONF = `${HOME}/.config/mise/config.toml`;

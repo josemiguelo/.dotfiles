@@ -5,8 +5,7 @@
 //
 // `update antidote` (loadout calls it per row) fast-forwards it.
 // usage: outdated-antidote.ts [update antidote]
-import { run } from "#loadout";
-import { behind, fastForward } from "#git-clones";
+import { clonesBehind, fastForward, formatRow, run } from "loadout/script";
 import { ANTIDOTE } from "#antidote";
 
 const antidote = { name: "antidote", dir: ANTIDOTE };
@@ -18,7 +17,7 @@ async function outdated(mode?: string, want?: string) {
     return;
   }
   if (mode !== undefined) throw new Error("usage: outdated-antidote.ts [update antidote]");
-  for (const row of await behind([antidote])) console.log(row);
+  for (const row of await clonesBehind([antidote])) console.log(formatRow(row));
 }
 
 await run(outdated);

@@ -8,7 +8,7 @@
 import { mkdir, mkdtemp, rename, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { $, out, run } from "#loadout";
+import { $, out, run } from "loadout/script";
 
 const BIN_DIR = `${process.env.HOME}/.local/bin`;
 const REPO = "https://github.com/tmuxpack/tpack";

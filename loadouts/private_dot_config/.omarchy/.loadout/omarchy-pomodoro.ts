@@ -8,7 +8,7 @@
 // (menuBlockWrite in lib/omarchy.ts). They run the plugin's own
 // bin/omarchy-pomodoro by its path, so nothing goes on the PATH.
 // Modes: `check` / `install` (default).
-import { main } from "#loadout";
+import { main } from "loadout/script";
 import { menuBlockInPlace, menuBlockWrite, pluginUpdateHint, widgetConfigure, widgetConfigured, widgetEnabled } from "#omarchy";
 
 const ID = "pomodoro-omarchy";

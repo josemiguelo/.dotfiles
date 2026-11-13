@@ -3,7 +3,7 @@
 // check mode: every Toolbox script must be symlinked (nothing to do when the
 // Toolbox scripts dir doesn't exist yet).
 import { existsSync, lstatSync, mkdirSync, readdirSync, statSync } from "node:fs";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const SCRIPTS_DIR = `${HOME}/.local/share/JetBrains/Toolbox/scripts`;

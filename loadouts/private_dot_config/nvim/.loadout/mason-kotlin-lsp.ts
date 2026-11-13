@@ -11,7 +11,7 @@
 //   check      Mason has kotlin-lsp
 //   install    Mason installs the latest (the default; an update when installed)
 // Modes: `check` / `install` (default).
-import { main } from "#loadout";
+import { main } from "loadout/script";
 import { masonHas, masonInstall } from "#nvim";
 
 const PACKAGE = "kotlin-lsp";

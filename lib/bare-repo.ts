@@ -3,7 +3,7 @@
 // and skills-repo: fetched from one url (https for a public repo, so a fresh
 // machine clones it before GitHub knows its ssh key) and pushed to another
 // (ssh, remote.origin.pushurl).
-import { $ } from "#loadout";
+import { $ } from "loadout/script";
 
 /** Where a clone fetches from and pushes to. */
 export type Remotes = { url: string; push: string };

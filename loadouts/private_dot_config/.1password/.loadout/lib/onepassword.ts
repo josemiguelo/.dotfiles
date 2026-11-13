@@ -1,6 +1,6 @@
 // The 1Password CLI for the steps that read secrets with `op`
 // (onepassword-cli, intentional-sync, kait2en-dev, t2-bcm-firmware).
-import { $ } from "#loadout";
+import { $ } from "loadout/script";
 
 const has = (program: string) => Bun.which(program) !== null;
 

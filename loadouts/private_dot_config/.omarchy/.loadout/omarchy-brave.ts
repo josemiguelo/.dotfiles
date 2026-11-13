@@ -11,7 +11,7 @@
 // so the entries that aren't Omarchy's are carried onto the new line.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
-import { $, main, ok, read } from "#loadout";
+import { $, main, ok, read } from "loadout/script";
 
 const CONFIG = process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`;
 const FLAGS = `${CONFIG}/brave-flags.conf`;

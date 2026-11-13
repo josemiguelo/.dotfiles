@@ -33,7 +33,7 @@
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { $, fail, main, read } from "#loadout";
+import { $, fail, main, read } from "loadout/script";
 import { HOME } from "#hypr";
 import { SHELL_JSON, readJson, shellReady, widgetEnabled } from "#omarchy";
 

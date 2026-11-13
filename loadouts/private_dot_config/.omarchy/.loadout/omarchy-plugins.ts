@@ -6,7 +6,7 @@
 // the plugin's id, not its URL). Done = every URL installed and enabled.
 // Plugins run unsandboxed inside the shell: list only ones you trust.
 // usage: omarchy-plugins.ts [check] <git-url>...
-import { $, fail, main } from "#loadout";
+import { $, fail, main } from "loadout/script";
 import { SHELL_JSON, pluginCheckouts, pluginUpdateHint, readJson, shellReady, widgetEnabled } from "#omarchy";
 
 function urls(args: string[]) {

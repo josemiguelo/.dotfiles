@@ -11,7 +11,7 @@
 // after this read without asking again). It gives up after ONEPASSWORD_WAIT
 // seconds (default 900; 0 doesn't wait).
 // Modes: `check` / `install` (default).
-import { $, main, ok } from "#loadout";
+import { $, main, ok } from "loadout/script";
 import { opConnected, opUnlocked } from "#onepassword";
 
 const WAIT = Number(process.env.ONEPASSWORD_WAIT || 900);

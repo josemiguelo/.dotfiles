@@ -13,7 +13,8 @@ import { existsSync, lstatSync } from "node:fs";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { $, brew, brewPrefix, executable, main } from "#loadout";
+import { $, executable, main } from "loadout/script";
+import { brew, brewPrefix } from "#brew";
 
 const HOME = process.env.HOME;
 const TOOLBOX_DIR = `${HOME}/.local/share/JetBrains/Toolbox`;

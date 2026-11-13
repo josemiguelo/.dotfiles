@@ -17,7 +17,7 @@
 // ONLY that file, so Omarchy's identity in ~/.config/git/config would look
 // unset and get overwritten.
 // Modes: `check` / `install` (default).
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 
 const DESIRED_EMAIL = "15330034+josemiguelo@users.noreply.github.com";
 const DESIRED_NAME = "Jose Miguel Ochoa";

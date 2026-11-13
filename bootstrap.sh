@@ -3,8 +3,8 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 #
-# <machine> names a machine the repo declares (machine "<machine>" in
-# machines/<machine>.loadout.hcl, compiled into loadout.lock.json) and becomes the
+# <machine> names a machine the repo declares (machine("<machine>", …) in
+# machines/<machine>.loadout.ts, compiled into loadout.lock.json) and becomes the
 # hostname, so loadout, chezmoi's templates and the state file all agree on
 # it. The order is the point: the hostname before the first apply (templates
 # rendered for an unknown host get the defaults, e.g. omarchy: false), the
@@ -94,9 +94,9 @@ main() {
     cat >&2 <<EOF
 bootstrap: $GH declares no machine $MACHINE (it has: $(printf '%s ' $machines)).
 A machine new to the repo is declared first, extending its profiles, in
-machines/$MACHINE.loadout.hcl, e.g.
-  # MacBookPro16,1 (T2) running Omarchy.
-  machine "$MACHINE" { extends = [profile.t2-macbook] }
+machines/$MACHINE.loadout.ts, e.g.
+  // MacBookPro16,1 (T2) running Omarchy.
+  machine<Data>("$MACHINE", { extends: [t2Macbook] });
 Then loadout compile, commit and push (the lock too), and run this again.
 EOF
     exit 1

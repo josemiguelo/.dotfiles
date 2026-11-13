@@ -27,7 +27,8 @@
 // usage: github-ssh-key.ts [check] <key-name>
 import { existsSync } from "node:fs";
 import { hostname } from "node:os";
-import { $, brewPrefix, main, ok } from "#loadout";
+import { $, main, ok } from "loadout/script";
+import { brewPrefix } from "#brew";
 import { onTerminal, publicKey, sshAgentUp, sshKeyLoaded } from "#ssh";
 
 const HOME = process.env.HOME!;

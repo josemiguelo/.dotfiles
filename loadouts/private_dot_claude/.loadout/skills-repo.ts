@@ -12,7 +12,7 @@
 //
 // Modes: `check` / `install` (default).
 import { existsSync, lstatSync, mkdirSync, readdirSync, readlinkSync, rmSync, statSync, symlinkSync } from "node:fs";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 import { cloneBare, defaultBranch, remotesOk, setRemotes } from "#bare-repo";
 
 const HOME = process.env.HOME!;

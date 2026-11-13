@@ -5,7 +5,7 @@
 // its remote is the antidote / antidote-plugins oracles' question.
 // usage: plugins.ts [check|install]
 import { existsSync } from "node:fs";
-import { $, has, main } from "#loadout";
+import { $, has, main } from "loadout/script";
 import { ANTIDOTE, BUNDLES, bundleAll, bundlePaths } from "#antidote";
 
 async function ready() {

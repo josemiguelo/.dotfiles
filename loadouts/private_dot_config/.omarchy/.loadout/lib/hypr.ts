@@ -4,7 +4,7 @@
 import { readdirSync, statSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { $, read } from "#loadout";
+import { $, read } from "loadout/script";
 
 const LIB = import.meta.dir;
 export const HOME = process.env.HOME!;

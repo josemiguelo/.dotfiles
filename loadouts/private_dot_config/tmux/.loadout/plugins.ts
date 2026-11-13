@@ -6,7 +6,7 @@
 // (outdated-plugins.ts), not this one's.
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 import { CONF, cloneOf, declared, toolsPath } from "#tmux";
 
 async function ready() {

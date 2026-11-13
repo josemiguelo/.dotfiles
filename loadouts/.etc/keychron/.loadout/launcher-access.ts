@@ -14,7 +14,7 @@
 // USB, every one of its hidraw nodes readable and writable by this user.
 // Modes: `check` / `install` (default).
 import { accessSync, constants, existsSync, readdirSync } from "node:fs";
-import { $, main, read, readTrimmed, sudoWrite } from "#loadout";
+import { $, main, read, readTrimmed, sudoWrite } from "loadout/script";
 
 const RULE = "/etc/udev/rules.d/50-keychron-hid.rules";
 const RULE_TEXT = `# Managed by loadout (keychron-launcher-access): let the logged-in user open

@@ -12,7 +12,7 @@
 // up the same — a later override anywhere in the chain fails it. Install then
 // reloads the running Hyprland and requires no config errors.
 // usage: omarchy-hypr-config.ts [check] <file>...
-import { fail, main } from "#loadout";
+import { fail, main } from "loadout/script";
 import { HOME, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 
 const SETTINGS = `${import.meta.dir}/hypr-config`;

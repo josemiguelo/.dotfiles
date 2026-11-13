@@ -15,7 +15,7 @@
 // reset) / `reset` (the server only — what the hook runs).
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { $, fail, mainCheckoutPath, ok, out, read, reason } from "#loadout";
+import { $, fail, mainCheckoutPath, ok, out, read, reason } from "loadout/script";
 
 const HOOK = `${process.env.HOME}/.config/omarchy/hooks/theme-set.d/tmux-follows-kitty`;
 

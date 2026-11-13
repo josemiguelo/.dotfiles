@@ -6,7 +6,8 @@
 // cask, then tmux and git unless another brew package still needs them (that
 // one is reported and left alone: removing it would break the other).
 // Modes: `check` / `install` (default).
-import { brew, brewPrefix, executable, main, ok } from "#loadout";
+import { executable, main, ok } from "loadout/script";
+import { brew, brewPrefix } from "#brew";
 
 const FORMULAE = ["tmux", "git"];
 const prefix = await brewPrefix();

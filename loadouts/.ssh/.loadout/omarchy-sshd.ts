@@ -18,7 +18,7 @@
 // needs no sudo for it.
 // usage: omarchy-sshd.ts [check] <key-title>...
 import { existsSync, writeFileSync } from "node:fs";
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 
 const HOME = process.env.HOME!;
 // gh from mise's shims, where Omarchy's conf.d/omarchy.toml installs it.

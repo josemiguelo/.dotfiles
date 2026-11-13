@@ -12,7 +12,7 @@
 // description.
 // usage: omarchy-theme-mode.ts [check] <dark-theme> <light-theme>
 import { mkdir } from "node:fs/promises";
-import { $, fail, main, out, read } from "#loadout";
+import { $, fail, main, out, read } from "loadout/script";
 import { BINDINGS, HOME, binds, block, blockIn, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 
 const NAME = "omarchy-theme-mode";

@@ -10,7 +10,7 @@
 // The check reads /etc/ufw/user.rules (world-readable) for the three rules
 // by their comment, so `loadout status` needs no sudo for it.
 // Modes: `check` / `install` (default).
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 
 const RULES = "/etc/ufw/user.rules";
 const TAG = "libvirt";

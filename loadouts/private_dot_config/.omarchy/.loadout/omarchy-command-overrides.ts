@@ -14,7 +14,7 @@
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 import { HOME, block, blockIn, liveInstance, probe, reload, writeBlock } from "#hypr";
 import { OVERRIDES_DIR, shellPath } from "#omarchy";
 

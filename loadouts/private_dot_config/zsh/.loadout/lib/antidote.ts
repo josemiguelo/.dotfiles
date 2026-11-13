@@ -2,7 +2,7 @@
 // the chezmoi dotfiles), for plugins.ts and the outdated oracles. Local
 // $ZDOTDIR/... entries are dotfiles, not clones: chezmoi's business.
 import { existsSync } from "node:fs";
-import { $, out, read } from "#loadout";
+import { $, out, read } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const ZDOTDIR = process.env.ZDOTDIR || `${HOME}/.config/zsh`;

@@ -1,7 +1,7 @@
 // The ssh agent setup-ssh.ts and github-ssh-key.ts reach, and the commands
 // that need a terminal (a passphrase, a browser login).
 import { statSync } from "node:fs";
-import { $, read } from "#loadout";
+import { $, read } from "loadout/script";
 
 /**
  * argv on this terminal, with this process's environment as it is now: a

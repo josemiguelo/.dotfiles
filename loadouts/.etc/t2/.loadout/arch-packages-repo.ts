@@ -17,7 +17,7 @@
 // usage: arch-packages-repo.ts [check|install]
 import { chmod, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { $, executable, main, readTrimmed } from "#loadout";
+import { $, executable, main, readTrimmed } from "loadout/script";
 
 const REPO = "t2-arch-packages";
 const SERVER = "https://github.com/josemiguelo/t2-arch-packages/releases/download/repo";

@@ -2,16 +2,15 @@
 // Custom `loadout outdated` oracle for the tmux plugins tmux.conf declares.
 // The config is the list, not the clone dirs: a declared plugin with no clone
 // is a row ("not installed", candidate = its remote tip), an installed one is
-// a row when its clone is behind its remote tip (#git-clones, shared with the
-// zsh plugins' oracle). Silent when tmux isn't set up on this
-// machine.
+// a row when its clone is behind its remote tip (clonesBehind, from
+// loadout/script, as the zsh plugins' oracle). Silent when tmux isn't set up
+// on this machine.
 //
 // `update <name>` (loadout calls it per row): clone what's missing with
 // `tpack install`, fast-forward the one clone that's behind.
 // usage: outdated-plugins.ts [update <name>]
 import { existsSync } from "node:fs";
-import { $, run } from "#loadout";
-import { behind, fastForward } from "#git-clones";
+import { $, clonesBehind, fastForward, formatRow, run } from "loadout/script";
 import { CONF, cloneOf, declared, toolsPath } from "#tmux";
 
 const name = (repo: string) => repo.split("/").pop()!;
@@ -45,7 +44,7 @@ async function outdated(mode?: string, want?: string) {
     const tip = remote.slice(0, 9).trim() || "?";
     console.log(`${name(repo)} - ${tip} not installed https://github.com/${repo}`);
   }
-  for (const row of await behind(clones)) console.log(row);
+  for (const row of await clonesBehind(clones)) console.log(formatRow(row));
 }
 
 await run(outdated);

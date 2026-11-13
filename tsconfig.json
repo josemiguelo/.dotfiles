@@ -15,8 +15,22 @@
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
-    "types": ["bun"]
+    "types": ["bun"],
+    // The manifests' and the scripts' SDKs, written by `loadout compile` from
+    // the loadout that compiles them.
+    "paths": { "loadout": ["./loadout.sdk.ts"], "loadout/script": ["./loadout.script.ts"] }
   },
-  // The scripts live in dot folders (.loadout/), which a bare ** skips.
-  "include": ["lib/*.ts", "loadouts/**/.loadout/**/*.ts", "loadouts/**/.*/.loadout/**/*.ts"]
+  // The scripts live in dot folders (.loadout/), and the manifests are dot
+  // files (.tmux.loadout.ts), which a bare ** skips.
+  "include": [
+    "lib/*.ts",
+    "loadouts/**/.loadout/**/*.ts",
+    "loadouts/**/.*/.loadout/**/*.ts",
+    "loadout.ts",
+    "loadout.sdk.ts",
+    "machines/**/*.ts",
+    "loadouts/**/.*.loadout.ts",
+    "loadouts/**/.*/.*.loadout.ts",
+    "loadouts/.etc/*/.*.loadout.ts"
+  ]
 }

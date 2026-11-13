@@ -1,6 +1,6 @@
 // An Omarchy web app (its own app window), installed with Omarchy's own
 // omarchy-webapp-install: one script per app, each a call to webapp().
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 
 export type WebApp = {
   /** The launcher's name: ~/.local/share/applications/<name>.desktop. */
@@ -11,7 +11,7 @@ export type WebApp = {
   host: RegExp;
 };
 
-/** Runs the managed_by protocol for app: done when its launcher opens its host. */
+/** Runs the managedBy protocol for app: done when its launcher opens its host. */
 export async function webapp(app: WebApp) {
   const desktop = `${process.env.HOME}/.local/share/applications/${app.name}.desktop`;
   const exec = new RegExp(`^Exec=omarchy-launch-webapp.*${app.host.source}`, "m");

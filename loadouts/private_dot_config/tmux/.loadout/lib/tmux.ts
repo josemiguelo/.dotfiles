@@ -2,7 +2,8 @@
 // declares (`set -g @plugin 'owner/repo'`; the file comes from the chezmoi
 // dotfiles) and the clones tpack made of them.
 import { existsSync, readdirSync, statSync } from "node:fs";
-import { brewPrefix, read } from "#loadout";
+import { read } from "loadout/script";
+import { brewPrefix } from "#brew";
 
 const HOME = process.env.HOME!;
 const CONFIG = process.env.XDG_CONFIG_HOME || `${HOME}/.config`;

@@ -21,7 +21,7 @@
 // next login. Modes: `check` / `install` (default).
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { $, main, read } from "#loadout";
+import { $, main, read } from "loadout/script";
 
 const ENV_FILE = `${process.env.XDG_CONFIG_HOME || `${process.env.HOME}/.config`}/uwsm/env-hyprland`;
 const BEGIN = "# >>> Managed by loadout (t2-render-gpu)";

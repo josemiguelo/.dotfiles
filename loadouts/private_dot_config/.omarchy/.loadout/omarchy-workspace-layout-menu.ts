@@ -8,7 +8,7 @@
 // extensions (menuBlockWrite in lib/omarchy.ts). Done = the block as written
 // and the command on the PATH.
 // Modes: `check` / `install` (default).
-import { has, main } from "#loadout";
+import { has, main } from "loadout/script";
 import { MENU, menuBlockInPlace, menuBlockWrite } from "#omarchy";
 
 const NAME = "omarchy-workspace-layout-menu";

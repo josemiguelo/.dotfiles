@@ -21,3 +21,4 @@ Repos/gh/clainstone
 .config/zsh/functions/is_apt_package_installed
 .config/mise/conf.d/omarchy.toml
 .config/surfingkeys
+.config/nvim/lua/features/langs/loadout.lua

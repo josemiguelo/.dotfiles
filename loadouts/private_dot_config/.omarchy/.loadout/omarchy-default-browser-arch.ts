@@ -4,7 +4,7 @@
 // browser <name>`. Arch's packages already use the desktop ids Omarchy
 // expects, so no desktop-id alias is needed.
 // usage: omarchy-default-browser-arch.ts <browser>
-import { $, has, run } from "#loadout";
+import { $, has, run } from "loadout/script";
 
 async function setDefault(browser?: string) {
   if (!browser) throw new Error("usage: omarchy-default-browser-arch.ts <browser>");

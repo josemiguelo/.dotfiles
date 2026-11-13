@@ -8,7 +8,8 @@
 //   brew-taps.ts check <tap>                    exit 0 when the tap is tapped and trusted
 //   brew-taps.ts install <tap>                  tap and trust it (a no-op when it already is)
 //   brew-taps.ts install <tap> <name> [--cask]  then install <name> (its full path) from it
-import { brew, main } from "#loadout";
+import { main } from "loadout/script";
+import { brew } from "#brew";
 
 function usage(): never {
   console.error("usage: brew-taps.ts check <tap> | install <tap> [<name> [--cask]]");

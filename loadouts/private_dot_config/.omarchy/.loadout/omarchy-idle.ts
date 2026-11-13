@@ -8,7 +8,7 @@
 // Omarchy's own editing does (omarchy-shell-config), since the shell reads a
 // user file in their place, not over them. The shell is told to reload.
 // usage: omarchy-idle.ts [check] <lock-seconds>
-import { $, fail, main, ok, read } from "#loadout";
+import { $, fail, main, ok, read } from "loadout/script";
 import { SHELL_JSON, readJson, replaceFile, shellReady } from "#omarchy";
 
 const DEFAULTS = `${process.env.OMARCHY_PATH || "/usr/share/omarchy"}/config/omarchy/shell.json`;

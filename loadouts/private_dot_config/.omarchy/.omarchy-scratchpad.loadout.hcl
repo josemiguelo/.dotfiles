@@ -1,7 +1,0 @@
-# Kitty windows in the scratchpad (Hyper+Escape) at the opacity the machine names;
-# needs kitty.conf's dynamic_background_opacity.
-script "omarchy-scratchpad-opacity" {
-  description = "scratchpad kitty windows less see-through"
-  managed_by  = ".loadout/omarchy-scratchpad-opacity.ts"
-  run_after   = [program.kitty]
-}

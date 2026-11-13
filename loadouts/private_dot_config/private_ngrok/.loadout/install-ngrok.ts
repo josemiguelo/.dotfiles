@@ -5,7 +5,7 @@
 import { chmod, mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { $, out, run } from "#loadout";
+import { $, out, run } from "loadout/script";
 
 const BIN_DIR = `${process.env.HOME}/.local/bin`;
 const BASE = "https://bin.equinox.io/c/bNyj1mQVY4c";

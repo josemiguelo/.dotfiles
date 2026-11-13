@@ -4,7 +4,7 @@
 // usage: completions.ts [check|install]
 import { existsSync } from "node:fs";
 import { mkdir, rename, rm } from "node:fs/promises";
-import { main } from "#loadout";
+import { main } from "loadout/script";
 
 // ZDOTDIR is exported by ~/.zshenv; from bash (a desktop's default shell before
 // default-shell has run) it is unset, so fall back to the same directory.

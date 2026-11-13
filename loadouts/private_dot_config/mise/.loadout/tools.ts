@@ -14,7 +14,7 @@
 // moves needs no change here.
 // usage: tools.ts [check|install] [tool...]
 import { existsSync, statSync } from "node:fs";
-import { $, fail, has, main } from "#loadout";
+import { $, fail, has, main } from "loadout/script";
 
 if (!has("mise")) fail("mise not found");
 

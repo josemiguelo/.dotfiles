@@ -15,7 +15,7 @@
 // usage: outdated-tools.ts [update <tool>]
 import { existsSync, statSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-import { $, has, run } from "#loadout";
+import { $, has, run } from "loadout/script";
 
 const HOME = process.env.HOME!;
 const CFG = process.env.MISE_GLOBAL_CONFIG_FILE || `${process.env.XDG_CONFIG_HOME || `${HOME}/.config`}/mise/config.toml`;

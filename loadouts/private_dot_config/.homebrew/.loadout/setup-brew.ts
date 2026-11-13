@@ -9,7 +9,8 @@
 //         someone else
 // usage: setup-brew.ts [check|install]
 import { accessSync, constants, existsSync } from "node:fs";
-import { $, brewPrefix, executable, fail, main } from "#loadout";
+import { $, executable, fail, main } from "loadout/script";
+import { brewPrefix } from "#brew";
 
 const INSTALLER = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh";
 

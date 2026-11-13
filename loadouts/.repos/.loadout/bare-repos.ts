@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// josemiguelo's repos named by the machine (`args(script.bare-repos, "loadout",
+// josemiguelo's repos named by the machine (`args(bareRepos, "loadout",
 // "loadout.wiki")`), each a bare clone in ~/Repos/gh/josemiguelo/<repo> with
 // its default branch checked out in all_worktrees/<branch> (#bare-repo, the
 // layout `gclone --bare` makes by hand and skills-repo keeps for skills).
@@ -12,7 +12,7 @@
 // usage: bare-repos.ts [check] [--ssh] <repo>...
 import { mkdirSync, statSync } from "node:fs";
 import { dirname } from "node:path";
-import { main, reason } from "#loadout";
+import { main, reason } from "loadout/script";
 import { cloneBare, defaultBranch, remotesOk, setRemotes } from "#bare-repo";
 
 const HOME = process.env.HOME!;

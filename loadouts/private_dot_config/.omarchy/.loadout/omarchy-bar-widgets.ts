@@ -17,7 +17,7 @@
 // a neighbour is one already in the section (stock, or placed by an earlier
 // line).
 // usage: omarchy-bar-widgets.ts [check] "<id> <section> <before|after|at> <neighbour|index>"...
-import { $, fail, main, ok } from "#loadout";
+import { $, fail, main, ok } from "loadout/script";
 import {
   SHELL_JSON,
   pluginUpdateHint,

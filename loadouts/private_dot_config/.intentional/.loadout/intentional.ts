@@ -9,7 +9,7 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { $, executable, main, out } from "#loadout";
+import { $, executable, main, out } from "loadout/script";
 
 const REPO = "https://github.com/josemiguelo/intentional";
 const INSTALLED = `${process.env.XDG_DATA_HOME || `${process.env.HOME}/.local/share`}/intentional/install.sh`;

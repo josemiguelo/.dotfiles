@@ -5,7 +5,7 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 
 const URL = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip";
 const darwin = process.platform === "darwin";

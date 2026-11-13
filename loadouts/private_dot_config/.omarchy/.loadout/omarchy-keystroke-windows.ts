@@ -14,7 +14,7 @@
 // Modes: `check` / `install` (default).
 import { existsSync, lstatSync } from "node:fs";
 import { rm } from "node:fs/promises";
-import { main, read } from "#loadout";
+import { main, read } from "loadout/script";
 import { BINDINGS, HOME, binds, block, blockIn, liveInstance, noConfigErrors, probe, reload, writeBlock } from "#hypr";
 import { pluginUpdateHint, readJson, replaceFile } from "#omarchy";
 

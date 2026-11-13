@@ -12,7 +12,7 @@ One command, on a fresh Omarchy or macOS install:
 curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
 ```
 
-`<machine>` names a machine of the repo (`machines/<machine>.loadout.hcl`)
+`<machine>` names a machine of the repo (`machines/<machine>.loadout.ts`)
 and becomes the hostname (each install keeps its own state file, so a reinstall gets a name of its own, e.g.
 `t2-macbook-omarchy-2`). The work laptop is a private child repo's machine
 (loadout's contract 18): `bootstrap.sh <machine> --child <ssh url>` keeps its
@@ -28,9 +28,9 @@ first: the install leaves pacman without package lists, and installing
 chezmoi fails with "target not found".
 
 A machine new to the repo is declared first, compiled and pushed before the
-bootstrap reads it: `machine "<machine>" { extends = [profile.t2-macbook] }`
-(or `profile.omarchy`, `profile.macos`) in `machines/<machine>.loadout.hcl`,
+bootstrap reads it: `machine<Data>("<machine>", { extends: [t2Macbook] })`
+(or `omarchyProfile`, `macos`) in `machines/<machine>.loadout.ts`,
 then `loadout compile` and commit the lock with it. `loadout sync` publishes its state
 afterwards (it commits only the state file). To ssh into the T2 laptop from it,
 add its name to the key titles `omarchy-sshd` trusts in
-`machines/profiles/t2-macbook.profile.loadout.hcl`: the T2 lets in no other key.
+`machines/profiles/t2-macbook.profile.loadout.ts`: the T2 lets in no other key.

@@ -3,7 +3,7 @@
 // usermod rather than chsh so it never prompts for a password (loadout runs
 // this under captured output and asks for sudo itself).
 // usage: default-shell.ts [check|install]; check: login shell already zsh?
-import { $, fail, main, read } from "#loadout";
+import { $, fail, main, read } from "loadout/script";
 
 const ZSH = Bun.which("zsh") ?? fail("zsh is not installed");
 const USER = process.env.USER ?? fail("USER isn't set");

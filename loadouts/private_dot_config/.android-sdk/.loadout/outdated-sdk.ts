@@ -13,7 +13,7 @@
 // is the repo's: commit the change afterwards.
 // usage: outdated-sdk.ts [update <item>]
 import { existsSync } from "node:fs";
-import { run } from "#loadout";
+import { run } from "loadout/script";
 import { PINS, knownIds, pins, sdkDir, sdkmanagerInstall, sdkmanagerPath, studioJdk } from "#android-sdk";
 
 const PRERELEASE = /(-rc|rc[0-9]|alpha|beta|preview)/i;

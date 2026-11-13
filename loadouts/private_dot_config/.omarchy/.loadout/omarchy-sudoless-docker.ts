@@ -11,7 +11,7 @@
 // restart step reads it). An Omarchy migration once took users out of the
 // group; the check catches that happening again.
 // Modes: `check` / `install` (default).
-import { $, has, main, ok } from "#loadout";
+import { $, has, main, ok } from "loadout/script";
 
 /** omarchy-sudo-docker --configured succeeds when Docker would still need sudo. */
 async function configured() {

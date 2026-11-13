@@ -13,7 +13,7 @@
 // Done = the mode is selected with none of its models missing, and every
 // setting has its value.
 // usage: superwhisper-settings.ts [check] key=value...
-import { $, main } from "#loadout";
+import { $, main } from "loadout/script";
 
 type Models = {
   processing: string;
