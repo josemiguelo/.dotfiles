@@ -4,7 +4,7 @@
 # `args(script.bare-repos, "loadout", "loadout.wiki")`.
 script "bare-repos" {
   description = "josemiguelo's repos as bare clones in ~/Repos/gh/josemiguelo"
-  managed_by  = ".loadout/bare-repos.sh"
+  managed_by  = ".loadout/bare-repos.ts"
   run_after   = [program.git]
 }
 

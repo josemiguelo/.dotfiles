@@ -35,7 +35,7 @@ script "setup-completions" {
 # never a bare one. Next login.
 script "default-shell" {
   description = "login shell set to zsh"
-  managed_by  = ".loadout/default-shell.sh"
+  managed_by  = ".loadout/default-shell.ts"
   needs_sudo  = true
   run_after   = [program.zsh]
 }

@@ -10,7 +10,12 @@ repo {
   name             = "jm's machines"
   state            = "machines/state"
   configs          = "loadouts"
-  min_tool_version = "4.4.0"
+  min_tool_version = "4.5.0"
+  # The bun loadout's scripts run with: loadout downloads it and puts it
+  # first on PATH for every command it runs, so TypeScript works from a new
+  # machine's first step. mise's bun (mise/config.toml) is the shells'; the
+  # pre-commit hook keeps the two at one version.
+  bun = "1.4.3"
   sources = [
     "loadouts/**/.*.loadout.hcl",
     "loadouts/**/.*/.*.loadout.hcl",

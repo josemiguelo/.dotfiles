@@ -31,7 +31,7 @@ script "dotfiles-ssh-remote" {
 # Converge = pull only.
 script "dotfiles-pull" {
   description   = "pull dotfiles source when behind its origin"
-  managed_by    = ".loadout/pull.sh"
+  managed_by    = ".loadout/pull.ts"
   maintain_only = true
 }
 
@@ -39,7 +39,7 @@ script "dotfiles-pull" {
 # pushes.
 script "dotfiles-push" {
   description   = "push dotfiles source when ahead of its origin"
-  managed_by    = ".loadout/push.sh"
+  managed_by    = ".loadout/push.ts"
   run_after     = [script.dotfiles-pull]
   maintain_only = true
 }

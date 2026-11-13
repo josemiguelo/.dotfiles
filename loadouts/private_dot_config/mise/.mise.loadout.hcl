@@ -13,19 +13,8 @@ program "mise" {
 
 # Exactly the versions config.toml pins; and whether those pins are behind
 # upstream.
-# Bun left mise's tools: the system's (program.bun) is the one Bun, the one
-# loadout's scripts run with. mise keeps an uninstalled tool's versions.
-# From $HOME, where mise reads the global config only.
-script "mise-drop-bun" {
-  description  = "no Bun from mise (the system's is the one Bun)"
-  run          = "cd \"$HOME\" && mise uninstall --all bun"
-  check        = "cd \"$HOME\" && ! mise ls --installed bun 2>/dev/null | grep -q ."
-  run_after    = [script.mise-tools]
-  transitional = true
-}
-
 # OpenSSL 1.1 beside the system's: Python 2.7's ssl module builds against
-# 1.x only, and Arch dropped 1.1 from its repos. tools.sh builds the 2.x
+# 1.x only, and Arch dropped 1.1 from its repos. tools.ts builds the 2.x
 # pythons config.toml pins against it.
 program "openssl-1.1" {
   description = "OpenSSL 1.1, for mise's Python 2.7 builds"
@@ -38,9 +27,9 @@ program "openssl-1.1" {
 # the rest. Without names, every version (macOS).
 script "mise-tools" {
   description        = "mise tools at the versions ~/.config/mise/config.toml pins"
-  managed_by         = ".loadout/tools.sh"
+  managed_by         = ".loadout/tools.ts"
   run_after          = [program.mise]
-  updates_managed_by = ".loadout/outdated-tools.sh"
+  updates_managed_by = ".loadout/outdated-tools.ts"
 }
 
 # Everything mise-tools' names left out: older versions, tools nothing in
@@ -48,7 +37,7 @@ script "mise-tools" {
 script "mise-tools-later" {
   description = "the rest of the mise tools config.toml pins"
   later       = "older versions and builds from source; setup needs none of them"
-  managed_by  = ".loadout/tools.sh"
+  managed_by  = ".loadout/tools.ts"
   run_after   = [script.mise-tools, program["openssl-1.1"]]
 }
 

@@ -11,7 +11,7 @@ program "t2-arch-packages-repo" {
   description = "the signed [t2-arch-packages] pacman repo, kept across pacman.conf refreshes"
 
   via "omarchy" {
-    managed_by = ".loadout/arch-packages-repo.sh"
+    managed_by = ".loadout/arch-packages-repo.ts"
     needs_sudo = true
   }
 }

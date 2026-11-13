@@ -3,7 +3,7 @@
 
 script "setup-ssh" {
   description = "machine ssh key and agent auto-add config"
-  file        = ".loadout/setup-ssh.sh"
+  file        = ".loadout/setup-ssh.ts"
   # The agent-unit clause is for Linux with systemd; uname short-circuits it
   # on macOS, and /run/systemd/system where systemd isn't running
   # (a container).
@@ -19,7 +19,7 @@ script "setup-ssh" {
 # browser when needed: the one browser step, last.
 script "github-ssh-key" {
   description = "this machine's ssh key on GitHub"
-  managed_by  = ".loadout/github-ssh-key.sh"
+  managed_by  = ".loadout/github-ssh-key.ts"
   run_after   = [script.setup-ssh, script.mise-tools, program.gh]
 }
 

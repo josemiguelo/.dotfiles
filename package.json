@@ -5,6 +5,8 @@
   "imports": {
     "#loadout": "./lib/loadout.ts",
     "#git-clones": "./lib/git-clones.ts",
+    "#bare-repo": "./lib/bare-repo.ts",
+    "#ssh": "./loadouts/.ssh/.loadout/lib/ssh.ts",
     "#antidote": "./loadouts/private_dot_config/zsh/.loadout/lib/antidote.ts",
     "#android-sdk": "./loadouts/private_dot_config/.android-sdk/.loadout/lib/android-sdk.ts",
     "#hypr": "./loadouts/private_dot_config/.omarchy/.loadout/lib/hypr.ts",

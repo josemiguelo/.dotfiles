@@ -19,7 +19,7 @@ program "tpack" {
   # which would shadow the system's. Its own copy only: a tpack on PATH may
   # still be the cask's, which remove-brew-tmux takes away after this.
   custom "linux" {
-    installed_by = ".loadout/install-tpack.sh"
+    installed_by = ".loadout/install-tpack.ts"
     version      = "$HOME/.local/bin/tpack --version"
   }
 }

@@ -6,7 +6,7 @@ profile "omarchy" {
 
   via "omarchy" {
     install = [
-      program.bun, program.curl, program.git, program.gcc, program.procps-ng, program.zsh, program.chezmoi,
+      program.curl, program.git, program.gcc, program.procps-ng, program.zsh, program.chezmoi,
       program.mise, program.kitty, program.tmux,
       local.everyday_cli,
       program.code, program.sublime-text, program.obsidian, program.spotify,
@@ -55,7 +55,7 @@ profile "omarchy" {
     local.shell_scripts,
     # Each tool's default version now; the older ones and the rest later.
     args(script.mise-tools, "node", "python", "neovim", "go"), script.mise-tools-later,
-    script.mise-default-packages, script.mise-drop-bun,
+    script.mise-default-packages,
     args(script.omarchy-default-agent, "claude"),
     script.omarchy-default-terminal,
     script.tmux-plugins, script.remove-brew-tmux, script.omarchy-tmux-theme,

@@ -7,7 +7,7 @@ program "jetbrains-toolbox" {
   # Linux: per-user install from JetBrains' release feed (the script says
   # why not the ublue-os cask). Version = the build.txt Toolbox ships.
   custom "linux" {
-    managed_by = ".loadout/install-toolbox.sh"
+    managed_by = ".loadout/install-toolbox.ts"
     regex      = "([0-9]+\\.[0-9][0-9.]*)"
   }
 

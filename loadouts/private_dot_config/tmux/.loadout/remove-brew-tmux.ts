@@ -2,7 +2,7 @@
 // Linux: no tpack, tmux or git from brew. The tpack cask pulled in brew's tmux
 // and git, which brew's bin put ahead of the system's on PATH: a tmux server of
 // another version than the one Omarchy's own launches run, and another git.
-// tpack now comes from its release (install-tpack.sh), so this removes the
+// tpack now comes from its release (install-tpack.ts), so this removes the
 // cask, then tmux and git unless another brew package still needs them (that
 // one is reported and left alone: removing it would break the other).
 // Modes: `check` / `install` (default).

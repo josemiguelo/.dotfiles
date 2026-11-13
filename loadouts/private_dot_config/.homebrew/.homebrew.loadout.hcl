@@ -1,5 +1,5 @@
-# Homebrew: brew itself, and third-party taps. brew.sh, setup-brew.sh and
-# brew-taps.sh are in .loadout/. brew and brew-cask are loadout's own.
+# Homebrew: brew itself, and third-party taps. brew.ts, setup-brew.ts and
+# brew-taps.ts are in .loadout/. brew and brew-cask are loadout's own.
 
 # Homebrew must exist and be writable by the login user before anything
 # installs with brew. Homebrew is single-owner: a prefix installed by
@@ -13,7 +13,7 @@ program "setup-brew" {
   # Linux: /home/linuxbrew, reclaimed for the login user, after Homebrew's
   # own build prerequisites.
   custom "linux" {
-    managed_by = ".loadout/setup-brew.sh"
+    managed_by = ".loadout/setup-brew.ts"
     needs_sudo = true
     depends_on = [program.curl, program.git, program.gcc, program.procps-ng]
     provides "brew" {
@@ -27,7 +27,7 @@ program "setup-brew" {
   custom "macos" {
     command    = "NONINTERACTIVE=1 /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
     needs_sudo = true
-    version    = run_script(".loadout/brew.sh --version")
+    version    = run_script(".loadout/brew.ts --version")
     regex      = "Homebrew ([0-9][0-9.]*)"
     provides "brew" {
       at = "/opt/homebrew/bin"
@@ -48,7 +48,7 @@ locals {
 installer "brew-tap" {
   params       = ["tap"]
   probe        = "brew"
-  install      = run_script(".loadout/brew-taps.sh install {tap} {tap}/{pkg}")
+  install      = run_script(".loadout/brew-taps.ts install {tap} {tap}/{pkg}")
   upgrade      = "brew upgrade"
   check        = "brew list --versions {pkg}"
   outdated_all = "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose | ${local.outdated_awk}"
@@ -57,7 +57,7 @@ installer "brew-tap" {
 installer "brew-tap-cask" {
   params       = ["tap"]
   probe        = "brew"
-  install      = run_script(".loadout/brew-taps.sh install {tap} {tap}/{pkg} --cask")
+  install      = run_script(".loadout/brew-taps.ts install {tap} {tap}/{pkg} --cask")
   upgrade      = "brew upgrade --cask"
   check        = "brew list --cask --versions {pkg}"
   outdated_all = "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --cask --verbose | ${local.outdated_awk}"

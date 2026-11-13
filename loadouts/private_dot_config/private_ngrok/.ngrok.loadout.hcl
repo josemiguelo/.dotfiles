@@ -2,7 +2,7 @@ program "ngrok" {
   description = "ngrok tunnel"
 
   custom {
-    installed_by = ".loadout/install-ngrok.sh"
+    installed_by = ".loadout/install-ngrok.ts"
   }
 
   path    = ["$HOME/.local/bin"]

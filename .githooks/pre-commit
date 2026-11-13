@@ -7,6 +7,20 @@
 set -eu
 
 root=$(git rev-parse --show-toplevel)
+
+# loadout.hcl's bun (the scripts') and mise's (the shells') at one version,
+# as they're staged.
+mise_config=loadouts/private_dot_config/mise/config.toml
+if git diff --cached --name-only | grep -qxE "loadout\.hcl|$mise_config"; then
+  pin() { git show ":$1" | sed -nE "s/^[[:space:]]*bun[[:space:]]*=[[:space:]]*\"([^\"]*)\".*/\1/p" | head -n 1; }
+  scripts=$(pin loadout.hcl)
+  shells=$(pin "$mise_config")
+  if [ "$scripts" != "$shells" ]; then
+    echo "pre-commit: loadout.hcl pins bun ${scripts:-nothing}, mise's config.toml ${shells:-nothing}: move both" >&2
+    exit 1
+  fi
+fi
+
 generated='loadout.lock.json loadouts/.chezmoidata/loadout.json loadouts/.chezmoitemplates/loadout'
 
 git diff --cached --name-only | grep -qE '\.hcl$|^loadout\.lock\.json$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0

@@ -10,14 +10,14 @@ program "intentional" {
   depends_on  = [program.libxcrypt-compat, program.brave]
 
   custom {
-    managed_by = ".loadout/intentional.sh"
+    managed_by = ".loadout/intentional.ts"
     # Its check prints "intentional <version>" once everything is in place.
     regex = "intentional ([0-9][0-9.]*)"
   }
 
   path               = ["$HOME/.local/bin"]
   version            = "intentional --version"
-  updates_managed_by = ".loadout/outdated-intentional.sh"
+  updates_managed_by = ".loadout/outdated-intentional.ts"
 }
 
 # Sync's secrets from 1Password, so a new machine syncs once installed. The

@@ -13,10 +13,10 @@ program "claude" {
   version = "claude --version"
 
   # Is the binary behind the latest published release?
-  updates_managed_by = ".loadout/outdated-claude.sh"
+  updates_managed_by = ".loadout/outdated-claude.ts"
 }
 
 script "skills-repo" {
   description = "clone the skills repo (bare + worktree) and symlink its skills into ~/.claude/skills"
-  managed_by  = ".loadout/skills-repo.sh"
+  managed_by  = ".loadout/skills-repo.ts"
 }

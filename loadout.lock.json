@@ -1,11 +1,12 @@
 {
   "format": 1,
-  "toolVersion": "4.4.0",
-  "sources": "4cfee703bb3e77cd3a8257fdfc9cd49b47c6ef06574774562ee185e0441b293f",
+  "toolVersion": "4.5.0",
+  "sources": "af2436f8907cfb6e647ae15df688e1e1ac9e7aada2e37f1331bf96f8978a82a3",
   "manifest": {
     "meta": {
       "name": "jm's machines",
-      "min-tool-version": "4.4.0"
+      "min-tool-version": "4.5.0",
+      "bun": "1.4.3"
     },
     "layout": {
       "state": "machines/state",
@@ -53,7 +54,7 @@
         "params": [
           "tap"
         ],
-        "install": "file:.loadout/brew-taps.sh install {tap} {tap}/{pkg}",
+        "install": "file:.loadout/brew-taps.ts install {tap} {tap}/{pkg}",
         "check": "brew list --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
@@ -68,7 +69,7 @@
         "params": [
           "tap"
         ],
-        "install": "file:.loadout/brew-taps.sh install {tap} {tap}/{pkg} --cask",
+        "install": "file:.loadout/brew-taps.ts install {tap} {tap}/{pkg} --cask",
         "check": "brew list --cask --versions {pkg}",
         "regex": "([0-9]+\\.[0-9][0-9.]*)",
         "outdated-all": "HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --cask --verbose | awk '{n=$1; sub(/.*[/]/, \"\", n); v=$NF; gsub(/[()]/, \"\", v); print n, v}'",
@@ -243,13 +244,6 @@
         },
         "origin": "loadouts/private_dot_config/btop"
       },
-      "bun": {
-        "install": {
-          "omarchy": {},
-          "brew": {}
-        },
-        "origin": "loadouts/private_dot_config"
-      },
       "chezmoi": {
         "install": {
           "brew": {},
@@ -273,8 +267,8 @@
           }
         },
         "outdated": {
-          "command": "file:.loadout/outdated-claude.sh",
-          "upgrade": "file:.loadout/outdated-claude.sh update"
+          "command": "file:.loadout/outdated-claude.ts",
+          "upgrade": "file:.loadout/outdated-claude.ts update"
         },
         "path": [
           "$HOME/.local/bin"
@@ -462,14 +456,14 @@
         },
         "install": {
           "custom": {
-            "command": "file:.loadout/intentional.sh install",
-            "check": "file:.loadout/intentional.sh check",
+            "command": "file:.loadout/intentional.ts install",
+            "check": "file:.loadout/intentional.ts check",
             "regex": "intentional ([0-9][0-9.]*)"
           }
         },
         "outdated": {
-          "command": "file:.loadout/outdated-intentional.sh",
-          "upgrade": "file:.loadout/outdated-intentional.sh update"
+          "command": "file:.loadout/outdated-intentional.ts",
+          "upgrade": "file:.loadout/outdated-intentional.ts update"
         },
         "path": [
           "$HOME/.local/bin"
@@ -480,8 +474,8 @@
         "description": "JetBrains Toolbox",
         "install": {
           "linux": {
-            "command": "file:.loadout/install-toolbox.sh install",
-            "check": "file:.loadout/install-toolbox.sh check",
+            "command": "file:.loadout/install-toolbox.ts install",
+            "check": "file:.loadout/install-toolbox.ts check",
             "regex": "([0-9]+\\.[0-9][0-9.]*)"
           },
           "brew-cask": {}
@@ -625,7 +619,7 @@
         },
         "install": {
           "custom": {
-            "command": "file:.loadout/install-ngrok.sh"
+            "command": "file:.loadout/install-ngrok.ts"
           }
         },
         "path": [
@@ -739,8 +733,8 @@
         "description": "Homebrew installed and owned by the login user",
         "install": {
           "linux": {
-            "command": "file:.loadout/setup-brew.sh install",
-            "check": "file:.loadout/setup-brew.sh check",
+            "command": "file:.loadout/setup-brew.ts install",
+            "check": "file:.loadout/setup-brew.ts check",
             "present": true,
             "sudo": true,
             "depends-on": [
@@ -758,7 +752,7 @@
           },
           "macos": {
             "command": "NONINTERACTIVE=1 /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
-            "check": "file:.loadout/brew.sh --version",
+            "check": "file:.loadout/brew.ts --version",
             "regex": "Homebrew ([0-9][0-9.]*)",
             "sudo": true,
             "provides": [
@@ -851,8 +845,8 @@
         "description": "the signed [t2-arch-packages] pacman repo, kept across pacman.conf refreshes",
         "install": {
           "omarchy": {
-            "command": "file:.loadout/arch-packages-repo.sh install",
-            "check": "file:.loadout/arch-packages-repo.sh check",
+            "command": "file:.loadout/arch-packages-repo.ts install",
+            "check": "file:.loadout/arch-packages-repo.ts check",
             "present": true,
             "sudo": true
           }
@@ -1038,7 +1032,7 @@
             }
           },
           "linux": {
-            "command": "file:.loadout/install-tpack.sh",
+            "command": "file:.loadout/install-tpack.ts",
             "check": "$HOME/.local/bin/tpack --version",
             "regex": "([0-9]+\\.[0-9][0-9.]*)"
           }
@@ -1178,8 +1172,8 @@
       },
       "bare-repos": {
         "description": "josemiguelo's repos as bare clones in ~/Repos/gh/josemiguelo",
-        "file": ".loadout/bare-repos.sh",
-        "check": "file:.loadout/bare-repos.sh check \"$@\"",
+        "file": ".loadout/bare-repos.ts",
+        "check": "file:.loadout/bare-repos.ts check \"$@\"",
         "after": [
           "programs.git"
         ],
@@ -1187,8 +1181,8 @@
       },
       "default-shell": {
         "description": "login shell set to zsh",
-        "file": ".loadout/default-shell.sh",
-        "check": "file:.loadout/default-shell.sh check \"$@\"",
+        "file": ".loadout/default-shell.ts",
+        "check": "file:.loadout/default-shell.ts check \"$@\"",
         "after": [
           "programs.zsh"
         ],
@@ -1197,8 +1191,8 @@
       },
       "dotfiles-pull": {
         "description": "pull dotfiles source when behind its origin",
-        "file": ".loadout/pull.sh",
-        "check": "file:.loadout/pull.sh check \"$@\"",
+        "file": ".loadout/pull.ts",
+        "check": "file:.loadout/pull.ts check \"$@\"",
         "modes": [
           "maintain"
         ],
@@ -1206,8 +1200,8 @@
       },
       "dotfiles-push": {
         "description": "push dotfiles source when ahead of its origin",
-        "file": ".loadout/push.sh",
-        "check": "file:.loadout/push.sh check \"$@\"",
+        "file": ".loadout/push.ts",
+        "check": "file:.loadout/push.ts check \"$@\"",
         "after": [
           "scripts.dotfiles-pull"
         ],
@@ -1230,8 +1224,8 @@
       },
       "github-ssh-key": {
         "description": "this machine's ssh key on GitHub",
-        "file": ".loadout/github-ssh-key.sh",
-        "check": "file:.loadout/github-ssh-key.sh check \"$@\"",
+        "file": ".loadout/github-ssh-key.ts",
+        "check": "file:.loadout/github-ssh-key.ts check \"$@\"",
         "after": [
           "scripts.setup-ssh",
           "scripts.mise-tools",
@@ -1308,19 +1302,10 @@
         ],
         "origin": "loadouts/private_dot_config/mise"
       },
-      "mise-drop-bun": {
-        "description": "no Bun from mise (the system's is the one Bun)",
-        "run": "cd \"$HOME\" && mise uninstall --all bun",
-        "check": "cd \"$HOME\" && ! mise ls --installed bun 2>/dev/null | grep -q .",
-        "after": [
-          "scripts.mise-tools"
-        ],
-        "origin": "loadouts/private_dot_config/mise"
-      },
       "mise-tools": {
         "description": "mise tools at the versions ~/.config/mise/config.toml pins",
-        "file": ".loadout/tools.sh",
-        "check": "file:.loadout/tools.sh check \"$@\"",
+        "file": ".loadout/tools.ts",
+        "check": "file:.loadout/tools.ts check \"$@\"",
         "after": [
           "programs.mise"
         ],
@@ -1328,8 +1313,8 @@
       },
       "mise-tools-later": {
         "description": "the rest of the mise tools config.toml pins",
-        "file": ".loadout/tools.sh",
-        "check": "file:.loadout/tools.sh check \"$@\"",
+        "file": ".loadout/tools.ts",
+        "check": "file:.loadout/tools.ts check \"$@\"",
         "after": [
           "scripts.mise-tools",
           "programs.openssl-1.1"
@@ -1663,8 +1648,8 @@
       },
       "setup-git": {
         "description": "git identity and delta configuration",
-        "file": ".loadout/setup-git.sh",
-        "check": "file:.loadout/setup-git.sh check \"$@\"",
+        "file": ".loadout/setup-git.ts",
+        "check": "file:.loadout/setup-git.ts check \"$@\"",
         "origin": "loadouts/.gitconfig"
       },
       "setup-libvirt": {
@@ -1682,14 +1667,14 @@
       },
       "setup-ssh": {
         "description": "machine ssh key and agent auto-add config",
-        "file": ".loadout/setup-ssh.sh",
+        "file": ".loadout/setup-ssh.ts",
         "check": "test -f $HOME/.ssh/$1 && grep -q 'AddKeysToAgent yes' $HOME/.ssh/config && ssh-keygen -F github.com -f $HOME/.ssh/known_hosts >/dev/null && { test \"$(uname -s)\" != Linux || test ! -d /run/systemd/system || systemctl --user -q is-enabled ssh-agent.socket; }",
         "origin": "loadouts/.ssh"
       },
       "skills-repo": {
         "description": "clone the skills repo (bare + worktree) and symlink its skills into ~/.claude/skills",
-        "file": ".loadout/skills-repo.sh",
-        "check": "file:.loadout/skills-repo.sh check \"$@\"",
+        "file": ".loadout/skills-repo.ts",
+        "check": "file:.loadout/skills-repo.ts check \"$@\"",
         "origin": "loadouts/private_dot_claude"
       },
       "solaar-no-autostart": {
@@ -1867,7 +1852,6 @@
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
-          "bun": "omarchy",
           "chezmoi": "omarchy",
           "code": "omarchy",
           "curl": "omarchy",
@@ -1936,7 +1920,6 @@
           "mise-tools node python neovim go",
           "mise-tools-later",
           "mise-default-packages",
-          "mise-drop-bun",
           "omarchy-default-agent claude",
           "omarchy-default-terminal",
           "tmux-plugins",
@@ -1999,7 +1982,6 @@
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
-          "bun": "omarchy",
           "chezmoi": "omarchy",
           "cmocka": "omarchy",
           "code": "omarchy",
@@ -2101,7 +2083,6 @@
           "mise-tools node python neovim go",
           "mise-tools-later",
           "mise-default-packages",
-          "mise-drop-bun",
           "omarchy-default-agent claude",
           "omarchy-default-terminal",
           "tmux-plugins",
@@ -2194,8 +2175,8 @@
         "origin": "loadouts/private_dot_config/nvim"
       },
       "mise-tools": {
-        "command": "file:.loadout/outdated-tools.sh",
-        "upgrade": "file:.loadout/outdated-tools.sh update {item}",
+        "command": "file:.loadout/outdated-tools.ts",
+        "upgrade": "file:.loadout/outdated-tools.ts update {item}",
         "origin": "loadouts/private_dot_config/mise"
       },
       "nvim-plugins": {
