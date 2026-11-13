@@ -14,10 +14,5 @@ repo({
   state: "machines/state",
   configs: "loadouts",
   minToolVersion: "5.0.0",
-  // The bun loadout's scripts run with: loadout downloads it and puts it
-  // first on PATH for every command it runs, so TypeScript works from a new
-  // machine's first step. mise's bun (mise/config.toml) is the shells'; the
-  // pre-commit hook keeps the two at one version.
-  bun: "1.4.3",
   data: schema,
 });

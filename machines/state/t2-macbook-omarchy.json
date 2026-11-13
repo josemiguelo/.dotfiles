@@ -4,8 +4,8 @@
   "os": "linux",
   "distro": "omarchy",
   "arch": "x86_64",
-  "toolVersion": "4.4.0",
-  "updatedAt": "2026-11-12T20:25:48.862543697Z",
+  "toolVersion": "5.0.0",
+  "updatedAt": "2026-11-13T23:55:43.526013030Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -55,11 +55,6 @@
     "btop": {
       "status": "installed",
       "version": "1.4.7",
-      "reason": null
-    },
-    "bun": {
-      "status": "installed",
-      "version": "1.4.3",
       "reason": null
     },
     "chezmoi": {
@@ -550,18 +545,13 @@
       "exitCode": 0
     },
     "mise-tools-later": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-11-12T02:58:15.151253797Z",
       "exitCode": 0
     },
     "mise-default-packages": {
       "status": "done",
       "lastRun": "2026-10-13T14:22:25.149669894Z",
-      "exitCode": 0
-    },
-    "mise-drop-bun": {
-      "status": "done",
-      "lastRun": "2026-11-08T02:45:44.768538617Z",
       "exitCode": 0
     },
     "omarchy-default-agent": {
@@ -755,7 +745,7 @@
       "exitCode": 0
     },
     "omarchy-sshd": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-11-12T02:40:08.531910193Z",
       "exitCode": 0
     },
@@ -887,8 +877,10 @@
       "reason": null
     },
     ".local": {
-      "status": "applied",
-      "files": [],
+      "status": "drifted",
+      "files": [
+        ".local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md"
+      ],
       "reason": null
     },
     ".zshenv": {
@@ -927,13 +919,22 @@
       "reason": null
     },
     "mise": {
+      "status": "drifted",
+      "files": [
+        ".config/mise/config.toml"
+      ],
+      "reason": null
+    },
+    "ngrok": {
       "status": "applied",
       "files": [],
       "reason": null
     },
     "nvim": {
-      "status": "applied",
-      "files": [],
+      "status": "drifted",
+      "files": [
+        ".config/nvim/lua/features/fuzzy_finder.lua"
+      ],
       "reason": null
     },
     "spotify-flags.conf": {

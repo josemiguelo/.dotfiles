@@ -579,6 +579,8 @@ export function machine<Data = Record<string, unknown>>(name: string, spec: Omit
 
 // ─── the repo ───────────────────────────────────────────────────────────
 
+const repoSettings = ["name", "state", "configs", "minToolVersion", "data", "parent"];
+
 export type RepoSpec<Data> = {
   name: string;
   /** The folder each machine's state is written to. */
@@ -587,8 +589,6 @@ export type RepoSpec<Data> = {
   configs?: string;
   /** The oldest loadout that may read this repo. */
   minToolVersion?: string;
-  /** The bun its scripts run with: loadout downloads it and puts it first on PATH. */
-  bun?: string;
   /** Every per-machine setting, with its default (a child repo's are its parent's). */
   data?: Data;
   /** The repo this one builds on (a child repo): its checkout, `~/…`, absolute, or relative to this one. */
@@ -651,9 +651,11 @@ const entries = (m: Map<string, Entry>) => (m.size ? Object.fromEntries([...m].m
  * declared everything. Under `loadout compile` it prints the draft.
  */
 export function repo<Data>(spec: RepoSpec<Data>) {
+  const unknown = Object.keys(spec).filter((k) => !repoSettings.includes(k));
+  if (unknown.length) fail(`repo has no setting '${unknown[0]}' (its settings: ${repoSettings.join(", ")})`);
   if (!process.env.LOADOUT_COMPILE) return;
   const manifest = clean({
-    meta: clean({ name: spec.name, "min-tool-version": spec.minToolVersion, bun: spec.bun }),
+    meta: clean({ name: spec.name, "min-tool-version": spec.minToolVersion }),
     layout: clean({ state: spec.state, configs: spec.configs, sources: sourcesFrom([Bun.main, ...included]) }),
     installers: entries(draft.installers),
     programs: entries(draft.programs),

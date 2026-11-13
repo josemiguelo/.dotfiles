@@ -8,15 +8,14 @@ set -eu
 
 root=$(git rev-parse --show-toplevel)
 
-# loadout.ts's bun (the scripts') and mise's (the shells') at one version,
-# as they're staged.
+# loadout's bun (the scripts': the one it's built with, `loadout bun`) and
+# mise's (the shells') at one version, mise's as it's staged.
 mise_config=loadouts/private_dot_config/mise/config.toml
 if git diff --cached --name-only | grep -qxE "loadout\.ts|$mise_config"; then
-  pin() { git show ":$1" | sed -nE "s/^[[:space:]]*bun[[:space:]]*[=:][[:space:]]*\"([^\"]*)\".*/\1/p" | head -n 1; }
-  scripts=$(pin loadout.ts)
-  shells=$(pin "$mise_config")
+  shells=$(git show ":$mise_config" | sed -nE 's/^[[:space:]]*bun[[:space:]]*=[[:space:]]*"([^"]*)".*/\1/p' | head -n 1)
+  scripts=$(loadout bun --version 2>/dev/null) || scripts=
   if [ "$scripts" != "$shells" ]; then
-    echo "pre-commit: loadout.ts pins bun ${scripts:-nothing}, mise's config.toml ${shells:-nothing}: move both" >&2
+    echo "pre-commit: loadout runs scripts with bun ${scripts:-(unknown: is loadout 5 on PATH?)}, mise's config.toml pins ${shells:-nothing}: move mise's to loadout's" >&2
     exit 1
   fi
 fi
