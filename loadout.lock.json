@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "4.4.0",
-  "sources": "1607af1e46de0d097699610390300eaf7c83c1c7d3817c185a7487fb51253560",
+  "sources": "50ec92db4a6ef524359a4080f20457ae2703d5a20db8f2f12934c36fa7b49244",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -781,7 +781,7 @@
         "version": {
           "command": "ngrok version",
           "regex": "([0-9]+\\.[0-9][0-9.]*)",
-          "origin": "loadouts/private_dot_config/ngrok",
+          "origin": "loadouts/private_dot_config/private_ngrok",
           "path": [
             "$HOME/.local/bin"
           ]
@@ -794,7 +794,7 @@
         "path": [
           "$HOME/.local/bin"
         ],
-        "origin": "loadouts/private_dot_config/ngrok"
+        "origin": "loadouts/private_dot_config/private_ngrok"
       },
       "ninja": {
         "install": {
