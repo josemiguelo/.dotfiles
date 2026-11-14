@@ -1,6 +1,6 @@
 import { args, omarchy, profile, via } from "loadout";
 import type { Data } from "../data.ts";
-import { kait2en, removeT2BootClock, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2HidAppleKeyboard, t2IbridgeUnmanaged, t2KernelArgs, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd } from "../../loadouts/.etc/t2/.t2.loadout.ts";
+import { kait2en, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2HidAppleKeyboard, t2IbridgeUnmanaged, t2KernelArgs, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd } from "../../loadouts/.etc/t2/.t2.loadout.ts";
 import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
@@ -31,7 +31,6 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     t2OmarchyChannel,
     t2HidAppleKeyboard,
     t2KernelArgs,
-    removeT2BootClock,
     t2GmuxBacklight,
     t2BcmFirmware,
     t2RenderGpu,

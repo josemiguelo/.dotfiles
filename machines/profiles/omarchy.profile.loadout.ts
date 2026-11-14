@@ -20,6 +20,7 @@ import { omarchyCloseWindowKey, omarchyGoogleBindings, omarchyHarpoon, omarchyHy
 import { intentional } from "../../loadouts/private_dot_config/.intentional/.intentional.loadout.ts";
 import { just } from "../../loadouts/private_dot_config/.just.loadout.ts";
 import { libxcryptCompat } from "../../loadouts/private_dot_config/.libxcrypt-compat.loadout.ts";
+import { removeLoadoutBunDownloads } from "../../loadouts/private_dot_config/.loadout-cli.loadout.ts";
 import { obsidian } from "../../loadouts/private_dot_config/.obsidian/.obsidian.loadout.ts";
 import { omarchy1password, omarchyAgentsPrune, omarchyBrave, omarchyDefaultBrowser, omarchyDefaultDictation, omarchyRemoveVoxtypeExtras, omarchyVscode, removeSurfingkeys } from "../../loadouts/private_dot_config/.omarchy/.omarchy-apps.loadout.ts";
 import { omarchyCommandOverrides, omarchyKeyboardBacklightGuard } from "../../loadouts/private_dot_config/.omarchy/.omarchy-overrides.loadout.ts";
@@ -103,6 +104,7 @@ export const omarchyProfile = profile<Data>("omarchy", {
     nvimPlugins,
     masonKotlinLsp,
     removeKotlinLspDownload,
+    removeLoadoutBunDownloads,
     unlinkBrewGlib,
     keychronLauncherAccess,
     shellScripts,

@@ -186,18 +186,6 @@ export const t2KernelArgs = script("t2-kernel-args", {
   needsSudo: true,
 });
 
-// The real clock lives in the EC, and t2smc writes the system time to it in
-// its own suspend and shutdown callbacks (as macOS does before every power
-// transition), so the shutdown unit t2-boot-clock installed for it only did
-// the same again: this takes the unit and its helper off.
-export const removeT2BootClock = script("remove-t2-boot-clock", {
-  description: "no sync-hwclock.service (t2smc writes the EC clock itself)",
-  needsSudo: true,
-  run: "sudo systemctl disable --now sync-hwclock.service 2>/dev/null; sudo rm -f /etc/systemd/system/sync-hwclock.service /usr/local/sbin/t2-hwclock-save && sudo systemctl daemon-reload",
-  check: "test ! -e /etc/systemd/system/sync-hwclock.service && test ! -e /usr/local/sbin/t2-hwclock-save",
-  transitional: true,
-});
-
 // The internal keyboard: Fn/Ctrl and Alt/Super swaps and the fnmode that
 // keeps Fn+arrows working beside the touchbar. The boot image is rebuilt
 // through Limine (limine-mkinitcpio).

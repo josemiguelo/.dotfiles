@@ -16,6 +16,7 @@ import { brewTap, brewTapCask, setupBrew } from "../../loadouts/private_dot_conf
 import { jiraCli } from "../../loadouts/private_dot_config/.jira-cli.loadout.ts";
 import { jordanbairdIce } from "../../loadouts/private_dot_config/.jordanbaird-ice.loadout.ts";
 import { jq } from "../../loadouts/private_dot_config/.jq.loadout.ts";
+import { removeLoadoutBunDownloads } from "../../loadouts/private_dot_config/.loadout-cli.loadout.ts";
 import { lunar } from "../../loadouts/private_dot_config/.lunar.loadout.ts";
 import { meetingbar } from "../../loadouts/private_dot_config/.meetingbar.loadout.ts";
 import { obs } from "../../loadouts/private_dot_config/.obs.loadout.ts";
@@ -83,6 +84,7 @@ export const macos = profile<Data>("macos", {
     nvimPlugins,
     masonKotlinLsp,
     removeKotlinLspDownload,
+    removeLoadoutBunDownloads,
     downloadFonts,
     shellScripts,
     miseTools,
