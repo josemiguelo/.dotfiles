@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-14T01:44:45.254692138Z",
+  "updatedAt": "2026-11-14T02:12:37.084401598Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -550,8 +550,8 @@
       "exitCode": 0
     },
     "mise-tools-later": {
-      "status": "pending",
-      "lastRun": "2026-11-12T02:58:15.151253797Z",
+      "status": "done",
+      "lastRun": "2026-11-14T02:12:27.859494956Z",
       "exitCode": 0
     },
     "mise-default-packages": {
@@ -591,7 +591,7 @@
     },
     "android-sdk": {
       "status": "pending",
-      "lastRun": "2026-11-12T20:10:05.872786476Z",
+      "lastRun": "2026-11-14T02:12:23.040891720Z",
       "exitCode": 1
     },
     "omarchy-hypr-config": {
@@ -750,8 +750,8 @@
       "exitCode": 0
     },
     "omarchy-sshd": {
-      "status": "pending",
-      "lastRun": "2026-11-12T02:40:08.531910193Z",
+      "status": "done",
+      "lastRun": "2026-11-14T02:12:21.086099409Z",
       "exitCode": 0
     },
     "t2-omarchy-channel": {
