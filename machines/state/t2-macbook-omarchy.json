@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-13T23:55:43.526013030Z",
+  "updatedAt": "2026-11-14T01:44:45.254692138Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -519,6 +519,11 @@
       "lastRun": "2026-11-07T23:39:36.244699985Z",
       "exitCode": 0
     },
+    "remove-loadout-bun-downloads": {
+      "status": "done",
+      "lastRun": "2026-11-14T01:44:42.787801405Z",
+      "exitCode": 0
+    },
     "unlink-brew-glib": {
       "status": "done",
       "lastRun": "2026-11-12T03:01:07.927011813Z",
@@ -576,7 +581,7 @@
     },
     "omarchy-tmux-theme": {
       "status": "done",
-      "lastRun": "2026-11-12T02:40:08.916387409Z",
+      "lastRun": "2026-11-14T01:44:42.782168321Z",
       "exitCode": 0
     },
     "link-jetbrains-launchers-linux": {
@@ -764,11 +769,6 @@
       "lastRun": null,
       "exitCode": null
     },
-    "remove-t2-boot-clock": {
-      "status": "done",
-      "lastRun": "2026-11-12T19:01:25.312225224Z",
-      "exitCode": 0
-    },
     "t2-gmux-backlight": {
       "status": "done",
       "lastRun": "2026-11-12T02:40:34.203028728Z",
@@ -831,7 +831,7 @@
     },
     "omarchy-scratchpad-opacity": {
       "status": "done",
-      "lastRun": "2026-11-12T02:39:57.093005051Z",
+      "lastRun": "2026-11-14T01:44:42.726211200Z",
       "exitCode": 0
     },
     "solaar-no-autostart": {
@@ -877,10 +877,8 @@
       "reason": null
     },
     ".local": {
-      "status": "drifted",
-      "files": [
-        ".local/share/workflow-skills/NEW-LOADOUT-SESSION-AGENTS.md"
-      ],
+      "status": "applied",
+      "files": [],
       "reason": null
     },
     ".zshenv": {
@@ -919,10 +917,8 @@
       "reason": null
     },
     "mise": {
-      "status": "drifted",
-      "files": [
-        ".config/mise/config.toml"
-      ],
+      "status": "applied",
+      "files": [],
       "reason": null
     },
     "ngrok": {
@@ -931,10 +927,8 @@
       "reason": null
     },
     "nvim": {
-      "status": "drifted",
-      "files": [
-        ".config/nvim/lua/features/fuzzy_finder.lua"
-      ],
+      "status": "applied",
+      "files": [],
       "reason": null
     },
     "spotify-flags.conf": {
