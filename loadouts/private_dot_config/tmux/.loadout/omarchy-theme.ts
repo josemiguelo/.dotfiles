@@ -21,13 +21,14 @@ const HOOK = `${process.env.HOME}/.config/omarchy/hooks/theme-set.d/tmux-follows
 
 /**
  * The hook runs this script by its main checkout's path, which outlives a
- * feature worktree this may be installed from; it runs without LOADOUT_REPO,
- * and #loadout is found from the script's own folder.
+ * feature worktree this may be installed from, through `loadout bun`:
+ * "loadout/script" is a module inside loadout, so a plain bun can't run it.
+ * It runs without LOADOUT_REPO.
  */
 const hookBody = async () => `# Managed by loadout (omarchy-tmux-theme): undo omarchy-theme-set-tmux's
 # window-style/cursor/pane colours so tmux keeps kitty's palette and
 # background_opacity. Runs after every theme switch.
-bun '${await mainCheckoutPath(import.meta.path)}' reset`;
+loadout bun '${await mainCheckoutPath(import.meta.path)}' reset`;
 
 const hookCurrent = async () => (await read(HOOK)) === (await hookBody());
 const tmuxRunning = () => ok($`tmux list-sessions`);

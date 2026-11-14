@@ -41,7 +41,9 @@ const HOOKS = ["theme-set", "font-set"].map((h) => `${HOME}/.config/omarchy/hook
 const TEXT_SIZE = "omarchy-display-text-size";
 const WRAPPER = `${OVERRIDES_DIR}/${TEXT_SIZE}`;
 // The hooks and the wrapper run this script by its main checkout's path,
-// which outlives a feature worktree this may be installed from.
+// which outlives a feature worktree this may be installed from, through
+// `loadout bun`: "loadout/script" is a module inside loadout, so a plain
+// bun can't run it.
 const SELF = await mainCheckoutPath(import.meta.path);
 
 function opacity(args: string[]) {
@@ -92,7 +94,7 @@ end)`.split("\n");
 
 const hook = (inside: string) => `# Managed by loadout (omarchy-scratchpad-opacity): Omarchy just reloaded every
 # kitty's config, which puts scratchpad windows back at background_opacity.
-bun '${SELF}' reapply ${inside}
+loadout bun '${SELF}' reapply ${inside}
 `;
 
 const wrapper = (inside: string) => `#!/bin/bash
@@ -101,7 +103,7 @@ const wrapper = (inside: string) => `#!/bin/bash
 # Everything else is Omarchy's.
 "${OMARCHY_BIN}/${TEXT_SIZE}" "$@"
 status=$?
-bun '${SELF}' reapply ${inside}
+loadout bun '${SELF}' reapply ${inside}
 exit $status
 `;
 
