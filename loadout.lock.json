@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "cbaf1c3266da6d462200b66c984dd98d51586bfc411b0b9925513516cf197c94",
+  "sources": "02947e218e138a1d4d29be11d1f5019bbcfbda4f0bad88065fe7e4383fe0051e",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -13,7 +13,6 @@
       "sources": [
         "loadouts/**/*.loadout.ts",
         "machines/**/*.loadout.ts",
-        "loadout.sdk.ts",
         "loadout.ts",
         "loadouts/.etc/keychron/.keychron.loadout.ts",
         "loadouts/.etc/t2/.t2.loadout.ts",

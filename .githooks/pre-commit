@@ -20,9 +20,9 @@ if git diff --cached --name-only | grep -qxE "loadout\.ts|$mise_config"; then
   fi
 fi
 
-generated='loadout.lock.json loadout.sdk.ts loadouts/.chezmoidata/loadout.json loadouts/.chezmoitemplates/loadout'
+generated='loadout.lock.json loadouts/.chezmoidata/loadout.json loadouts/.chezmoitemplates/loadout'
 
-git diff --cached --name-only | grep -qE '(^|/)loadout\.ts$|\.loadout\.ts$|^machines/data\.ts$|^loadout\.(lock\.json|sdk\.ts)$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0
+git diff --cached --name-only | grep -qE '(^|/)loadout\.ts$|\.loadout\.ts$|^machines/data\.ts$|^loadout\.lock\.json$|^loadouts/\.chezmoi(data|templates)/loadout' || exit 0
 
 command -v loadout >/dev/null 2>&1 || {
   echo "pre-commit: loadout isn't on PATH, so the lock can't be checked" >&2
