@@ -4,32 +4,33 @@
 // the finger and the daemon hands fprintd the verdict.
 //
 // Fingers are enrolled in macOS only, and the Secure Enclave reports none until
-// macOS has been logged into once since the T2 last lost power. The daemon
-// binds them to a Linux account without a touch (T2_TOUCHID_BIND_USER in
-// /etc/t2-touchid.conf); any finger enrolled in macOS then unlocks it.
+// macOS has been logged into once since the T2 last lost power. Turning Touch
+// ID on is Omarchy's own fingerprint setup, as on any laptop with a reader: the
+// package names the T2's reader in /usr/share/omarchy-platform/fingerprint-readers
+// (the daemon writes /run/t2-touchid/reader, `ready` or the reason it isn't),
+// so the setup finds it; its enroll step binds the macOS finger to this account
+// with one touch, then it verifies, then adds the PAM lines (sudo and polkit-1,
+// behind its lid-closed gate) and the lock screen's (omarchy-apply-lock).
+// Omarchy's removal undoes it. The daemon's automatic binding
+// (T2_TOUCHID_BIND_USER) stays off: it would bind again at every daemon start
+// and bring a removed fingerprint back.
 //
-// In order, as tested by hand on 2026-11-14 (t2-arch-packages' CLAUDE.md, item
-// 9): the binding set to this user and the daemon running; fprintd listing the
-// fingers; only then PAM, Omarchy's own: its fingerprint setup's
-// setup_pam_config (sudo and polkit-1, `sufficient`, behind its lid-closed
-// gate) and omarchy-apply-lock (the lock screen's fingerprint context and the
-// fprintd resume hook). Omarchy's whole setup can't run on a T2: it finds no
-// USB reader, then would enroll. Each PAM line falls through to the password
-// when fprintd has no reader or the finger doesn't come.
+// install: the daemon running and not binding; with no finger bound, Omarchy's
+// setup (asks for two touches); with one bound but no PAM lines, just Omarchy's
+// PAM steps (setup_pam_config and omarchy-apply-lock).
 // Modes: `check` / `install` (default).
 import { existsSync } from "node:fs";
-import { $, main, ok, out, read } from "loadout/script";
+import { $, main, ok, out, read, readTrimmed } from "loadout/script";
 
 const CONF = "/etc/t2-touchid.conf";
 const UNIT = "t2-touchid.service";
+const READER = "/run/t2-touchid/reader";
 const SETUP = "/usr/share/omarchy/bin/omarchy-setup-security-fingerprint";
 const LOCK_PAM = "/etc/pam.d/omarchy-lock-fingerprint";
 const USER = process.env.USER || "";
-const WAIT = 30; // seconds for the daemon to bind the fingers
+const WAIT = 30; // seconds for the daemon to reach the sensor
 
-const bindLine = `T2_TOUCHID_BIND_USER=${USER}`;
-
-const bound = async () => (await read(CONF)).split("\n").includes(bindLine);
+const noBinding = async () => (await read(CONF)).split("\n").includes("T2_TOUCHID_BIND_USER=none");
 
 const running = async () => (await ok($`systemctl -q is-enabled ${UNIT}`)) && (await ok($`systemctl -q is-active ${UNIT}`));
 
@@ -45,35 +46,44 @@ async function pam() {
   return existsSync(LOCK_PAM);
 }
 
-const ready = async () => (await bound()) && (await running()) && (await fingers()) && (await pam());
+const ready = async () => (await noBinding()) && (await running()) && (await fingers()) && (await pam());
+
+/** The daemon says the sensor answers and macOS has fingers enrolled, or why not. */
+async function waitForReader() {
+  for (let i = 0; i < WAIT && (await readTrimmed(READER)) !== "ready"; i++) await Bun.sleep(1000);
+  const state = (await readTrimmed(READER)) || "no status";
+  if (state === "ready") return;
+  const why =
+    state === "no-fingers"
+      ? "macOS has no finger enrolled, or hasn't unlocked the Secure Enclave since the Mac lost power: enroll one in macOS (System Settings → Touch ID), or log into macOS once"
+      : `the daemon says '${state}' (journalctl -u ${UNIT})`;
+  throw new Error(`Touch ID isn't ready after ${WAIT}s: ${why}; then run this again`);
+}
 
 async function install() {
   if (!USER) throw new Error("USER isn't set");
   if (!existsSync(CONF)) throw new Error(`${CONF} isn't there: is t2-touchid installed?`);
-  if (!(await bound())) {
-    await $`sudo sed -i ${`s/^T2_TOUCHID_BIND_USER=.*/${bindLine}/`} ${CONF}`;
-    if (!(await bound())) throw new Error(`${CONF} has no T2_TOUCHID_BIND_USER line to set`);
+  if (!(await noBinding())) {
+    await $`sudo sed -i ${"s/^T2_TOUCHID_BIND_USER=.*/T2_TOUCHID_BIND_USER=none/"} ${CONF}`;
+    if (!(await noBinding())) throw new Error(`${CONF} has no T2_TOUCHID_BIND_USER line to set`);
     await $`sudo systemctl enable ${UNIT}`;
     await $`sudo systemctl restart ${UNIT}`;
   } else if (!(await running())) {
     await $`sudo systemctl enable --now ${UNIT}`;
   }
+  await waitForReader();
 
-  // The daemon binds within seconds of reaching the sensor; nothing to bind
-  // means macOS hasn't unlocked the Secure Enclave since the T2 lost power.
-  for (let i = 0; i < WAIT && !(await fingers()); i++) await Bun.sleep(1000);
   if (!(await fingers())) {
-    throw new Error(
-      `fprintd lists no fingers for ${USER} after ${WAIT}s. Enroll one in macOS (System Settings → Touch ID), or log into macOS once if the Mac lost power, then run this again; journalctl -u ${UNIT} says what the daemon sees`,
-    );
+    // Omarchy's setup, on this terminal: one touch binds the finger, one verifies.
+    await $`${SETUP}`;
+  } else if (!(await pam())) {
+    // A finger bound already (by an earlier setup): only Omarchy's PAM steps.
+    const fn = (await read(SETUP)).match(/^setup_pam_config\(\) \{\n[\s\S]*?\n\}$/m)?.[0];
+    if (!fn) throw new Error(`setup_pam_config isn't in ${SETUP} any more`);
+    await $`bash -c ${`${fn}\nsetup_pam_config`}`;
+    await $`omarchy-apply-lock`;
   }
-
-  // Omarchy's setup_pam_config, taken out of its fingerprint setup unchanged.
-  const fn = (await read(SETUP)).match(/^setup_pam_config\(\) \{\n[\s\S]*?\n\}$/m)?.[0];
-  if (!fn) throw new Error(`setup_pam_config isn't in ${SETUP} any more`);
-  await $`bash -c ${`${fn}\nsetup_pam_config`}`;
-  await $`omarchy-apply-lock`;
-  if (!(await pam())) throw new Error("Omarchy's fingerprint PAM lines aren't in place after setup");
+  if (!(await ready())) throw new Error("Touch ID isn't fully set up after Omarchy's fingerprint setup");
 }
 
 await main(ready, install);

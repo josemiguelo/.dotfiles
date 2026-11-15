@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "38e81d508c99b908020e4a3439de4cb55e5a0aaf31d8229a738b73fa4991a1eb",
+  "sources": "722c26981139a579686f4b846e27e457842fe30901224dbea2c761fe5adaf0f8",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -468,16 +468,6 @@
         },
         "origin": "loadouts/private_dot_local/share"
       },
-      "fprintd": {
-        "description": "fingerprint service PAM asks, for Touch ID",
-        "depends-on": [
-          "libfprint-git"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
       "fzf": {
         "install": {
           "brew": {},
@@ -642,13 +632,6 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "libfprint-git": {
-        "description": "fingerprint reader library, every driver built (Omarchy's; for Touch ID, its virtual storage driver)",
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
       },
       "libvirt": {
         "description": "libvirt virtualization daemon and tools",
@@ -1032,9 +1015,7 @@
       "t2-touchid": {
         "description": "Touch ID bridge from the T2's Secure Enclave to fprintd (KaiT2en)",
         "depends-on": [
-          "t2-arch-packages-repo",
-          "libfprint-git",
-          "fprintd"
+          "t2-arch-packages-repo"
         ],
         "install": {
           "omarchy": {}
@@ -2129,7 +2110,6 @@
           "fd": "omarchy",
           "flathub-remote": "flatpak",
           "flatpak": "omarchy",
-          "fprintd": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
           "ghostscript": "omarchy",
@@ -2144,7 +2124,6 @@
           "kitty": "omarchy",
           "lazydocker": "omarchy",
           "lazygit": "omarchy",
-          "libfprint-git": "omarchy",
           "libvirt": "omarchy",
           "libxcrypt-compat": "omarchy",
           "linux-apfs-rw-dkms": "omarchy",
