@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "63e358691150c48f8307090f4ebd84836c61e5e2d7ecedad722cabda92993843",
+  "sources": "867f0aa6e5809d7197d3901e8085467c5d95392e5a03bfb20b163addd73c6bbe",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -928,6 +928,17 @@
         "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
+      "t2-airshare": {
+        "description": "Quick Share with Android and AirDrop with Apple devices (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "t2-drop"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-arch-packages-keyring": {
         "description": "the [t2-arch-packages] signing key, for pacman-key --populate",
         "depends-on": [
@@ -954,6 +965,17 @@
         "description": "aborts linux-omarchy upgrades that would break the T2 DKMS modules",
         "depends-on": [
           "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-drop": {
+        "description": "AirDrop with Apple devices over AWDL (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "t2-wireless-dkms"
         ],
         "install": {
           "omarchy": {}
@@ -1833,6 +1855,16 @@
         "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
       },
+      "t2-airshare-firewall": {
+        "description": "ufw allows Quick Share and AirDrop transfers in (T2 Mac)",
+        "file": ".loadout/airshare-firewall.ts",
+        "check": "file:.loadout/airshare-firewall.ts check \"$@\"",
+        "after": [
+          "programs.t2-airshare"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-bcm-firmware": {
         "description": "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback",
         "file": ".loadout/bcm-firmware.ts",
@@ -2203,9 +2235,11 @@
           "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
+          "t2-airshare": "omarchy",
           "t2-arch-packages-keyring": "omarchy",
           "t2-arch-packages-repo": "omarchy",
           "t2-dkms-guard": "omarchy",
+          "t2-drop": "omarchy",
           "t2-dsp": "omarchy",
           "t2-fan-control": "omarchy",
           "t2-force-click": "omarchy",
@@ -2302,6 +2336,7 @@
           "t2-touchbar-switch",
           "t2-kbd-backlight-daemon",
           "t2-kbd-backlight-sync",
+          "t2-airshare-firewall",
           "t2-kernel-args",
           "t2-gmux-backlight",
           "t2-bcm-firmware",

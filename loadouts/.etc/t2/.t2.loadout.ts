@@ -197,6 +197,25 @@ export const t2KbdBacklight = program("t2-kbd-backlight", {
 
 export const t2TouchBar = [t2TouchbarDkms, t2Touchbar, t2KbdBacklight];
 
+// Sharing files with phones: t2-drop is AirDrop with Apple devices over AWDL
+// (t2-wireless-dkms's peer-to-peer Wi-Fi), t2-airshare the app and receiver
+// for it and for Quick Share with Android. The receiver runs while the app's
+// "visible" switch is on, which also makes the Mac discoverable over
+// Bluetooth: that's left to the user.
+export const t2Drop = program("t2-drop", {
+  description: "AirDrop with Apple devices over AWDL (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2WirelessDkms],
+  install: [omarchy],
+});
+
+export const t2Airshare = program("t2-airshare", {
+  description: "Quick Share with Android and AirDrop with Apple devices (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2Drop],
+  install: [omarchy],
+});
+
+export const t2Sharing = [t2Drop, t2Airshare];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -249,6 +268,15 @@ export const t2KbdBacklightSync = script("t2-kbd-backlight-sync", {
   description: "keyboard backlight keys reach UPower, for the idle fade and the Touch Bar (T2 Mac)",
   managedBy: ".loadout/kbd-backlight-sync.ts",
   runAfter: [omarchyCommandOverrides, t2KbdBacklight],
+});
+
+// The firewall lets phones and Apple devices reach the receivers: Quick
+// Share's port, its hotspot, and AirDrop's port on awdl0.
+export const t2AirshareFirewall = script("t2-airshare-firewall", {
+  description: "ufw allows Quick Share and AirDrop transfers in (T2 Mac)",
+  managedBy: ".loadout/airshare-firewall.ts",
+  needsSudo: true,
+  runAfter: [t2Airshare],
 });
 
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
