@@ -167,6 +167,27 @@ export const t2Touchid = program("t2-touchid", {
 
 export const t2TouchId = [t2Touchid];
 
+// The Touch Bar and internal keyboard drivers (t2hid, t2touchbar_kbd/_bl,
+// t2bdrm), installed inert: the package keeps them from autoloading, so
+// hid-apple and the in-kernel Touch Bar drivers stay in charge until the
+// switch-over (/etc/modprobe.d/t2-touchbar.conf).
+export const t2TouchbarDkms = program("t2-touchbar-dkms", {
+  description: "Touch Bar and keyboard drivers: t2hid, t2touchbar, t2bdrm (DKMS, KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+// The Touch Bar daemon: draws its own bar on the Touch Bar's screen (t2bdrm),
+// with a root attach service and a private seat; its user service runs for
+// members of the t2-touchbar group.
+export const t2Touchbar = program("t2-touchbar", {
+  description: "Touch Bar daemon: media and F-key layers, swipes, custom keys, Touch ID prompt (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2TouchbarDkms],
+  install: [omarchy],
+});
+
+export const t2TouchBar = [t2TouchbarDkms, t2Touchbar];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -200,13 +221,15 @@ export const t2KernelArgs = script("t2-kernel-args", {
   needsSudo: true,
 });
 
-// The internal keyboard: Fn/Ctrl and Alt/Super swaps and the fnmode that
-// keeps Fn+arrows working beside the touchbar. The boot image is rebuilt
-// through Limine (limine-mkinitcpio).
-export const t2HidAppleKeyboard = script("t2-hid-apple-keyboard", {
-  description: "internal keyboard fn/ctrl swap and fnmode",
-  managedBy: ".loadout/hid-apple-keyboard.ts",
+// The internal keyboard and Touch Bar on KaiT2en's drivers: t2hid (with the
+// Fn/Ctrl and Alt/Super swaps) in the initramfs in place of hid-apple, the
+// in-kernel Touch Bar drivers blacklisted, the user in the t2-touchbar group
+// and the daemon enabled. Applies at the next boot (limine-mkinitcpio).
+export const t2TouchbarSwitch = script("t2-touchbar-switch", {
+  description: "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
+  managedBy: ".loadout/touchbar.ts",
   needsSudo: true,
+  runAfter: [t2Touchbar],
 });
 
 // A sleep hook sends the backlight level back on resume; a udev rule puts it

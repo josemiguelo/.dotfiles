@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "722c26981139a579686f4b846e27e457842fe30901224dbea2c761fe5adaf0f8",
+  "sources": "8bad1b8bf3ed338803d22c02ed965b0982fb0f03e5411c6539f67e61201ab897",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1012,6 +1012,27 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-touchbar": {
+        "description": "Touch Bar daemon: media and F-key layers, swipes, custom keys, Touch ID prompt (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "t2-touchbar-dkms"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-touchbar-dkms": {
+        "description": "Touch Bar and keyboard drivers: t2hid, t2touchbar, t2bdrm (DKMS, KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-touchid": {
         "description": "Touch ID bridge from the T2's Secure Enclave to fprintd (KaiT2en)",
         "depends-on": [
@@ -1840,13 +1861,6 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
-      "t2-hid-apple-keyboard": {
-        "description": "internal keyboard fn/ctrl swap and fnmode",
-        "file": ".loadout/hid-apple-keyboard.ts",
-        "check": "file:.loadout/hid-apple-keyboard.ts check \"$@\"",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-ibridge-unmanaged": {
         "description": "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
         "file": ".loadout/ibridge-unmanaged.ts",
@@ -1899,6 +1913,16 @@
         "check": "file:.loadout/touch-id.ts check \"$@\"",
         "after": [
           "programs.t2-touchid"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-touchbar-switch": {
+        "description": "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
+        "file": ".loadout/touchbar.ts",
+        "check": "file:.loadout/touchbar.ts check \"$@\"",
+        "after": [
+          "programs.t2-touchbar"
         ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
@@ -2157,6 +2181,8 @@
           "t2-force-click": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
+          "t2-touchbar": "omarchy",
+          "t2-touchbar-dkms": "omarchy",
           "t2-touchid": "omarchy",
           "t2-trackpad-actuator-dkms": "omarchy",
           "t2-wireless-dkms": "omarchy",
@@ -2242,7 +2268,7 @@
           "github-ssh-key id_ed25519",
           "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm work-mac",
           "t2-omarchy-channel",
-          "t2-hid-apple-keyboard",
+          "t2-touchbar-switch",
           "t2-kernel-args",
           "t2-gmux-backlight",
           "t2-bcm-firmware",
