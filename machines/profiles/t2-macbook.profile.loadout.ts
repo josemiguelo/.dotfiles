@@ -1,6 +1,6 @@
 import { args, omarchy, profile, via } from "loadout";
 import type { Data } from "../data.ts";
-import { kait2en, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2HidAppleKeyboard, t2IbridgeUnmanaged, t2KernelArgs, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd } from "../../loadouts/.etc/t2/.t2.loadout.ts";
+import { kait2en, t2TouchId, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2HidAppleKeyboard, t2IbridgeUnmanaged, t2KernelArgs, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth } from "../../loadouts/.etc/t2/.t2.loadout.ts";
 import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
@@ -19,6 +19,7 @@ export const t2Macbook = profile<Data>("t2-macbook", {
   install: [
     via(omarchy, [
       kait2en,  // KaiT2en's T2 drivers on linux-omarchy, and their repo
+      t2TouchId,
       archVirtualization,
       solaar,
       rocmSmiLib,  // btop's stats for the Radeon Pro 5300M/5500M
@@ -38,6 +39,7 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     args(t2ChargeLimit, "85"),
     t2SmcGaugingd,
     t2ForceClickDaemon,
+    t2TouchIdAuth,
     t2PostUpdateCheck,
     setupLibvirt,
     ufwLibvirt,

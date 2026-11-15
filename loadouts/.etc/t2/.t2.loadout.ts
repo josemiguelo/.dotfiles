@@ -153,6 +153,31 @@ export const kait2en = [
   t2DkmsGuard,
 ];
 
+// Touch ID: the T2 matches the finger in its Secure Enclave, and KaiT2en's
+// t2-touchid daemon hands fprintd the result through libfprint's virtual
+// storage driver. Omarchy's libfprint-git (its own repo, every driver built,
+// the one its fingerprint setup installs) in place of Arch's libfprint, which
+// conflicts with it: first, so fprintd doesn't pull Arch's in.
+export const libfprintGit = program("libfprint-git", {
+  description: "fingerprint reader library, every driver built (Omarchy's; for Touch ID, its virtual storage driver)",
+  install: [omarchy],
+});
+
+export const fprintd = program("fprintd", {
+  description: "fingerprint service PAM asks, for Touch ID",
+  dependsOn: [libfprintGit],
+  install: [omarchy],
+});
+
+// The daemon, its fprintd drop-in and the udev rule that brings the T2 link up.
+export const t2Touchid = program("t2-touchid", {
+  description: "Touch ID bridge from the T2's Secure Enclave to fprintd (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, libfprintGit, fprintd],
+  install: [omarchy],
+});
+
+export const t2TouchId = [libfprintGit, fprintd, t2Touchid];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -244,6 +269,16 @@ export const t2PostUpdateCheck = script("t2-post-update-check", {
 // The T2's internal USB network link (05ac:8233), macOS's line to the T2
 // chip: no DHCP server answers on it, so NetworkManager would retry it every
 // 45 s. A udev rule (also written by the fork's fix-t2.sh) unmanages it.
+// Touch ID for sudo, polkit and the lock screen: the macOS fingers bound to
+// this user, then Omarchy's fingerprint PAM. Asks to log into macOS once when
+// the Secure Enclave reports no fingers.
+export const t2TouchIdAuth = script("t2-touch-id-auth", {
+  description: "Touch ID for sudo, polkit and the lock screen (T2 Mac)",
+  managedBy: ".loadout/touch-id.ts",
+  needsSudo: true,
+  runAfter: [t2Touchid],
+});
+
 export const t2IbridgeUnmanaged = script("t2-ibridge-unmanaged", {
   description: "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
   managedBy: ".loadout/ibridge-unmanaged.ts",

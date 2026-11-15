@@ -8,8 +8,10 @@
 // T2 Mac): macOS's link to the T2 chip (iBridge), over IPv6 link-local.
 // cdc_ncm binds it like any USB Ethernet adapter, NetworkManager makes a
 // "Wired connection" for it, and since the T2 runs no DHCP server it retries
-// every 45 s, forever. Nothing on Linux uses the link (KaiT2en's t2-airshare
-// only keeps it out of mDNS).
+// every 45 s, forever. Touch ID (the t2-touchid package) reaches the T2's
+// Secure Enclave over it, IPv6 link-local only: that package's own udev rule
+// brings it up as it appears (the T2 signals carrier only then) and keeps
+// NetworkManager off it too; this rule is for a T2 Mac without it.
 //
 // A udev rule tags it NM_UNMANAGED by its USB ID, not by driver: phones'
 // USB tethering is cdc_ncm too, and t2-bcm-firmware's fallback needs it.
