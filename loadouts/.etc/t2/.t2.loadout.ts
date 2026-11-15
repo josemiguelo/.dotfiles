@@ -186,7 +186,16 @@ export const t2Touchbar = program("t2-touchbar", {
   install: [omarchy],
 });
 
-export const t2TouchBar = [t2TouchbarDkms, t2Touchbar];
+// The keyboard backlight fades out after 30 s without input and back on the
+// next one (t2KbdBacklightDaemon runs it); before suspend it puts the level
+// back, so the keyboard resumes lit.
+export const t2KbdBacklight = program("t2-kbd-backlight", {
+  description: "keyboard backlight idle fade (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+export const t2TouchBar = [t2TouchbarDkms, t2Touchbar, t2KbdBacklight];
 
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
@@ -225,6 +234,23 @@ export const t2KernelArgs = script("t2-kernel-args", {
 // Fn/Ctrl and Alt/Super swaps) in the initramfs in place of hid-apple, the
 // in-kernel Touch Bar drivers blacklisted, the user in the t2-touchbar group
 // and the daemon enabled. Applies at the next boot (limine-mkinitcpio).
+export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
+  description: "the keyboard backlight idle fade running (T2 Mac)",
+  needsSudo: true,
+  run: "sudo systemctl enable --now t2-kbd-backlight.service",
+  check: "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
+  runAfter: [t2KbdBacklight],
+});
+
+// Omarchy's keyboard-backlight keys write the LED behind UPower's back, so the
+// idle fade and the Touch Bar's glyphs missed them: a wrapper around
+// omarchy-brightness-keyboard tells UPower the new level.
+export const t2KbdBacklightSync = script("t2-kbd-backlight-sync", {
+  description: "keyboard backlight keys reach UPower, for the idle fade and the Touch Bar (T2 Mac)",
+  managedBy: ".loadout/kbd-backlight-sync.ts",
+  runAfter: [omarchyCommandOverrides, t2KbdBacklight],
+});
+
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
   description: "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
   managedBy: ".loadout/touchbar.ts",

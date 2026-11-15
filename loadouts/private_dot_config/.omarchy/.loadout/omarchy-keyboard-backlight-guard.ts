@@ -18,7 +18,7 @@
 // config's PATH and the running shell's). Omarchy 4.5 fixed it: once every
 // Omarchy machine has run install on 4.5 or later, this script can go.
 // Modes: `check` / `install` (default).
-import { existsSync, lstatSync, mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { $, main } from "loadout/script";
@@ -76,13 +76,16 @@ const affected = () => savesWhen(`${OMARCHY_BIN}/${COMMAND}`, 0);
 
 const guarded = async () => (await executableHolds(WRAPPER, wrapper)) && (await overrideActive(COMMAND));
 
-const check = async () => ((await affected()) ? guarded() : !lstatSync(WRAPPER, { throwIfNoEntry: false }));
+/** Our wrapper is there (another script may put its own at the same path: the T2's t2-kbd-backlight-sync). */
+const ours = () => executableHolds(WRAPPER, wrapper);
+
+const check = async () => ((await affected()) ? guarded() : !(await ours()));
 
 async function install() {
   if (await affected()) {
     await writeExecutable(WRAPPER, wrapper);
     if (!(await guarded())) throw new Error(`the session doesn't run ${WRAPPER}: is omarchy-command-overrides installed?`);
-  } else {
+  } else if (await ours()) {
     await rm(WRAPPER, { force: true });
     console.log(`Omarchy's ${COMMAND} no longer saves over a dark light: wrapper removed.`);
   }
