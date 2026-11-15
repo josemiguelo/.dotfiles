@@ -84,7 +84,7 @@ export const omarchyBarFn = () => [
     "https://github.com/sumdahl/omarchy-plugin-media.git",
     "https://github.com/josemiguelo/omarchy-harpoon.git",
   ),
-  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode"),
+  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode", "josemiguelo.airshare"),
   args(
     omarchyBarWidgets,
     widget("evindor.keystroke", "left", "at", "0"),
@@ -93,6 +93,9 @@ export const omarchyBarFn = () => [
     widget("pomodoro-omarchy", "centerEnd", "before", "omarchy.weather"),
     widget("omarchy.elsewhen", "centerEnd", "before", "pomodoro-omarchy"),
     widget("io.github.sumdahl.media", "right", "after", "omarchy.tray"),
+    // T2 AirShare, beside the other wireless widgets; it hides itself where
+    // AirShare isn't installed.
+    widget("josemiguelo.airshare", "right", "before", "omarchy.bluetooth"),
     widget("omarchy.power", "right", "after", "omarchy.monitor"),
     widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),
     widget("omarchy.keyboard-layout", "right", "before", "josemiguelo.theme-mode"),

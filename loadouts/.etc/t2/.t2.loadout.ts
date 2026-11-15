@@ -4,6 +4,7 @@
 import { omarchy, program, script, via } from "loadout";
 import { onepasswordCli } from "../../private_dot_config/.1password/.1password.loadout.ts";
 import { omarchyCommandOverrides } from "../../private_dot_config/.omarchy/.omarchy-overrides.loadout.ts";
+import { omarchyBarOwnWidgets } from "../../private_dot_config/.omarchy/.omarchy-shell.loadout.ts";
 
 // The [t2-arch-packages] repo (github.com/josemiguelo/t2-arch-packages):
 // KaiT2en's drivers and tools packaged for linux-omarchy, signed. Omarchy's
@@ -277,6 +278,13 @@ export const t2AirshareFirewall = script("t2-airshare-firewall", {
   managedBy: ".loadout/airshare-firewall.ts",
   needsSudo: true,
   runAfter: [t2Airshare],
+});
+
+// AirShare in the Omarchy menu's Share submenu, beside LocalSend's entries.
+export const t2AirshareMenu = script("t2-airshare-menu", {
+  description: "AirShare entries in the Omarchy menu's Share submenu (T2 Mac)",
+  managedBy: ".loadout/airshare-menu.ts",
+  runAfter: [t2Airshare, omarchyBarOwnWidgets],
 });
 
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
