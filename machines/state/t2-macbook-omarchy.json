@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T21:23:53.520437428Z",
+  "updatedAt": "2026-11-16T21:35:11.552665260Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -35,11 +35,6 @@
     "awscli": {
       "status": "installed",
       "version": "2.40.0",
-      "reason": null
-    },
-    "bankstown-lv2": {
-      "status": "installed",
-      "version": "1.1.0.",
       "reason": null
     },
     "bat": {
@@ -192,11 +187,6 @@
       "version": "4.5.2",
       "reason": null
     },
-    "linux-apfs-rw-dkms": {
-      "status": "installed",
-      "version": "0.3.22",
-      "reason": null
-    },
     "meson": {
       "status": "installed",
       "version": "1.12.1",
@@ -307,154 +297,9 @@
       "version": "0.10.2",
       "reason": null
     },
-    "t2-airshare": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-amdgpu-dkms": {
-      "status": "installed",
-      "version": "7.2.15.",
-      "reason": null
-    },
-    "t2-arch-packages-keyring": {
-      "status": "installed",
-      "version": null,
-      "reason": null
-    },
     "t2-arch-packages-repo": {
       "status": "installed",
       "version": null,
-      "reason": null
-    },
-    "t2-ave": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-boot-gpu": {
-      "status": "installed",
-      "version": "0.1",
-      "reason": null
-    },
-    "t2-dkms-guard": {
-      "status": "installed",
-      "version": "0.1",
-      "reason": null
-    },
-    "t2-drop": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-dsp": {
-      "status": "installed",
-      "version": "14.402",
-      "reason": null
-    },
-    "t2-fan-control": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-force-click": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-i915-dkms": {
-      "status": "installed",
-      "version": "7.2.15.",
-      "reason": null
-    },
-    "t2-journal": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-kbd-backlight": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-kernel-args": {
-      "status": "installed",
-      "version": "0.1",
-      "reason": null
-    },
-    "t2-precision-trackpad-dkms": {
-      "status": "installed",
-      "version": "0.01.",
-      "reason": null
-    },
-    "t2-smc-control": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-thunderbolt-dkms": {
-      "status": "installed",
-      "version": "7.2.15.",
-      "reason": null
-    },
-    "t2-touchbar": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-touchbar-dkms": {
-      "status": "installed",
-      "version": "0.1.",
-      "reason": null
-    },
-    "t2-touchid": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-trackpad-actuator-dkms": {
-      "status": "installed",
-      "version": "0.01.",
-      "reason": null
-    },
-    "t2-truetone": {
-      "status": "installed",
-      "version": "0.1.0.",
-      "reason": null
-    },
-    "t2-wireless-dkms": {
-      "status": "installed",
-      "version": "7.2.15.",
-      "reason": null
-    },
-    "t2bce-audio-ucm": {
-      "status": "installed",
-      "version": "7.27",
-      "reason": null
-    },
-    "t2bce-stack-dkms": {
-      "status": "installed",
-      "version": "0.01.",
-      "reason": null
-    },
-    "t2gmux-dkms": {
-      "status": "installed",
-      "version": "0.9.",
-      "reason": null
-    },
-    "t2sbs-dkms": {
-      "status": "installed",
-      "version": "0.1.",
-      "reason": null
-    },
-    "t2smc-dkms": {
-      "status": "installed",
-      "version": "0.1.",
-      "reason": null
-    },
-    "t2smp-dkms": {
-      "status": "installed",
-      "version": "0.1.",
       "reason": null
     },
     "teams-for-linux": {
@@ -485,11 +330,6 @@
     "ttf-firacode-nerd": {
       "status": "installed",
       "version": "3.5.1",
-      "reason": null
-    },
-    "turbostat": {
-      "status": "installed",
-      "version": "7.2.11",
       "reason": null
     },
     "vim": {
