@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "8706f29cc3b8e00b2234bba2b7ec274c279f525d8a8043df402fab416a05160d",
+  "sources": "f54ccfbbd439c4b5a0f3901ce22db06b54ab68f35264350138d854050d6b065b",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1085,6 +1085,16 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-truetone": {
+        "description": "True Tone and automatic brightness from the ambient light sensor (KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-wireless-dkms": {
         "description": "brcmfmac and btbcm/hci_uart with KaiT2en's Apple fixes: Wi-Fi resume, Bluetooth LE devices (DKMS)",
         "depends-on": [
@@ -1999,6 +2009,15 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
+      "t2-truetone-daemon": {
+        "description": "True Tone and automatic brightness running (T2 Mac)",
+        "run": "systemctl --user enable --now t2-truetone.service",
+        "check": "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
+        "after": [
+          "programs.t2-truetone"
+        ],
+        "origin": "loadouts/.etc/t2"
+      },
       "tmux-plugins": {
         "description": "tmux plugins tmux.conf declares",
         "file": ".loadout/plugins.ts",
@@ -2147,8 +2166,8 @@
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
-          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare josemiguelo.truetone",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2260,6 +2279,7 @@
           "t2-touchbar-dkms": "omarchy",
           "t2-touchid": "omarchy",
           "t2-trackpad-actuator-dkms": "omarchy",
+          "t2-truetone": "omarchy",
           "t2-wireless-dkms": "omarchy",
           "t2bce-audio-ucm": "omarchy",
           "t2bce-stack-dkms": "omarchy",
@@ -2317,8 +2337,8 @@
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
-          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare josemiguelo.truetone",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2345,6 +2365,7 @@
           "t2-omarchy-channel",
           "t2-touchbar-switch",
           "t2-kbd-backlight-daemon",
+          "t2-truetone-daemon",
           "t2-kbd-backlight-sync",
           "t2-airshare-firewall",
           "t2-airshare-menu",

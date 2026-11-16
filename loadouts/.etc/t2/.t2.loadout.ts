@@ -217,6 +217,19 @@ export const t2Airshare = program("t2-airshare", {
 
 export const t2Sharing = [t2Drop, t2Airshare];
 
+// The ambient light sensor at work: t2-truetone (KaiT2en's, ported from GNOME
+// to Hyprland) moves the screen's white point with the room's light (a gamma
+// table, under Omarchy's night light) and its brightness along macOS's curve,
+// learning from the brightness keys. A user service; the bar's Ambient Light
+// widget switches it and its two halves.
+export const t2Truetone = program("t2-truetone", {
+  description: "True Tone and automatic brightness from the ambient light sensor (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+export const t2AmbientLight = [t2Truetone];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -260,6 +273,13 @@ export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
   run: "sudo systemctl enable --now t2-kbd-backlight.service",
   check: "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
   runAfter: [t2KbdBacklight],
+});
+
+export const t2TruetoneDaemon = script("t2-truetone-daemon", {
+  description: "True Tone and automatic brightness running (T2 Mac)",
+  run: "systemctl --user enable --now t2-truetone.service",
+  check: "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
+  runAfter: [t2Truetone],
 });
 
 // Omarchy's keyboard-backlight keys write the LED behind UPower's back, so the

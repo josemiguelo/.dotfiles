@@ -84,7 +84,7 @@ export const omarchyBarFn = () => [
     "https://github.com/sumdahl/omarchy-plugin-media.git",
     "https://github.com/josemiguelo/omarchy-harpoon.git",
   ),
-  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode", "josemiguelo.airshare"),
+  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode", "josemiguelo.airshare", "josemiguelo.truetone"),
   args(
     omarchyBarWidgets,
     widget("evindor.keystroke", "left", "at", "0"),
@@ -96,6 +96,8 @@ export const omarchyBarFn = () => [
     // T2 AirShare, beside the other wireless widgets; it hides itself where
     // AirShare isn't installed.
     widget("josemiguelo.airshare", "right", "before", "omarchy.bluetooth"),
+    // Ambient Light (t2-truetone): the screen's colour and brightness; hidden without it.
+    widget("josemiguelo.truetone", "right", "before", "josemiguelo.airshare"),
     widget("omarchy.power", "right", "after", "omarchy.monitor"),
     widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),
     widget("omarchy.keyboard-layout", "right", "before", "josemiguelo.theme-mode"),
