@@ -373,8 +373,9 @@ export const t2GmuxBacklight = script("t2-gmux-backlight", {
 });
 
 // The battery's charge limit, named by the machine:
-// `args(t2ChargeLimit, "85")`. The SMC keeps it across reboots (and
-// in macOS); t2-smc-gaugingd lifts it for calibration charges.
+// `args(t2ChargeLimit, "85")`. The SMC keeps it across reboots, but macOS
+// may change it, so a boot unit (t2-charge-limit.service) writes it again;
+// t2-smc-gaugingd lifts it for calibration charges.
 export const t2ChargeLimit = script("t2-charge-limit", {
   description: "battery charge limit in the T2 SMC (T2 Mac)",
   managedBy: ".loadout/charge-limit.ts",
