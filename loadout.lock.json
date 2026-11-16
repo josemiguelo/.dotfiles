@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "ee2cf2a0b55f7ff630fa9b39886673d45117f08efa145fed3c218b6dc1ca657f",
+  "sources": "21a0b95a281d3acaf4db29db645a7d29431a0d326a0b11f140c66710b398ad70",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1077,6 +1077,16 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-kernel-args": {
+        "description": "the T2 Mac's kernel arguments, kept in Limine's entries and boot image",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-precision-trackpad-dkms": {
         "description": "internal trackpad multitouch and Force Touch (DKMS; stock kernels see a plain mouse)",
         "depends-on": [
@@ -2043,13 +2053,6 @@
         ],
         "origin": "loadouts/.etc/t2"
       },
-      "t2-kernel-args": {
-        "description": "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)",
-        "file": ".loadout/kernel-args.ts",
-        "check": "file:.loadout/kernel-args.ts check \"$@\"",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-omarchy-channel": {
         "description": "Omarchy on the stable channel, as the T2 ISO is built (T2 Mac)",
         "file": ".loadout/omarchy-channel.ts",
@@ -2371,6 +2374,7 @@
           "t2-i915-dkms": "omarchy",
           "t2-journal": "omarchy",
           "t2-kbd-backlight": "omarchy",
+          "t2-kernel-args": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
           "t2-thunderbolt-dkms": "omarchy",
@@ -2471,7 +2475,6 @@
           "t2-kbd-backlight-sync",
           "t2-airshare-firewall",
           "t2-airshare-menu",
-          "t2-kernel-args",
           "t2-gmux-backlight",
           "t2-bcm-firmware",
           "t2-render-gpu",

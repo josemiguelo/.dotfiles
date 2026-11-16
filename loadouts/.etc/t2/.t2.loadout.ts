@@ -136,8 +136,21 @@ export const t2ArchPackagesKeyring = program("t2-arch-packages-keyring", {
   install: [omarchy],
 });
 
+// The T2 Mac's kernel arguments (pci=noaer pcie_ports=compat for a ~1 s wake,
+// forced PCIe ASPM for deeper package C-states, ...), kept: the package owns
+// /etc/limine-entry-tool.d/t2-mac.conf, and a path unit and a boot service
+// write it back and rebuild the boot image whenever something else rewrites it
+// (an Omarchy migration once swapped pcie_ports=compat for pm_async=off). It
+// replaced this repo's t2-kernel-args script.
+export const t2KernelArgs = program("t2-kernel-args", {
+  description: "the T2 Mac's kernel arguments, kept in Limine's entries and boot image",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
 export const kait2en = [
   t2ArchPackagesRepo,
+  t2KernelArgs,
   t2ArchPackagesKeyring,
   t2bceStackDkms,
   t2smcDkms,
@@ -313,15 +326,6 @@ export const t2OmarchyChannel = script("t2-omarchy-channel", {
   managedBy: ".loadout/omarchy-channel.ts",
   needsSudo: true,
   runAfter: [t2ArchPackagesRepo],
-});
-
-// The KaiT2en kernel arguments Omarchy's installer writes for T2 Macs, kept
-// against upstream migrations that rewrite /etc/limine-entry-tool.d/t2-mac.conf
-// (#6562 once swapped pcie_ports=compat for pm_async=off). Next boot.
-export const t2KernelArgs = script("t2-kernel-args", {
-  description: "pci=noaer pcie_ports=compat for fast resume (T2 Mac, linux-omarchy)",
-  managedBy: ".loadout/kernel-args.ts",
-  needsSudo: true,
 });
 
 // The internal keyboard and Touch Bar on KaiT2en's drivers: t2hid (with the
