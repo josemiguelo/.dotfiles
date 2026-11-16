@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "ee5098cfbb76b9372312738fea0c794c5cd509546a9b503240dbba0b46061f3a",
+  "sources": "ee2cf2a0b55f7ff630fa9b39886673d45117f08efa145fed3c218b6dc1ca657f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1097,6 +1097,16 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-thunderbolt-dkms": {
+        "description": "Thunderbolt with the idle controllers powered off, and PM ordering (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-touchbar": {
         "description": "Touch Bar daemon: media and F-key layers, swipes, custom keys, Touch ID prompt (KaiT2en)",
         "depends-on": [
@@ -1210,16 +1220,6 @@
       },
       "t2smp-dkms": {
         "description": "secondary CPUs offline around suspend: ~1 s wake (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2thunderbolt-dkms": {
-        "description": "Thunderbolt PM ordering, NHI before its ports (DKMS)",
         "depends-on": [
           "t2-arch-packages-repo"
         ],
@@ -2373,6 +2373,7 @@
           "t2-kbd-backlight": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
+          "t2-thunderbolt-dkms": "omarchy",
           "t2-touchbar": "omarchy",
           "t2-touchbar-dkms": "omarchy",
           "t2-touchid": "omarchy",
@@ -2385,7 +2386,6 @@
           "t2sbs-dkms": "omarchy",
           "t2smc-dkms": "omarchy",
           "t2smp-dkms": "omarchy",
-          "t2thunderbolt-dkms": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
           "tpack": "linux",

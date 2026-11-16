@@ -43,8 +43,11 @@ export const t2smpDkms = program("t2smp-dkms", {
   install: [omarchy],
 });
 
-export const t2thunderboltDkms = program("t2thunderbolt-dkms", {
-  description: "Thunderbolt PM ordering, NHI before its ports (DKMS)",
+// The thunderbolt driver with KaiT2en's Apple RTD3: the idle Titan Ridge
+// controllers power off (the CPU package then reaches PC6/PC7) and the PM
+// ordering t2thunderbolt-dkms added, which it replaces (conflicts).
+export const t2ThunderboltDkms = program("t2-thunderbolt-dkms", {
+  description: "Thunderbolt with the idle controllers powered off, and PM ordering (DKMS)",
   dependsOn: [t2ArchPackagesRepo],
   install: [omarchy],
 });
@@ -140,7 +143,7 @@ export const kait2en = [
   t2smcDkms,
   t2sbsDkms,
   t2smpDkms,
-  t2thunderboltDkms,
+  t2ThunderboltDkms,
   t2PrecisionTrackpadDkms,
   t2WirelessDkms,
   linuxApfsRwDkms,
