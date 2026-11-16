@@ -270,6 +270,24 @@ export const turbostat = program("turbostat", {
 
 export const t2HybridGraphics = [t2gmuxDkms, t2AmdgpuDkms, t2I915Dkms, t2BootGpu, turbostat];
 
+// KaiT2en's t2-services, over the T2 link t2-touchid's udev rule brings up:
+// t2-journal merges the T2's own logs with the Linux journal (`t2journal -b`),
+// t2-ave runs t2remote so the T2's HEVC and Sidecar encoders show up as V4L2
+// devices (ffmpeg's hevc_v4l2m2m/h264_v4l2m2m; /usr/bin/ffmpeg, not Homebrew's).
+export const t2Journal = program("t2-journal", {
+  description: "the T2's bridgeOS logs merged with the Linux journal (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2Touchid],
+  install: [omarchy],
+});
+
+export const t2Ave = program("t2-ave", {
+  description: "the T2's HEVC and H.264 video encoders as V4L2 devices (KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2Touchid],
+  install: [omarchy],
+});
+
+export const t2Services = [t2Journal, t2Ave];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -322,6 +340,15 @@ export const t2HybridBoot = script("t2-hybrid-boot", {
   run: "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
   check: "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
   runAfter: [t2BootGpu, t2gmuxDkms, t2AmdgpuDkms, t2I915Dkms],
+});
+
+// The encoder daemon running, and its sessions closed around sleep.
+export const t2AveDaemon = script("t2-ave-daemon", {
+  description: "the T2 video encoders available (T2 Mac)",
+  needsSudo: true,
+  run: "sudo systemctl enable --now t2-ave.service t2-ave-suspend.service",
+  check: "systemctl -q is-enabled t2-ave.service && systemctl -q is-enabled t2-ave-suspend.service && systemctl -q is-active t2-ave.service",
+  runAfter: [t2Ave],
 });
 
 export const t2TruetoneDaemon = script("t2-truetone-daemon", {
