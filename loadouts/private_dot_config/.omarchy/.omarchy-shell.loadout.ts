@@ -93,13 +93,10 @@ export const omarchyBarFn = () => [
     widget("pomodoro-omarchy", "centerEnd", "before", "omarchy.weather"),
     widget("omarchy.elsewhen", "centerEnd", "before", "pomodoro-omarchy"),
     widget("io.github.sumdahl.media", "right", "after", "omarchy.tray"),
-    // The T2 widgets (Ambient Light, AirShare, Sidecar) come with their
-    // packages (t2-omarchy-setup links and places them; Omarchy's first login
-    // runs it); only where they sit is here. Each hides itself where its
-    // package isn't installed.
-    widget("josemiguelo.sidecar", "right", "before", "omarchy.bluetooth"),
-    widget("josemiguelo.airshare", "right", "before", "josemiguelo.sidecar"),
-    widget("josemiguelo.truetone", "right", "before", "josemiguelo.airshare"),
+    // The T2 panel (t2.panel: a tab per T2 feature installed) comes with
+    // t2-omarchy-plugins (t2-omarchy-setup links and places it; Omarchy's first
+    // login runs it); only where it sits is here. Hidden without T2 packages.
+    widget("t2.panel", "right", "before", "omarchy.bluetooth"),
     widget("omarchy.power", "right", "after", "omarchy.monitor"),
     widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),
     widget("omarchy.keyboard-layout", "right", "before", "josemiguelo.theme-mode"),

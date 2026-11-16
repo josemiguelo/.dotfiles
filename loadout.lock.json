@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "092d0aad94cf26e648083cbf18afa200ea0a5dd367bf942c7515d1e2f3a6c47d",
+  "sources": "05639ee159bd5d76a3b9a083aefc80bf6c6159a6908e39d457780329b97dc213",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1860,7 +1860,7 @@
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.sidecar right before omarchy.bluetooth josemiguelo.airshare right before josemiguelo.sidecar josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray t2.panel right before omarchy.bluetooth omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2007,7 +2007,7 @@
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
           "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.sidecar right before omarchy.bluetooth josemiguelo.airshare right before josemiguelo.sidecar josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray t2.panel right before omarchy.bluetooth omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
