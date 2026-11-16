@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-15T20:43:02.000522567Z",
+  "updatedAt": "2026-11-16T01:02:08.336730151Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -382,6 +382,11 @@
       "version": "0.01.",
       "reason": null
     },
+    "t2-truetone": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
     "t2-wireless-dkms": {
       "status": "installed",
       "version": "7.2.15.",
@@ -505,7 +510,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -795,6 +800,11 @@
       "exitCode": null
     },
     "t2-kbd-backlight-daemon": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-truetone-daemon": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
