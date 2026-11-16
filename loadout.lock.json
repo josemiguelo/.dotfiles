@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "0a8f34c6b96d40e556b11632a9838ac49cc06aecf54cff1a8218867f426a44ea",
+  "sources": "ee5098cfbb76b9372312738fea0c794c5cd509546a9b503240dbba0b46061f3a",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -2476,7 +2476,7 @@
           "t2-bcm-firmware",
           "t2-render-gpu",
           "t2-ibridge-unmanaged",
-          "t2-charge-limit 85",
+          "t2-charge-limit 90",
           "t2-smc-gaugingd",
           "t2-force-click-daemon",
           "t2-touch-id-auth",

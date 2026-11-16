@@ -48,7 +48,8 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     t2BcmFirmware,
     t2RenderGpu,
     t2IbridgeUnmanaged,
-    args(t2ChargeLimit, "85"),
+    // The SMC stops charging 5 points below the limit: 90 holds the battery at 85 %.
+    args(t2ChargeLimit, "90"),
     t2SmcGaugingd,
     t2ForceClickDaemon,
     t2TouchIdAuth,

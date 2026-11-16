@@ -1,6 +1,9 @@
 #!/usr/bin/env bun
 // The battery stops charging at the limit the machine names:
-// `args(script.t2-charge-limit, "85")`.
+// `args(script.t2-charge-limit, "90")`. The T2 SMC stops 5 points below it
+// and resumes once the battery drops further (tested 2026-11-16 on the
+// MacBookPro16,1: limit 85 stopped at 80 %, limit 90 at 85 %), so name the
+// limit 5 above the level you want; the check compares the limit, not the level.
 //
 // t2smc puts the T2 SMC's charge limit (the key CHLS, what macOS's powerd
 // sets) on BAT0 as charge_control_end_threshold, 1-100, 100 for none. The SMC
