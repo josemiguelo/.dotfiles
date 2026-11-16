@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T17:14:47.222258414Z",
+  "updatedAt": "2026-11-16T18:00:44.271468343Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -327,6 +327,11 @@
       "version": null,
       "reason": null
     },
+    "t2-ave": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
     "t2-boot-gpu": {
       "status": "installed",
       "version": "0.1",
@@ -360,6 +365,11 @@
     "t2-i915-dkms": {
       "status": "installed",
       "version": "7.2.15.",
+      "reason": null
+    },
+    "t2-journal": {
+      "status": "installed",
+      "version": "0.1.0.",
       "reason": null
     },
     "t2-kbd-backlight": {
@@ -438,9 +448,9 @@
       "reason": null
     },
     "t2thunderbolt-dkms": {
-      "status": "installed",
-      "version": "0.6.",
-      "reason": null
+      "status": "missing",
+      "version": null,
+      "reason": "error: package 't2thunderbolt-dkms' was not found"
     },
     "teams-for-linux": {
       "status": "installed",
@@ -535,7 +545,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -839,6 +849,11 @@
       "lastRun": "2026-11-16T16:28:33.329361946Z",
       "exitCode": 0
     },
+    "t2-ave-daemon": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
     "t2-kbd-backlight-sync": {
       "status": "done",
       "lastRun": null,
@@ -881,7 +896,7 @@
     },
     "t2-charge-limit": {
       "status": "done",
-      "lastRun": "2026-11-12T15:32:26.404424652Z",
+      "lastRun": "2026-11-16T17:41:45.802537413Z",
       "exitCode": 0
     },
     "t2-smc-gaugingd": {
