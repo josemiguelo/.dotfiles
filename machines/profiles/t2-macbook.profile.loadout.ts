@@ -1,6 +1,6 @@
 import { args, omarchy, profile, via } from "loadout";
 import type { Data } from "../data.ts";
-import { kait2en, t2Sharing, t2AmbientLight, t2TruetoneDaemon, t2HybridGraphics, t2HybridBoot, t2Services, t2AveDaemon, t2TouchBar, t2TouchId, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2IbridgeUnmanaged, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon, t2KbdBacklightSync, t2AirshareMenu } from "../../loadouts/.etc/t2/.t2.loadout.ts";
+import { t2ArchPackagesRepo, t2TruetoneDaemon, t2HybridBoot, t2AveDaemon, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2IbridgeUnmanaged, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon, t2KbdBacklightSync, t2AirshareMenu } from "../../loadouts/.etc/t2/.t2.loadout.ts";
 import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
@@ -18,13 +18,9 @@ export const t2Macbook = profile<Data>("t2-macbook", {
   extends: [omarchyProfile],
   install: [
     via(omarchy, [
-      kait2en,  // KaiT2en's T2 drivers on linux-omarchy, and their repo
-      t2TouchId,
-      t2TouchBar,
-      t2Sharing,
-      t2AmbientLight,
-      t2HybridGraphics,
-      t2Services,
+      // the [t2-arch-packages] repo; the T2 packages come with the t2-mac and
+      // t2-mac-hybrid meta-packages (the Omarchy fork's installer), not here
+      t2ArchPackagesRepo,
       archVirtualization,
       solaar,
       rocmSmiLib,  // btop's stats for the Radeon Pro 5300M/5500M

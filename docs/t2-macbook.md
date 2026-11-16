@@ -28,7 +28,7 @@ Where it's built (`script.kait2en-dev` and `bare-repos` set all of it up, with t
 
 The ISO installs on stable. The first `omarchy update` replaces the branch's package (built as the recipe's `4.5.0-2`) with upstream's stable one. What `fix-t2.sh` set up stays: loadout guards the repo (`t2-arch-packages-repo`), and the `t2-kernel-args` package keeps the kernel arguments (its path unit and boot service write `t2-mac.conf` back when something rewrites it).
 
-`loadouts/.etc/t2/` holds the rest: `local.kait2en` tracks the packages and `t2-arch-packages-repo` keeps the repo, its key and a `pre-refresh-pacman` hook (`omarchy refresh pacman` rewrites `pacman.conf` without the repo); the `t2-*` scripts fix the hardware below.
+`loadouts/.etc/t2/` holds the rest: the packages aren't listed (the `t2-mac` meta-package carries them, and `t2-mac-hybrid` the hybrid graphics ones with `turbostat`; the fork's installer installs them, and `pacman -Syu` adds any new one), `t2-arch-packages-repo` keeps the repo, its key and a `pre-refresh-pacman` hook (`omarchy refresh pacman` rewrites `pacman.conf` without the repo); the `t2-*` scripts fix the hardware below.
 
 ## Things to know
 

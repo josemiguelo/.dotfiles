@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "f9224061f8079f9b8979349c8f36f95992fd92254d6818d64e7bda019257cef1",
+  "sources": "a1b6f32ad8a269a79ccecb1843cd0c2721232649bc40a3faef069033f18ecc3f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -307,16 +307,6 @@
           "brew": {}
         },
         "origin": "loadouts/private_dot_config"
-      },
-      "bankstown-lv2": {
-        "description": "Bankstown bass enhancer LV2 plugin, for t2-dsp",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
       },
       "bat": {
         "install": {
@@ -647,13 +637,6 @@
         },
         "origin": "loadouts/private_dot_config"
       },
-      "linux-apfs-rw-dkms": {
-        "description": "APFS driver the Wi-Fi firmware fetcher mounts the macOS volume with (DKMS)",
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
       "loadout": {
         "description": "loadout, which reads this repo",
         "version": {
@@ -928,38 +911,6 @@
         "later": "VMs can wait; nothing in setup needs them",
         "origin": "loadouts/private_dot_config/.libvirt"
       },
-      "t2-airshare": {
-        "description": "Quick Share with Android and AirDrop with Apple devices (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-drop"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-amdgpu-dkms": {
-        "description": "amdgpu with the Apple GMUX runtime PM: the dGPU off in hybrid mode (DKMS, KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2gmux-dkms"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-arch-packages-keyring": {
-        "description": "the [t2-arch-packages] signing key, for pacman-key --populate",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-arch-packages-repo": {
         "description": "the signed [t2-arch-packages] pacman repo, kept across pacman.conf refreshes",
         "install": {
@@ -969,272 +920,6 @@
             "present": true,
             "sudo": true
           }
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-ave": {
-        "description": "the T2's HEVC and H.264 video encoders as V4L2 devices (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-touchid"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-boot-gpu": {
-        "description": "keeps the boot GPU (hybrid or discrete) across macOS boots",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-dkms-guard": {
-        "description": "aborts linux-omarchy upgrades that would break the T2 DKMS modules",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-drop": {
-        "description": "AirDrop with Apple devices over AWDL (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-wireless-dkms"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-dsp": {
-        "description": "speaker and mic DSP as PipeWire filter chains (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "bankstown-lv2"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-fan-control": {
-        "description": "fan daemon and GTK app on t2smc (replaces t2fanrd)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-force-click": {
-        "description": "Force Touch settings app and daemon (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-trackpad-actuator-dkms"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-i915-dkms": {
-        "description": "i915 with the Apple panel fixes and the wake retrain (DKMS, KaiT2en + ours)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-journal": {
-        "description": "the T2's bridgeOS logs merged with the Linux journal (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-touchid"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-kbd-backlight": {
-        "description": "keyboard backlight idle fade (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-kernel-args": {
-        "description": "the T2 Mac's kernel arguments, kept in Limine's entries and boot image",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-precision-trackpad-dkms": {
-        "description": "internal trackpad multitouch and Force Touch (DKMS; stock kernels see a plain mouse)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-smc-control": {
-        "description": "SMC app and battery gauging daemon on t2smc (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-thunderbolt-dkms": {
-        "description": "Thunderbolt with the idle controllers powered off, and PM ordering (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-touchbar": {
-        "description": "Touch Bar daemon: media and F-key layers, swipes, custom keys, Touch ID prompt (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo",
-          "t2-touchbar-dkms"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-touchbar-dkms": {
-        "description": "Touch Bar and keyboard drivers: t2hid, t2touchbar, t2bdrm (DKMS, KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-touchid": {
-        "description": "Touch ID bridge from the T2's Secure Enclave to fprintd (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-trackpad-actuator-dkms": {
-        "description": "trackpad Taptic Engine driver: a haptic click on force click (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-truetone": {
-        "description": "True Tone and automatic brightness from the ambient light sensor (KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-wireless-dkms": {
-        "description": "brcmfmac and btbcm/hci_uart with KaiT2en's Apple fixes: Wi-Fi resume, Bluetooth LE devices (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2bce-audio-ucm": {
-        "description": "ALSA UCM profiles for the T2 audio driver",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2bce-stack-dkms": {
-        "description": "T2 BCE bus: internal keyboard/trackpad, audio transport (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2gmux-dkms": {
-        "description": "gmux driver with the T2 dGPU power sequencing, in place of apple_gmux (DKMS, KaiT2en)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2sbs-dkms": {
-        "description": "battery charge relative to full (DKMS, replaces sbs)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2smc-dkms": {
-        "description": "T2 SMC: fans, charge limit, sensors, RTC (DKMS, replaces applesmc)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2smp-dkms": {
-        "description": "secondary CPUs offline around suspend: ~1 s wake (DKMS)",
-        "depends-on": [
-          "t2-arch-packages-repo"
-        ],
-        "install": {
-          "omarchy": {}
         },
         "origin": "loadouts/.etc/t2"
       },
@@ -1314,13 +999,6 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/kitty"
-      },
-      "turbostat": {
-        "description": "processor frequency, idle states and package power",
-        "install": {
-          "omarchy": {}
-        },
-        "origin": "loadouts/.etc/t2"
       },
       "unixodbc": {
         "install": {
@@ -1950,7 +1628,6 @@
         "file": ".loadout/airshare-menu.ts",
         "check": "file:.loadout/airshare-menu.ts check \"$@\"",
         "after": [
-          "programs.t2-airshare",
           "scripts.omarchy-bar-own-widgets"
         ],
         "origin": "loadouts/.etc/t2"
@@ -1959,9 +1636,6 @@
         "description": "the T2 video encoders available (T2 Mac)",
         "run": "sudo systemctl enable --now t2-ave.service t2-ave-suspend.service",
         "check": "systemctl -q is-enabled t2-ave.service && systemctl -q is-enabled t2-ave-suspend.service && systemctl -q is-active t2-ave.service",
-        "after": [
-          "programs.t2-ave"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -1970,7 +1644,6 @@
         "file": ".loadout/bcm-firmware.ts",
         "check": "file:.loadout/bcm-firmware.ts check \"$@\"",
         "after": [
-          "programs.linux-apfs-rw-dkms",
           "scripts.onepassword-cli"
         ],
         "sudo": true,
@@ -1987,9 +1660,6 @@
         "description": "the Force Touch daemon running (T2 Mac)",
         "run": "sudo systemctl enable --now t2-force-click.service",
         "check": "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service",
-        "after": [
-          "programs.t2-force-click"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2007,12 +1677,6 @@
         "description": "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
         "run": "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
         "check": "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
-        "after": [
-          "programs.t2-boot-gpu",
-          "programs.t2gmux-dkms",
-          "programs.t2-amdgpu-dkms",
-          "programs.t2-i915-dkms"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2027,9 +1691,6 @@
         "description": "the keyboard backlight idle fade running (T2 Mac)",
         "run": "sudo systemctl enable --now t2-kbd-backlight.service",
         "check": "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
-        "after": [
-          "programs.t2-kbd-backlight"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2038,8 +1699,7 @@
         "file": ".loadout/kbd-backlight-sync.ts",
         "check": "file:.loadout/kbd-backlight-sync.ts check \"$@\"",
         "after": [
-          "scripts.omarchy-command-overrides",
-          "programs.t2-kbd-backlight"
+          "scripts.omarchy-command-overrides"
         ],
         "origin": "loadouts/.etc/t2"
       },
@@ -2069,9 +1729,6 @@
         "description": "battery gauge calibration charges under the charge limit (T2 Mac)",
         "run": "sudo systemctl enable --now t2-smc-gaugingd.service",
         "check": "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service",
-        "after": [
-          "programs.t2-smc-control"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2079,9 +1736,6 @@
         "description": "Touch ID for sudo, polkit and the lock screen (T2 Mac)",
         "file": ".loadout/touch-id.ts",
         "check": "file:.loadout/touch-id.ts check \"$@\"",
-        "after": [
-          "programs.t2-touchid"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2089,9 +1743,6 @@
         "description": "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
         "file": ".loadout/touchbar.ts",
         "check": "file:.loadout/touchbar.ts check \"$@\"",
-        "after": [
-          "programs.t2-touchbar"
-        ],
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -2099,9 +1750,6 @@
         "description": "True Tone and automatic brightness running (T2 Mac)",
         "run": "systemctl --user enable --now t2-truetone.service",
         "check": "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
-        "after": [
-          "programs.t2-truetone"
-        ],
         "origin": "loadouts/.etc/t2"
       },
       "tmux-plugins": {
@@ -2296,7 +1944,6 @@
           "anydesk": "omarchy-aur",
           "atuin": "omarchy",
           "awscli": "brew",
-          "bankstown-lv2": "omarchy",
           "bat": "omarchy",
           "brave": "omarchy-aur",
           "btop": "omarchy",
@@ -2327,7 +1974,6 @@
           "lazygit": "omarchy",
           "libvirt": "omarchy",
           "libxcrypt-compat": "omarchy",
-          "linux-apfs-rw-dkms": "omarchy",
           "meson": "omarchy",
           "mise": "omarchy",
           "ngrok": "custom",
@@ -2350,43 +1996,13 @@
           "stremio": "flatpak",
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
-          "t2-airshare": "omarchy",
-          "t2-amdgpu-dkms": "omarchy",
-          "t2-arch-packages-keyring": "omarchy",
           "t2-arch-packages-repo": "omarchy",
-          "t2-ave": "omarchy",
-          "t2-boot-gpu": "omarchy",
-          "t2-dkms-guard": "omarchy",
-          "t2-drop": "omarchy",
-          "t2-dsp": "omarchy",
-          "t2-fan-control": "omarchy",
-          "t2-force-click": "omarchy",
-          "t2-i915-dkms": "omarchy",
-          "t2-journal": "omarchy",
-          "t2-kbd-backlight": "omarchy",
-          "t2-kernel-args": "omarchy",
-          "t2-precision-trackpad-dkms": "omarchy",
-          "t2-smc-control": "omarchy",
-          "t2-thunderbolt-dkms": "omarchy",
-          "t2-touchbar": "omarchy",
-          "t2-touchbar-dkms": "omarchy",
-          "t2-touchid": "omarchy",
-          "t2-trackpad-actuator-dkms": "omarchy",
-          "t2-truetone": "omarchy",
-          "t2-wireless-dkms": "omarchy",
-          "t2bce-audio-ucm": "omarchy",
-          "t2bce-stack-dkms": "omarchy",
-          "t2gmux-dkms": "omarchy",
-          "t2sbs-dkms": "omarchy",
-          "t2smc-dkms": "omarchy",
-          "t2smp-dkms": "omarchy",
           "teams-for-linux": "omarchy-aur",
           "tmux": "omarchy",
           "tpack": "linux",
           "trash-cli": "brew",
           "tree-sitter-cli": "omarchy",
           "ttf-firacode-nerd": "omarchy",
-          "turbostat": "omarchy",
           "vim": "brew",
           "virt-install": "omarchy",
           "virt-manager": "omarchy",
