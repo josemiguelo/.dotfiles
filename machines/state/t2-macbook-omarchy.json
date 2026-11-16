@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T01:02:08.336730151Z",
+  "updatedAt": "2026-11-16T15:44:57.563387867Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -312,6 +312,11 @@
       "version": "0.1.0.",
       "reason": null
     },
+    "t2-amdgpu-dkms": {
+      "status": "installed",
+      "version": "7.2.15.",
+      "reason": null
+    },
     "t2-arch-packages-keyring": {
       "status": "installed",
       "version": null,
@@ -320,6 +325,11 @@
     "t2-arch-packages-repo": {
       "status": "installed",
       "version": null,
+      "reason": null
+    },
+    "t2-boot-gpu": {
+      "status": "installed",
+      "version": "0.1",
       "reason": null
     },
     "t2-dkms-guard": {
@@ -345,6 +355,11 @@
     "t2-force-click": {
       "status": "installed",
       "version": "0.1.0.",
+      "reason": null
+    },
+    "t2-i915-dkms": {
+      "status": "installed",
+      "version": "7.2.15.",
       "reason": null
     },
     "t2-kbd-backlight": {
@@ -402,6 +417,11 @@
       "version": "0.01.",
       "reason": null
     },
+    "t2gmux-dkms": {
+      "status": "installed",
+      "version": "0.9.",
+      "reason": null
+    },
     "t2sbs-dkms": {
       "status": "installed",
       "version": "0.1.",
@@ -450,6 +470,11 @@
     "ttf-firacode-nerd": {
       "status": "installed",
       "version": "3.5.1",
+      "reason": null
+    },
+    "turbostat": {
+      "status": "installed",
+      "version": "7.2.11",
       "reason": null
     },
     "vim": {
@@ -809,6 +834,11 @@
       "lastRun": null,
       "exitCode": null
     },
+    "t2-hybrid-boot": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
     "t2-kbd-backlight-sync": {
       "status": "done",
       "lastRun": null,
@@ -850,7 +880,7 @@
       "exitCode": 1
     },
     "t2-charge-limit": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-11-12T15:32:26.404424652Z",
       "exitCode": 0
     },
