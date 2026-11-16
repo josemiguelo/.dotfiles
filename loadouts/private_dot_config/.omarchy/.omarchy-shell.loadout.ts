@@ -84,7 +84,7 @@ export const omarchyBarFn = () => [
     "https://github.com/sumdahl/omarchy-plugin-media.git",
     "https://github.com/josemiguelo/omarchy-harpoon.git",
   ),
-  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode", "josemiguelo.airshare", "josemiguelo.truetone"),
+  args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode"),
   args(
     omarchyBarWidgets,
     widget("evindor.keystroke", "left", "at", "0"),
@@ -93,10 +93,12 @@ export const omarchyBarFn = () => [
     widget("pomodoro-omarchy", "centerEnd", "before", "omarchy.weather"),
     widget("omarchy.elsewhen", "centerEnd", "before", "pomodoro-omarchy"),
     widget("io.github.sumdahl.media", "right", "after", "omarchy.tray"),
-    // T2 AirShare, beside the other wireless widgets; it hides itself where
-    // AirShare isn't installed.
-    widget("josemiguelo.airshare", "right", "before", "omarchy.bluetooth"),
-    // Ambient Light (t2-truetone): the screen's colour and brightness; hidden without it.
+    // The T2 widgets (Ambient Light, AirShare, Sidecar) come with their
+    // packages (t2-omarchy-setup links and places them; Omarchy's first login
+    // runs it); only where they sit is here. Each hides itself where its
+    // package isn't installed.
+    widget("josemiguelo.sidecar", "right", "before", "omarchy.bluetooth"),
+    widget("josemiguelo.airshare", "right", "before", "josemiguelo.sidecar"),
     widget("josemiguelo.truetone", "right", "before", "josemiguelo.airshare"),
     widget("omarchy.power", "right", "after", "omarchy.monitor"),
     widget("josemiguelo.theme-mode", "right", "before", "omarchy.tray"),

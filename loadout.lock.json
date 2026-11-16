@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "a1b6f32ad8a269a79ccecb1843cd0c2721232649bc40a3faef069033f18ecc3f",
+  "sources": "0531c01f197bf3210692a53e76016b0f394c9dc7a6897983243319ffbf2b0f5c",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1623,15 +1623,6 @@
         "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
       },
-      "t2-airshare-menu": {
-        "description": "AirShare entries in the Omarchy menu's Share submenu (T2 Mac)",
-        "file": ".loadout/airshare-menu.ts",
-        "check": "file:.loadout/airshare-menu.ts check \"$@\"",
-        "after": [
-          "scripts.omarchy-bar-own-widgets"
-        ],
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-ave-daemon": {
         "description": "the T2 video encoders available (T2 Mac)",
         "run": "sudo systemctl enable --now t2-ave.service t2-ave-suspend.service",
@@ -1900,8 +1891,8 @@
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
-          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare josemiguelo.truetone",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.sidecar right before omarchy.bluetooth josemiguelo.airshare right before josemiguelo.sidecar josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2047,8 +2038,8 @@
           "omarchy-theme-mode tokyo-night catppuccin-latte",
           "omarchy-bar position=top size=24 background=glassy off=omarchy.workspaces",
           "omarchy-plugins https://github.com/evindor/keystroke.git https://github.com/tornikegomareli/omarchy-spaces.git https://github.com/binoymanoj/pomodoro-omarchy.git https://github.com/sumdahl/omarchy-plugin-media.git https://github.com/josemiguelo/omarchy-harpoon.git",
-          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode josemiguelo.airshare josemiguelo.truetone",
-          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.airshare right before omarchy.bluetooth josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
+          "omarchy-bar-own-widgets josemiguelo.workspace-layout josemiguelo.theme-mode",
+          "omarchy-bar-widgets evindor.keystroke left at 0 josemiguelo.workspace-layout left after evindor.keystroke tornikegomareli.spaces left after josemiguelo.workspace-layout pomodoro-omarchy centerEnd before omarchy.weather omarchy.elsewhen centerEnd before pomodoro-omarchy io.github.sumdahl.media right after omarchy.tray josemiguelo.sidecar right before omarchy.bluetooth josemiguelo.airshare right before josemiguelo.sidecar josemiguelo.truetone right before josemiguelo.airshare omarchy.power right after omarchy.monitor josemiguelo.theme-mode right before omarchy.tray omarchy.keyboard-layout right before josemiguelo.theme-mode omarchy.clock center at 0 omarchy.indicators centerBegin at 0",
           "omarchy-keystroke-windows",
           "omarchy-pomodoro",
           "omarchy-workspace-layout-menu",
@@ -2079,7 +2070,6 @@
           "t2-hybrid-boot",
           "t2-ave-daemon",
           "t2-kbd-backlight-sync",
-          "t2-airshare-menu",
           "t2-gmux-backlight",
           "t2-bcm-firmware",
           "t2-render-gpu",

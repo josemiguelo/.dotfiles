@@ -1,6 +1,6 @@
 import { args, omarchy, profile, via } from "loadout";
 import type { Data } from "../data.ts";
-import { t2ArchPackagesRepo, t2TruetoneDaemon, t2HybridBoot, t2AveDaemon, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2IbridgeUnmanaged, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon, t2KbdBacklightSync, t2AirshareMenu } from "../../loadouts/.etc/t2/.t2.loadout.ts";
+import { t2ArchPackagesRepo, t2TruetoneDaemon, t2HybridBoot, t2AveDaemon, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2IbridgeUnmanaged, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon, t2KbdBacklightSync } from "../../loadouts/.etc/t2/.t2.loadout.ts";
 import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
@@ -37,7 +37,6 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     t2HybridBoot,
     t2AveDaemon,
     t2KbdBacklightSync,
-    t2AirshareMenu,
     t2GmuxBacklight,
     t2BcmFirmware,
     t2RenderGpu,

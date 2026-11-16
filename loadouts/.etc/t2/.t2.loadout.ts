@@ -4,7 +4,6 @@
 import { omarchy, program, script, via } from "loadout";
 import { onepasswordCli } from "../../private_dot_config/.1password/.1password.loadout.ts";
 import { omarchyCommandOverrides } from "../../private_dot_config/.omarchy/.omarchy-overrides.loadout.ts";
-import { omarchyBarOwnWidgets } from "../../private_dot_config/.omarchy/.omarchy-shell.loadout.ts";
 
 // The [t2-arch-packages] repo (github.com/josemiguelo/t2-arch-packages):
 // KaiT2en's drivers and tools packaged for linux-omarchy, signed. Omarchy's
@@ -85,13 +84,6 @@ export const t2KbdBacklightSync = script("t2-kbd-backlight-sync", {
   description: "keyboard backlight keys reach UPower, for the idle fade and the Touch Bar (T2 Mac)",
   managedBy: ".loadout/kbd-backlight-sync.ts",
   runAfter: [omarchyCommandOverrides],
-});
-
-// AirShare in the Omarchy menu's Share submenu, beside LocalSend's entries.
-export const t2AirshareMenu = script("t2-airshare-menu", {
-  description: "AirShare entries in the Omarchy menu's Share submenu (T2 Mac)",
-  managedBy: ".loadout/airshare-menu.ts",
-  runAfter: [omarchyBarOwnWidgets],
 });
 
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
