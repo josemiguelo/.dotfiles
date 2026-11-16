@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T18:00:44.271468343Z",
+  "updatedAt": "2026-11-16T19:04:18.006344396Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -377,6 +377,11 @@
       "version": "0.1.0.",
       "reason": null
     },
+    "t2-kernel-args": {
+      "status": "installed",
+      "version": "0.1",
+      "reason": null
+    },
     "t2-precision-trackpad-dkms": {
       "status": "installed",
       "version": "0.01.",
@@ -385,6 +390,11 @@
     "t2-smc-control": {
       "status": "installed",
       "version": "0.1.0.",
+      "reason": null
+    },
+    "t2-thunderbolt-dkms": {
+      "status": "installed",
+      "version": "7.2.15.",
       "reason": null
     },
     "t2-touchbar": {
@@ -446,11 +456,6 @@
       "status": "installed",
       "version": "0.1.",
       "reason": null
-    },
-    "t2thunderbolt-dkms": {
-      "status": "missing",
-      "version": null,
-      "reason": "error: package 't2thunderbolt-dkms' was not found"
     },
     "teams-for-linux": {
       "status": "installed",
@@ -545,7 +550,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -868,11 +873,6 @@
       "status": "done",
       "lastRun": "2026-11-15T19:53:47.412274819Z",
       "exitCode": 0
-    },
-    "t2-kernel-args": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
     },
     "t2-gmux-backlight": {
       "status": "done",
