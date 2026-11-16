@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-14T02:12:37.084401598Z",
+  "updatedAt": "2026-11-15T20:43:02.000522567Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -307,6 +307,11 @@
       "version": "0.10.2",
       "reason": null
     },
+    "t2-airshare": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
     "t2-arch-packages-keyring": {
       "status": "installed",
       "version": null,
@@ -320,6 +325,11 @@
     "t2-dkms-guard": {
       "status": "installed",
       "version": "0.1",
+      "reason": null
+    },
+    "t2-drop": {
+      "status": "installed",
+      "version": "0.1.0.",
       "reason": null
     },
     "t2-dsp": {
@@ -337,12 +347,32 @@
       "version": "0.1.0.",
       "reason": null
     },
+    "t2-kbd-backlight": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
     "t2-precision-trackpad-dkms": {
       "status": "installed",
       "version": "0.01.",
       "reason": null
     },
     "t2-smc-control": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
+    "t2-touchbar": {
+      "status": "installed",
+      "version": "0.1.0.",
+      "reason": null
+    },
+    "t2-touchbar-dkms": {
+      "status": "installed",
+      "version": "0.1.",
+      "reason": null
+    },
+    "t2-touchid": {
       "status": "installed",
       "version": "0.1.0.",
       "reason": null
@@ -631,12 +661,12 @@
     },
     "omarchy-bar-own-widgets": {
       "status": "done",
-      "lastRun": "2026-11-12T02:39:39.312278466Z",
+      "lastRun": "2026-11-15T20:42:30.547459159Z",
       "exitCode": 0
     },
     "omarchy-bar-widgets": {
       "status": "done",
-      "lastRun": "2026-11-12T02:39:44.295972931Z",
+      "lastRun": "2026-11-15T20:42:59.905411178Z",
       "exitCode": 0
     },
     "omarchy-keystroke-windows": {
@@ -759,9 +789,29 @@
       "lastRun": null,
       "exitCode": null
     },
-    "t2-hid-apple-keyboard": {
+    "t2-touchbar-switch": {
       "status": "done",
-      "lastRun": "2026-11-12T02:40:41.348343849Z",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-kbd-backlight-daemon": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-kbd-backlight-sync": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-airshare-firewall": {
+      "status": "done",
+      "lastRun": "2026-11-15T17:05:30.711298321Z",
+      "exitCode": 0
+    },
+    "t2-airshare-menu": {
+      "status": "done",
+      "lastRun": "2026-11-15T19:53:47.412274819Z",
       "exitCode": 0
     },
     "t2-kernel-args": {
@@ -800,6 +850,11 @@
       "exitCode": 0
     },
     "t2-force-click-daemon": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "t2-touch-id-auth": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
