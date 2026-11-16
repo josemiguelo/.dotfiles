@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T16:26:57.857754709Z",
+  "updatedAt": "2026-11-16T16:39:30.286658627Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -535,7 +535,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -835,9 +835,9 @@
       "exitCode": null
     },
     "t2-hybrid-boot": {
-      "status": "pending",
-      "lastRun": null,
-      "exitCode": null
+      "status": "done",
+      "lastRun": "2026-11-16T16:28:33.329361946Z",
+      "exitCode": 0
     },
     "t2-kbd-backlight-sync": {
       "status": "done",
@@ -880,7 +880,7 @@
       "exitCode": 1
     },
     "t2-charge-limit": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-11-12T15:32:26.404424652Z",
       "exitCode": 0
     },
