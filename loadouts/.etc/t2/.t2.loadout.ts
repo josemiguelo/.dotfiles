@@ -230,6 +230,46 @@ export const t2Truetone = program("t2-truetone", {
 
 export const t2AmbientLight = [t2Truetone];
 
+// Hybrid graphics: the Intel iGPU drives the panel and the Radeon powers off
+// (D3cold) until an app asks for it (DRI_PRIME=1), ~20 W idle instead of
+// 32 W. KaiT2en's gmux driver in place of apple_gmux, amdgpu with its GMUX
+// runtime PM, i915 with its Apple panel patches and ours (the panel power
+// cycled after a wake, or it stays dark), and t2-boot-gpu, which keeps Apple's
+// boot GPU variable on the iGPU across macOS boots. External displays on the
+// Thunderbolt ports need the dGPU: `sudo t2-boot-gpu discrete`, reboot.
+export const t2gmuxDkms = program("t2gmux-dkms", {
+  description: "gmux driver with the T2 dGPU power sequencing, in place of apple_gmux (DKMS, KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+export const t2AmdgpuDkms = program("t2-amdgpu-dkms", {
+  description: "amdgpu with the Apple GMUX runtime PM: the dGPU off in hybrid mode (DKMS, KaiT2en)",
+  dependsOn: [t2ArchPackagesRepo, t2gmuxDkms],
+  install: [omarchy],
+});
+
+export const t2I915Dkms = program("t2-i915-dkms", {
+  description: "i915 with the Apple panel fixes and the wake retrain (DKMS, KaiT2en + ours)",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+export const t2BootGpu = program("t2-boot-gpu", {
+  description: "keeps the boot GPU (hybrid or discrete) across macOS boots",
+  dependsOn: [t2ArchPackagesRepo],
+  install: [omarchy],
+});
+
+// Processor idle and power statistics (package C-states, watts), for
+// checking what keeps the Mac from idling lower.
+export const turbostat = program("turbostat", {
+  description: "processor frequency, idle states and package power",
+  install: [omarchy],
+});
+
+export const t2HybridGraphics = [t2gmuxDkms, t2AmdgpuDkms, t2I915Dkms, t2BootGpu, turbostat];
+
 // The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
@@ -273,6 +313,15 @@ export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
   run: "sudo systemctl enable --now t2-kbd-backlight.service",
   check: "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
   runAfter: [t2KbdBacklight],
+});
+
+// Hybrid mode from the next boot on, and kept there across macOS boots.
+export const t2HybridBoot = script("t2-hybrid-boot", {
+  description: "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
+  needsSudo: true,
+  run: "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
+  check: "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+  runAfter: [t2BootGpu, t2gmuxDkms, t2AmdgpuDkms, t2I915Dkms],
 });
 
 export const t2TruetoneDaemon = script("t2-truetone-daemon", {

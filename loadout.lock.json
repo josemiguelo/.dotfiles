@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "f54ccfbbd439c4b5a0f3901ce22db06b54ab68f35264350138d854050d6b065b",
+  "sources": "2c249d880bea8c6ea8e7bae095ece0fed2ace16a21151e6934f5c6679b3c2c30",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -939,6 +939,17 @@
         },
         "origin": "loadouts/.etc/t2"
       },
+      "t2-amdgpu-dkms": {
+        "description": "amdgpu with the Apple GMUX runtime PM: the dGPU off in hybrid mode (DKMS, KaiT2en)",
+        "depends-on": [
+          "t2-arch-packages-repo",
+          "t2gmux-dkms"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-arch-packages-keyring": {
         "description": "the [t2-arch-packages] signing key, for pacman-key --populate",
         "depends-on": [
@@ -958,6 +969,16 @@
             "present": true,
             "sudo": true
           }
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-boot-gpu": {
+        "description": "keeps the boot GPU (hybrid or discrete) across macOS boots",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
         },
         "origin": "loadouts/.etc/t2"
       },
@@ -1008,6 +1029,16 @@
         "depends-on": [
           "t2-arch-packages-repo",
           "t2-trackpad-actuator-dkms"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2-i915-dkms": {
+        "description": "i915 with the Apple panel fixes and the wake retrain (DKMS, KaiT2en + ours)",
+        "depends-on": [
+          "t2-arch-packages-repo"
         ],
         "install": {
           "omarchy": {}
@@ -1117,6 +1148,16 @@
       },
       "t2bce-stack-dkms": {
         "description": "T2 BCE bus: internal keyboard/trackpad, audio transport (DKMS)",
+        "depends-on": [
+          "t2-arch-packages-repo"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
+      },
+      "t2gmux-dkms": {
+        "description": "gmux driver with the T2 dGPU power sequencing, in place of apple_gmux (DKMS, KaiT2en)",
         "depends-on": [
           "t2-arch-packages-repo"
         ],
@@ -1241,6 +1282,13 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config/kitty"
+      },
+      "turbostat": {
+        "description": "processor frequency, idle states and package power",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/.etc/t2"
       },
       "unixodbc": {
         "install": {
@@ -1923,6 +1971,19 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
+      "t2-hybrid-boot": {
+        "description": "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
+        "run": "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
+        "check": "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+        "after": [
+          "programs.t2-boot-gpu",
+          "programs.t2gmux-dkms",
+          "programs.t2-amdgpu-dkms",
+          "programs.t2-i915-dkms"
+        ],
+        "sudo": true,
+        "origin": "loadouts/.etc/t2"
+      },
       "t2-ibridge-unmanaged": {
         "description": "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
         "file": ".loadout/ibridge-unmanaged.ts",
@@ -2265,13 +2326,16 @@
           "sublime-text": "omarchy",
           "swtpm": "omarchy",
           "t2-airshare": "omarchy",
+          "t2-amdgpu-dkms": "omarchy",
           "t2-arch-packages-keyring": "omarchy",
           "t2-arch-packages-repo": "omarchy",
+          "t2-boot-gpu": "omarchy",
           "t2-dkms-guard": "omarchy",
           "t2-drop": "omarchy",
           "t2-dsp": "omarchy",
           "t2-fan-control": "omarchy",
           "t2-force-click": "omarchy",
+          "t2-i915-dkms": "omarchy",
           "t2-kbd-backlight": "omarchy",
           "t2-precision-trackpad-dkms": "omarchy",
           "t2-smc-control": "omarchy",
@@ -2283,6 +2347,7 @@
           "t2-wireless-dkms": "omarchy",
           "t2bce-audio-ucm": "omarchy",
           "t2bce-stack-dkms": "omarchy",
+          "t2gmux-dkms": "omarchy",
           "t2sbs-dkms": "omarchy",
           "t2smc-dkms": "omarchy",
           "t2smp-dkms": "omarchy",
@@ -2293,6 +2358,7 @@
           "trash-cli": "brew",
           "tree-sitter-cli": "omarchy",
           "ttf-firacode-nerd": "omarchy",
+          "turbostat": "omarchy",
           "vim": "brew",
           "virt-install": "omarchy",
           "virt-manager": "omarchy",
@@ -2366,6 +2432,7 @@
           "t2-touchbar-switch",
           "t2-kbd-backlight-daemon",
           "t2-truetone-daemon",
+          "t2-hybrid-boot",
           "t2-kbd-backlight-sync",
           "t2-airshare-firewall",
           "t2-airshare-menu",
