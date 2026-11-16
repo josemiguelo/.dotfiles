@@ -374,15 +374,6 @@ export const t2KbdBacklightSync = script("t2-kbd-backlight-sync", {
   runAfter: [omarchyCommandOverrides, t2KbdBacklight],
 });
 
-// The firewall lets phones and Apple devices reach the receivers: Quick
-// Share's port, its hotspot, and AirDrop's port on awdl0.
-export const t2AirshareFirewall = script("t2-airshare-firewall", {
-  description: "ufw allows Quick Share and AirDrop transfers in (T2 Mac)",
-  managedBy: ".loadout/airshare-firewall.ts",
-  needsSudo: true,
-  runAfter: [t2Airshare],
-});
-
 // AirShare in the Omarchy menu's Share submenu, beside LocalSend's entries.
 export const t2AirshareMenu = script("t2-airshare-menu", {
   description: "AirShare entries in the Omarchy menu's Share submenu (T2 Mac)",

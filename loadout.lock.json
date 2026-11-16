@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "21a0b95a281d3acaf4db29db645a7d29431a0d326a0b11f140c66710b398ad70",
+  "sources": "f9224061f8079f9b8979349c8f36f95992fd92254d6818d64e7bda019257cef1",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1945,16 +1945,6 @@
         "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
       },
-      "t2-airshare-firewall": {
-        "description": "ufw allows Quick Share and AirDrop transfers in (T2 Mac)",
-        "file": ".loadout/airshare-firewall.ts",
-        "check": "file:.loadout/airshare-firewall.ts check \"$@\"",
-        "after": [
-          "programs.t2-airshare"
-        ],
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-airshare-menu": {
         "description": "AirShare entries in the Omarchy menu's Share submenu (T2 Mac)",
         "file": ".loadout/airshare-menu.ts",
@@ -2473,7 +2463,6 @@
           "t2-hybrid-boot",
           "t2-ave-daemon",
           "t2-kbd-backlight-sync",
-          "t2-airshare-firewall",
           "t2-airshare-menu",
           "t2-gmux-backlight",
           "t2-bcm-firmware",
