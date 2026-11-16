@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "0531c01f197bf3210692a53e76016b0f394c9dc7a6897983243319ffbf2b0f5c",
+  "sources": "092d0aad94cf26e648083cbf18afa200ea0a5dd367bf942c7515d1e2f3a6c47d",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1654,27 +1654,10 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
-      "t2-gmux-backlight": {
-        "description": "screen brightness kept across suspend and reboots (T2 Mac)",
-        "file": ".loadout/gmux-backlight.ts",
-        "check": "file:.loadout/gmux-backlight.ts check \"$@\"",
-        "after": [
-          "scripts.omarchy-command-overrides"
-        ],
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-hybrid-boot": {
         "description": "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
         "run": "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
         "check": "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-ibridge-unmanaged": {
-        "description": "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
-        "file": ".loadout/ibridge-unmanaged.ts",
-        "check": "file:.loadout/ibridge-unmanaged.ts check \"$@\"",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -1683,15 +1666,6 @@
         "run": "sudo systemctl enable --now t2-kbd-backlight.service",
         "check": "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
         "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-kbd-backlight-sync": {
-        "description": "keyboard backlight keys reach UPower, for the idle fade and the Touch Bar (T2 Mac)",
-        "file": ".loadout/kbd-backlight-sync.ts",
-        "check": "file:.loadout/kbd-backlight-sync.ts check \"$@\"",
-        "after": [
-          "scripts.omarchy-command-overrides"
-        ],
         "origin": "loadouts/.etc/t2"
       },
       "t2-omarchy-channel": {
@@ -1708,12 +1682,6 @@
         "description": "a check of the T2 setup after every omarchy update (T2 Mac)",
         "file": ".loadout/post-update-check.ts",
         "check": "file:.loadout/post-update-check.ts check \"$@\"",
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-render-gpu": {
-        "description": "Hyprland renders on the GPU driving the panel (T2 Mac)",
-        "file": ".loadout/render-gpu.ts",
-        "check": "file:.loadout/render-gpu.ts check \"$@\"",
         "origin": "loadouts/.etc/t2"
       },
       "t2-smc-gaugingd": {
@@ -2069,11 +2037,7 @@
           "t2-truetone-daemon",
           "t2-hybrid-boot",
           "t2-ave-daemon",
-          "t2-kbd-backlight-sync",
-          "t2-gmux-backlight",
           "t2-bcm-firmware",
-          "t2-render-gpu",
-          "t2-ibridge-unmanaged",
           "t2-charge-limit 90",
           "t2-smc-gaugingd",
           "t2-force-click-daemon",

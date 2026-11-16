@@ -3,7 +3,6 @@
 // the screen backlight and the GPU Hyprland renders on (docs/t2-macbook.md).
 import { omarchy, program, script, via } from "loadout";
 import { onepasswordCli } from "../../private_dot_config/.1password/.1password.loadout.ts";
-import { omarchyCommandOverrides } from "../../private_dot_config/.omarchy/.omarchy-overrides.loadout.ts";
 
 // The [t2-arch-packages] repo (github.com/josemiguelo/t2-arch-packages):
 // KaiT2en's drivers and tools packaged for linux-omarchy, signed. Omarchy's
@@ -20,7 +19,7 @@ export const t2ArchPackagesRepo = program("t2-arch-packages-repo", {
 // Omarchy fork's installer installs and `pacman -Syu` keeps complete. What
 // follows only configures and sets them up.
 
-// The T2 Mac fixes, the t2-* scripts: `run: [t2GmuxBacklight]`.
+// The T2 Mac fixes, the t2-* scripts: `run: [t2ChargeLimit]`.
 
 // The Wi-Fi/Bluetooth firmware, which only macOS ships: copied off the macOS
 // volume by apple-bcm-firmware-fetcher, or, with no macOS volume, the old
@@ -77,28 +76,10 @@ export const t2TruetoneDaemon = script("t2-truetone-daemon", {
   check: "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
 });
 
-// Omarchy's keyboard-backlight keys write the LED behind UPower's back, so the
-// idle fade and the Touch Bar's glyphs missed them: a wrapper around
-// omarchy-brightness-keyboard tells UPower the new level.
-export const t2KbdBacklightSync = script("t2-kbd-backlight-sync", {
-  description: "keyboard backlight keys reach UPower, for the idle fade and the Touch Bar (T2 Mac)",
-  managedBy: ".loadout/kbd-backlight-sync.ts",
-  runAfter: [omarchyCommandOverrides],
-});
-
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
   description: "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
   managedBy: ".loadout/touchbar.ts",
   needsSudo: true,
-});
-
-// A sleep hook sends the backlight level back on resume; a udev rule puts it
-// under systemd-backlight for reboots.
-export const t2GmuxBacklight = script("t2-gmux-backlight", {
-  description: "screen brightness kept across suspend and reboots (T2 Mac)",
-  managedBy: ".loadout/gmux-backlight.ts",
-  needsSudo: true,
-  runAfter: [omarchyCommandOverrides],
 });
 
 // The battery's charge limit, named by the machine:
@@ -152,15 +133,3 @@ export const t2TouchIdAuth = script("t2-touch-id-auth", {
   needsSudo: true,
 });
 
-export const t2IbridgeUnmanaged = script("t2-ibridge-unmanaged", {
-  description: "NetworkManager leaves the T2's internal USB network link alone (T2 Mac)",
-  managedBy: ".loadout/ibridge-unmanaged.ts",
-  needsSudo: true,
-});
-
-// Hyprland renders on whichever card has the panel connected (a uwsm env
-// block), not the iGPU.
-export const t2RenderGpu = script("t2-render-gpu", {
-  description: "Hyprland renders on the GPU driving the panel (T2 Mac)",
-  managedBy: ".loadout/render-gpu.ts",
-});

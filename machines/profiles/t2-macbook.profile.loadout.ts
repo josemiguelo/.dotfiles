@@ -1,6 +1,6 @@
 import { args, omarchy, profile, via } from "loadout";
 import type { Data } from "../data.ts";
-import { t2ArchPackagesRepo, t2TruetoneDaemon, t2HybridBoot, t2AveDaemon, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2GmuxBacklight, t2IbridgeUnmanaged, t2OmarchyChannel, t2PostUpdateCheck, t2RenderGpu, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon, t2KbdBacklightSync } from "../../loadouts/.etc/t2/.t2.loadout.ts";
+import { t2ArchPackagesRepo, t2TruetoneDaemon, t2HybridBoot, t2AveDaemon, t2BcmFirmware, t2ChargeLimit, t2ForceClickDaemon, t2OmarchyChannel, t2PostUpdateCheck, t2SmcGaugingd, t2TouchIdAuth, t2TouchbarSwitch, t2KbdBacklightDaemon } from "../../loadouts/.etc/t2/.t2.loadout.ts";
 import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
@@ -36,11 +36,7 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     t2TruetoneDaemon,
     t2HybridBoot,
     t2AveDaemon,
-    t2KbdBacklightSync,
-    t2GmuxBacklight,
     t2BcmFirmware,
-    t2RenderGpu,
-    t2IbridgeUnmanaged,
     // The SMC stops charging 5 points below the limit: 90 holds the battery at 85 %.
     args(t2ChargeLimit, "90"),
     t2SmcGaugingd,
