@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T19:04:18.006344396Z",
+  "updatedAt": "2026-11-16T21:23:53.520437428Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -863,11 +863,6 @@
       "status": "done",
       "lastRun": null,
       "exitCode": null
-    },
-    "t2-airshare-firewall": {
-      "status": "done",
-      "lastRun": "2026-11-15T17:05:30.711298321Z",
-      "exitCode": 0
     },
     "t2-airshare-menu": {
       "status": "done",
