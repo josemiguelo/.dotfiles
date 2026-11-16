@@ -19,6 +19,12 @@
 // the panel's card is listed: the Thunderbolt ports are wired to the AMD card
 // too. Install rewrites the block between its markers; takes effect at the
 // next login. Modes: `check` / `install` (default).
+//
+// The panel's card can register after the login starts: in hybrid mode
+// (t2-boot-gpu) the first boot after macOS runs on the dGPU again, and amdgpu
+// came up after uwsm had read this file, so nothing was found, aquamarine took
+// the Intel card and the cursor was a black square (2026-11-16). The block
+// waits up to 5 s for a connected panel; the iGPU's is there at once.
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { $, main, read } from "loadout/script";
@@ -30,13 +36,20 @@ const BLOCK = `# >>> Managed by loadout (t2-render-gpu)
 # Hyprland renders on the GPU the built-in panel is wired to, picked at login
 # (loadouts/.etc/t2/.loadout/render-gpu.ts): left alone it renders on the Intel iGPU and
 # copies every frame to the AMD card driving the panel, which lags.
-for status in /sys/class/drm/card*-eDP-*/status; do
-  [ "$(cat "$status" 2>/dev/null)" = connected ] || continue
-  card=\${status#/sys/class/drm/}
-  export AQ_DRM_DEVICES="/dev/dri/\${card%%-*}"
-  break
+# The panel's card can still be registering (amdgpu on the first boot after
+# macOS, which leaves the boot GPU on the dGPU): wait up to 5 s for it.
+tries=0
+while [ "$tries" -lt 50 ]; do
+  for status in /sys/class/drm/card*-eDP-*/status; do
+    [ "$(cat "$status" 2>/dev/null)" = connected ] || continue
+    card=\${status#/sys/class/drm/}
+    export AQ_DRM_DEVICES="/dev/dri/\${card%%-*}"
+    break 2
+  done
+  sleep 0.1
+  tries=$((tries + 1))
 done
-unset status card
+unset status card tries
 # <<< Managed by loadout (t2-render-gpu)`;
 
 /** The file's lines, split into the block (markers included) and the rest. */
