@@ -53,12 +53,15 @@ export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
   check: "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
 });
 
-// Hybrid mode from the next boot on, and kept there across macOS boots.
+// The boot GPU kept across macOS boots (t2-boot-gpu.service), Hybrid on a
+// machine where nothing is chosen yet. After that the choice is the T2 panel's
+// Graphics tab (Hybrid or Discrete, which external displays need): whichever
+// is kept isn't drift.
 export const t2HybridBoot = script("t2-hybrid-boot", {
-  description: "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
+  description: "a boot GPU kept, Hybrid unless chosen in the T2 panel (T2 Mac, hybrid graphics; next boot)",
   needsSudo: true,
-  run: "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
-  check: "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+  run: "{ grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated; } && sudo systemctl enable t2-boot-gpu.service",
+  check: "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
 });
 
 // The encoder daemon running, and its sessions closed around sleep.

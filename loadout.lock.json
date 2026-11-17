@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "bee101747fd6a9f4ba3ed9eb6e82f0163b7f944f9453d95bd3c6a8b2ab3dd4a8",
+  "sources": "f9ceda7fbc5f54e3ff355a6f7c8d25db4fd968b359e2c712f407a09d19c2b98d",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1655,9 +1655,9 @@
         "origin": "loadouts/.etc/t2"
       },
       "t2-hybrid-boot": {
-        "description": "boots on the iGPU, the dGPU off until needed (T2 Mac, hybrid graphics; next boot)",
-        "run": "sudo t2-boot-gpu integrated && sudo systemctl enable t2-boot-gpu.service",
-        "check": "[ \"$(t2-boot-gpu)\" = integrated ] && grep -qx BOOT_GPU=integrated /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+        "description": "a boot GPU kept, Hybrid unless chosen in the T2 panel (T2 Mac, hybrid graphics; next boot)",
+        "run": "{ { grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated; } && sudo systemctl enable t2-boot-gpu.service; }",
+        "check": "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
