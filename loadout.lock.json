@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "f9ceda7fbc5f54e3ff355a6f7c8d25db4fd968b359e2c712f407a09d19c2b98d",
+  "sources": "961e793752f4ce7d634b388b1d1366829cb86877494f0bc26111966ed589d686",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1623,13 +1623,6 @@
         "later": "an offline mode downloads gigabytes of models; dictation can wait for them",
         "origin": "loadouts/private_dot_config/.superwhisper"
       },
-      "t2-ave-daemon": {
-        "description": "the T2 video encoders available (T2 Mac)",
-        "run": "sudo systemctl enable --now t2-ave.service t2-ave-suspend.service",
-        "check": "systemctl -q is-enabled t2-ave.service && systemctl -q is-enabled t2-ave-suspend.service && systemctl -q is-active t2-ave.service",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-bcm-firmware": {
         "description": "Wi-Fi firmware from the macOS volume, or apple-bcm-firmware 14.0-1 as the fallback",
         "file": ".loadout/bcm-firmware.ts",
@@ -1647,24 +1640,17 @@
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
-      "t2-force-click-daemon": {
-        "description": "the Force Touch daemon running (T2 Mac)",
-        "run": "sudo systemctl enable --now t2-force-click.service",
-        "check": "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-hybrid-boot": {
-        "description": "a boot GPU kept, Hybrid unless chosen in the T2 panel (T2 Mac, hybrid graphics; next boot)",
-        "run": "{ { grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated; } && sudo systemctl enable t2-boot-gpu.service; }",
-        "check": "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+        "description": "Hybrid graphics unless a boot GPU is chosen in the T2 panel (T2 Mac, dual GPU; next boot)",
+        "run": "{ grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated; }",
+        "check": "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
-      "t2-kbd-backlight-daemon": {
-        "description": "the keyboard backlight idle fade running (T2 Mac)",
-        "run": "sudo systemctl enable --now t2-kbd-backlight.service",
-        "check": "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
+      "t2-key-swaps": {
+        "description": "Ctrl/Fn and Alt/Super swapped on the internal keyboard (T2 Mac)",
+        "file": ".loadout/key-swaps.ts",
+        "check": "file:.loadout/key-swaps.ts check \"$@\"",
         "sudo": true,
         "origin": "loadouts/.etc/t2"
       },
@@ -1684,31 +1670,11 @@
         "check": "file:.loadout/post-update-check.ts check \"$@\"",
         "origin": "loadouts/.etc/t2"
       },
-      "t2-smc-gaugingd": {
-        "description": "battery gauge calibration charges under the charge limit (T2 Mac)",
-        "run": "sudo systemctl enable --now t2-smc-gaugingd.service",
-        "check": "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
       "t2-touch-id-auth": {
         "description": "Touch ID for sudo, polkit and the lock screen (T2 Mac)",
         "file": ".loadout/touch-id.ts",
         "check": "file:.loadout/touch-id.ts check \"$@\"",
         "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-touchbar-switch": {
-        "description": "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
-        "file": ".loadout/touchbar.ts",
-        "check": "file:.loadout/touchbar.ts check \"$@\"",
-        "sudo": true,
-        "origin": "loadouts/.etc/t2"
-      },
-      "t2-truetone-daemon": {
-        "description": "True Tone and automatic brightness running (T2 Mac)",
-        "run": "systemctl --user enable --now t2-truetone.service",
-        "check": "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
         "origin": "loadouts/.etc/t2"
       },
       "tmux-plugins": {
@@ -2032,15 +1998,10 @@
           "github-ssh-key id_ed25519",
           "omarchy-sshd t2-macbook-omarchy t2-macbook-omarchy-2 omarchy-vm work-mac",
           "t2-omarchy-channel",
-          "t2-touchbar-switch",
-          "t2-kbd-backlight-daemon",
-          "t2-truetone-daemon",
+          "t2-key-swaps",
           "t2-hybrid-boot",
-          "t2-ave-daemon",
           "t2-bcm-firmware",
           "t2-charge-limit 90",
-          "t2-smc-gaugingd",
-          "t2-force-click-daemon",
           "t2-touch-id-auth",
           "t2-post-update-check",
           "setup-libvirt",

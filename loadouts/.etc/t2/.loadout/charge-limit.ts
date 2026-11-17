@@ -52,8 +52,7 @@ async function limitSet(limit: string) {
 
 async function unitReady(limit: string) {
   return !existsSync(OLD_UNIT) && existsSync(`/usr/lib/systemd/system/${SERVICE}`) &&
-    (await readTrimmed(CONF)) === confText(limit).replace(/\n+$/, "") &&
-    (await ok($`systemctl -q is-enabled ${SERVICE}`));
+    (await readTrimmed(CONF)) === confText(limit).replace(/\n+$/, "");
 }
 
 async function ready(arg?: string) {
@@ -70,12 +69,11 @@ async function install(arg?: string) {
     if (existsSync(OLD_UNIT)) await $`sudo rm -f ${OLD_UNIT}`;
     await sudoWrite(CONF, confText(limit));
     await $`sudo systemctl daemon-reload`;
-    await $`sudo systemctl enable ${SERVICE}`;
   }
   // Now too, in place: a sysfs attribute can't be replaced the way sudoWrite does (install).
   if (!(await limitSet(limit))) await $`sudo sh -c ${'echo "$1" > "$2"'} sh ${limit} ${LIMIT}`;
   if (!(await limitSet(limit))) throw new Error(`the SMC didn't take a charge limit of ${limit}`);
-  if (!(await unitReady(limit))) throw new Error(`${CONF} and ${SERVICE} aren't in place and enabled after install`);
+  if (!(await unitReady(limit))) throw new Error(`${CONF} isn't in place after install`);
   if (await suspended()) console.log(`The limit is ${limit}%, lifted for now by a calibration charge (battery_charge_limit_suspended).`);
 }
 

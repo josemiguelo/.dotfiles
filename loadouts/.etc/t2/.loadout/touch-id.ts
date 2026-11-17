@@ -32,7 +32,8 @@ const WAIT = 30; // seconds for the daemon to reach the sensor
 
 const noBinding = async () => (await read(CONF)).split("\n").includes("T2_TOUCHID_BIND_USER=none");
 
-const running = async () => (await ok($`systemctl -q is-enabled ${UNIT}`)) && (await ok($`systemctl -q is-active ${UNIT}`));
+// The fork's install enables the daemon; here it only has to be running.
+const running = () => ok($`systemctl -q is-active ${UNIT}`);
 
 /** fprintd lists at least one finger for this user. */
 const fingers = async () => /^\s*-\s*#\d+:/m.test(await out($`fprintd-list ${USER}`.nothrow()));
@@ -66,10 +67,9 @@ async function install() {
   if (!(await noBinding())) {
     await $`sudo sed -i ${"s/^T2_TOUCHID_BIND_USER=.*/T2_TOUCHID_BIND_USER=none/"} ${CONF}`;
     if (!(await noBinding())) throw new Error(`${CONF} has no T2_TOUCHID_BIND_USER line to set`);
-    await $`sudo systemctl enable ${UNIT}`;
     await $`sudo systemctl restart ${UNIT}`;
   } else if (!(await running())) {
-    await $`sudo systemctl enable --now ${UNIT}`;
+    await $`sudo systemctl start ${UNIT}`;
   }
   await waitForReader();
 

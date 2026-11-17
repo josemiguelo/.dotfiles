@@ -1,16 +1,19 @@
 // T2 Macs (MacBookPro16,1) on linux-omarchy with KaiT2en's T2 drivers: the
-// setup only (the packages come with t2-mac and t2-mac-hybrid): the repo, the
-// Wi-Fi firmware fallback, the stable channel, the internal keyboard's
-// switch-over, the services enabled, the charge limit, Touch ID's PAM
-// (docs/t2-macbook.md).
+// owner's preferences and per-person setup only. The packages come with t2-mac
+// and t2-mac-hybrid; the services a feature needs, the keyboard switch-over and
+// the firewall rules are the Omarchy fork's install (fix-t2.sh); per-user
+// pieces (the T2 panel, menu entries, the hook that keeps the repo across
+// `omarchy refresh pacman`) are t2-omarchy-setup's. Here: the repo and its key,
+// the Wi-Fi firmware fallback, the stable channel, the key swaps, Hybrid once,
+// the charge limit, Touch ID's finger and PAM (docs/t2-macbook.md).
 import { omarchy, program, script, via } from "loadout";
 import { onepasswordCli } from "../../private_dot_config/.1password/.1password.loadout.ts";
 
 // The [t2-arch-packages] repo (github.com/josemiguelo/t2-arch-packages):
 // KaiT2en's drivers and tools packaged for linux-omarchy, signed. Omarchy's
-// installer adds it on T2 Macs (the t2-kait2en branch's fix-t2.sh), but
-// `omarchy refresh pacman` rewrites pacman.conf without it; this keeps it, its
-// key trusted, and a pre-refresh-pacman hook that puts it back.
+// installer adds it on T2 Macs (the t2-kait2en branch's fix-t2.sh), and
+// t2-omarchy-plugins' hook puts it back after `omarchy refresh pacman`; this
+// only makes sure it's there and its key trusted.
 export const t2ArchPackagesRepo = program("t2-arch-packages-repo", {
   description: "the signed [t2-arch-packages] pacman repo, kept across pacman.conf refreshes",
   install: [via(omarchy, { managedBy: ".loadout/arch-packages-repo.ts", needsSudo: true })],
@@ -45,46 +48,23 @@ export const t2OmarchyChannel = script("t2-omarchy-channel", {
   runAfter: [t2ArchPackagesRepo],
 });
 
-// The keyboard backlight's idle fade (t2-kbd-backlight) enabled.
-export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
-  description: "the keyboard backlight idle fade running (T2 Mac)",
-  needsSudo: true,
-  run: "sudo systemctl enable --now t2-kbd-backlight.service",
-  check: "systemctl -q is-enabled t2-kbd-backlight.service && systemctl -q is-active t2-kbd-backlight.service",
-});
-
-// The boot GPU kept across macOS boots (t2-boot-gpu.service), Hybrid on a
-// machine where nothing is chosen yet. After that the choice is the T2 panel's
-// Graphics tab (Hybrid or Discrete, which external displays need): whichever
-// is kept isn't drift.
+// Hybrid as the boot GPU on a machine where nothing is chosen yet (the fork's
+// t2-boot-gpu.service keeps the choice across macOS boots). After that the
+// choice is the T2 panel's Graphics tab (Hybrid or Discrete, which external
+// displays need): whichever is kept isn't drift.
 export const t2HybridBoot = script("t2-hybrid-boot", {
-  description: "a boot GPU kept, Hybrid unless chosen in the T2 panel (T2 Mac, hybrid graphics; next boot)",
+  description: "Hybrid graphics unless a boot GPU is chosen in the T2 panel (T2 Mac, dual GPU; next boot)",
   needsSudo: true,
-  run: "{ grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated; } && sudo systemctl enable t2-boot-gpu.service",
-  check: "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf && systemctl -q is-enabled t2-boot-gpu.service",
+  run: "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf 2>/dev/null || sudo t2-boot-gpu integrated",
+  check: "grep -qE '^BOOT_GPU=(integrated|discrete)$' /etc/t2-boot-gpu.conf",
 });
 
-// The encoder daemon running, and its sessions closed around sleep.
-export const t2AveDaemon = script("t2-ave-daemon", {
-  description: "the T2 video encoders available (T2 Mac)",
-  needsSudo: true,
-  run: "sudo systemctl enable --now t2-ave.service t2-ave-suspend.service",
-  check: "systemctl -q is-enabled t2-ave.service && systemctl -q is-enabled t2-ave-suspend.service && systemctl -q is-active t2-ave.service",
-});
-
-export const t2TruetoneDaemon = script("t2-truetone-daemon", {
-  description: "True Tone and automatic brightness running (T2 Mac)",
-  run: "systemctl --user enable --now t2-truetone.service",
-  check: "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
-});
-
-// The internal keyboard and Touch Bar on KaiT2en's drivers: t2hid (with the
-// Fn/Ctrl and Alt/Super swaps) in the initramfs in place of hid-apple, the
-// in-kernel Touch Bar drivers blacklisted, the user in the t2-touchbar group
-// and the daemon enabled. Applies at the next boot (limine-mkinitcpio).
-export const t2TouchbarSwitch = script("t2-touchbar-switch", {
-  description: "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
-  managedBy: ".loadout/touchbar.ts",
+// The owner's layout on the internal keyboard (t2hid, which the fork's install
+// puts in place): Ctrl in the bottom-left corner, Fn where "control" is,
+// Alt/Super swapped. At once, and in the initramfs for the unlock prompt.
+export const t2KeySwaps = script("t2-key-swaps", {
+  description: "Ctrl/Fn and Alt/Super swapped on the internal keyboard (T2 Mac)",
+  managedBy: ".loadout/key-swaps.ts",
   needsSudo: true,
 });
 
@@ -92,31 +72,12 @@ export const t2TouchbarSwitch = script("t2-touchbar-switch", {
 // `args(t2ChargeLimit, "90")`: the SMC stops charging 5 points below the
 // limit (90 holds 85 %), so the argument is the limit, not the level reached.
 // The SMC keeps it across reboots, but macOS
-// may change it, so a boot unit (t2-charge-limit.service) writes it again;
+// may change it, so the fork's boot unit (t2-charge-limit.service) writes it again;
 // t2-smc-gaugingd lifts it for calibration charges.
 export const t2ChargeLimit = script("t2-charge-limit", {
   description: "battery charge limit in the T2 SMC (T2 Mac)",
   managedBy: ".loadout/charge-limit.ts",
   needsSudo: true,
-});
-
-// A permanent charge limit keeps the battery gauge from recalibrating:
-// t2-smc-gaugingd lifts it for a full charge when the gauge's DOD0 is 3 days
-// old or the last full charge 21, as powerd does on macOS.
-export const t2SmcGaugingd = script("t2-smc-gaugingd", {
-  description: "battery gauge calibration charges under the charge limit (T2 Mac)",
-  needsSudo: true,
-  run: "sudo systemctl enable --now t2-smc-gaugingd.service",
-  check: "systemctl -q is-enabled t2-smc-gaugingd.service && systemctl -q is-active t2-smc-gaugingd.service",
-});
-
-// t2-force-click's root daemon: applies the saved click settings at boot and
-// runs the action bound to a force click.
-export const t2ForceClickDaemon = script("t2-force-click-daemon", {
-  description: "the Force Touch daemon running (T2 Mac)",
-  needsSudo: true,
-  run: "sudo systemctl enable --now t2-force-click.service",
-  check: "systemctl -q is-enabled t2-force-click.service && systemctl -q is-active t2-force-click.service",
 });
 
 // An Omarchy post-update hook that asks loadout about the T2 items after each
@@ -127,7 +88,8 @@ export const t2PostUpdateCheck = script("t2-post-update-check", {
 });
 
 // Touch ID for sudo, polkit and the lock screen, through Omarchy's own
-// fingerprint setup (two touches): the daemon running, then that setup binds
+// fingerprint setup (two touches): the daemon (the fork enables it) told to
+// bind no user itself, then that setup binds
 // the finger enrolled in macOS and adds the PAM lines. Asks to log into macOS
 // once when the Secure Enclave reports no fingers.
 export const t2TouchIdAuth = script("t2-touch-id-auth", {
