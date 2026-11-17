@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-16T21:35:11.552665260Z",
+  "updatedAt": "2026-11-17T01:00:43.040042271Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -390,7 +390,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -699,35 +699,10 @@
       "lastRun": null,
       "exitCode": null
     },
-    "t2-kbd-backlight-sync": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
-    },
-    "t2-airshare-menu": {
-      "status": "done",
-      "lastRun": "2026-11-15T19:53:47.412274819Z",
-      "exitCode": 0
-    },
-    "t2-gmux-backlight": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:40:34.203028728Z",
-      "exitCode": 0
-    },
     "t2-bcm-firmware": {
       "status": "done",
       "lastRun": "2026-11-06T03:06:37.809469243Z",
       "exitCode": 0
-    },
-    "t2-render-gpu": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:40:41.473465786Z",
-      "exitCode": 0
-    },
-    "t2-ibridge-unmanaged": {
-      "status": "done",
-      "lastRun": "2026-11-12T15:12:11.206717403Z",
-      "exitCode": 1
     },
     "t2-charge-limit": {
       "status": "done",
