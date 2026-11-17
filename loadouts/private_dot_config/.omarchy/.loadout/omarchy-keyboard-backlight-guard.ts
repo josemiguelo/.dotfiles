@@ -76,7 +76,7 @@ const affected = () => savesWhen(`${OMARCHY_BIN}/${COMMAND}`, 0);
 
 const guarded = async () => (await executableHolds(WRAPPER, wrapper)) && (await overrideActive(COMMAND));
 
-/** Our wrapper is there (another script may put its own at the same path: the T2's t2-kbd-backlight-sync). */
+/** Our wrapper is there. */
 const ours = () => executableHolds(WRAPPER, wrapper);
 
 const check = async () => ((await affected()) ? guarded() : !(await ours()));

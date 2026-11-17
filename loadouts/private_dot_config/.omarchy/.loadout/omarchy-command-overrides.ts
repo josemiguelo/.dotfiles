@@ -5,8 +5,8 @@
 // (default/hypr/envs.lua), ahead of any system directory, so a block in
 // ~/.config/hypr/hyprland.lua — loaded after envs.lua — puts this directory in
 // front of it the same way, removing it first so reloads don't stack it. The
-// fixes that need a replacement (omarchy-keyboard-backlight-guard,
-// t2-gmux-backlight) each put or remove their own wrapper there.
+// fixes that need a replacement (omarchy-keyboard-backlight-guard) put or
+// remove their own wrapper there.
 // Install reloads Hyprland and restarts the shell, so the shell runs with the
 // PATH — only when the block changed or the shell doesn't have it yet. The
 // check reads the PATH the evaluated config produces (hypr-option.lua

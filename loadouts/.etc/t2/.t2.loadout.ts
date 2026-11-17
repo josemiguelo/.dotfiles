@@ -1,6 +1,8 @@
-// T2 Macs (MacBookPro16,1) on linux-omarchy with KaiT2en's T2 drivers: their
-// packages and repo, the Wi-Fi firmware, the EC clock, the internal keyboard,
-// the screen backlight and the GPU Hyprland renders on (docs/t2-macbook.md).
+// T2 Macs (MacBookPro16,1) on linux-omarchy with KaiT2en's T2 drivers: the
+// setup only (the packages come with t2-mac and t2-mac-hybrid): the repo, the
+// Wi-Fi firmware fallback, the stable channel, the internal keyboard's
+// switch-over, the services enabled, the charge limit, Touch ID's PAM
+// (docs/t2-macbook.md).
 import { omarchy, program, script, via } from "loadout";
 import { onepasswordCli } from "../../private_dot_config/.1password/.1password.loadout.ts";
 
@@ -43,10 +45,7 @@ export const t2OmarchyChannel = script("t2-omarchy-channel", {
   runAfter: [t2ArchPackagesRepo],
 });
 
-// The internal keyboard and Touch Bar on KaiT2en's drivers: t2hid (with the
-// Fn/Ctrl and Alt/Super swaps) in the initramfs in place of hid-apple, the
-// in-kernel Touch Bar drivers blacklisted, the user in the t2-touchbar group
-// and the daemon enabled. Applies at the next boot (limine-mkinitcpio).
+// The keyboard backlight's idle fade (t2-kbd-backlight) enabled.
 export const t2KbdBacklightDaemon = script("t2-kbd-backlight-daemon", {
   description: "the keyboard backlight idle fade running (T2 Mac)",
   needsSudo: true,
@@ -76,6 +75,10 @@ export const t2TruetoneDaemon = script("t2-truetone-daemon", {
   check: "systemctl --user -q is-enabled t2-truetone.service && systemctl --user -q is-active t2-truetone.service",
 });
 
+// The internal keyboard and Touch Bar on KaiT2en's drivers: t2hid (with the
+// Fn/Ctrl and Alt/Super swaps) in the initramfs in place of hid-apple, the
+// in-kernel Touch Bar drivers blacklisted, the user in the t2-touchbar group
+// and the daemon enabled. Applies at the next boot (limine-mkinitcpio).
 export const t2TouchbarSwitch = script("t2-touchbar-switch", {
   description: "internal keyboard and Touch Bar on t2hid, t2touchbar and t2-touchbar (T2 Mac; next boot)",
   managedBy: ".loadout/touchbar.ts",
@@ -120,9 +123,6 @@ export const t2PostUpdateCheck = script("t2-post-update-check", {
   managedBy: ".loadout/post-update-check.ts",
 });
 
-// The T2's internal USB network link (05ac:8233), macOS's line to the T2
-// chip: no DHCP server answers on it, so NetworkManager would retry it every
-// 45 s. A udev rule (also written by the fork's fix-t2.sh) unmanages it.
 // Touch ID for sudo, polkit and the lock screen, through Omarchy's own
 // fingerprint setup (two touches): the daemon running, then that setup binds
 // the finger enrolled in macOS and adds the PAM lines. Asks to log into macOS
