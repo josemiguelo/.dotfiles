@@ -5,11 +5,11 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-17T02:51:18.404425232Z",
+  "updatedAt": "2026-11-17T19:31:37.161801785Z",
   "programs": {
     "1password": {
       "status": "installed",
-      "version": "8.12.44",
+      "version": "8.12.46",
       "reason": null
     },
     "1password-cli": {
@@ -19,7 +19,7 @@
     },
     "antigravity": {
       "status": "installed",
-      "version": "2.6.0",
+      "version": "2.7.0",
       "reason": null
     },
     "anydesk": {
@@ -44,7 +44,7 @@
     },
     "brave": {
       "status": "installed",
-      "version": "1.99.56",
+      "version": "1.99.57",
       "reason": null
     },
     "btop": {
@@ -194,7 +194,7 @@
     },
     "mise": {
       "status": "installed",
-      "version": "2026.11.6",
+      "version": "2026.11.9",
       "reason": null
     },
     "ngrok": {
@@ -264,7 +264,7 @@
     },
     "slack": {
       "status": "installed",
-      "version": "4.53.276",
+      "version": "4.53.287",
       "reason": null
     },
     "solaar": {
@@ -304,7 +304,7 @@
     },
     "teams-for-linux": {
       "status": "installed",
-      "version": "2.28.0",
+      "version": "2.32.0",
       "reason": null
     },
     "tmux": {
@@ -390,7 +390,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -575,7 +575,7 @@
       "exitCode": 0
     },
     "onepassword-cli": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-11-12T02:33:57.115662436Z",
       "exitCode": 0
     },
@@ -674,30 +674,15 @@
       "lastRun": null,
       "exitCode": null
     },
-    "t2-touchbar-switch": {
+    "t2-key-swaps": {
       "status": "done",
-      "lastRun": null,
-      "exitCode": null
-    },
-    "t2-kbd-backlight-daemon": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
-    },
-    "t2-truetone-daemon": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
+      "lastRun": "2026-11-17T19:31:34.616588016Z",
+      "exitCode": 0
     },
     "t2-hybrid-boot": {
       "status": "done",
       "lastRun": "2026-11-16T16:28:33.329361946Z",
       "exitCode": 0
-    },
-    "t2-ave-daemon": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
     },
     "t2-bcm-firmware": {
       "status": "done",
@@ -708,16 +693,6 @@
       "status": "done",
       "lastRun": "2026-11-16T17:41:45.802537413Z",
       "exitCode": 0
-    },
-    "t2-smc-gaugingd": {
-      "status": "done",
-      "lastRun": "2026-11-12T15:40:23.670024522Z",
-      "exitCode": 0
-    },
-    "t2-force-click-daemon": {
-      "status": "done",
-      "lastRun": null,
-      "exitCode": null
     },
     "t2-touch-id-auth": {
       "status": "done",
