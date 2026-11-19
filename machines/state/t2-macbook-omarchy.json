@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-17T19:32:24.931947269Z",
+  "updatedAt": "2026-11-19T22:59:25.799130441Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -575,7 +575,7 @@
       "exitCode": 0
     },
     "onepassword-cli": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-11-12T02:33:57.115662436Z",
       "exitCode": 0
     },
@@ -746,7 +746,7 @@
     },
     "kait2en-dev": {
       "status": "done",
-      "lastRun": "2026-11-12T02:34:29.176674227Z",
+      "lastRun": "2026-11-19T22:59:23.262482951Z",
       "exitCode": 0
     }
   },

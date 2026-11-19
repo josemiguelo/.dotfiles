@@ -46,6 +46,11 @@ Description=Check KaiT2en and linux-omarchy for changes to the T2 packages
 [Service]
 Type=oneshot
 ExecStart=${SYNC} notify
+# A new kernel means building every T2 DKMS module (make -j$(nproc)): at idle
+# CPU and disk priority it never makes the desktop sluggish.
+Nice=19
+CPUSchedulingPolicy=idle
+IOSchedulingClass=idle
 `;
 
 const TIMER = `# Managed by loadout (kait2en-dev).
