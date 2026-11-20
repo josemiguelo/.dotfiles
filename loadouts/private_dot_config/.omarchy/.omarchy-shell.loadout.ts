@@ -73,8 +73,10 @@ export const widget = (id: string, section: string, where: string, neighbour: st
 // Omarchy install: its plugins, which widgets it shows, where the widgets sit
 // and the settings that aren't stock. A stock widget at its stock place and
 // settings is left out. A profile runs `omarchyBar()`, so the
-// settings live beside the scripts that apply them.
-export const omarchyBarFn = () => [
+// settings live beside the scripts that apply them. A profile for some of
+// those machines passes what only they add (`extra`): its call replaces the
+// shared one, since a profile's args win over the profile it extends.
+export const omarchyBarFn = (extra: { plugins?: string[]; widgets?: string[] } = {}) => [
   args(omarchyBar, "position=top", "size=24", "background=glassy", "off=omarchy.workspaces"),
   args(
     omarchyPlugins,
@@ -83,6 +85,7 @@ export const omarchyBarFn = () => [
     "https://github.com/binoymanoj/pomodoro-omarchy.git",
     "https://github.com/sumdahl/omarchy-plugin-media.git",
     "https://github.com/josemiguelo/omarchy-harpoon.git",
+    ...(extra.plugins ?? []),
   ),
   args(omarchyBarOwnWidgets, "josemiguelo.workspace-layout", "josemiguelo.theme-mode"),
   args(
@@ -104,6 +107,7 @@ export const omarchyBarFn = () => [
     // Stock, but listed: a stray drag on the bar drops it in another section,
     // and only a listed widget gets put back.
     widget("omarchy.indicators", "centerBegin", "at", "0"),
+    ...(extra.widgets ?? []),
   ),
   omarchyKeystrokeWindows,
   omarchyPomodoro,

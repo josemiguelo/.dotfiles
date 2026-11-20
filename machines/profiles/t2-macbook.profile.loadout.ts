@@ -10,6 +10,7 @@ import { fuse2, miyo, miyoLauncher } from "../../loadouts/private_dot_config/.mi
 import { obsidianCopilot, obsidianVault } from "../../loadouts/private_dot_config/.obsidian/.obsidian.loadout.ts";
 import { omarchySudolessDocker } from "../../loadouts/private_dot_config/.omarchy/.omarchy-apps.loadout.ts";
 import { omarchyScratchpadOpacity } from "../../loadouts/private_dot_config/.omarchy/.omarchy-scratchpad.loadout.ts";
+import { omarchyBarFn, widget } from "../../loadouts/private_dot_config/.omarchy/.omarchy-shell.loadout.ts";
 import { solaar, solaarNoAutostart } from "../../loadouts/private_dot_config/.solaar.loadout.ts";
 import { superwhisperGpu } from "../../loadouts/private_dot_config/.superwhisper/.superwhisper.loadout.ts";
 import { rocmSmiLib } from "../../loadouts/private_dot_config/btop/.btop.loadout.ts";
@@ -89,6 +90,13 @@ export const t2Macbook = profile<Data>("t2-macbook", {
       "8",      // Miyo results per search: each is text the 32K context has to hold
     ),
     args(miyoLauncher, "--vulkan-gpu Intel"),  // its embeddings on the iGPU, off the Radeon
+    // The shared bar, plus a switch in the tray to start and stop llama-server
+    // (llama-toggle: systemd user units only; its models setting names just
+    // llama-server.service, or it would list llama-warmup too).
+    omarchyBarFn({
+      plugins: ["https://github.com/thesilentbear/llama-toggle.git"],
+      widgets: [widget("dev.thesilentbear.llama-toggle", "tray", "at", "0")],
+    }),
     // Dictation on the iGPU too (Intel UHD 630): its models took ~2.9 GB of the
     // Radeon, and llama-server crashed beside them.
     args(superwhisperGpu, "8086:3e9b"),

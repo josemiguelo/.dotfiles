@@ -1,0 +1,7 @@
+{
+  "models": {
+    "items": [
+      { "unit": "llama-server.service", "label": "Qwen 3.6 35B-A3B", "short": "QWEN" }
+    ]
+  }
+}

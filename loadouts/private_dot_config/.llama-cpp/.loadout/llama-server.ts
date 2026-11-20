@@ -24,9 +24,10 @@
 //   or the skills change the setup, the next first message is slow once, and
 //   from the next server start the warm-up replays the new one.
 //
-// check: both units as the arguments make them, enabled, and the server running
-// with memory on its GPU (not fallen back to the CPU), which other programs
-// don't crowd (more than SHARE_LIMIT_MIB of theirs on it).
+// check: both units as the arguments make them and enabled (it starts at
+// login); stopped is fine (switched off from the tray, llama-toggle), and
+// running it must hold memory on its GPU (not fallen back to the CPU), which
+// other programs don't crowd (more than SHARE_LIMIT_MIB of theirs on it).
 // install: writes what differs and (re)starts the server; the warm-up follows.
 // It refuses to without llm-model's verified model.
 // usage: llama-server.ts [check|install] <args…>
@@ -206,8 +207,11 @@ async function ready(...args: string[]) {
     (await read(WARMUP_UNIT)) === warmupUnit &&
     (await enabled("llama-server.service")) &&
     (await enabled("llama-warmup.service")) &&
-    (await active("llama-server.service")) &&
-    (!gpu || ((st) => st.onGpu && !crowded(st.others))(gpuState(await serverPid())))
+    // Stopped is fine (the tray's switch, llama-toggle, turns it off; it
+    // starts again at the next login); running, it must be on its GPU.
+    (!(await active("llama-server.service")) ||
+      !gpu ||
+      ((st) => st.onGpu && !crowded(st.others))(gpuState(await serverPid())))
   );
 }
 
