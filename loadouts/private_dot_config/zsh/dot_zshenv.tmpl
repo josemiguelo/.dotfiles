@@ -14,11 +14,3 @@ export ZDOTDIR=${${(%):-%x}:h}
 # ~/.config/mise, not project configs); as a setting in that config it comes
 # too late, after mise has already tried to load them.
 export MISE_IGNORED_CONFIG_PATHS="$HOME/.local/share/chezmoi:$HOME/.local/share/chezmoi__worktrees"
-{{- if (includeTemplate "loadout/machine" . | fromJson).miyo }}
-
-# Miyo's CLI (docs/local-llm.md), here because agents run it from `zsh -c`,
-# which reads no .zshrc. Miyo appends this to ~/.zshenv itself unless its own
-# PATH already has it; the session inherits this file's exports, so after a
-# login it doesn't. Not guarded on the folder: Miyo checks before it creates it.
-[[ :$PATH: == *:$HOME/.miyo/bin:* ]] || path=( $HOME/.miyo/bin $path )
-{{- end }}

@@ -23,9 +23,9 @@ export const llmModel = script("llm-model", {
   later: "a ~21 GB download; nothing else needs it",
 });
 
-// llama-server as a user service, and the warm-up that pre-reads Agent Chat's
-// setup prompt after every start:
-// args(llamaServer, "VAR=value"…, "--model <file>", "<llama-server flags>"…).
+// llama-server as a user service on the GPU named by a word of its name, and
+// the warm-up that pre-reads Agent Chat's setup prompt after every start:
+// args(llamaServer, "--vulkan-gpu <name>", "VAR=value"…, "--model <file>", "<llama-server flags>"…).
 export const llamaServer = script("llama-server", {
   description: "llama-server user service, with its prompt-cache warm-up",
   managedBy: ".loadout/llama-server.ts",

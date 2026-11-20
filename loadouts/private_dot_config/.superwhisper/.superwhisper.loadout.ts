@@ -18,3 +18,12 @@ export const superwhisperSettings = script("superwhisper-settings", {
   managedBy: ".loadout/superwhisper-settings.ts",
   runAfter: [omarchyDefaultDictation],
 });
+
+// Linux: its offline workers on one GPU, by PCI id (`lspci -nn`), where a
+// discrete GPU is someone else's (the T2's Radeon is llama-server's):
+// `args(superwhisperGpu, "8086:3e9b")`.
+export const superwhisperGpu = script("superwhisper-gpu", {
+  description: "Superwhisper's offline workers on one GPU",
+  managedBy: ".loadout/gpu.ts",
+  runAfter: [omarchyDefaultDictation],
+});

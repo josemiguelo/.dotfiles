@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "f0bd9f0b8ded28bd185fb41d53013d1289410e02b2ea90ca7eecee3a4c566562",
+  "sources": "868b0ab25b55e577020ff324bbe630bc8d902c85792a7a936d930c9d6c52b03f",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -1704,6 +1704,15 @@
         ],
         "origin": "loadouts/private_dot_config"
       },
+      "superwhisper-gpu": {
+        "description": "Superwhisper's offline workers on one GPU",
+        "file": ".loadout/gpu.ts",
+        "check": "file:.loadout/gpu.ts check \"$@\"",
+        "after": [
+          "scripts.omarchy-default-dictation"
+        ],
+        "origin": "loadouts/private_dot_config/.superwhisper"
+      },
       "superwhisper-settings": {
         "description": "Superwhisper's processing mode and settings",
         "file": ".loadout/superwhisper-settings.ts",
@@ -2107,10 +2116,11 @@
           "omarchy-scratchpad-opacity 0.99",
           "solaar-no-autostart",
           "llm-model unsloth/Qwen3.6-35B-A3B-GGUF a483e9e6cbd595906af30beda3187c2663a1118c Qwen3.6-35B-A3B-UD-Q4_K_M.gguf ac0e2c1189e055faa36eff361580e79c5bd6f8e76bffb4ce547f167d53e31a61",
-          "llama-server GGML_VK_VISIBLE_DEVICES=1 GGML_OP_OFFLOAD_MIN_BATCH=1024 --model Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --alias qwen3.6-35b-a3b --host 127.0.0.1 --port 8080 -c 32768 -t 8 -np 1 -ngl 99 --n-cpu-moe 41 -ub 2048 -b 2048 -fa on --jinja --chat-template-kwargs '{\"enable_thinking\":false}'",
+          "llama-server --vulkan-gpu Radeon GGML_OP_OFFLOAD_MIN_BATCH=1024 --model Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --alias qwen3.6-35b-a3b --host 127.0.0.1 --port 8080 -c 32768 -t 8 -np 1 -ngl 99 --n-cpu-moe 41 -ub 2048 -b 2048 -fa on --jinja --chat-template-kwargs '{\"enable_thinking\":false}'",
           "obsidian-vault ~/Obsidian/vaults/jm",
           "obsidian-copilot ~/Obsidian/vaults/jm http://127.0.0.1:8080/v1 qwen3.6-35b-a3b 32768 8",
-          "miyo-launcher GGML_VK_VISIBLE_DEVICES=0",
+          "miyo-launcher --vulkan-gpu Intel",
+          "superwhisper-gpu 8086:3e9b",
           "intentional-sync t2-macbook",
           "bare-repos t2-arch-packages omarchy omarchy-iso",
           "kait2en-dev"

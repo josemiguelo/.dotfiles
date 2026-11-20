@@ -11,6 +11,7 @@ import { obsidianCopilot, obsidianVault } from "../../loadouts/private_dot_confi
 import { omarchySudolessDocker } from "../../loadouts/private_dot_config/.omarchy/.omarchy-apps.loadout.ts";
 import { omarchyScratchpadOpacity } from "../../loadouts/private_dot_config/.omarchy/.omarchy-scratchpad.loadout.ts";
 import { solaar, solaarNoAutostart } from "../../loadouts/private_dot_config/.solaar.loadout.ts";
+import { superwhisperGpu } from "../../loadouts/private_dot_config/.superwhisper/.superwhisper.loadout.ts";
 import { rocmSmiLib } from "../../loadouts/private_dot_config/btop/.btop.loadout.ts";
 import { omarchyProfile } from "./omarchy.profile.loadout.ts";
 
@@ -64,7 +65,7 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     ),
     args(
       llamaServer,
-      "GGML_VK_VISIBLE_DEVICES=1",       // the Radeon (Vulkan0 is the Intel iGPU)
+      "--vulkan-gpu Radeon",             // by name: Vulkan's numbers follow the boot GPU
       "GGML_OP_OFFLOAD_MIN_BATCH=1024",  // prompts under 1024 tokens are faster on the CPU
       "--model Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
       "--alias qwen3.6-35b-a3b",
@@ -87,6 +88,9 @@ export const t2Macbook = profile<Data>("t2-macbook", {
       "32768",  // llama-server's -c, passed on to OpenCode so it doesn't assume 200K
       "8",      // Miyo results per search: each is text the 32K context has to hold
     ),
-    args(miyoLauncher, "GGML_VK_VISIBLE_DEVICES=0"),  // its embeddings on the Intel iGPU
+    args(miyoLauncher, "--vulkan-gpu Intel"),  // its embeddings on the iGPU, off the Radeon
+    // Dictation on the iGPU too (Intel UHD 630): its models took ~2.9 GB of the
+    // Radeon, and llama-server crashed beside them.
+    args(superwhisperGpu, "8086:3e9b"),
   ],
 });

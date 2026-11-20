@@ -18,8 +18,8 @@ export const miyo = program("miyo", {
 });
 
 // Its launcher entry and login autostart (Copilot's search needs it running),
-// with the machine's environment for it:
-// args(miyoLauncher, "GGML_VK_VISIBLE_DEVICES=<device>").
+// its embedding server on the GPU named by a word of its name, and no
+// dashboard at login: args(miyoLauncher, "--vulkan-gpu <name>", "VAR=value"…).
 export const miyoLauncher = script("miyo-launcher", {
   description: "Miyo's launcher entry and login autostart",
   managedBy: ".loadout/launcher.ts",

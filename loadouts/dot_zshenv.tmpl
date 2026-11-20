@@ -3,3 +3,12 @@
 # .zshenv, so everything every zsh needs is set there.
 export ZDOTDIR=~/.config/zsh
 [[ -f $ZDOTDIR/.zshenv ]] && . $ZDOTDIR/.zshenv
+{{- if (includeTemplate "loadout/machine" . | fromJson).miyo }}
+# Miyo's CLI on PATH, as Miyo writes it (docs/local-llm.md): it rewrites this
+# file at every launch after a reboot unless its marked block is here, and
+# leaves an identical one alone. Here and not in $ZDOTDIR's: Miyo only looks
+# here. Shells that skip this file inherit PATH from the session.
+# >>> Miyo CLI >>>
+export PATH="{{ .chezmoi.homeDir }}/.miyo/bin:$PATH"
+# <<< Miyo CLI <<<
+{{- end }}
