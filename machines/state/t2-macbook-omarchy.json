@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-20T23:19:21.711802604Z",
+  "updatedAt": "2026-11-20T23:54:06.869282787Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -410,7 +410,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "pending",
+      "status": "done",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -552,36 +552,6 @@
     "omarchy-theme-mode": {
       "status": "done",
       "lastRun": "2026-11-12T02:40:08.882863526Z",
-      "exitCode": 0
-    },
-    "omarchy-bar": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:39:32.543345729Z",
-      "exitCode": 0
-    },
-    "omarchy-plugins": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:39:32.090422630Z",
-      "exitCode": 0
-    },
-    "omarchy-bar-own-widgets": {
-      "status": "done",
-      "lastRun": "2026-11-15T20:42:30.547459159Z",
-      "exitCode": 0
-    },
-    "omarchy-bar-widgets": {
-      "status": "done",
-      "lastRun": "2026-11-15T20:42:59.905411178Z",
-      "exitCode": 0
-    },
-    "omarchy-keystroke-windows": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:39:55.431724854Z",
-      "exitCode": 0
-    },
-    "omarchy-pomodoro": {
-      "status": "done",
-      "lastRun": "2026-11-12T02:39:56.926548470Z",
       "exitCode": 0
     },
     "omarchy-workspace-layout-menu": {
@@ -778,6 +748,36 @@
       "status": "done",
       "lastRun": null,
       "exitCode": null
+    },
+    "omarchy-bar": {
+      "status": "done",
+      "lastRun": "2026-11-12T02:39:32.543345729Z",
+      "exitCode": 0
+    },
+    "omarchy-plugins": {
+      "status": "done",
+      "lastRun": "2026-11-12T02:39:32.090422630Z",
+      "exitCode": 0
+    },
+    "omarchy-bar-own-widgets": {
+      "status": "done",
+      "lastRun": "2026-11-15T20:42:30.547459159Z",
+      "exitCode": 0
+    },
+    "omarchy-bar-widgets": {
+      "status": "done",
+      "lastRun": "2026-11-15T20:42:59.905411178Z",
+      "exitCode": 0
+    },
+    "omarchy-keystroke-windows": {
+      "status": "done",
+      "lastRun": "2026-11-12T02:39:55.431724854Z",
+      "exitCode": 0
+    },
+    "omarchy-pomodoro": {
+      "status": "done",
+      "lastRun": "2026-11-12T02:39:56.926548470Z",
+      "exitCode": 0
     },
     "superwhisper-gpu": {
       "status": "done",
