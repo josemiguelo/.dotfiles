@@ -5,7 +5,7 @@
   "distro": "omarchy",
   "arch": "x86_64",
   "toolVersion": "5.0.0",
-  "updatedAt": "2026-11-19T22:59:25.799130441Z",
+  "updatedAt": "2026-11-20T23:19:21.711802604Z",
   "programs": {
     "1password": {
       "status": "installed",
@@ -34,7 +34,7 @@
     },
     "awscli": {
       "status": "installed",
-      "version": "2.40.0",
+      "version": "2.41.2",
       "reason": null
     },
     "bat": {
@@ -107,6 +107,11 @@
       "version": "1.18.4",
       "reason": null
     },
+    "fuse2": {
+      "status": "installed",
+      "version": "2.9.9",
+      "reason": null
+    },
     "fzf": {
       "status": "installed",
       "version": "0.74.5",
@@ -115,6 +120,11 @@
     "gcc": {
       "status": "installed",
       "version": "16.2.1",
+      "reason": null
+    },
+    "ggml-vulkan": {
+      "status": "installed",
+      "version": "0.26.0",
       "reason": null
     },
     "ghostscript": {
@@ -187,6 +197,11 @@
       "version": "4.5.2",
       "reason": null
     },
+    "llama-cpp": {
+      "status": "installed",
+      "version": "0.6.0",
+      "reason": null
+    },
     "meson": {
       "status": "installed",
       "version": "1.12.1",
@@ -195,6 +210,11 @@
     "mise": {
       "status": "installed",
       "version": "2026.11.9",
+      "reason": null
+    },
+    "miyo": {
+      "status": "installed",
+      "version": null,
       "reason": null
     },
     "ngrok": {
@@ -334,7 +354,7 @@
     },
     "vim": {
       "status": "installed",
-      "version": "9.2.1320",
+      "version": "9.2.1373",
       "reason": null
     },
     "virt-install": {
@@ -390,7 +410,7 @@
       "exitCode": 1
     },
     "dotfiles-push": {
-      "status": "done",
+      "status": "pending",
       "lastRun": "2026-10-27T13:56:44.341985062Z",
       "exitCode": 1
     },
@@ -506,7 +526,7 @@
     },
     "android-sdk": {
       "status": "pending",
-      "lastRun": "2026-11-14T02:12:23.040891720Z",
+      "lastRun": "2026-11-20T21:59:07.272063088Z",
       "exitCode": 1
     },
     "omarchy-hypr-config": {
@@ -691,7 +711,7 @@
     },
     "t2-charge-limit": {
       "status": "done",
-      "lastRun": "2026-11-16T17:41:45.802537413Z",
+      "lastRun": "2026-11-20T21:59:06.933682912Z",
       "exitCode": 0
     },
     "t2-touch-id-auth": {
@@ -730,6 +750,36 @@
       "exitCode": 0
     },
     "solaar-no-autostart": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "llm-model": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "llama-server": {
+      "status": "done",
+      "lastRun": "2026-11-20T23:19:19.456226047Z",
+      "exitCode": 0
+    },
+    "obsidian-vault": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "obsidian-copilot": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "miyo-launcher": {
+      "status": "done",
+      "lastRun": null,
+      "exitCode": null
+    },
+    "superwhisper-gpu": {
       "status": "done",
       "lastRun": null,
       "exitCode": null
