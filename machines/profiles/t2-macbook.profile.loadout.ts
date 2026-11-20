@@ -5,6 +5,9 @@ import { omarchySshd } from "../../loadouts/.ssh/.omarchy-sshd.loadout.ts";
 import { sshKey } from "../../loadouts/.ssh/.ssh.loadout.ts";
 import { omarchyActivityMonitorSize } from "../../loadouts/private_dot_config/.hypr/.hyprland.loadout.ts";
 import { archVirtualization, setupLibvirt, ufwLibvirt } from "../../loadouts/private_dot_config/.libvirt/.libvirt.loadout.ts";
+import { ggmlVulkan, llamaCpp, llamaServer, llmModel } from "../../loadouts/private_dot_config/.llama-cpp/.llama-cpp.loadout.ts";
+import { fuse2, miyo, miyoLauncher } from "../../loadouts/private_dot_config/.miyo/.miyo.loadout.ts";
+import { obsidianCopilot, obsidianVault } from "../../loadouts/private_dot_config/.obsidian/.obsidian.loadout.ts";
 import { omarchySudolessDocker } from "../../loadouts/private_dot_config/.omarchy/.omarchy-apps.loadout.ts";
 import { omarchyScratchpadOpacity } from "../../loadouts/private_dot_config/.omarchy/.omarchy-scratchpad.loadout.ts";
 import { solaar, solaarNoAutostart } from "../../loadouts/private_dot_config/.solaar.loadout.ts";
@@ -16,6 +19,7 @@ import { omarchyProfile } from "./omarchy.profile.loadout.ts";
 // (named by its hostname, so each keeps its own state file).
 export const t2Macbook = profile<Data>("t2-macbook", {
   extends: [omarchyProfile],
+  data: { miyo: true },
   install: [
     via(omarchy, [
       // the [t2-arch-packages] repo; the T2 packages come with the t2-mac and
@@ -24,7 +28,12 @@ export const t2Macbook = profile<Data>("t2-macbook", {
       archVirtualization,
       solaar,
       rocmSmiLib,  // btop's stats for the Radeon Pro 5300M/5500M
+      // the local LLM for Obsidian Copilot (docs/local-llm.md)
+      llamaCpp,
+      ggmlVulkan,
+      fuse2,  // Miyo's AppImage
     ]),
+    miyo,
   ],
   run: [
     sshKey("id_ed25519"),
@@ -44,5 +53,40 @@ export const t2Macbook = profile<Data>("t2-macbook", {
     args(omarchyActivityMonitorSize, "90%", "90%"),
     args(omarchyScratchpadOpacity, "0.99"),
     solaarNoAutostart,
+    // The local LLM, sized for 64 GB of RAM and the Radeon's 4 GB (docs/local-llm.md):
+    // a Mixture-of-Experts model, ~3B of its 35B parameters at work per token.
+    args(
+      llmModel,
+      "unsloth/Qwen3.6-35B-A3B-GGUF",
+      "a483e9e6cbd595906af30beda3187c2663a1118c",  // the repo's commit, so a re-upload can't change it
+      "Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
+      "ac0e2c1189e055faa36eff361580e79c5bd6f8e76bffb4ce547f167d53e31a61",
+    ),
+    args(
+      llamaServer,
+      "GGML_VK_VISIBLE_DEVICES=1",       // the Radeon (Vulkan0 is the Intel iGPU)
+      "GGML_OP_OFFLOAD_MIN_BATCH=1024",  // prompts under 1024 tokens are faster on the CPU
+      "--model Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
+      "--alias qwen3.6-35b-a3b",
+      "--host 127.0.0.1 --port 8080",
+      "-c 32768",                        // 16K overflowed in Agent Chat; 64K fills the VRAM
+      "-t 8 -np 1",                      // the 8 cores, one user
+      "-ngl 99 --n-cpu-moe 41",          // attention on the GPU, every layer's experts in RAM
+      "-ub 2048 -b 2048",                // big batches: ~175 tok/s prompt reading
+      "-fa on --jinja",
+      // Thinking takes minutes here. Args go through a shell: the JSON is single-quoted.
+      `--chat-template-kwargs '{"enable_thinking":false}'`,
+    ),
+    // Waits on a new machine for the Obsidian login and Sync, like 1Password does.
+    args(obsidianVault, "~/Obsidian/vaults/jm"),
+    args(
+      obsidianCopilot,
+      "~/Obsidian/vaults/jm",
+      "http://127.0.0.1:8080/v1",
+      "qwen3.6-35b-a3b",
+      "32768",  // llama-server's -c, passed on to OpenCode so it doesn't assume 200K
+      "8",      // Miyo results per search: each is text the 32K context has to hold
+    ),
+    args(miyoLauncher, "GGML_VK_VISIBLE_DEVICES=0"),  // its embeddings on the Intel iGPU
   ],
 });

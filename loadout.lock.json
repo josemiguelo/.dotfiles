@@ -1,7 +1,7 @@
 {
   "format": 1,
   "toolVersion": "5.0.0",
-  "sources": "961e793752f4ce7d634b388b1d1366829cb86877494f0bc26111966ed589d686",
+  "sources": "f0bd9f0b8ded28bd185fb41d53013d1289410e02b2ea90ca7eecee3a4c566562",
   "manifest": {
     "meta": {
       "name": "jm's machines",
@@ -56,9 +56,11 @@
         "loadouts/private_dot_config/.lazygit.loadout.ts",
         "loadouts/private_dot_config/.libvirt/.libvirt.loadout.ts",
         "loadouts/private_dot_config/.libxcrypt-compat.loadout.ts",
+        "loadouts/private_dot_config/.llama-cpp/.llama-cpp.loadout.ts",
         "loadouts/private_dot_config/.loadout-cli.loadout.ts",
         "loadouts/private_dot_config/.lunar.loadout.ts",
         "loadouts/private_dot_config/.meetingbar.loadout.ts",
+        "loadouts/private_dot_config/.miyo/.miyo.loadout.ts",
         "loadouts/private_dot_config/.obs.loadout.ts",
         "loadouts/private_dot_config/.obsidian/.obsidian.loadout.ts",
         "loadouts/private_dot_config/.omarchy-iso-test.loadout.ts",
@@ -458,6 +460,13 @@
         },
         "origin": "loadouts/private_dot_local/share"
       },
+      "fuse2": {
+        "description": "FUSE 2 library, for AppImages",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config/.miyo"
+      },
       "fzf": {
         "install": {
           "brew": {},
@@ -476,6 +485,13 @@
           "omarchy": {}
         },
         "origin": "loadouts/private_dot_config"
+      },
+      "ggml-vulkan": {
+        "description": "ggml's Vulkan backend: llama.cpp on the GPU",
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config/.llama-cpp"
       },
       "gh": {
         "description": "GitHub CLI",
@@ -637,6 +653,16 @@
         },
         "origin": "loadouts/private_dot_config"
       },
+      "llama-cpp": {
+        "description": "llama.cpp: local LLM inference and its OpenAI-compatible server",
+        "depends-on": [
+          "ggml-vulkan"
+        ],
+        "install": {
+          "omarchy": {}
+        },
+        "origin": "loadouts/private_dot_config/.llama-cpp"
+      },
       "loadout": {
         "description": "loadout, which reads this repo",
         "version": {
@@ -686,6 +712,24 @@
           "brew": {}
         },
         "origin": "loadouts/private_dot_config/mise"
+      },
+      "miyo": {
+        "description": "Miyo: local semantic search for Obsidian Copilot",
+        "depends-on": [
+          "fuse2"
+        ],
+        "install": {
+          "custom": {
+            "command": "file:.loadout/miyo.ts install",
+            "check": "file:.loadout/miyo.ts check",
+            "present": true
+          }
+        },
+        "path": [
+          "$HOME/.local/bin"
+        ],
+        "later": "a ~300 MB app download; nothing else needs it",
+        "origin": "loadouts/private_dot_config/.miyo"
       },
       "ngrok": {
         "description": "ngrok tunnel",
@@ -1211,6 +1255,24 @@
         ],
         "origin": "loadouts/private_dot_local/share/.jetbrains"
       },
+      "llama-server": {
+        "description": "llama-server user service, with its prompt-cache warm-up",
+        "file": ".loadout/llama-server.ts",
+        "check": "file:.loadout/llama-server.ts check \"$@\"",
+        "after": [
+          "programs.llama-cpp",
+          "scripts.llm-model"
+        ],
+        "later": "it serves the model, which is later",
+        "origin": "loadouts/private_dot_config/.llama-cpp"
+      },
+      "llm-model": {
+        "description": "the local LLM's GGUF model, from Hugging Face",
+        "file": ".loadout/model.ts",
+        "check": "file:.loadout/model.ts check \"$@\"",
+        "later": "a ~21 GB download; nothing else needs it",
+        "origin": "loadouts/private_dot_config/.llama-cpp"
+      },
       "mason-kotlin-lsp": {
         "description": "kotlin-lsp for kotlin.nvim, from Mason",
         "file": ".loadout/mason-kotlin-lsp.ts",
@@ -1250,6 +1312,16 @@
         "later": "older versions and builds from source; setup needs none of them",
         "origin": "loadouts/private_dot_config/mise"
       },
+      "miyo-launcher": {
+        "description": "Miyo's launcher entry and login autostart",
+        "file": ".loadout/launcher.ts",
+        "check": "file:.loadout/launcher.ts check \"$@\"",
+        "after": [
+          "programs.miyo"
+        ],
+        "later": "it launches Miyo, which is later",
+        "origin": "loadouts/private_dot_config/.miyo"
+      },
       "nvim-plugins": {
         "description": "lazy.nvim plugins at the commits lazy-lock.json locks",
         "file": ".loadout/plugins.ts",
@@ -1258,6 +1330,25 @@
           "scripts.mise-tools"
         ],
         "origin": "loadouts/private_dot_config/nvim"
+      },
+      "obsidian-copilot": {
+        "description": "Copilot plugin in the vault, on the local LLM",
+        "file": ".loadout/copilot.ts",
+        "check": "file:.loadout/copilot.ts check \"$@\"",
+        "after": [
+          "programs.obsidian",
+          "scripts.obsidian-vault"
+        ],
+        "origin": "loadouts/private_dot_config/.obsidian"
+      },
+      "obsidian-vault": {
+        "description": "the Obsidian vault, brought by Obsidian Sync",
+        "file": ".loadout/vault.ts",
+        "check": "file:.loadout/vault.ts check \"$@\"",
+        "after": [
+          "programs.obsidian"
+        ],
+        "origin": "loadouts/private_dot_config/.obsidian"
       },
       "omarchy-1password": {
         "description": "1Password via Omarchy's installer, unscaled, Ctrl+Shift+Space Quick Access",
@@ -1853,6 +1944,7 @@
         "data": {
           "omarchy": true,
           "work": false,
+          "miyo": false,
           "kitty": {
             "opacity": 0.85
           }
@@ -1883,8 +1975,10 @@
           "fd": "omarchy",
           "flathub-remote": "flatpak",
           "flatpak": "omarchy",
+          "fuse2": "omarchy",
           "fzf": "omarchy",
           "gcc": "omarchy",
+          "ggml-vulkan": "omarchy",
           "ghostscript": "omarchy",
           "git": "omarchy",
           "git-delta": "omarchy",
@@ -1899,8 +1993,10 @@
           "lazygit": "omarchy",
           "libvirt": "omarchy",
           "libxcrypt-compat": "omarchy",
+          "llama-cpp": "omarchy",
           "meson": "omarchy",
           "mise": "omarchy",
+          "miyo": "custom",
           "ngrok": "custom",
           "ninja": "omarchy",
           "obsidian": "omarchy",
@@ -2010,6 +2106,11 @@
           "omarchy-activity-monitor-size 90% 90%",
           "omarchy-scratchpad-opacity 0.99",
           "solaar-no-autostart",
+          "llm-model unsloth/Qwen3.6-35B-A3B-GGUF a483e9e6cbd595906af30beda3187c2663a1118c Qwen3.6-35B-A3B-UD-Q4_K_M.gguf ac0e2c1189e055faa36eff361580e79c5bd6f8e76bffb4ce547f167d53e31a61",
+          "llama-server GGML_VK_VISIBLE_DEVICES=1 GGML_OP_OFFLOAD_MIN_BATCH=1024 --model Qwen3.6-35B-A3B-UD-Q4_K_M.gguf --alias qwen3.6-35b-a3b --host 127.0.0.1 --port 8080 -c 32768 -t 8 -np 1 -ngl 99 --n-cpu-moe 41 -ub 2048 -b 2048 -fa on --jinja --chat-template-kwargs '{\"enable_thinking\":false}'",
+          "obsidian-vault ~/Obsidian/vaults/jm",
+          "obsidian-copilot ~/Obsidian/vaults/jm http://127.0.0.1:8080/v1 qwen3.6-35b-a3b 32768 8",
+          "miyo-launcher GGML_VK_VISIBLE_DEVICES=0",
           "intentional-sync t2-macbook",
           "bare-repos t2-arch-packages omarchy omarchy-iso",
           "kait2en-dev"
@@ -2017,6 +2118,7 @@
         "data": {
           "omarchy": true,
           "work": false,
+          "miyo": true,
           "kitty": {
             "opacity": 0.85
           }
@@ -2080,6 +2182,7 @@
     "data": {
       "omarchy": false,
       "work": false,
+      "miyo": false,
       "kitty": {
         "opacity": 0.85
       }

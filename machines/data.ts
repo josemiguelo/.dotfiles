@@ -10,6 +10,9 @@ export const schema = {
   // the rest comes from its private child repo.
   work: flag(false),
 
+  // Miyo runs here (docs/local-llm.md): its CLI's folder goes on zsh's PATH.
+  miyo: flag(false),
+
   kitty: {
     // background_opacity; Omarchy's scratchpad repaints its own windows on top.
     opacity: number(0.85),
