@@ -1,0 +1,24 @@
+# atuin's settings; everything else is its default (`atuin default-config`).
+# Themes are ~/.config/atuin's, picked by theme.zsh there. Only this file is
+# managed: ~/.atuin/data holds the history and its encryption key.
+
+# Enter puts the command on the prompt instead of running it.
+enter_accept = false
+
+# Opens on this git repo's commands, on all of them outside one. Ctrl+R cycles.
+filter_mode = "workspace"
+
+inline_height = 25
+
+# Opens typing; Esc goes to vim's normal mode (j, k, /, i).
+keymap_mode = "vim-insert"
+
+# Credentials on the command line; atuin's own secrets_filter only knows tokens
+# with a recognizable format.
+history_filter = [
+  "^curl (.* )?(-u|--user[ =])",
+]
+
+[keys]
+# Down on the last row stays in the search instead of closing it.
+scroll_exits = false

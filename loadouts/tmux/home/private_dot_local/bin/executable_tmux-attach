@@ -1,0 +1,282 @@
+#!/usr/bin/env bash
+
+# It runs from kitty-tmux-attach's overlay or from tmux's run-shell, neither of
+# which has an interactive shell's environment, so FZF_DEFAULT_OPTS is not set.
+# Load it here; fzf-tmux forwards the variable into the popup it opens.
+source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/theme.sh"
+
+# Icons for differentiation (Nerd Fonts)
+session_icon=""
+dir_icon="󰉋"
+worktree_icon=""
+
+# The server inherits its cwd from whatever shell first spawns it, not from
+# new-session's -c. Pin a fresh server to $HOME so it can't end up rooted in a
+# project directory. exit-empty is on by default, so this session must stay to
+# keep an otherwise-empty server alive.
+ensure_server_home() {
+  tmux list-sessions >/dev/null 2>&1 || (cd "$HOME" && tmux new-session -d -s _bootstrap >/dev/null 2>&1)
+}
+
+# Sessions, excluding floating scratchpads and the bootstrap session. The
+# current session stays in the list — easy to forget you're already in it.
+# Also sets open_names, used by _has_session_for below.
+collect_sessions() {
+  # Most recently attached first (tmux's own timestamp). The grep matches a
+  # space before the name because each line starts with the timestamp.
+  sessions_raw=$(tmux list-sessions -F "#{session_last_attached} #S" 2>/dev/null \
+    | grep -vE ' (floating-|_bootstrap$)' | sort -rn | cut -d' ' -f2-)
+  if [[ -n "$TMUX" ]]; then
+    current_session=$(tmux display-message -p '#S' 2>/dev/null)
+  fi
+
+  if [[ -n "$sessions_raw" ]]; then
+    sessions=$(echo "$sessions_raw" | sed "s|^|$session_icon |")
+  else
+    sessions=""
+  fi
+
+  open_names=$(tmux list-sessions -F '#S' 2>/dev/null)
+}
+
+# workmux (nerdfont: true) prefixes session names with a glyph, so a match is
+# the exact name or a " <name>" suffix. Depends on open_names from
+# collect_sessions.
+_has_session_for() {
+  local target="$1" sname
+  while IFS= read -r sname; do
+    [[ "$sname" == "$target" || "$sname" == *" $target" ]] && return 0
+  done <<< "$open_names"
+  return 1
+}
+
+# Zoxide's frecency score below which a directory is left out of the picker.
+# Its list is ranked by that score, so this only trims the long tail; the
+# dropped ones are still reachable with `z`.
+zoxide_min_score=2
+
+# zoxide directories, minus any whose session already exists (selecting one
+# would just switch to that session anyway — see determine_target). Ranked by
+# zoxide's frecency, most frecent first, and cut at zoxide_min_score.
+collect_dirs() {
+  if command -v zoxide &>/dev/null; then
+    dirs=$(zoxide query -ls | awk -v min="$zoxide_min_score" '$1 >= min { sub(/^ *[^ ]+ /, ""); print }' | while IFS= read -r d; do
+      b="${d##*/}"; b="${b//[ .]/_}"
+      _has_session_for "$b" || printf '%s %s\n' "$dir_icon" "$d"
+    done)
+  else
+    dirs=""
+  fi
+}
+
+# `git worktree list --porcelain` for the repo the cwd is in. From workmux's
+# default worktree folder (<repo>__worktrees, beside the repo) the cwd isn't in
+# any repo, so ask one of the worktrees inside it: they all belong to the same
+# repo. Other folders outside a repo give nothing, as before.
+repo_worktrees() {
+  local out child
+  out=$(git worktree list --porcelain 2>/dev/null)
+  if [[ -z "$out" && "$PWD" == *__worktrees ]]; then
+    for child in "$PWD"/*/; do
+      out=$(git -C "$child" worktree list --porcelain 2>/dev/null)
+      [[ -n "$out" ]] && break
+    done
+  fi
+  printf '%s\n' "$out"
+}
+
+# This repo's worktrees, read from git (fast; `workmux list` is slow). Entries
+# show as "<project> <handle>", matching the session name workmux's
+# window_prefix produces. Skip worktrees with an existing session (shown as a
+# session instead) and skip entirely inside the floating scratchpad.
+collect_worktrees() {
+  worktrees=""
+  [[ "$current_session" == floating-* ]] && return
+  command -v workmux &>/dev/null && command -v git &>/dev/null || return
+
+  local list
+  list=$(repo_worktrees)
+  project=$(awk '/^worktree /{print $2; exit}' <<< "$list")
+  project="${project##*/}"
+  worktrees=$(
+    awk '
+      /^worktree /{path=$2; bare=0}
+      /^bare/{bare=1}
+      /^branch /{ if (!bare) { n=split(path, a, "/"); print a[n] } }
+    ' <<< "$list" | while IFS= read -r handle; do
+      _has_session_for "$handle" || printf '%s %s\n' "$worktree_icon" "${project:+$project }$handle"
+    done
+  )
+}
+
+# A dim horizontal rule, drawn only when there's something both above ($1)
+# and below ($2) it -- used between the sessions block and everything after
+# it, and again between worktrees and the zoxide dirs list. fzf has no
+# native section-header support for the middle of a list (--header-lines
+# only pins lines at the very top), so this is just a plain content line,
+# kept out of reach two ways: pick()'s enter binding rejects it outright
+# (Enter does nothing, picker stays open -- verified against a real
+# fzf-tmux popup), and main() no-ops if $choice ends up being it anyway
+# (belt and suspenders, e.g. if pick() is ever called differently).
+divider() {
+  [[ -n "$1" && -n "$2" ]] || return
+  local width
+  width=$(tput cols 2>/dev/null) || width=80
+  printf '\033[2m%s\033[0m\n' "$(printf '─%.0s' $(seq 1 "$width"))"
+}
+
+# Ctrl-j/Ctrl-k move to the start of the next/previous section (sessions,
+# worktrees, dirs) instead of scrolling line by line -- a divider alone
+# doesn't help once a section has more than a couple of items. Vim-style
+# (j down, k up); this also sidesteps Option/Alt, unreliable in terminals
+# on macOS (its default role is composing special characters) -- tried
+# first, dropped for that reason. Overrides fzf's default down/up bindings
+# on ctrl-j/ctrl-k, a deliberate trade for keys that actually work; plain
+# arrow keys still move one line at a time as before.
+#
+# Built as fzf `transform` bindings rather than a fixed pos(N): each press
+# needs the CURRENT cursor position ({n}, confirmed 0-indexed and distinct
+# from pos()'s own 1-indexed target) to decide which section is
+# next/previous relative to wherever the cursor already is. Both always
+# land in a DIFFERENT section than the current one -- "previous" first
+# works out which section the cursor is actually in (largest start <=
+# cur), then looks for a start before THAT, not just before cur; otherwise
+# pressing it from the middle of a section (not right at its own start)
+# would land back on that same section's start instead of the one before
+# it -- and both wrap around at either end.
+section_binds() {
+  local n_sessions n_worktrees n_dirs div1 div2 pos=0
+  local starts=()
+  n_sessions=$(printf '%s' "$sessions" | grep -c .)
+  n_worktrees=$(printf '%s' "$worktrees" | grep -c .)
+  n_dirs=$(printf '%s' "$dirs" | grep -c .)
+  div1=0; [[ -n "$sessions" && -n "$worktrees$dirs" ]] && div1=1
+  div2=0; [[ -n "$worktrees" && -n "$dirs" ]] && div2=1
+
+  (( n_sessions > 0 )) && starts+=("$((pos + 1))")
+  pos=$((pos + n_sessions + div1))
+  (( n_worktrees > 0 )) && starts+=("$((pos + 1))")
+  pos=$((pos + n_worktrees + div2))
+  (( n_dirs > 0 )) && starts+=("$((pos + 1))")
+
+  (( ${#starts[@]} < 2 )) && return # nothing to move between
+
+  # ${starts[-1]} needs bash 4.3+; the system /bin/bash on macOS is 3.2.
+  local starts_str="${starts[*]}" first="${starts[0]}" last="${starts[$((${#starts[@]} - 1))]}"
+
+  # pos($s) has to be quoted: sh (what fzf runs transform commands under,
+  # not bash) parses a bare word immediately followed by "(" as an attempt
+  # at a function definition and fails with a syntax error on whatever's
+  # inside the parens -- confirmed this is what silently broke every jump.
+  echo 'ctrl-j:transform:for s in '"$starts_str"'; do if (( s > {n} + 1 )); then echo "pos($s)"; exit; fi; done; echo "pos('"$first"')"'
+  echo 'ctrl-k:transform:my=; for s in '"$starts_str"'; do if (( s <= {n} + 1 )); then my=$s; fi; done; p='"$last"'; for s in '"$starts_str"'; do if (( s < my )); then p=$s; fi; done; echo "pos($p)"'
+}
+
+# Combine and select using a full-screen fzf-tmux popup, like kitty's overlay
+# and the workmux dashboard's (tmux.conf's prefix + W). Order: sessions,
+# divider, worktrees, divider, then the long zoxide list. Both dividers' lines
+# are the only ones containing '─', so enter:transform picks accept/ignore
+# based on that regardless of which one it is.
+pick() {
+  local section_args=() bind picker=(fzf-tmux -p 100%,100%)
+  while IFS= read -r bind; do
+    [[ -n "$bind" ]] && section_args+=(--bind "$bind")
+  done < <(section_binds)
+
+  # TMUX_ATTACH_INLINE is set by kitty-tmux-attach, which runs this in a kitty
+  # overlay outside tmux. fzf-tmux would open its own popup on the attached
+  # client instead of drawing in the overlay.
+  [[ -n "${TMUX_ATTACH_INLINE:-}" ]] && picker=(fzf)
+
+  choice=$(printf '%s\n%s\n%s\n%s\n%s' \
+    "$sessions" "$(divider "$sessions" "$worktrees$dirs")" \
+    "$worktrees" "$(divider "$worktrees" "$dirs")" \
+    "$dirs" | grep . | "${picker[@]}" --reverse \
+    --bind 'enter:transform:if [[ {} == *─* ]]; then echo ignore; else echo accept; fi' \
+    "${section_args[@]}" \
+    --header 'ctrl-j/ctrl-k next/previous section')
+}
+
+# Resolves $choice into either an exec (worktree open) or $target (session
+# name), creating a session for a directory pick if one doesn't exist yet.
+determine_target() {
+  icon="${choice%% *}"
+  value="${choice#* }"
+
+  if [[ "$icon" == "$worktree_icon" ]]; then
+    # Last word is the handle. tmux-workmux-open (shared with the workmux
+    # wrapper) handles the -s / inside-vs-outside-tmux details.
+    handle="${value##* }"
+    exec "$HOME/.local/bin/tmux-workmux-open" "$handle"
+  fi
+
+  if [[ "$icon" == "$session_icon" ]]; then
+    # It's an existing session
+    target="$value"
+  else
+    # It's a directory: create session if needed
+    target_path="$value"
+    # Sanitize: use basename and replace characters that might annoy tmux
+    target=$(basename "$target_path" | tr ' .' '__')
+
+    if ! tmux has-session -t "$target" 2>/dev/null; then
+      layout_file=""
+      named_file=""
+      for candidate in "$target_path/.tmuxinator.yml" "$target_path/.tmuxinator.yaml"; do
+        if [[ -f "$candidate" ]]; then
+          layout_file="$candidate"
+          break
+        fi
+      done
+      for candidate in "$HOME/.config/tmuxinator/${target}.yml" "$HOME/.config/tmuxinator/${target}.yaml"; do
+        if [[ -f "$candidate" ]]; then
+          named_file="$candidate"
+          break
+        fi
+      done
+
+      started=0
+      if command -v tmuxinator &>/dev/null; then
+        tmuxinator_flags=(--no-attach --suppress-tmux-version-warning --name "$target")
+        if [[ -n "$layout_file" ]]; then
+          tmuxinator start --project-config "$layout_file" "${tmuxinator_flags[@]}" && started=1
+        elif [[ -n "$named_file" ]]; then
+          tmuxinator start "$target" "${tmuxinator_flags[@]}" && started=1
+        fi
+      fi
+
+      if [[ "$started" -eq 0 ]] && ! tmux has-session -t "$target" 2>/dev/null; then
+        tmux new-session -ds "$target" -c "$target_path"
+      fi
+    fi
+  fi
+}
+
+main() {
+  ensure_server_home
+
+  # The caller passes a directory as $1 (kitty-tmux-attach: the active pane's,
+  # or its own); cd there so `git worktree list` reads the right repo.
+  [[ -n "$1" && -d "$1" ]] && cd "$1"
+
+  collect_sessions
+  collect_dirs
+  collect_worktrees
+  pick
+
+  [[ -z "$choice" ]] && exit 0
+  [[ "$choice" == *'─'* ]] && exit 0 # the divider -- harmless no-op if picked
+
+  determine_target
+
+  # Hand off to the popup-aware switcher (attaches when outside tmux, moves
+  # the outer client and closes the popup when run from inside a floating
+  # scratchpad).
+  "$HOME/.local/bin/tmux-goto" "$target"
+}
+
+# Allow sourcing this file (e.g. from tests) without running the interactive
+# picker.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

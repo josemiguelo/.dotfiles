@@ -1,0 +1,6 @@
+# What mise no longer has, removed from machines.
+.config/environment.d/10-mise.conf
+.tool-versions
+.plugin-versions
+.config/asdf
+.config/mise/conf.d/omarchy.toml

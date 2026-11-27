@@ -1,0 +1,4 @@
+# Switching between the machine's dark and light Omarchy theme.
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+.local/bin/omarchy-theme-mode-toggle
+{{ end }}

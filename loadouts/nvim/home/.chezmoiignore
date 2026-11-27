@@ -1,0 +1,3 @@
+# The nvim config's README and license stay in the source, out of $HOME.
+.config/nvim/README.md
+.config/nvim/LICENSE

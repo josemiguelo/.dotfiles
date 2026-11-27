@@ -1,0 +1,4 @@
+# Spotify's launch flags work around a crash under Omarchy's Wayland session.
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+.config/spotify-flags.conf
+{{ end }}

@@ -1,0 +1,5 @@
+# ngrok reads ~/Library/Application Support/ngrok on macOS, not ~/.config.
+{{ if eq .chezmoi.os "darwin" }}
+.config/ngrok
+.config/ngrok/**
+{{ end }}

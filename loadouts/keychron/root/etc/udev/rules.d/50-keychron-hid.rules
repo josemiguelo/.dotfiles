@@ -1,0 +1,3 @@
+# Managed by loadout (keychron-launcher-access): let the logged-in user open
+# Keychron keyboards' HID nodes, so the Keychron Launcher (WebHID) can connect.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", TAG+="uaccess"

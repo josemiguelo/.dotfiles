@@ -1,0 +1,84 @@
+(($+commands[workmux])) || return
+
+# Force the tmux backend for every workmux invocation, including
+# non-interactive ones that bypass the workmux() function below entirely
+# (e.g. a Neovim plugin's overseer tasks, which exec workmux directly). Without
+# this, workmux auto-detects the backend from $TMUX/$KITTY_WINDOW_ID/etc.,
+# and a process with no $TMUX (nvim running directly in a kitty tab, no
+# tmux involved at all) gets detected as "kitty" and refuses session mode
+# outright -- even though a tmux server is reachable on the default socket
+# regardless of what terminal launched the process. Harmless for the
+# interactive paths below: they only ever run `workmux add --headless ...`
+# (backend-check-exempt) or `command workmux add -s ...` from inside a branch
+# that already confirmed $TMUX is set, so this changes nothing for either of
+# them.
+export WORKMUX_BACKEND=tmux
+
+# `workmux add`/`open` both refuse session mode outside tmux ("Session mode
+# ... only supported with tmux"), even though workmux is always used with
+# tmux sessions here. Wrap both specifically:
+# - open: outside tmux, hand off to tmux-workmux-open (shared with the
+#   tmux-attach picker), which bootstraps into tmux to run it.
+# - add: outside tmux, do the slow part (checkout, hooks, file ops) headless
+#   under a gum spinner first — headless needs no tmux backend at all,
+#   sidestepping the error entirely — then hand off the same way.
+# Every other subcommand passes straight through.
+#
+# No `exec` anywhere in here: this function runs in the interactive shell's
+# own process (unlike a script, which gets its own disposable one), so
+# replacing it would close the terminal once the tmux workflow ends instead
+# of returning to the prompt.
+workmux() {
+  case "$1" in
+  open)
+    shift
+    # workmux finds a project's .workmux.yaml by walking up from the cwd, so it
+    # only sees a worktree's own file from inside that worktree. From a folder
+    # of worktrees (no repo above it, e.g. all_worktrees/), the file is missed
+    # and the global config's windows are used instead. So pass the named
+    # worktree's file explicitly, unless the caller already gave --config.
+    local -a config_args=()
+    if [[ -n "$1" && "$1" != -* && "$*" != *--config* && -f "$PWD/$1/.workmux.yaml" ]]; then
+      config_args=(--config "$PWD/$1/.workmux.yaml")
+    fi
+    if [[ -n "$TMUX" ]]; then
+      # -s forces session mode; safe even though it's already the configured
+      # default, and matches tmux-workmux-open's same defensive choice.
+      command workmux open -s "${config_args[@]}" "$@"
+    else
+      "$HOME/.local/bin/tmux-workmux-open" "${config_args[@]}" "$@"
+    fi
+    ;;
+
+  add)
+    shift
+
+    if [[ -n "$TMUX" ]]; then
+      command workmux add -s "$@"
+      return
+    fi
+
+    # gum runs its arguments as a program, so the binary's own path: `command`
+    # is a shell builtin, not a program gum can start.
+    local json
+    json=$(gum spin --title "Creating worktree..." --show-error -- "$(whence -p workmux)" add --headless --json "$@")
+    # gum is the gum plugin's function: it drops the terminal's answers to gum's
+    # exit-time queries, which would otherwise be typed into the new session.
+    local rc=$?
+    ((rc == 0)) || return $rc
+
+    local handle
+    handle=$(print -r -- "$json" | command jq -r '.handle // empty')
+    if [[ -z "$handle" ]]; then
+      print -u2 "workmux: couldn't determine the created worktree's handle from: $json"
+      return 1
+    fi
+
+    "$HOME/.local/bin/tmux-workmux-open" "$handle"
+    ;;
+
+  *)
+    command workmux "$@"
+    ;;
+  esac
+}

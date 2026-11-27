@@ -1,0 +1,57 @@
+#!/bin/sh
+# Refuses a commit of TypeScript with type errors, and one whose manifests and
+# compiled lock disagree: a pushed manifest change without its
+# loadout.lock.json leaves every other machine refusing to run until someone
+# compiles. Only commits that touch them are checked.
+# Enabled per clone with: git config core.hooksPath .githooks
+set -eu
+
+root=$(git rev-parse --show-toplevel)
+
+# loadout's bun (the scripts': the one it's built with, `loadout bun`) and
+# mise's (the shells') at one version, mise's as it's staged.
+mise_config=loadouts/mise/home/private_dot_config/mise/config.toml
+if git diff --cached --name-only | grep -qxE "loadout\.ts|$mise_config"; then
+  shells=$(git show ":$mise_config" | sed -nE 's/^[[:space:]]*bun[[:space:]]*=[[:space:]]*"([^"]*)".*/\1/p' | head -n 1)
+  scripts=$(loadout bun --version 2>/dev/null) || scripts=
+  if [ "$scripts" != "$shells" ]; then
+    echo "pre-commit: loadout runs scripts with bun ${scripts:-(unknown: is a loadout older than the repo's minLoadoutVersion on PATH?)}, mise's config.toml pins ${shells:-nothing}: move mise's to loadout's" >&2
+    exit 1
+  fi
+fi
+
+# The manifests' and scripts' types: loadout repo compile doesn't check them.
+if git diff --cached --name-only --diff-filter=ACMRD | grep -qE '\.ts$|^tsconfig\.json$|^package\.json$'; then
+  tsc="$root/node_modules/typescript/bin/tsc"
+  [ -e "$tsc" ] || {
+    echo "pre-commit: no node_modules, so the types can't be checked: run bun install in $root" >&2
+    exit 1
+  }
+  # Any loadout command refreshes the SDKs' types; a stale lock is refused below.
+  loadout --repo "$root" machine explain >/dev/null 2>&1 || true
+  if ! types=$(cd "$root" && loadout bun "$tsc" --noEmit -p . 2>&1); then
+    printf 'pre-commit: type errors:\n%s\n' "$types" >&2
+    exit 1
+  fi
+fi
+
+# What compile writes and the repo commits: the lock (chezmoi's sources built
+# from the tool folders are ignored: every loadout command rewrites them).
+generated='loadout.lock.json'
+
+git diff --cached --name-only | grep -qE '(^|/)loadout\.ts$|\.loadout\.ts$|^machines/data\.ts$|^loadout\.lock\.json$|^loadouts/' || exit 0
+
+command -v loadout >/dev/null 2>&1 || {
+  echo "pre-commit: loadout isn't on PATH, so the lock can't be checked" >&2
+  exit 1
+}
+# Any loadout command refuses a lock older than its sources.
+if ! out=$(loadout --repo "$root" machine explain 2>&1); then
+  printf 'pre-commit: %s\n' "$(printf '%s\n' "$out" | tail -n 1)" >&2
+  exit 1
+fi
+# shellcheck disable=SC2086 # $generated is a list of paths
+if ! (cd "$root" && git diff --quiet -- $generated); then
+  echo "pre-commit: what loadout repo compile wrote isn't staged: git add $generated" >&2
+  exit 1
+fi

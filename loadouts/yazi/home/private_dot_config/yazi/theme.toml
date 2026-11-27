@@ -1,0 +1,7 @@
+#:schema https://yazi-rs.github.io/schemas/theme.json
+
+# Flavors are verbatim copies of tokyonight.nvim's extras/yazi, picked from the
+# system appearance.
+[flavor]
+dark  = "tokyonight-storm"
+light = "tokyonight-day"

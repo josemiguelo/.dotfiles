@@ -1,0 +1,160 @@
+#!/usr/bin/env zsh
+# Tests loadouts/zsh/home/private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh in
+# isolation: a fake `chezmoi` on PATH logs its arguments (and answers
+# `source-path` with the fixture source), a fake `loadout` logs its own
+# ("loadout …") to the same log, and the fixture holds a tiny git
+# repo as the source, a linked worktree of it and an unrelated repo, all
+# inside one mktemp dir. Never touches the real dotfiles, chezmoi or $HOME.
+# chztry's program is a fake `tmux` (logs its args and $TMUX) or `sh`.
+# Run: tests/test-chezmoi-plugin.zsh
+
+SCRIPT_DIR="${0:A:h}/.."
+PLUGIN="$SCRIPT_DIR/loadouts/zsh/home/private_dot_config/zsh/plugins/chezmoi/chezmoi.plugin.zsh"
+WORK="$(mktemp -d "${TMPDIR:-/tmp}/chezmoi-plugin-test.XXXXXX")"
+WORK="${WORK:A}"
+
+# Deletes only the dir this run created.
+cleanup() {
+  case "${WORK:?}" in
+    "${${TMPDIR:-/tmp}:A}"/chezmoi-plugin-test.*) rm -rf -- "${WORK:?}" ;;
+    *) print -u2 "refusing to delete $WORK" ;;
+  esac
+}
+trap cleanup EXIT
+
+pass=0
+fail=0
+ok() { pass=$((pass + 1)); echo "  ok - $1" }
+bad() { fail=$((fail + 1)); echo "  FAIL - $1" }
+eq() { [[ "$1" == "$2" ]] && ok "$3" || bad "$3 (expected [$2], got [$1])" }
+contains() { [[ "$1" == *"$2"* ]] && ok "$3" || bad "$3 (expected to contain [$2], got [$1])" }
+
+FIXTURE_HOME="$WORK/home"
+SRC="$WORK/src"
+WT="$WORK/wt"
+OTHER="$WORK/other"
+FAKEBIN="$WORK/fakebin"
+LOG="$WORK/chezmoi-calls.log"
+mkdir -p "$FIXTURE_HOME" "$SRC" "$OTHER" "$FAKEBIN"
+[[ "$FIXTURE_HOME" == "$WORK"/* ]] || { print -u2 "fixture HOME is not inside $WORK"; exit 1 }
+
+# The fake chezmoi: `source-path` prints the fixture source; anything else is
+# logged, one call per line.
+printf '%s\n' '#!/usr/bin/env bash' \
+  'if [[ "$1" == source-path ]]; then echo "$FAKE_SOURCE"; exit 0; fi' \
+  'echo "$*" >> "$CHEZMOI_LOG"' > "$FAKEBIN/chezmoi"
+printf '%s\n' '#!/usr/bin/env bash' \
+  'echo "loadout $*" >> "$CHEZMOI_LOG"' > "$FAKEBIN/loadout"
+printf '%s\n' '#!/usr/bin/env bash' \
+  'echo "tmux $* TMUX=${TMUX-unset}"' > "$FAKEBIN/tmux"
+chmod +x "$FAKEBIN/chezmoi" "$FAKEBIN/loadout" "$FAKEBIN/tmux"
+
+g() { git -c user.name=test -c user.email=test@example.com "$@" }
+export GIT_CONFIG_GLOBAL="$WORK/gitconfig" GIT_CONFIG_NOSYSTEM=1
+: > "$GIT_CONFIG_GLOBAL"
+g -C "$SRC" init -q -b master
+echo a > "$SRC/dot_a"
+g -C "$SRC" add -A
+g -C "$SRC" commit -qm init
+# An upstream for chzup's pull to fast-forward from.
+g init -q --bare "$WORK/origin.git"
+g -C "$SRC" remote add origin "$WORK/origin.git"
+g -C "$SRC" push -q -u origin master
+g -C "$SRC" worktree add -q -b feat "$WT"
+g -C "$OTHER" init -q -b main
+
+# Calls one of the plugin's functions from directory $1 in a fresh zsh, with
+# the fixture HOME/PATH; prints stderr, sets $code.
+run() {
+  local dir="$1"; shift
+  : > "$LOG"
+  err=$(cd "$dir" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" \
+    PLUGIN="$PLUGIN" zsh -fc 'source "$PLUGIN"; "$@"' _ "$@" 2>&1 >/dev/null)
+  code=$?
+  calls=$(<"$LOG")
+}
+
+# Like run, but keeps stdout in $out (for what chztry's program printed).
+run_out() {
+  local dir="$1"; shift
+  : > "$LOG"
+  out=$(cd "$dir" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" \
+    PLUGIN="$PLUGIN" TMUX=/tmp/outer,1,0 XDG_RUNTIME_DIR="$WORK/runtime" zsh -fc 'source "$PLUGIN"; "$@"' _ "$@" 2>&1)
+  code=$?
+  calls=$(<"$LOG")
+}
+
+for place in "${FIXTURE_HOME}:outside git" "${SRC}:the main source" "${OTHER}:an unrelated repo"; do
+  dir=${place%%:*}
+  echo "in ${place#*:}: everything runs loadout chezmoi"
+  run "$dir" chzdi ~/.x;      eq "$calls" "loadout chezmoi diff $HOME/.x" "chzdi -> loadout chezmoi diff, args passed"
+  run "$dir" chzapnv;         eq "$calls" "loadout chezmoi apply -nv" "chzapnv -> loadout chezmoi apply -nv"
+  run "$dir" chzap --force;   eq "$calls" "loadout chezmoi apply --force" "chzap -> loadout chezmoi apply, args passed"
+  run "$dir" chzad ~/.y;      eq "$calls" "loadout chezmoi add $HOME/.y" "chzad -> loadout chezmoi add, which writes into the tool folder"
+  run "$dir" chzup;           eq "$calls" "loadout chezmoi apply" "chzup -> pulls the source, then loadout chezmoi apply"
+done
+
+echo "in a feature worktree: read-only ones follow it"
+run "$WT" chzdi ~/.x
+eq "$calls" "loadout --repo $WT chezmoi diff $HOME/.x" "chzdi -> loadout --repo <worktree> chezmoi diff"
+eq "$code" 0 "chzdi exits 0"
+run "$WT/" chzapnv
+eq "$calls" "loadout --repo $WT chezmoi apply -nv" "chzapnv -> loadout --repo <worktree> chezmoi apply -nv"
+
+echo "in a feature worktree: the ones that change things refuse"
+for fn in chzap chzad chzup; do
+  run "$WT" $fn
+  eq "$code" 1 "$fn exits 1"
+  eq "$calls" "" "$fn never calls chezmoi"
+  contains "$err" "would act on master" "$fn says why"
+done
+contains "$err" "loadout --repo \"$WT\" chezmoi apply" "suggests a targeted apply from the worktree"
+
+echo "in a subdirectory of the worktree"
+mkdir -p "$WT/sub/dir"
+run "$WT/sub/dir" chzdi
+eq "$calls" "loadout --repo $WT chezmoi diff" "uses the worktree root, not the subdirectory"
+
+echo "when source-path is a .chezmoiroot folder inside the repo"
+mkdir -p "$SRC/loadouts"
+run_root() { local s=$SRC; SRC="$SRC/loadouts"; run "$@"; SRC=$s }
+run_root "$WT" chzdi
+eq "$calls" "loadout --repo $WT chezmoi diff" "still finds the worktree"
+run_root "$SRC" chzdi
+eq "$calls" "loadout chezmoi diff" "the main checkout is still not a worktree"
+run_root "$WT" chzap
+eq "$code" 1 "chzap still refuses in the worktree"
+
+PREVIEW="$WORK/runtime/chztry/wt"
+echo "chztry"
+run_out "$WT" chztry sh -c 'echo "cfg=$XDG_CONFIG_HOME zdot=$ZDOTDIR star=$STARSHIP_CONFIG path1=${PATH%%:*} tmux=$TMUX"'
+eq "$code" 0 "exits with the program's status"
+eq "$calls" "loadout --repo $WT machine explain
+--source $WT --destination $PREVIEW --persistent-state $PREVIEW.boltdb apply --force --exclude scripts,externals" \
+  "brings the worktree's build up to date, then renders it, without scripts or externals, into a preview home"
+eq "$out" "cfg=$PREVIEW/.config zdot=$PREVIEW/.config/zsh star=$PREVIEW/.config/starship.toml path1=$PREVIEW/.local/bin tmux=/tmp/outer,1,0" \
+  "runs the program with its configs and scripts from the preview, TMUX kept"
+mkdir -p "$PREVIEW/stale"
+run_out "$WT/sub/dir" chztry true
+[[ ! -e $PREVIEW/stale ]] && ok "re-renders from scratch" || bad "re-renders from scratch (a stale file survived)"
+mkdir -p "$PREVIEW/stale"
+: > "$LOG"
+out=$(cd "$WT" && HOME="$FIXTURE_HOME" PATH="$FAKEBIN:$PATH" FAKE_SOURCE="$SRC" CHEZMOI_LOG="$LOG" XDG_RUNTIME_DIR="$WORK/runtime" \
+  PLUGIN="$PLUGIN" zsh -fc 'alias rm="echo use trash; false"; source "$PLUGIN"; chztry true' 2>&1)
+[[ ! -e $PREVIEW/stale && $out != *"use trash"* ]] && ok "re-renders from scratch despite an rm alias" \
+  || bad "re-renders from scratch despite an rm alias (got [$out])"
+run_out "$WT" chztry tmux new -s x
+eq "$out" "tmux -L chztry-wt new -s x TMUX=unset" "tmux gets its own server, outside the current one"
+run_out "$WT" chztry sh -c 'exit 7'
+eq "$code" 7 "passes the program's failure on"
+run_out "$OTHER" chztry true
+eq "$code" 1 "outside a worktree: exits 1"
+eq "$calls" "" "outside a worktree: renders nothing"
+contains "$out" "not in a feature worktree" "outside a worktree: says why"
+run_out "$WT" chztry
+eq "$code" 2 "no program: exits 2"
+contains "$out" "usage: chztry" "no program: prints usage"
+
+echo
+echo "$pass passed, $fail failed"
+[[ $fail -eq 0 ]]

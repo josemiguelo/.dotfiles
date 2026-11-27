@@ -1,0 +1,23 @@
+# Tokyo Night Day (light), from tokyonight.nvim; theme.zsh picks it.
+[theme]
+name = "tokyonight-day"
+parent = "default"
+
+# AlertError is the selected row as well as failures, so it is purple, not red.
+# Annotation is the key hints on top and the command preview at the bottom.
+[colors]
+Base = "#3760bf"
+Title = "#4094a3"
+Important = "#2e7de9"
+Guidance = "#68709a"
+Muted = "#68709a"
+Annotation = "#3760bf"
+AlertInfo = "#587539"
+AlertWarn = "#b15c00"
+AlertError = "#7847bd"
+SyntaxCommand = "#2e7de9"
+SyntaxFlag = "#007197"
+SyntaxString = "#587539"
+SyntaxVariable = "#007197"
+SyntaxOperator = "#b15c00"
+SyntaxComment = "#68709a"

@@ -1,0 +1,5 @@
+  "appearance.workspace-layout": { "label": "Default Workspace Layout", "description": "For new and empty workspaces; ones with windows keep theirs" },
+  "appearance.workspace-layout-here": { "icon": "󱂬", "label": "This Workspace's Layout", "title": "This Workspace Only", "aliases": ["layout", "workspace-layout"] },
+  "appearance.workspace-layout-here.dwindle": { "icon": "󱓻", "label": "Tiling (this workspace only)", "checked": "[[ $(omarchy-hyprland-workspace-layout-current) == \"dwindle\" ]]", "action": "omarchy-workspace-layout-set dwindle" },
+  "appearance.workspace-layout-here.scrolling": { "icon": "󰝥", "label": "Scrolling (this workspace only)", "checked": "[[ $(omarchy-hyprland-workspace-layout-current) == \"scrolling\" ]]", "action": "omarchy-workspace-layout-set scrolling" },
+  "appearance.workspace-layout-here.floating": { "icon": "󰔶", "label": "Floating (this workspace only)", "checked": "[[ $(omarchy-hyprland-workspace-layout-current) == \"floating\" ]]", "action": "omarchy-workspace-layout-set floating" },

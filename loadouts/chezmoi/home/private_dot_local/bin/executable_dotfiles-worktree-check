@@ -1,0 +1,55 @@
+#!/bin/sh
+# Lists what a feature worktree of the dotfiles would leave behind on this
+# machine: targets its configs manage but the main checkout's don't ($HOME's
+# and the / ones alike), that exist on disk. Once the worktree is gone
+# nothing manages them, and `chezmoi verify` from the main checkout never
+# mentions them. Exits 1 when there are any, so as workmux's pre_remove hook
+# (.workmux.yaml) it stops `workmux remove` until they're dealt with;
+# DOTFILES_CHECK_SKIP=1 lets it through. It also says when managed targets
+# differ from the main checkout's state (an abandoned feature's edits), which
+# `loadout config apply` from the main checkout restores. It asks chezmoi
+# through `loadout --repo <checkout> chezmoi`, which brings each checkout's
+# build (.chezmoi-home/, .chezmoi-root/) up to date first. Deletes nothing.
+# Usage: dotfiles-worktree-check [worktree] [main-checkout]; the hook gets
+# them from WM_WORKTREE_PATH and WM_PROJECT_ROOT.
+set -eu
+export LC_ALL=C
+
+wt=${1:-${WM_WORKTREE_PATH:-$(git rev-parse --show-toplevel)}}
+# chezmoi's source is the repo's .chezmoiroot folder; the checkout is its top.
+main=${2:-${WM_PROJECT_ROOT:-$(git -C "$(chezmoi source-path)" rev-parse --show-toplevel)}}
+wt=$(cd "$wt" && pwd -P)
+main=$(cd "$main" && pwd -P)
+if [ "$wt" = "$main" ]; then
+  echo "dotfiles-worktree-check: $wt is the main source; give a feature worktree" >&2
+  exit 2
+fi
+
+tmp=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-worktree-check.XXXXXX")
+trap 'rm -f "$tmp/main" "$tmp/wt" "$tmp/left"; rmdir "$tmp"' EXIT
+
+loadout --repo "$main" chezmoi managed --path-style absolute | sort > "$tmp/main"
+loadout --repo "$wt" chezmoi managed --path-style absolute | sort > "$tmp/wt"
+comm -13 "$tmp/main" "$tmp/wt" | while IFS= read -r p; do
+  if [ -e "$p" ] || [ -L "$p" ]; then printf '%s\n' "$p"; fi
+done > "$tmp/left"
+
+rc=0
+if [ -s "$tmp/left" ]; then
+  echo "Only $wt manages these, and they exist; they'd be left on this machine:"
+  sed 's/^/  /' "$tmp/left"
+  echo "Delete the ones you don't want, then remove the worktree again"
+  echo "(DOTFILES_CHECK_SKIP=1 workmux remove keeps them)."
+  rc=1
+fi
+
+if ! loadout --repo "$main" chezmoi verify >/dev/null 2>&1; then
+  echo "These differ from $main's state; loadout config apply restores them:"
+  loadout --repo "$main" chezmoi status | sed 's/^/  /'
+fi
+
+if [ "$rc" -ne 0 ] && [ "${DOTFILES_CHECK_SKIP:-0}" = 1 ]; then
+  echo "DOTFILES_CHECK_SKIP=1: going ahead and leaving them."
+  rc=0
+fi
+exit "$rc"

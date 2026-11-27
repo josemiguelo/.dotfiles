@@ -1,0 +1,33 @@
+# Global tool versions, managed by mise (was ~/.tool-versions under asdf).
+# A plain file on purpose: `mise use -g` and `mise up --bump` write here, and
+# `loadout chezmoi re-add` brings their change back into the source. The agents
+# Omarchy installs through mise (claude, codex, gh) are Omarchy's own, from
+# 4.5 in /etc/mise/conf.d/omarchy-tools.toml: elsewhere they come from their
+# own installers.
+[tools]
+# The first version of each list is the default.
+node = ["26.8.2", "23.11.1", "18.16.0", "16.20.0"]
+# temurin = what asdf-java still lists as adoptopenjdk (same Eclipse builds).
+# A new Java major here (not a new 17.0.x) also goes into Gradle's toolchain
+# list: add JDK<major>_HOME to fromEnv in ~/.gradle/gradle.properties
+# (loadouts/mise/home/dot_gradle/gradle.properties); zsh's java plugin exports it by itself.
+java = ["temurin-21.0.6+7.0.LTS", "temurin-17.0.7+7", "temurin-11.0.18+10", "zulu-8.78.0.19"]
+# Prebuilt; mise has no free-threaded (3.14.7t) build.
+python = ["3.14.7", "2.7.18"]
+go = "1.27.1"
+rust = "1.98.1"
+ruby = "3.4.10"
+# The shells' and the editor's bun. loadout's scripts run with the bun
+# loadout is built with (`loadout bun --version`); .githooks/pre-commit keeps
+# both at one version.
+bun = "1.4.3"
+neovim = "nightly"
+tomcat = "9.0.88"
+gradle = ["8.14.2", "7.6.3"]
+# mise's default maven source starts after 3.6.3, so it comes from Apache's
+# archive. Not the vfox-maven plugin: mise clones a missing plugin while
+# activating, so every new shell before mise-tools-later fetched it from
+# GitHub (6s and warnings offline). Pinned on purpose: outdated-tools.ts
+# doesn't read a tool with options.
+"http:maven" = { version = "3.6.3", url = "https://archive.apache.org/dist/maven/maven-3/{{ version }}/binaries/apache-maven-{{ version }}-bin.tar.gz", strip_components = 1, bin_path = "bin" }
+cocoapods = { version = "1.16.0", os = ["macos"] }

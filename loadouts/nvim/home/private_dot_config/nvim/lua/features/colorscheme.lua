@@ -1,0 +1,165 @@
+local reload_plugins = function()
+  require("features.tabbar")[2].config()
+  require("features.blink_cursor")[1].config()
+end
+
+-- merge onto what the theme already set instead of replacing the whole group
+local function extend(highlights, group, opts)
+  highlights[group] = vim.tbl_extend("force", highlights[group] or {}, opts)
+end
+
+local function luminance(hex)
+  local r, g, b = hex:match("^#(%x%x)(%x%x)(%x%x)$")
+  return (0.299 * tonumber(r, 16) + 0.587 * tonumber(g, 16) + 0.114 * tonumber(b, 16)) / 255
+end
+
+-- palette lightness flips between the storm and day styles, so pick the
+-- foreground from the background that actually resolved
+local function contrast_fg(bg)
+  return luminance(bg) > 0.5 and "#000000" or "#ffffff"
+end
+
+return {
+  {
+    "folke/tokyonight.nvim",
+    priority = 1000,
+    opts = {
+      style = "storm",
+      light_style = "day",
+      transparent = true,
+      terminal_colors = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
+      on_colors = function(colors)
+        colors.border = colors.blue6
+        -- storm's #565f89 contrasts 4.1:1 on bg; this clears 5.7:1 and stays
+        -- below the #c0caf5 body text. Day is fine as-is.
+        if luminance(colors.bg) < 0.5 then
+          colors.comment = "#8b93c4"
+        end
+      end,
+      on_highlights = function(hl, c)
+        local light = luminance(c.bg) > 0.5
+        local blend = require("tokyonight.util").blend
+        local emphasis = { bold = true, underline = true, italic = true }
+
+        for _, group in ipairs({
+          "Normal",
+          "NormalFloat",
+          "SnacksPicker",
+          "SnacksPickerBorder",
+          "SnacksTerminal",
+        }) do
+          extend(hl, group, { bg = c.none, nocombine = true })
+        end
+
+        -- snacks default-links this to NonText (2.2:1). Blend fg_dark toward
+        -- the background so the dirname stays secondary to the filename.
+        extend(hl, "SnacksPickerDir", { fg = blend(c.fg_dark, 0.85, c.bg) })
+
+        extend(hl, "LineNrAbove", { fg = c.blue1 })
+        extend(hl, "LineNrBelow", { fg = c.blue1 })
+
+        extend(hl, "CursorLine", { bg = c.bg_highlight })
+        extend(hl, "CursorColumn", { bg = c.bg_highlight })
+        extend(hl, "CursorLineNr", { fg = light and c.cyan or c.purple })
+
+        extend(hl, "FlashLabel", { bg = c.magenta2, fg = contrast_fg(c.magenta2), bold = true })
+
+        -- util/winbar.lua: the buffer's path, on a highlight band in dark mode
+        local winbar_bg = not light and c.bg_highlight or nil
+        hl.WinbarPath = { fg = c.blue, bg = winbar_bg, bold = true }
+        hl.WinbarModified = { fg = c.red, bg = winbar_bg, bold = true, italic = true }
+
+        if light then
+          extend(hl, "Comment", { fg = "#7380ba", italic = true })
+        end
+
+        extend(hl, "@variable", { fg = c.cyan })
+
+        -- terminal_black/comment as-is clear only ~3:1 contrast (< WCAG's
+        -- 4.5:1), and day's inversion collapses them to similar lightness
+        local code_fg = light and "#4c5372" or c.fg_dark
+        local code_bg = light and blend(c.fg_dark, 0.12, c.bg) or blend("#000000", 0.15, c.terminal_black)
+        extend(hl, "@markup.raw.markdown_inline", { fg = code_fg })
+
+        -- assigned directly: tokyonight links this group to a bare string,
+        -- which extend()'s tbl_extend can't merge onto, and a link can't
+        -- carry extra attrs anyway
+        hl.RenderMarkdownCodeInline = { fg = code_fg, bg = code_bg }
+
+        -- c.git holds the sign colors, c.diff the region tints
+        extend(hl, "Added", { fg = c.git.add })
+        extend(hl, "Removed", { fg = c.git.delete })
+        extend(hl, "Changed", { fg = c.git.change, bold = true })
+
+        -- c.git.add/delete are muted and get lost on the diff tints, so the diff
+        -- body uses the saturated syntax colors instead
+        extend(hl, "diffAdded", { fg = c.green })
+        extend(hl, "diffRemoved", { fg = c.red })
+
+        -- the fugitive status window maps diffLine and diffSubname onto these
+        -- groups (see features/git.lua), so its hunk headers keep the underlined
+        -- look while the global diffLine below changes
+        hl.FugitiveHunkHeader = vim.tbl_extend("force", hl.diffLine or {}, emphasis, { bg = c.bg_visual })
+        hl.FugitiveHunkContext = vim.tbl_extend("force", emphasis, { fg = c.blue })
+
+        -- the file divider (diff --git) and the hunk divider (@@) sit on a band:
+        -- bg_visual, a step above the bg_highlight CursorLine uses, so they read
+        -- as dividers; the file line also gets an underline in its own color
+        extend(hl, "diffFile", { bg = c.bg_visual, bold = true, underline = true })
+        extend(hl, "diffLine", { bg = c.bg_visual, bold = true })
+
+        extend(hl, "DiffText", { bg = c.diff.text, fg = contrast_fg(c.diff.text), bold = true })
+
+        -- GitSignsAdd/Change/Delete already use c.git; the staged variants are
+        -- missing, dimmed toward the background
+        extend(hl, "GitSignsStagedAdd", { fg = blend(c.git.add, 0.5, c.bg) })
+        extend(hl, "GitSignsStagedChange", { fg = blend(c.git.change, 0.5, c.bg) })
+        extend(hl, "GitSignsStagedDelete", { fg = blend(c.git.delete, 0.5, c.bg) })
+
+        for _, group in ipairs({ "fugitiveUnstagedSection", "fugitiveStagedSection" }) do
+          extend(hl, group, vim.tbl_extend("force", emphasis, { fg = c.purple }))
+        end
+        -- commit buffers' folded files use it (util/git_foldtext.lua) before any
+        -- status window has loaded fugitive's syntax, which links it the same way
+        hl.fugitiveStagedModifier = hl.fugitiveStagedModifier or { link = "Typedef" }
+
+        -- flog's graph groups default-link to generic syntax colors; follow git's
+        -- --decorate conventions to match fugitive. flogDiff* already links to diff*.
+        extend(hl, "flogHash", { fg = c.magenta })
+        extend(hl, "flogAuthor", { fg = c.teal })
+        extend(hl, "flogDate", { fg = c.dark5 })
+        extend(hl, "flogRef", { fg = c.blue })
+        extend(hl, "flogRefTag", { fg = c.yellow, bold = true })
+        extend(hl, "flogRefRemote", { fg = c.red, bold = true })
+        extend(hl, "flogRefHead", { fg = c.cyan, bold = true })
+        extend(hl, "flogRefHeadBranch", { fg = c.green, bold = true })
+        extend(hl, "flogCollapsedCommit", { fg = c.comment, italic = true })
+        hl.FugitiveDeltaText = { link = "DiffText" }
+      end,
+    },
+  },
+
+  {
+    "f-person/auto-dark-mode.nvim",
+    opts = {
+      set_dark_mode = function()
+        vim.notify("Enabling dark mode 🌚")
+        vim.api.nvim_set_option_value("background", "dark", {})
+        vim.cmd("colorscheme tokyonight-storm")
+        reload_plugins()
+      end,
+      set_light_mode = function()
+        vim.notify("Enabling light mode 🌞")
+        vim.api.nvim_set_option_value("background", "light", {})
+        vim.cmd("colorscheme tokyonight-day")
+        reload_plugins()
+      end,
+    },
+  },
+
+  { "catppuccin/nvim", cond = false },
+}

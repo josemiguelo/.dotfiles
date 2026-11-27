@@ -1,0 +1,10 @@
+# fcitx5 is Omarchy's input method: its settings are for Omarchy machines only.
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+.config/fcitx5
+.config/fcitx5/**
+{{ end }}
+
+# Setting the focused workspace's layout, for the Omarchy menu's entries.
+{{ if not (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+.local/bin/omarchy-workspace-layout-set
+{{ end }}

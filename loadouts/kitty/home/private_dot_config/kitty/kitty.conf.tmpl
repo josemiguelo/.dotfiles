@@ -1,0 +1,146 @@
+# Default shell
+{{ if (eq .chezmoi.os "darwin") -}}
+shell /bin/zsh --login
+{{ else if (eq .chezmoi.os "linux") -}}
+shell /usr/bin/zsh --login
+{{ end -}}
+
+# Fonts
+{{ if (eq .chezmoi.os "darwin") -}}
+font_family Fira Code
+{{ else if (eq .chezmoi.os "linux") -}}
+font_family FiraCode Nerd Font Mono
+{{ end -}}
+{{ if (includeTemplate "loadout/machine" . | fromJson).omarchy -}}
+{{- /* Omarchy's text size setting (omarchy-display-text-size) rewrites this
+         line from its [font] base-size in ~/.config/omarchy/shell.toml:
+         pt = round(px * 9 / 12), 12px (the default, when unset) = 9pt.
+         Same source, same formula, so chezmoi never fights it. */ -}}
+{{-   $px := 12 -}}
+{{-   $shell := joinPath .chezmoi.homeDir ".config/omarchy/shell.toml" -}}
+{{-   if stat $shell -}}
+{{-     $font := get (include $shell | fromToml) "font" -}}
+{{-     if and $font (hasKey $font "base-size") -}}
+{{-       $px = get $font "base-size" -}}
+{{-     end -}}
+{{-   end -}}
+# Omarchy: follows its text size setting, which rewrites this line.
+font_size {{ div (add (mul $px 9) 6) 12 }}.0
+{{ else -}}
+font_size 12.0
+{{ end -}}
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+adjust_line_height 110%
+modify_font underline_thickness 150%
+modify_font underline_position 2
+modify_font strikethrough_position 2px
+
+# cursor
+cursor_shape beam
+
+# Symbol mapping (Nerd Font Icons)
+symbol_map U+E000-U+E00A,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6B1,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F372,U+F400-U+F532,U+F500-U+FD46,U+F0001-U+F1AF0 Symbols Nerd Font Mono
+narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7 1
+
+# Cursor
+cursor_trail 1
+cursor_trail_decay 0.01 0.45
+cursor_trail_start_threshold 0
+
+# Scrollback
+scrollback_lines 10000
+
+# Blur
+# NOTE: for linux, use WM's own capabilities
+{{ if (eq .chezmoi.os "darwin") -}}
+background_blur 30
+{{ else if (eq .chezmoi.os "linux") -}}
+background_blur 1
+{{ end -}}
+background_opacity {{ (includeTemplate "loadout/machine" . | fromJson).kitty.opacity }}
+{{- if (includeTemplate "loadout/machine" . | fromJson).omarchy }}
+# Lets Hyprland make scratchpad windows more opaque at runtime (see
+# ~/.config/hypr/hyprland.lua); the 0.85 above stays the default.
+dynamic_background_opacity yes
+{{- end }}
+
+# Remote control for scripting
+{{ if (includeTemplate "loadout/machine" . | fromJson).omarchy -}}
+# Omarchy: socket-only, on the per-window socket omarchy-cmd-terminal-cwd
+# queries so "open terminal here" lands in this window's cwd. Omarchy's own
+# migrations comment out the unrestricted form, so don't use it here.
+allow_remote_control socket-only
+listen_on unix:${XDG_RUNTIME_DIR}/omarchy-kitty-{kitty_pid}
+{{ else -}}
+allow_remote_control yes
+listen_on unix:/tmp/kitty
+{{ end -}}
+
+# --- Tab Bar ---
+tab_bar_edge top
+tab_bar_style separator
+tab_separator "  "
+tab_bar_background none
+tab_bar_margin_color none
+active_tab_font_style bold
+inactive_tab_font_style normal
+tab_title_template " {index}: {title} "
+
+# --- Keybindings ---
+map ctrl+alt+e set_tab_title
+
+# Open the tmux-attach picker as an overlay over the current window, which then
+# attaches to the session you pick. Use it from outside tmux; inside tmux, use
+# prefix + A (tmux.conf). The script sets PATH (see its header). The modifier
+# differs per OS so the physical key matches: Linux's Alt sits where macOS puts
+# Command. Over ssh kitty isn't there to open it, so tmux's prefix + A is the
+# picker there too, as a popup.
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attach
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+alt+a launch --type=overlay --cwd=current ~/.local/bin/kitty-tmux-attach
+{{ end -}}
+
+# Open the workmux dashboard as an overlay over the current window. It runs
+# outside tmux: it reads agent status from the tmux server, and picking an
+# agent switches tmux's client to that session. The script sets PATH and the
+# tmux backend (see its header). Same modifier split as above. Over ssh, tmux's
+# prefix + W opens it as a popup instead (tmux.conf).
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+alt+w launch --type=overlay --cwd=current ~/.local/bin/workmux-dashboard
+{{ end -}}
+
+# The command palette: fuzzy-find a command from its registry
+# (~/.config/command-palette/commands), type its arguments, and run it. One key
+# for every command, so none needs a binding of its own. Same modifier split as
+# above. It runs outside tmux, like the pickers, so it works from either.
+{{ if (eq .chezmoi.os "darwin") -}}
+map ctrl+cmd+p launch --type=overlay --cwd=current ~/.local/bin/command-palette
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+alt+p launch --type=overlay --cwd=current ~/.local/bin/command-palette
+{{ end -}}
+
+# kitty grabs ctrl+shift+left/right for next_tab/previous_tab by default.
+# no_op releases them so tmux receives them for swapping windows.
+map ctrl+shift+left no_op
+map ctrl+shift+right no_op
+{{ if (eq .chezmoi.os "darwin") -}}
+map cmd+t new_tab_with_cwd
+{{ else if (eq .chezmoi.os "linux") -}}
+map ctrl+shift+t new_tab_with_cwd
+{{ end -}}
+
+# --- Theme ---
+# Automatic theme switching is managed by Kitty using the .auto.conf files.
+# No explicit include is needed for current-theme.conf if you want it to follow system theme.
+# By default, no-preference-theme it's actually a light theme
+
+# Send Shift+Enter as CSI-u so TUIs can distinguish it from Enter.
+map shift+enter send_text all \e[13;2u
+
+# Kitty legacy encoding sends Alt+Shift+Enter the same as Alt+Enter; send CSI-u so tmux can match M-S-Enter.
+map alt+shift+enter send_text all \e[13;4u

@@ -1,0 +1,48 @@
+return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = { "kotlin" },
+    },
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = { kotlin_lsp = { enabled = false } },
+    },
+  },
+
+  {
+    "AlexandrosAlexiou/kotlin.nvim",
+    ft = { "kotlin" },
+    dependencies = {
+      {
+        "mason-lspconfig.nvim",
+        opts = { automatic_enable = { exclude = { "kotlin_lsp" } } },
+      },
+      "oil.nvim",
+      "trouble.nvim",
+      {
+        "mason.nvim",
+        -- Loadout installs it too and reports Mason's newer builds
+        -- (.loadout/mason-kotlin-lsp.ts): they expire weeks after release.
+        opts = { ensure_installed = { "kotlin-lsp" } },
+      },
+    },
+    config = function()
+      require("kotlin").setup({
+        root_markers = {
+          "settings.gradle",
+          "settings.gradle.kts",
+          "build.xml",
+          "pom.xml",
+          "build.gradle",
+          "build.gradle.kts",
+        },
+
+        jdk_for_symbol_resolution = vim.env.HOME .. "/.local/share/mise/installs/java/temurin-21.0.6+7.0.LTS",
+      })
+    end,
+  },
+}

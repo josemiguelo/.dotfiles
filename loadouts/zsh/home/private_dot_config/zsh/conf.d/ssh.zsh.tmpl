@@ -1,0 +1,6 @@
+{{ if (eq .chezmoi.os "linux") }}
+# The user's ssh-agent (systemd's ssh-agent.socket), unless this is an ssh
+# login that forwarded its own agent: that one holds the keys of the machine
+# the login came from.
+[[ -n $SSH_CONNECTION && -S $SSH_AUTH_SOCK ]] || export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
+{{ end }}

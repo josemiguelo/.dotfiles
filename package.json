@@ -1,0 +1,25 @@
+{
+  "name": "dotfiles-scripts",
+  "private": true,
+  "description": "loadout's Bun scripts: their shared modules by name (imports, read by Bun and by the editor), and types for the editor and the pre-commit hook (bun install); the scripts run without installing anything.",
+  "imports": {
+    "#brew": "./lib/brew.ts",
+    "#user": "./lib/user.ts",
+    "#bare-repo": "./lib/bare-repo.ts",
+    "#ssh": "./loadouts/ssh/.loadout/lib/ssh.ts",
+    "#antidote": "./loadouts/zsh/.loadout/lib/antidote.ts",
+    "#android-sdk": "./loadouts/android-sdk/.loadout/lib/android-sdk.ts",
+    "#hypr": "./loadouts/hypr/.loadout/lib/hypr.ts",
+    "#omarchy": "./loadouts/omarchy/.loadout/lib/omarchy.ts",
+    "#webapp": "./loadouts/omarchy/.loadout/lib/webapp.ts",
+    "#nvim": "./loadouts/nvim/.loadout/lib/nvim.ts",
+    "#tmux": "./loadouts/tmux/.loadout/lib/tmux.ts",
+    "#onepassword": "./loadouts/1password/.loadout/lib/onepassword.ts",
+    "#llama-cpp": "./loadouts/llama-cpp/.loadout/lib/llama-cpp.ts",
+    "#obsidian": "./loadouts/obsidian/.loadout/lib/obsidian.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^7.0.2"
+  }
+}

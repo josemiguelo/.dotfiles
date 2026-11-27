@@ -1,0 +1,10 @@
+# ohmyzsh's lib/git.zsh otherwise registers async prompt handlers on every
+# precmd for a git prompt that starship already draws
+zstyle ':omz:alpha:lib:git' async-prompt no
+
+# Antidote
+zstyle ':antidote:bundle' use-friendly-names 'yes'
+zstyle ':antidote:bundle' file ${ZDOTDIR:-~}/.zplugins
+zstyle ':antidote:bundle:*' zcompile 'yes'
+zstyle ':antidote:static' file ${ZDOTDIR:-~}/.zplugins.zsh
+zstyle ':antidote:static' zcompile 'yes'

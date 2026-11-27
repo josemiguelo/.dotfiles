@@ -1,0 +1,13 @@
+{
+  "Lua Module Template": {
+    "prefix": "luamod",
+    "body": [
+      "local M = {}",
+      "",
+      "$1",
+      "",
+      "return M"
+    ],
+    "description": "Basic Lua module template (local M = {}... return M)"
+  }
+}

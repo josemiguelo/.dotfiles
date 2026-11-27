@@ -1,0 +1,47 @@
+// Linux: no tpack, tmux or git from brew. The tpack cask pulled in brew's tmux
+// and git, which brew's bin put ahead of the system's on PATH: a tmux server of
+// another version than the one Omarchy's own launches run, and another git.
+// tpack now comes from its release (install-tpack.ts), so this removes the
+// cask, then tmux and git unless another brew package still needs them (that
+// one is reported and left alone: removing it would break the other).
+import { executable, succeeds } from "loadout/script";
+import { brew, brewPrefix } from "#brew";
+
+const FORMULAE = ["tmux", "git"];
+const prefix = await brewPrefix();
+
+/** Without brew there's nothing to remove. */
+const hasBrew = () => executable(`${prefix}/bin/brew`);
+
+const hasCask = () => succeeds(brew("list", "--cask", "tpack"));
+const hasFormula = (f: string) => succeeds(brew("list", "--formula", f));
+/** The installed brew packages that need f. */
+const usersOf = async (f: string) =>
+  (await brew("uses", "--installed", f).quiet().nothrow()).stdout.toString().split(/\s+/).filter(Boolean);
+
+export async function check() {
+  if (!hasBrew()) return true;
+  let done = true;
+  if (await hasCask()) {
+    console.log("brew has the tpack cask");
+    done = false;
+  }
+  for (const f of FORMULAE) {
+    if ((await hasFormula(f)) && (await usersOf(f)).length === 0) {
+      console.log(`brew has ${f}`);
+      done = false;
+    }
+  }
+  return done;
+}
+
+export async function install() {
+  if (!hasBrew()) return;
+  if (await hasCask()) await brew("uninstall", "--cask", "tpack");
+  for (const f of FORMULAE) {
+    if (!(await hasFormula(f))) continue;
+    const users = await usersOf(f);
+    if (users.length > 0) console.warn(`keeping brew's ${f}: needed by ${users.join(" ")}`);
+    else await brew("uninstall", "--formula", f);
+  }
+}

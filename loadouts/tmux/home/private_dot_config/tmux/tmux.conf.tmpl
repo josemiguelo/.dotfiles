@@ -1,0 +1,241 @@
+##################
+## TMUX OPTIONS ##
+##################
+
+# This tells apps inside tmux (like Neovim) that they are in a 256-color tmux session.
+set -g default-terminal "tmux-256color"
+
+# This handles True Color (RGB), Undercurls, and Extended Keys for Kitty.
+# We use xterm-kitty specifically to ensure Kitty features are mapped correctly.
+set -as terminal-features ",xterm-kitty:RGB"
+set -as terminal-features ",xterm-kitty:undercurl"
+set -as terminal-features ",xterm-kitty:extkeys"
+# tmux doesn't detect kitty's synchronized updates. Without this its repaints
+# reach kitty unbracketed, and cursor_trail animates the half-drawn frames as a
+# ghost cursor on other lines.
+set -as terminal-features ",xterm-kitty:sync"
+set -as terminal-overrides ",xterm*:Tc" # true color
+set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'
+set -as terminal-overrides ',*:Setrgb=\E[48;2;%p1%d;%p2%d;%p3%dm'
+set -as terminal-overrides ',xterm*:Ss=\E[%p1%d q:Se=\E[5 q'
+
+# Extended Keys Logic (Keep your existing settings)
+set -gs extended-keys on
+set -g extended-keys-format csi-u
+
+set -g base-index 1
+setw -g pane-base-index 1
+set -g renumber-windows on
+set-window-option -g automatic-rename off
+
+set -g mouse on
+set -g @yank_action 'copy-pipe'
+
+# Copy mode keys. tmux otherwise picks vi or emacs from $EDITOR in whatever
+# process first started the server, and the kitty overlays and tmux-workmux-open
+# start it without one. tmux-yank already binds y in copy-mode-vi.
+setw -g mode-keys vi
+bind -T copy-mode-vi v send -X begin-selection
+
+set -g allow-passthrough on
+
+run-shell "tmux set-option -g default-shell $(command -v zsh)"
+
+# give enough time to pick the fing pane
+set -g display-panes-time 4000
+
+set -g pane-border-lines heavy
+# 'colour' half-colours the border in two-pane windows; keep it one colour
+set -g pane-border-indicators off
+
+#################
+## KEYBINDINGS ##
+#################
+unbind C-b
+set-option -g prefix C-a
+bind C-a send-prefix
+
+# The tmux-attach picker and the workmux dashboard, for where kitty's overlay
+# keys (kitty.conf) can't reach, like over ssh. Plain keys after the prefix, not
+# Alt: macOS terminals don't send Option as Meta, so M-a typed as å. A opens the
+# picker (worktrees and sessions), W the dashboard (agents). Pass the active
+# pane's dir as an argument so tmux-attach can list the current repo's workmux
+# worktrees. The format only resolves to the keypress pane inside the command
+# string; run-shell's -c flag mis-resolves it to $HOME instead. tmux-attach
+# opens its own fzf-tmux popup; the dashboard gets one here, full screen and
+# borderless like kitty's overlay, and closes it when it jumps to an agent.
+bind A run-shell -b "~/.local/bin/tmux-attach '#{pane_current_path}'"
+bind W display-popup -E -B -w 100% -h 100% -d "#{pane_current_path}" "~/.local/bin/workmux-dashboard"
+
+bind -n C-PPage previous-window
+bind -n C-NPage next-window
+
+# bind -n M-H resize-pane -L 2
+# bind -n M-L resize-pane -R 2
+# bind -n M-K resize-pane -U 2
+# bind -n M-J resize-pane -D 2
+
+bind  c  new-window      -c "#{pane_current_path}"
+bind  %  split-window -h -c "#{pane_current_path}"
+bind '"' split-window -v -c "#{pane_current_path}"
+
+# Toggle '_' prefix on the current window name to hide/show it in the status bar
+bind h run-shell 'tmux rename-window "#{?#{m:_*,#W},#{s/^_//:#W},_#W}"'
+
+bind-key -n C-S-Left swap-window -t -1\; select-window -t -1
+bind-key -n C-S-Right swap-window -t +1\; select-window -t +1
+
+# Cycle real sessions with prefix + ( / ), skipping the per-session floating scratch sessions.
+bind ( run-shell "~/.local/bin/tmux-session-cycle prev"
+bind ) run-shell "~/.local/bin/tmux-session-cycle next"
+
+# Hide those scratch sessions from the session/window trees as well. A filter
+# that evaluates to zero hides the item; tmux ignores it if nothing would be left.
+bind s choose-tree -Zs -f '#{?#{m:floating-*,#{session_name}},0,1}'
+bind w choose-tree -Zw -f '#{?#{m:floating-*,#{session_name}},0,1}'
+
+# go to the top/first pane and maximize it
+bind Z select-pane -t 1 \; resize-pane -Z
+
+bind X confirm-before -p "kill session #S? (y/n)" kill-session
+
+bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
+
+#############
+## PLUGINS ##
+#############
+set -g @plugin 'tmuxpack/tpack'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'josemiguelo/tmux-floating-scratchpad'
+
+set -g @floating_scratch_term 'C-t'
+set -g @floating_scratch_width '90%'
+set -g @floating_scratch_height '90%'
+# Copied onto the scratch session by the plugin. It has no defaults of its own.
+set -g @floating_light_env 'COLORFGBG=0;15 TMUX_FLOATING_THEME=light'
+set -g @floating_dark_env 'COLORFGBG=15;0 TMUX_FLOATING_THEME=dark'
+# Let tmux-attach create project sessions from their tmuxinator layouts.  If
+# Continuum restores on server start, it recreates a same-named session first,
+# causing tmux-attach to switch to that saved layout instead.  Continuum still
+# autosaves; restore remains available explicitly with prefix + C-r below.
+set -g @continuum-restore 'off'
+
+# The floating scratch sessions are saved and restored like any other, but if
+# a save runs while the popup is open (continuum autosaves) the state line
+# names floating-<session> as the active session and restore would land the
+# client there. Map it back to its parent. perl, not sed -i: the flag differs on macOS.
+set -g @resurrect-hook-post-save-layout "perl -pi -e 's/\\tfloating-/\\t/g if /^state\\t/'"
+
+#######################
+## TOKYO NIGHT THEME ##
+#######################
+
+# Kitty carries the Tokyo Night palette in its ANSI slots and swaps storm for
+# day with the system appearance (see kitty/*-theme.auto.conf). Naming slots
+# rather than hex follows that switch.
+#   color0 black   color1 red     color2 green  color3 yellow
+#   color4 blue    color5 magenta color6 cyan   color8 bright black
+#   color16 orange  color17 red (Tokyo Night's own, in the extended slots)
+
+# Foreground for text on a bright accent. color0 is near black under storm but
+# #b4b5b9 under day. Popup clients report an empty client_theme; @floating_theme
+# is the parent appearance stored on the scratch session. Comma-free so
+# tmux-prefix-highlight can still split its own settings on commas.
+set-option -g @fg_on_accent "#{?#{==:#{?#{==:#{client_theme},},#{@floating_theme},#{client_theme}},light},#ffffff,color0}"
+
+set-option -g status-style "bg=default"
+set-option -g mode-style "bg=color8,fg=color15"
+
+# Messages
+set-option -g message-style "bg=default,fg=color4"
+set-option -g message-command-style "bg=default,fg=color4"
+
+# Panes
+set-option -g pane-border-style "fg=color8"
+set-option -g pane-active-border-style "fg=color4"
+set-option -g display-panes-colour "color8"
+set-option -g display-panes-active-colour "color4"
+
+# Popups. tmux 3.8 defaults these to an opaque theme grey, which hides the
+# terminal's own (transparent) background behind the floating scratchpad.
+# "default" is what 3.7 and earlier already used.
+set-option -g popup-style default
+set-option -g popup-border-style default
+
+{{ if (includeTemplate "loadout/machine" . | fromJson).omarchy -}}
+# omarchy-theme-set-tmux writes the omarchy theme's fg/bg/cursor into these on
+# every theme switch, so panes stop matching kitty's palette and go opaque.
+# Pinned so a reload undoes it; loadout's omarchy-tmux-theme script watches
+# the live server (and the per-pane colours it also pushes).
+set-option -g window-style default
+set-option -g window-active-style default
+set-option -gu cursor-colour
+{{ end -}}
+
+# Copy mode search
+set-option -g copy-mode-match-style "bg=color3,fg=#{E:@fg_on_accent}"
+set-option -g copy-mode-current-match-style "bg=color4,fg=#{E:@fg_on_accent}"
+
+# Clock
+set-option -g clock-mode-colour "color4"
+
+# Center
+set-option -g status-justify left
+set-window-option -g window-status-current-format "#[range=window|#{window_index}]#{?#{m:_*,#W},,#[fg=color4]#[bg=default]▐#[fg=#{E:@fg_on_accent}]#[bg=color4]#[bold] #I #W #{?window_zoomed_flag,(ZOOMED),}#{?@workmux_status, #{@workmux_status},} #[fg=color4]#[bg=default]▌}#[norange]"
+set-window-option -g window-status-format "#[range=window|#{window_index}]#{?#{m:_*,#W},, #I #W#{?@workmux_status, #{@workmux_status},} }#[norange]"
+
+set-window-option -g window-status-separator ' '
+set-window-option -g window-status-style "bg=default"
+set-window-option -g window-status-activity-style "bg=default,fg=color3"
+set-window-option -g window-status-bell-style "bg=default,fg=color1,bold"
+
+# Left
+set-option -g status-left '#{prefix_highlight}'
+# the plugin builds its style by splitting this on commas, so bold rides along on fg
+set -g @prefix_highlight_fg '#{E:@fg_on_accent},bold'
+# Orange, not cyan: cyan sits ~20 degrees from the active window's blue.
+set -g @prefix_highlight_bg 'colour16'
+set -g @prefix_highlight_show_copy_mode 'on'
+set -g @prefix_highlight_copy_mode_attr 'fg=#{E:@fg_on_accent},bg=color3,bold'
+set -g @prefix_highlight_show_sync_mode 'on'
+set -g @prefix_highlight_sync_mode_attr 'fg=#{E:@fg_on_accent},bg=color2'
+set -g @prefix_highlight_copy_prompt 'COPY'
+set -g @prefix_highlight_sync_prompt 'SYNC'
+
+# Right. Blank in the floating scratch sessions: the popup sits on top of the
+# session it belongs to, so the name is already on screen underneath. One
+# #[..] per attribute: commas would split the #{?} conditional.
+set-option -g status-right "#{?#{m:floating-*,#S},,#[fg=#{E:@fg_on_accent}]#[bg=color5]#[bold] #S #[default]}"
+
+# Status bar
+# 1. Enable two lines for the status bar
+# 2. Set the top line (index 0) to be the "padding" line (as an empty line)
+# 3. Move your existing status content to the bottom line (index 1)
+# The window list is dropped in a floating scratch session while it has a
+# single window; there it only repeats "1 zsh".
+# The list=* markup is what the stock status-format uses: when the windows
+# overflow, tmux trims the list (showing < / > markers) and scrolls it to keep
+# the focus (current window) visible, instead of drawing over status-right.
+set -g status 2
+set -g status-format[0] ""
+set -g @window_list "#{W:#{T:window-status-format},#[list=focus]#{T:window-status-current-format}#[default list=on]}"
+set -g status-format[1] "#[align=left]#{E:status-left}#[list=on align=left]#[list=left-marker fg=color8]<#[list=right-marker fg=color8]>#[list=on default]#{?#{&&:#{m:floating-*,#S},#{==:#{session_windows},1}},,#{E:@window_list}}#[nolist align=right]#{E:status-right}"
+
+##########
+## INIT ##
+##########
+run 'tpack init'
+
+# Rebound after the plugins so this wins over resurrect's own binding. Restore
+# ends by switching the calling client to the saved active session; from the
+# scratch popup that nests the real session inside the popup.
+bind C-r if-shell -F '#{m:floating-*,#S}' {
+  display-message "not from the scratchpad: detach first"
+} {
+  run-shell "#{@resurrect-restore-script-path}"
+}

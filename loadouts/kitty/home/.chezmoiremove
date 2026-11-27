@@ -1,0 +1,2 @@
+# A dashboard script kitty opened, before workmux had its own.
+.local/bin/kitty-workmux-dashboard

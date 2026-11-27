@@ -1,0 +1,178 @@
+#!/usr/bin/env zsh
+# Tests loadouts/zsh/home/private_dot_config/zsh/plugins/android/android.plugin.zsh in
+# isolation: each case sources it in a fresh `zsh -c` subshell with $HOME
+# pointed at a throwaway fixture directory, so it never touches your real
+# Android SDK install or PATH. Run: tests/test-android-plugin.zsh
+#
+# Zsh-specific ((N), (/Nn) glob qualifiers), so this must run under zsh, not
+# bash — it can't even be parsed by bash.
+
+SCRIPT_DIR="${0:A:h}/.."
+SCRIPT="$SCRIPT_DIR/loadouts/zsh/home/private_dot_config/zsh/plugins/android/android.plugin.zsh"
+# The plugin reads the SDK directory from here, as deployed to ~/.local/lib.
+SDK_DIR_LIB="$SCRIPT_DIR/loadouts/android-sdk/home/private_dot_local/lib/android-sdk-dir.sh"
+WORK="$(mktemp -d)"
+
+cleanup() { rm -rf -- "${WORK:?}" }
+trap cleanup EXIT
+
+# macOS's default APFS volume is case-insensitive (case-preserving): creating
+# "Sdk" then "sdk" (or just "sdk" alone) yields one directory answering to
+# both names, so an sdk-only fixture can't be told apart from a Sdk one there.
+mkdir -p "$WORK/.case-probe/Case"
+case_insensitive_fs=0
+[[ -d "$WORK/.case-probe/case" ]] && case_insensitive_fs=1
+rm -rf -- "${WORK:?}/.case-probe"
+
+pass=0
+fail=0
+ok() { pass=$((pass + 1)); echo "  ok - $1" }
+bad() { fail=$((fail + 1)); echo "  FAIL - $1" }
+skip() { echo "  skip - $1" }
+eq() { [[ "$1" == "$2" ]] && ok "$3" || bad "$3 (expected [$2], got [$1])" }
+contains() { [[ "$1" == *"$2"* ]] && ok "$3" || bad "$3 (expected to contain [$2], got [$1])" }
+not_contains() { [[ "$1" != *"$2"* ]] && ok "$3" || bad "$3 (expected NOT to contain [$2], got [$1])" }
+
+# Runs the plugin in a fresh subshell with $1 as $HOME, then echoes
+# "$ANDROID_HOME|$ANDROID_SDK_ROOT|$PATH" so the caller can assert on it. The
+# plugin only conditionally overwrites these — it never resets them — so
+# start from a clean slate rather than inheriting this machine's real values.
+# The fixture gets the deployed SDK-directory helper unless it already has
+# one (or, for the case without it, a .no-lib marker).
+run_with_home() {
+  local fixture_home="$1"
+  if [[ ! -e "$fixture_home/.no-lib" ]]; then
+    mkdir -p "$fixture_home/.local/lib"
+    cp "$SDK_DIR_LIB" "$fixture_home/.local/lib/android-sdk-dir.sh"
+  fi
+  HOME="$fixture_home" SCRIPT="$SCRIPT" PATH="/usr/bin:/bin" \
+    ANDROID_HOME="" ANDROID_SDK_ROOT="" zsh -c '
+    source "$SCRIPT"
+    print -r -- "$ANDROID_HOME|$ANDROID_SDK_ROOT|$PATH"
+  '
+}
+
+### no SDK directory at all ###
+echo "no SDK directory"
+
+fixture="$WORK/none"
+mkdir -p "$fixture"
+result=$(run_with_home "$fixture")
+eq "${result%%|*}" "" "leaves ANDROID_HOME unset"
+
+### helper not deployed yet ###
+echo "no ~/.local/lib/android-sdk-dir.sh"
+
+fixture="$WORK/no-lib"
+mkdir -p "$fixture/Library/Android/Sdk"
+touch "$fixture/.no-lib"
+result=$(run_with_home "$fixture" 2>&1)
+eq "${result%%|*}" "" "leaves ANDROID_HOME unset, without an error, before the dotfiles are applied"
+
+### capitalized Sdk ###
+echo "capitalized Sdk"
+
+fixture="$WORK/cap"
+mkdir -p "$fixture/Library/Android/Sdk/platform-tools"
+result=$(run_with_home "$fixture")
+android_home="${result%%|*}"
+eq "$android_home" "$fixture/Library/Android/Sdk" "finds Sdk (capitalized)"
+contains "$result" "$android_home/platform-tools" "adds platform-tools to PATH"
+
+### lowercase sdk ###
+echo "lowercase sdk"
+
+fixture="$WORK/lower"
+mkdir -p "$fixture/Library/Android/sdk/platform-tools"
+if ((case_insensitive_fs)); then
+  skip "finds sdk (lowercase): filesystem is case-insensitive, Sdk and sdk are the same path here"
+else
+  result=$(run_with_home "$fixture")
+  eq "${result%%|*}" "$fixture/Library/Android/sdk" "finds sdk (lowercase), tolerating the case difference"
+fi
+
+### both Sdk and sdk exist ###
+echo "both Sdk and sdk exist"
+# On a case-insensitive filesystem the second mkdir -p below is a no-op onto
+# the first, so these pass trivially there (only one directory ever exists)
+# rather than exercising the Sdk-over-sdk precedence itself.
+
+fixture="$WORK/both"
+mkdir -p "$fixture/Library/Android/Sdk" "$fixture/Library/Android/sdk"
+result=$(run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk"
+result=$(LC_ALL=C run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under the C locale"
+result=$(LC_ALL=en_US.UTF-8 run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "picks Sdk over sdk under en_US.UTF-8 (whose collation sorts sdk first)"
+
+### Linux: ~/Android ###
+echo "Linux ~/Android"
+
+fixture="$WORK/linux"
+mkdir -p "$fixture/Android/Sdk/platform-tools"
+result=$(run_with_home "$fixture")
+android_home="${result%%|*}"
+eq "$android_home" "$fixture/Android/Sdk" "finds ~/Android/Sdk, where Android Studio puts it on Linux"
+contains "$result" "$android_home/platform-tools" "adds its platform-tools to PATH"
+
+fixture="$WORK/linux-lower"
+mkdir -p "$fixture/Android/sdk"
+if ((case_insensitive_fs)); then
+  skip "finds ~/Android/sdk (lowercase): filesystem is case-insensitive"
+else
+  result=$(run_with_home "$fixture")
+  eq "${result%%|*}" "$fixture/Android/sdk" "finds ~/Android/sdk (lowercase)"
+fi
+
+fixture="$WORK/linux-both"
+mkdir -p "$fixture/Android/Sdk" "$fixture/Android/sdk"
+result=$(LC_ALL=en_US.UTF-8 run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Android/Sdk" "picks ~/Android/Sdk over sdk under en_US.UTF-8"
+
+fixture="$WORK/mac-and-linux"
+mkdir -p "$fixture/Library/Android/Sdk" "$fixture/Android/Sdk"
+result=$(run_with_home "$fixture")
+eq "${result%%|*}" "$fixture/Library/Android/Sdk" "prefers ~/Library/Android, so a Mac's choice never changes"
+
+### ANDROID_SDK_ROOT mirrors ANDROID_HOME ###
+echo "ANDROID_SDK_ROOT"
+
+fixture="$WORK/mirror"
+mkdir -p "$fixture/Library/Android/Sdk"
+result=$(run_with_home "$fixture")
+parts=("${(@s:|:)result}")
+eq "${parts[2]}" "${parts[1]}" "ANDROID_SDK_ROOT is set to the same path as ANDROID_HOME"
+
+### build-tools: highest version wins, including natural (not lexicographic) sort ###
+echo "build-tools version picking"
+
+fixture="$WORK/versions"
+mkdir -p "$fixture/Library/Android/Sdk/build-tools/9.0.0"
+mkdir -p "$fixture/Library/Android/Sdk/build-tools/28.0.3"
+mkdir -p "$fixture/Library/Android/Sdk/build-tools/34.0.0"
+result=$(run_with_home "$fixture")
+contains "$result" "build-tools/34.0.0" \
+  "picks the highest version (34.0.0), not the lexicographically-last one (9.0.0)"
+not_contains "$result" "build-tools/9.0.0:" "does not add the lower versions to PATH"
+
+### build-tools directory missing ###
+echo "no build-tools directory"
+
+fixture="$WORK/no-buildtools-dir"
+mkdir -p "$fixture/Library/Android/Sdk/platform-tools"
+result=$(run_with_home "$fixture")
+not_contains "$result" "/build-tools/" "does not add a build-tools entry"
+contains "$result" "platform-tools" "still adds the rest of the SDK PATH entries"
+
+### build-tools directory present but empty ###
+echo "empty build-tools directory"
+
+fixture="$WORK/empty-buildtools-dir"
+mkdir -p "$fixture/Library/Android/Sdk/build-tools"
+result=$(run_with_home "$fixture")
+not_contains "$result" "/build-tools/" "adds no build-tools version when none are installed"
+
+echo
+echo "$pass passed, $fail failed"
+[[ "$fail" -eq 0 ]]

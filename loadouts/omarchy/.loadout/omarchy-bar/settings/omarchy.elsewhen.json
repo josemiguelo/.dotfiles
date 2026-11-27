@@ -1,0 +1,26 @@
+{
+  "units": "C",
+  "cities": [
+    {
+      "name": "Quito",
+      "zone": "America/Guayaquil",
+      "region": "Ecuador",
+      "lat": -0.18,
+      "lon": -78.47
+    },
+    {
+      "name": "Almería",
+      "zone": "Europe/Madrid",
+      "region": "Spain",
+      "lat": 36.84,
+      "lon": -2.46
+    },
+    {
+      "name": "Charleston",
+      "zone": "America/New_York",
+      "region": "South Carolina",
+      "lat": 32.78,
+      "lon": -79.93
+    }
+  ]
+}

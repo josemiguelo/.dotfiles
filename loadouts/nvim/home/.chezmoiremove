@@ -1,0 +1,3 @@
+# What nvim no longer has, removed from machines.
+.config/nvim/lua/features/langs/lisp.lua
+.config/nvim/lua/features/langs/loadout.lua

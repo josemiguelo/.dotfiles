@@ -1,0 +1,126 @@
+# Profile startup with: ZSH_PROFILE=1 zsh -i -c exit
+[[ -n "$ZSH_PROFILE" ]] && zmodload zsh/zprof
+
+# PATH and FPATH are exported, so nested shells re-append every entry
+typeset -U path fpath
+
+export PATH="$HOME/.local/bin:$PATH"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
+
+# completion; compinit itself is run by belak/zsh-utils once antidote has
+# finished adding plugin directories to fpath. $ZSH_CACHE_DIR/completions holds
+# the completions plugins generate at runtime (_kubectl) and has to be on
+# fpath or compinit never picks them up.
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p $ZSH_CACHE_DIR/completions
+fpath=($ZDOTDIR/completions $ZSH_CACHE_DIR/completions "${fpath[@]-}")
+
+# Init snippets from slow tools get cached and only regenerated when the tool
+# itself is newer than the cache, which keeps a fork out of every startup.
+typeset -g __zcache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/init"
+zcache() {
+  local name=$1; shift
+  local bin=${commands[$1]:-$1}
+  [[ -x $bin ]] || return 0
+  local file=$__zcache_dir/$name.zsh
+  if [[ ! -s $file || $bin -nt $file ]]; then
+    [[ -d $__zcache_dir ]] || mkdir -p $__zcache_dir
+    "$@" >| $file || { command rm -f $file; return 1; }
+  fi
+  source $file
+}
+
+# zstyles
+[[ -r $ZDOTDIR/.zstyles ]] && . $ZDOTDIR/.zstyles
+
+# use antidote for plugin management
+export antidote_path=${XDG_DATA_HOME:=~/.local/share}/mattmc3/antidote
+[[ -d $antidote_path ]] || git clone --depth 1 --quiet https://github.com/mattmc3/antidote $antidote_path
+
+source $antidote_path/antidote.zsh
+
+# ohmyzsh's lib calls compdef before zsh-utils has run compinit, so queue those
+# registrations and replay them once compinit has defined the real compdef
+typeset -ga _compdef_queue=()
+compdef() { _compdef_queue+=( "${(j: :)${(q)@}}" ) }
+
+antidote load
+
+if (( $+_comps )); then
+  for _cd in $_compdef_queue; do eval "compdef $_cd"; done
+fi
+unset _cd _compdef_queue
+
+# the brew plugin runs first so plugins don't shell out to the slow /usr/bin
+# stubs, but mise's activation prepends its own paths afterwards; re-assert
+# homebrew's precedence over the system's folders here: brew goes right before
+# the first of them, so mise, ~/.local/bin and Omarchy's command overrides
+# still come first (at the front, typeset -U would keep brew ahead of them
+# even after mise's hook rewrites PATH). A plain array move rather than
+# another brew shellenv. BREW_PREFIX comes from the brew plugin (brew-prefix.sh).
+() {
+  local -a brew=( $BREW_PREFIX/{bin,sbin}(N-/) )
+  (( $#brew )) || return 0
+  path=( ${path:|brew} )
+  local i=${path[(i)(/usr/local/sbin|/usr/local/bin|/usr/sbin|/usr/bin|/sbin|/bin)]}
+  path=( $path[1,i-1] $brew $path[i,-1] )
+}
+
+# history must be set after antidote load: ohmyzsh's lib/history.zsh raises
+# HISTSIZE to 50000 whenever it finds a smaller value, so anything set earlier
+# is silently overridden. HISTSIZE stays above SAVEHIST so hist_expire_dups_first
+# has room to drop duplicates before the file is trimmed.
+HISTFILE="$HOME/.local/state/zsh_history"
+HISTSIZE=50000
+SAVEHIST=10000
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
+
+zcache zoxide zoxide init zsh
+
+# zi opens fzf through `zoxide query -i`, not fzf's widgets, so conf.d/fzf.zsh's
+# re-pick of the palette doesn't reach it; re-pick it here. This wraps zoxide's
+# function, which only exists once zoxide init has run, after conf.d. It runs
+# in this shell, so plain fzf calls after a zi get the new palette too.
+if (( $+functions[__zoxide_zi] && $+functions[fzf-theme] )); then
+  functions[_zoxide_zi_orig]=$functions[__zoxide_zi]
+  __zoxide_zi() {
+    fzf-theme
+    _zoxide_zi_orig "$@"
+  }
+fi
+
+# --print-full-init is what `starship init zsh` ends up evaluating anyway
+zcache starship starship init zsh --print-full-init
+
+# after HISTFILE and antidote load, so Ctrl+R is atuin's and not ohmyzsh's fzf
+# plugin's. Up stays ohmyzsh's prefix search and ? types itself. The cache
+# doesn't notice a change of flags: remove init/atuin.zsh after changing them.
+# zsh's history stays the suggestions' fallback: init puts atuin before whatever
+# strategy is set, and leaves only itself when none is.
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+zcache atuin atuin init zsh --disable-up-arrow --disable-ai
+[[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/atuin/theme.zsh" ]] && source "${XDG_CONFIG_HOME:-$HOME/.config}/atuin/theme.zsh"
+
+[[ -n "$ZSH_PROFILE" ]] && zprof
+
+# Publish whether this pane's shell is idle at a prompt, for automation that
+# types into a pane (a Neovim plugin's task runner, say) to wait on. Each pane gets
+# a file named by $TMUX_PANE holding "idle" from the first prompt on, and
+# "busy" while a command runs. A `tmux wait-for` latch was tried first, but
+# it is consumed by one waiter and never fires again, so a later send would
+# hang. This is a flag that can be read any number of times.
+#
+# Builtins only (print, no forks per prompt), and nothing is typed into the
+# pane. The file goes under /tmp, not $TMPDIR: a tmux server's environment
+# may not carry the same $TMPDIR as the process that reads the file.
+if [[ -n "$TMUX_PANE" ]]; then
+  _pane_state_dir=/tmp/pane-shell-state-$UID
+  [[ -d $_pane_state_dir ]] || mkdir -p $_pane_state_dir
+  _pane_state_file=$_pane_state_dir/$TMUX_PANE
+  _pane_state_precmd() { print -r -- idle >| $_pane_state_file }
+  _pane_state_preexec() { print -r -- busy >| $_pane_state_file }
+  _pane_state_exit() { command rm -f $_pane_state_file }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd _pane_state_precmd
+  add-zsh-hook preexec _pane_state_preexec
+  add-zsh-hook zshexit _pane_state_exit
+fi

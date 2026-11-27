@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Prints the running tmux server's own working directory; exits 1 when no
+# server is running. A server keeps the directory it was started from for
+# life, and once that directory is deleted tmux 3.7 ignores -c: every new pane
+# opens in the deleted directory. On Linux a deleted one prints with the
+# kernel's " (deleted)" suffix. Used by tmux-ensure-server's warning and by the
+# loadout sessions' "finish a feature" check (NEW-LOADOUT-SESSION-AGENTS.md).
+
+pid=$(tmux display-message -p '#{pid}' 2>/dev/null) || exit 1
+[[ -n "$pid" ]] || exit 1
+
+if [[ -e /proc/$pid/cwd ]]; then
+  readlink "/proc/$pid/cwd"
+else
+  # macOS: no /proc. lsof's -Fn prints the path on its "n" line.
+  lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p'
+fi

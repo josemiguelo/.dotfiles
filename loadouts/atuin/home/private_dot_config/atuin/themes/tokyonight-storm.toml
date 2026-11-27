@@ -1,0 +1,23 @@
+# Tokyo Night Storm (dark), from tokyonight.nvim; theme.zsh picks it.
+[theme]
+name = "tokyonight-storm"
+parent = "default"
+
+# AlertError is the selected row as well as failures, so it is purple, not red.
+# Annotation is the key hints on top and the command preview at the bottom.
+[colors]
+Base = "#c0caf5"
+Title = "#29a4bd"
+Important = "#7aa2f7"
+Guidance = "#9aa5ce"
+Muted = "#9aa5ce"
+Annotation = "#a9b1d6"
+AlertInfo = "#9ece6a"
+AlertWarn = "#ff9e64"
+AlertError = "#bb9af7"
+SyntaxCommand = "#7aa2f7"
+SyntaxFlag = "#2ac3de"
+SyntaxString = "#9ece6a"
+SyntaxVariable = "#7dcfff"
+SyntaxOperator = "#ff9e64"
+SyntaxComment = "#9aa5ce"

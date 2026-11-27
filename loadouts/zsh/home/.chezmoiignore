@@ -1,0 +1,4 @@
+# zsh's files that zsh itself writes there.
+.config/zsh/.zplugins.zsh.zwc
+.config/zsh/.zplugins.zsh.zwc.old
+.config/zsh/.zcompdump

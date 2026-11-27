@@ -1,0 +1,6 @@
+# zsh's files that left the source.
+.config/zsh/plugins/asdf
+.config/zsh/plugins/asdf-pre
+.config/zsh/functions/start-loadout
+.config/zsh/functions/hello
+.config/zsh/functions/is_apt_package_installed

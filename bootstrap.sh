@@ -1,0 +1,229 @@
+#!/bin/sh
+# A new machine, from nothing to its whole loadout, in one command:
+#
+#   curl -fsSL https://raw.githubusercontent.com/josemiguelo/.dotfiles/master/bootstrap.sh | sh -s -- <machine>
+#
+# <machine> names a machine the repo declares (machine("<machine>", …) in
+# machines/<machine>.loadout.ts, compiled into loadout.lock.json) and becomes the
+# hostname, so loadout, chezmoi's templates and the state file all agree on
+# it. The order is the point: the hostname before the first apply (templates
+# rendered for an unknown host get the defaults, e.g. omarchy: false), the
+# dotfiles before machine new (its scripts read the applied configs).
+#
+#   1. the lock declares <machine> (asked over https, before any change)
+#   2. git and chezmoi
+#   3. the hostname
+#   4. ~/.local given back to the user where a root-run installer took it
+#   5. loadout
+#   6. chezmoi init over https (the repo is public; github-ssh-key registers
+#      this machine's key later, and pushes go over ssh), a loadout command to
+#      build chezmoi's source from the tool folders (it isn't committed), then
+#      chezmoi apply
+#   7. loadout machine new --yes, MISE_IGNORED_CONFIG_PATHS set as zsh
+#      would (from the repo's dirs mise would otherwise ask to trust its copy
+#      of mise's config)
+#
+# A machine of a private child repo of this one (loadout's contract 18: the
+# work laptop's, which builds on these dotfiles) takes --child <ssh url>: the
+# child declares it, so this repo's lock isn't asked; its hostname stays the
+# one its IT gave it, the name going in ~/.config/loadout/machine and the
+# child's checkout in ~/.config/loadout/repo (~/.config/zsh/.zshenv exports
+# both); the
+# child is cloned over ssh before the first apply (this repo's templates read
+# its machine through LOADOUT_REPO), so the machine's ssh key must already be
+# on GitHub; and loadout sets up the child, which runs this repo's recipes.
+#
+# machine new runs its later phase too (the programs and scripts the
+# repo marks `later`: big downloads, builds from source) after the rest, so
+# every question it asks comes first and the slow part needs nobody; stopped
+# there, the machine is set up and running bootstrap again finishes it.
+#
+# A step loadout couldn't finish (one that needs a hand, such as Android
+# Studio or a browser extension, fails on every fresh machine) doesn't stop
+# the end: loadout lists what failed, the closing instructions still print,
+# and the exit status is still loadout's.
+#
+# Safe to run again: every step skips what's done. --dry-run prints the
+# commands without running them.
+# usage: bootstrap.sh [--dry-run] <machine> [--child <ssh url>]
+set -eu
+
+GH=josemiguelo/.dotfiles
+# Where the dotfiles, their lock and loadout's installer come from: GitHub,
+# unless a test of what isn't published says otherwise (a VM served from the
+# host; install.sh reads LOADOUT_VERSION and LOADOUT_DOWNLOAD_BASE itself).
+DOTFILES=${BOOTSTRAP_DOTFILES:-https://github.com/$GH.git}
+RAW=${BOOTSTRAP_RAW:-https://raw.githubusercontent.com/$GH/master}
+REPO=$HOME/.local/share/chezmoi
+LOADOUT_INSTALL=${BOOTSTRAP_LOADOUT_INSTALL:-https://raw.githubusercontent.com/josemiguelo/loadout/master/install.sh}
+
+say() { printf '\033[1m==> %s\033[0m\n' "$*"; }
+die() { printf 'bootstrap: %s\n' "$*" >&2; exit 1; }
+# fetch_run <url> [args…]: the installer script at url, downloaded whole
+# first and then run with args. A failed download stops here with curl's
+# error; piped or substituted, it would run an empty script that succeeds.
+fetch_run() {
+  _fr=$(mktemp)
+  curl -fsSL "$1" -o "$_fr" || { rm -f "$_fr"; die "couldn't download $1"; }
+  shift
+  _rc=0
+  sh "$_fr" "$@" || _rc=$?
+  rm -f "$_fr"
+  return "$_rc"
+}
+
+run() {
+  printf '  + %s\n' "$*"
+  [ -n "$DRY" ] || "$@"
+}
+
+main() {
+  DRY=
+  if [ "${1:-}" = --dry-run ]; then DRY=1; shift; fi
+  MACHINE=${1:-}
+  [ -n "$MACHINE" ] || die "usage: bootstrap.sh [--dry-run] <machine> [--child <ssh url>]  (a machine in https://github.com/$GH/tree/master/machines)"
+  CHILD=
+  if [ "${2:-}" = --child ]; then CHILD=${3:-}; [ -n "$CHILD" ] || die "--child needs the child repo's ssh url"; fi
+  OS=$(uname -s)
+  OMARCHY=
+  command -v omarchy >/dev/null 2>&1 && OMARCHY=1
+
+  say "1. machine $MACHINE"
+  if [ -n "$CHILD" ]; then
+    echo "  declared by the child repo $CHILD"
+  else
+  # The lock's machines, one per line: the keys of its "machines" object,
+  # which loadout writes pretty-printed, two spaces per level.
+  machines=$(curl -fsSL "$RAW/loadout.lock.json" 2>/dev/null |
+    awk '/^    "machines": [{]/ { m = 1; next } m && /^    [}]/ { exit } m && /^      "[^"]*": [{]/ { sub(/^ *"/, ""); sub(/".*/, ""); print }')
+  if ! printf '%s\n' "$machines" | grep -qx "$MACHINE"; then
+    cat >&2 <<EOF
+bootstrap: $GH declares no machine $MACHINE (it has: $(printf '%s ' $machines)).
+A machine new to the repo is declared first, extending its profiles, in
+machines/$MACHINE.loadout.ts, e.g.
+  // MacBookPro16,1 (T2) running Omarchy.
+  machine<Data>("$MACHINE", { extends: [t2Macbook] });
+Then loadout repo compile, commit and push (the lock too), and run this again.
+EOF
+    exit 1
+  fi
+  fi
+
+  say "2. git and chezmoi"
+  if [ -n "$OMARCHY" ] && [ ! -s /var/lib/pacman/sync/core.db ]; then
+    # Omarchy 4's offline ISO leaves pacman without its online package
+    # lists, so `omarchy pkg add` finds nothing; its pacman hook refuses a
+    # direct -Syu, and `omarchy update -y` syncs them unattended.
+    run omarchy update -y
+  fi
+  command -v git >/dev/null 2>&1 && { command -v chezmoi >/dev/null 2>&1 || [ -x "$HOME/.local/bin/chezmoi" ]; } &&
+    echo "  present"
+  if ! command -v git >/dev/null 2>&1; then
+    if [ -n "$OMARCHY" ]; then run omarchy pkg add git
+    elif [ "$OS" = Darwin ]; then run xcode-select --install; die "install the command line tools, then run this again"
+    else die "install git, then run this again"
+    fi
+  fi
+  if ! command -v chezmoi >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/chezmoi" ]; then
+    if [ -n "$OMARCHY" ]; then run omarchy pkg add chezmoi
+    else run fetch_run https://get.chezmoi.io -b "$HOME/.local/bin"
+    fi
+  fi
+  PATH=$HOME/.local/bin:$PATH
+
+  say "3. hostname"
+  if [ -n "$CHILD" ]; then
+    # Its IT's hostname stays; the name is loadout's alone.
+    NAMEFILE=$HOME/.config/loadout/machine
+    if [ "$(cat "$NAMEFILE" 2>/dev/null)" != "$MACHINE" ]; then
+      run mkdir -p "$(dirname "$NAMEFILE")"
+      run sh -c 'printf "%s\n" "$1" >"$2"' sh "$MACHINE" "$NAMEFILE"
+    else
+      echo "  already $MACHINE (in $NAMEFILE)"
+    fi
+    # chezmoi's first apply runs before any zsh reads that file.
+    export LOADOUT_MACHINE="$MACHINE"
+  else
+    current=$(hostname -s 2>/dev/null || hostname)
+    if [ "$current" != "$MACHINE" ]; then
+      if [ "$OS" = Darwin ]; then
+        for name in HostName LocalHostName ComputerName; do run sudo scutil --set "$name" "$MACHINE"; done
+      else
+        run sudo hostnamectl set-hostname "$MACHINE"
+      fi
+    else
+      echo "  already $MACHINE"
+    fi
+  fi
+
+  say "4. ~/.local ownership"
+  if [ -d "$HOME/.local" ] && [ -n "$(find "$HOME/.local" ! -user "$(id -u)" -print -quit 2>/dev/null)" ]; then
+    run sh -c 'find "$HOME/.local" ! -user "$(id -u)" -exec sudo chown "$(id -u):$(id -g)" {} +'
+  else
+    echo "  all yours"
+  fi
+
+  say "5. loadout"
+  if [ ! -x "$HOME/.local/bin/loadout" ] && ! command -v loadout >/dev/null 2>&1; then
+    run fetch_run "$LOADOUT_INSTALL"
+  else
+    echo "  installed"
+  fi
+
+  say "6. dotfiles"
+  LREPO=$REPO
+  if [ -n "$CHILD" ]; then
+    # Bare, with its default branch's worktree, as bare-repos clones; its
+    # folder drops a leading dot (.dotfiles-work lands in dotfiles-work).
+    name=$(basename "$CHILD" .git)
+    dir=$HOME/Repos/gh/josemiguelo/${name#.}
+    if [ ! -d "$dir" ]; then
+      ssh -T -o BatchMode=yes -o ConnectTimeout=10 git@github.com 2>&1 | grep -q "successfully authenticated" || [ -n "$DRY" ] ||
+        die "the child repo is private: put this machine's ssh key on GitHub first (ssh-keygen -t ed25519, then gh ssh-key add ~/.ssh/id_ed25519.pub), then run this again"
+      run git clone --quiet --bare "$CHILD" "$dir"
+      run git -C "$dir" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+      run git -C "$dir" fetch --quiet origin
+    fi
+    # Its hooks, as this repo's (a commit whose lock is stale is refused).
+    run git -C "$dir" config core.hooksPath .githooks
+    branch=$(git -C "$dir" symbolic-ref --quiet --short HEAD 2>/dev/null || echo main)
+    [ -d "$dir/all_worktrees/$branch" ] || run git -C "$dir" worktree add --quiet "$dir/all_worktrees/$branch" "$branch"
+    LREPO=$dir/all_worktrees/$branch
+    run sh -c 'printf "%s\n" "$1" >"$2"' sh "$LREPO" "$HOME/.config/loadout/repo"
+    export LOADOUT_REPO="$LREPO"
+  fi
+  run chezmoi init "$DOTFILES"
+  # chezmoi's source (.chezmoi-home, which .chezmoiroot names) is built from
+  # the tool folders by loadout and isn't committed: any loadout command
+  # writes it.
+  run sh -c 'PATH="$HOME/.local/bin:$PATH" loadout --repo "$1" machine explain >/dev/null' sh "$REPO"
+  run chezmoi apply
+  # The repo's hooks (.githooks/pre-commit refuses manifests committed without
+  # their compiled lock).
+  run git -C "$REPO" config core.hooksPath .githooks
+
+  say "7. loadout machine new"
+  if [ -n "$CHILD" ]; then
+    # The child's own dotfiles; this repo's are applied above.
+    run env LOADOUT_REPO="$LREPO" loadout --repo "$LREPO" --machine "$MACHINE" config apply
+  fi
+  setup=0
+  run env LOADOUT_REPO="$LREPO" \
+    MISE_IGNORED_CONFIG_PATHS="$REPO:$HOME/.local/share/chezmoi__worktrees" \
+    loadout --repo "$LREPO" --machine "$MACHINE" machine new --yes || setup=$?
+
+  if [ "$setup" -eq 0 ]; then
+    say "done: $MACHINE"
+  else
+    say "done: $MACHINE, with steps left (loadout listed them above)"
+    echo "Finish them by hand or fix them, then run loadout machine new again"
+    echo "(it skips what's done)."
+  fi
+  echo "Reboot now: the login shell, new groups (docker, libvirt), the rebuilt"
+  echo "initramfs and the session's environment only apply after it."
+  return "$setup"
+}
+
+# Last, with the terminal as input: under `curl | sh` the script itself is
+# stdin, and sudo, gh's login and the installers need a terminal to ask on.
+if [ -t 0 ]; then main "$@"; else main "$@" </dev/tty; fi

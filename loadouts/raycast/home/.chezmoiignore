@@ -1,0 +1,4 @@
+# Raycast is a macOS app: its script commands land only on macOS.
+{{ if ne .chezmoi.os "darwin" }}
+.config/raycast
+{{ end }}

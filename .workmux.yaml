@@ -1,0 +1,10 @@
+# Worktrees beside the main checkout, not inside it: one nested in
+# ~/.local/share/chezmoi would sit in its working tree (git, loadout's tool
+# folders glob and its builds would all see it). The global worktree_dir
+# (all_worktrees) is for bare clones.
+worktree_dir: ../{project}__worktrees
+
+# Stop `workmux remove` while files only the worktree manages exist in
+# $HOME (they'd be left behind); DOTFILES_CHECK_SKIP=1 overrides.
+pre_remove:
+  - dotfiles-worktree-check
