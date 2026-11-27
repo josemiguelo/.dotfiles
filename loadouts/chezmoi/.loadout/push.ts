@@ -13,10 +13,13 @@ import { tell } from "#user";
 // the converge runs from whatever shell the desktop opened (bash, first).
 process.env.PATH = `${process.env.HOME}/.local/bin:${await brewPrefix()}/bin:${process.env.PATH}`;
 
-// chezmoi owns the source location; don't hardcode it. The source path is
-// .chezmoiroot's folder, so the repo is the git top level above it.
-const sourcePath = await $`chezmoi source-path`.quiet().nothrow();
-const top = await $`git -C ${sourcePath.exitCode === 0 ? sourcePath.stdout.toString().trim() : "/nonexistent"} rev-parse --show-toplevel`
+// chezmoi owns the source location; don't hardcode it. Its sourceDir is the
+// checkout: source-path is .chezmoiroot's folder (.chezmoi-home/), which only
+// exists once a loadout command has built it there, never on a machine whose
+// loadout is a child repo (the child builds the dotfiles' folders in its own).
+const config = await $`chezmoi dump-config --format json`.quiet().nothrow();
+const sourceDir = config.exitCode === 0 ? (JSON.parse(config.stdout.toString()).sourceDir ?? "") : "";
+const top = await $`git -C ${sourceDir || "/nonexistent"} rev-parse --show-toplevel`
   .quiet()
   .nothrow();
 const SOURCE = top.exitCode === 0 ? top.stdout.toString().trim() : "";
