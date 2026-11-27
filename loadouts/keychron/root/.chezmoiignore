@@ -1,0 +1,4 @@
+{{- /* The udev rule is for Linux: macOS has no udev. */ -}}
+{{ if ne .chezmoi.os "linux" }}
+etc/udev
+{{ end }}
